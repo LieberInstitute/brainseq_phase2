@@ -1,0 +1,10 @@
+**** Job starts ****
+Mon Feb 20 21:51:54 EST 2017
+**** JHPCE info ****
+User: ajaffe
+Job id: 9743236
+Job name: step4-featCounts-DLPFC_polyA_degradation.hg38_clean
+Hostname: compute-089
+Task id: 
+**** Job ends ****
+Mon Feb 20 21:51:54 EST 2017

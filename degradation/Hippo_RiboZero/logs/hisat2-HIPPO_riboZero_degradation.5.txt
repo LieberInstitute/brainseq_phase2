@@ -1,0 +1,6 @@
+**** Job starts ****
+Wed Feb  8 15:14:28 EST 2017
+HISAT2 alignment run on original untrimmed paired-end reads
+[bam_sort_core] merging from 16 files...
+**** Job ends ****
+Wed Feb  8 15:34:00 EST 2017

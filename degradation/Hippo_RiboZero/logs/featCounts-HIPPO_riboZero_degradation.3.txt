@@ -1,0 +1,122 @@
+**** Job starts ****
+Wed Feb  8 15:38:28 EST 2017
+
+        ==========     _____ _    _ ____  _____  ______          _____  
+        =====         / ____| |  | |  _ \|  __ \|  ____|   /\   |  __ \ 
+          =====      | (___ | |  | | |_) | |__) | |__     /  \  | |  | |
+            ====      \___ \| |  | |  _ <|  _  /|  __|   / /\ \ | |  | |
+              ====    ____) | |__| | |_) | | \ \| |____ / ____ \| |__| |
+        ==========   |_____/ \____/|____/|_|  \_\______/_/    \_\_____/
+	v1.5.0-p3
+
+//========================== featureCounts setting ===========================\\
+||                                                                            ||
+||             Input files : 1 BAM file                                       ||
+||                           P /dcl01/lieber/ajaffe/lab/brainseq_phase2/d ... ||
+||                                                                            ||
+||             Output file : /dcl01/lieber/ajaffe/lab/brainseq_phase2/deg ... ||
+||                 Summary : /dcl01/lieber/ajaffe/lab/brainseq_phase2/deg ... ||
+||              Annotation : /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/A ... ||
+||                                                                            ||
+||                 Threads : 8                                                ||
+||                   Level : meta-feature level                               ||
+||              Paired-end : yes                                              ||
+||         Strand specific : reversely stranded                               ||
+||      Multimapping reads : not counted                                      ||
+|| Multi-overlapping reads : not counted                                      ||
+||                                                                            ||
+||          Chimeric reads : counted                                          ||
+||        Both ends mapped : not required                                     ||
+||                                                                            ||
+\\===================== http://subread.sourceforge.net/ ======================//
+
+//================================= Running ==================================\\
+||                                                                            ||
+|| Load annotation file /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annota ... ||
+||    Features : 1182765                                                      ||
+||    Meta-features : 58037                                                   ||
+||    Chromosomes/contigs : 25                                                ||
+||                                                                            ||
+|| Process BAM file /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/ ... ||
+||    Paired-end reads are included.                                          ||
+||    Assign fragments (read pairs) to features...                            ||
+||                                                                            ||
+||    WARNING: reads from the same pair were found not adjacent to each       ||
+||             other in the input (due to read sorting by location or         ||
+||             reporting of multi-mapping read pairs).                        ||
+||                                                                            ||
+||    Read re-ordering is performed.                                          ||
+||                                                                            ||
+||    Total fragments : 7610139                                               ||
+||    Successfully assigned fragments : 3475417 (45.7%)                       ||
+||    Running time : 0.25 minutes                                             ||
+||                                                                            ||
+||                         Read assignment finished.                          ||
+||                                                                            ||
+\\===================== http://subread.sourceforge.net/ ======================//
+
+
+        ==========     _____ _    _ ____  _____  ______          _____  
+        =====         / ____| |  | |  _ \|  __ \|  ____|   /\   |  __ \ 
+          =====      | (___ | |  | | |_) | |__) | |__     /  \  | |  | |
+            ====      \___ \| |  | |  _ <|  _  /|  __|   / /\ \ | |  | |
+              ====    ____) | |__| | |_) | | \ \| |____ / ____ \| |__| |
+        ==========   |_____/ \____/|____/|_|  \_\______/_/    \_\_____/
+	v1.5.0-p3
+
+//========================== featureCounts setting ===========================\\
+||                                                                            ||
+||             Input files : 1 BAM file                                       ||
+||                           P /dcl01/lieber/ajaffe/lab/brainseq_phase2/d ... ||
+||                                                                            ||
+||             Output file : /dcl01/lieber/ajaffe/lab/brainseq_phase2/deg ... ||
+||                 Summary : /dcl01/lieber/ajaffe/lab/brainseq_phase2/deg ... ||
+||              Annotation : /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/A ... ||
+||                                                                            ||
+||                 Threads : 8                                                ||
+||                   Level : feature level                                    ||
+||              Paired-end : yes                                              ||
+||         Strand specific : reversely stranded                               ||
+||      Multimapping reads : not counted                                      ||
+|| Multi-overlapping reads : counted                                          ||
+||                                                                            ||
+||          Chimeric reads : counted                                          ||
+||        Both ends mapped : not required                                     ||
+||                                                                            ||
+\\===================== http://subread.sourceforge.net/ ======================//
+
+//================================= Running ==================================\\
+||                                                                            ||
+|| Load annotation file /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annota ... ||
+||    Features : 1182765                                                      ||
+||    Meta-features : 58037                                                   ||
+||    Chromosomes/contigs : 25                                                ||
+||                                                                            ||
+|| Process BAM file /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/ ... ||
+||    Paired-end reads are included.                                          ||
+||    Assign fragments (read pairs) to features...                            ||
+||                                                                            ||
+||    WARNING: reads from the same pair were found not adjacent to each       ||
+||             other in the input (due to read sorting by location or         ||
+||             reporting of multi-mapping read pairs).                        ||
+||                                                                            ||
+||    Read re-ordering is performed.                                          ||
+||                                                                            ||
+||    Total fragments : 7610139                                               ||
+||    Successfully assigned fragments : 3598376 (47.3%)                       ||
+||    Running time : 0.23 minutes                                             ||
+||                                                                            ||
+||                         Read assignment finished.                          ||
+||                                                                            ||
+\\===================== http://subread.sourceforge.net/ ======================//
+
+
+Program:	regtools
+Version:	0.2.0
+Minimum junction anchor length: 8
+Minimum intron length: 9
+Maximum intron length: 500000
+Alignment: /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/Hippo_RiboZero/Counts/junction/tmpdir/HIPPO_Br2623_D01_ribo.bam
+Output file: /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/Hippo_RiboZero/Counts/junction/HIPPO_Br2623_D01_ribo_junctions_primaryOnly_regtools.bed
+**** Job ends ****
+Wed Feb  8 15:41:34 EST 2017

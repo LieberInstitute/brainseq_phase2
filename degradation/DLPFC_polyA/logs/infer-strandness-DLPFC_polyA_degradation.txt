@@ -1,0 +1,74 @@
+**** Job starts ****
+Mon Feb 20 20:53:36 EST 2017
+**** JHPCE info ****
+User: ajaffe
+Job id: 9743234
+Job name: step3b-infer-strandness-DLPFC_polyA_degradation.hg38
+Hostname: compute-069
+Task id: 
+2017-02-20 20:53:37 processing HISAT2_out/infer_strandness/DLPFC_Br1385_A1_poly.txt
+2017-02-20 20:53:37 processing HISAT2_out/infer_strandness/DLPFC_Br1385_A2_poly.txt
+2017-02-20 20:53:37 processing HISAT2_out/infer_strandness/DLPFC_Br1385_A3_poly.txt
+2017-02-20 20:53:38 processing HISAT2_out/infer_strandness/DLPFC_Br1385_A4_poly.txt
+2017-02-20 20:53:38 processing HISAT2_out/infer_strandness/DLPFC_Br1729_B1_poly.txt
+2017-02-20 20:53:38 processing HISAT2_out/infer_strandness/DLPFC_Br1729_B2_poly.txt
+2017-02-20 20:53:38 processing HISAT2_out/infer_strandness/DLPFC_Br1729_B3_poly.txt
+2017-02-20 20:53:40 processing HISAT2_out/infer_strandness/DLPFC_Br1729_B4_poly.txt
+2017-02-20 20:53:40 processing HISAT2_out/infer_strandness/DLPFC_Br2015_F1_poly.txt
+2017-02-20 20:53:40 processing HISAT2_out/infer_strandness/DLPFC_Br2015_F2_poly.txt
+2017-02-20 20:53:40 processing HISAT2_out/infer_strandness/DLPFC_Br2015_F3_poly.txt
+2017-02-20 20:53:40 processing HISAT2_out/infer_strandness/DLPFC_Br2015_F4_poly.txt
+2017-02-20 20:53:40 processing HISAT2_out/infer_strandness/DLPFC_Br2020_C1_poly.txt
+2017-02-20 20:53:40 processing HISAT2_out/infer_strandness/DLPFC_Br2020_C2_poly.txt
+2017-02-20 20:53:40 processing HISAT2_out/infer_strandness/DLPFC_Br2020_C3_poly.txt
+2017-02-20 20:53:40 processing HISAT2_out/infer_strandness/DLPFC_Br2020_C4_poly.txt
+2017-02-20 20:53:40 processing HISAT2_out/infer_strandness/DLPFC_Br2074_D1_poly.txt
+2017-02-20 20:53:40 processing HISAT2_out/infer_strandness/DLPFC_Br2074_D2_poly.txt
+2017-02-20 20:53:41 processing HISAT2_out/infer_strandness/DLPFC_Br2074_D3_poly.txt
+2017-02-20 20:53:41 processing HISAT2_out/infer_strandness/DLPFC_Br2074_D4_poly.txt
+$infer_library
+
+PairEnd 
+     20 
+
+$infer_pattern1
+
+1++,1--,2+-,2-+ 
+             20 
+
+$infer_pattern2
+
+1+-,1-+,2++,2-- 
+             20 
+
+ infer_frac_undetermined infer_frac_pattern1 infer_frac_pattern2
+ Min.   :0.7499          Min.   :0.001300    Min.   :0.00460    
+ 1st Qu.:0.9751          1st Qu.:0.002425    1st Qu.:0.00845    
+ Median :0.9857          Median :0.003550    Median :0.01100    
+ Mean   :0.9577          Mean   :0.006090    Mean   :0.03621    
+ 3rd Qu.:0.9887          3rd Qu.:0.007925    3rd Qu.:0.01427    
+ Max.   :0.9915          Max.   :0.023300    Max.   :0.23640    
+null device 
+          1 
+2017-02-20 20:53:41 will use the following pattern for bam2wig: none
+   user  system elapsed 
+  1.493   0.556   6.323 
+2017-02-20 20:53:42
+Session info -----------------------------------------------------------------------------------------------------------
+ setting  value                                      
+ version  R version 3.3.1 Patched (2016-09-30 r71426)
+ system   x86_64, linux-gnu                          
+ ui       X11                                        
+ language (EN)                                       
+ collate  en_US.UTF-8                                
+ tz       <NA>                                       
+ date     2017-02-20                                 
+
+Packages ---------------------------------------------------------------------------------------------------------------
+ package  * version date       source        
+ devtools   1.12.0  2016-06-24 CRAN (R 3.3.1)
+ digest     0.6.12  2017-01-27 CRAN (R 3.3.1)
+ memoise    1.0.0   2016-01-29 CRAN (R 3.3.0)
+ withr      1.0.2   2016-06-20 CRAN (R 3.3.1)
+**** Job ends ****
+Mon Feb 20 20:55:55 EST 2017

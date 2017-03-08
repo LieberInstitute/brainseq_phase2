@@ -1,0 +1,52 @@
+**** Job starts ****
+Mon Feb 20 14:33:24 EST 2017
+**** JHPCE info ****
+User: ajaffe
+Job id: 9743231
+Job name: step1-fastqc-DLPFC_polyA_degradation.hg38
+Hostname: compute-109
+Task id: 
+Started analysis of Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Approx 5% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Approx 10% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Approx 15% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Approx 20% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Approx 25% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Approx 30% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Approx 35% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Approx 40% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Approx 45% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Approx 50% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Approx 55% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Approx 60% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Approx 65% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Approx 70% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Approx 75% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Approx 80% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Approx 85% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Approx 90% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Approx 95% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Analysis complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R1_001.fastq.gz
+Started analysis of Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+Approx 5% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+Approx 10% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+Approx 15% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+Approx 20% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+Approx 25% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+Approx 30% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+Approx 35% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+Approx 40% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+Approx 45% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+Approx 50% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+Approx 55% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+Approx 60% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+Approx 65% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+Approx 70% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+Approx 75% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+Approx 80% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+Approx 85% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+Approx 90% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+Approx 95% complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+Analysis complete for Br1729_B2_C68R6ACXX_GTGAAA_L002_R2_001.fastq.gz
+**** Job ends ****
+Mon Feb 20 14:43:47 EST 2017

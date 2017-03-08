@@ -1,0 +1,10 @@
+preprocessed_data/
+degradation/*/Counts
+degradation/*/HISAT2_out
+degradation/*/Salmon_tx
+degradation/*/merged_fastq
+degradation/*/FastQC
+degradation/*/Coverage
+degradation/*/FASTQ
+degradation/*/rpkmCounts*
+degradation/*/rawCounts*

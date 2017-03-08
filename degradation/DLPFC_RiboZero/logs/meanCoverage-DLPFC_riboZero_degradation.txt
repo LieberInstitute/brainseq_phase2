@@ -1,0 +1,6 @@
+**** Job starts ****
+Thu Feb  9 01:58:51 EST 2017
+Processing strand Forward
+Processing strand Reverse
+**** Job ends ****
+Thu Feb  9 03:48:41 EST 2017

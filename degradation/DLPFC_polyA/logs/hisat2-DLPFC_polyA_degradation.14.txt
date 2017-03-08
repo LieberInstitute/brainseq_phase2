@@ -1,0 +1,12 @@
+**** Job starts ****
+Mon Feb 20 19:13:00 EST 2017
+**** JHPCE info ****
+User: ajaffe
+Job id: 9743233
+Job name: step3-hisat2-DLPFC_polyA_degradation.hg38
+Hostname: compute-068
+Task id: 
+HISAT2 alignment run on original untrimmed paired-end reads
+[bam_sort_core] merging from 40 files...
+**** Job ends ****
+Mon Feb 20 20:19:02 EST 2017

@@ -1,0 +1,46 @@
+**** Job starts ****
+Wed Feb  8 15:09:43 EST 2017
+Started analysis of DLPFC_Br2020_C4_ribo.fastq.gz
+Approx 5% complete for DLPFC_Br2020_C4_ribo.fastq.gz
+Approx 10% complete for DLPFC_Br2020_C4_ribo.fastq.gz
+Approx 15% complete for DLPFC_Br2020_C4_ribo.fastq.gz
+Approx 20% complete for DLPFC_Br2020_C4_ribo.fastq.gz
+Approx 25% complete for DLPFC_Br2020_C4_ribo.fastq.gz
+Approx 30% complete for DLPFC_Br2020_C4_ribo.fastq.gz
+Approx 35% complete for DLPFC_Br2020_C4_ribo.fastq.gz
+Approx 40% complete for DLPFC_Br2020_C4_ribo.fastq.gz
+Approx 45% complete for DLPFC_Br2020_C4_ribo.fastq.gz
+Approx 50% complete for DLPFC_Br2020_C4_ribo.fastq.gz
+Approx 55% complete for DLPFC_Br2020_C4_ribo.fastq.gz
+Approx 60% complete for DLPFC_Br2020_C4_ribo.fastq.gz
+Approx 65% complete for DLPFC_Br2020_C4_ribo.fastq.gz
+Approx 70% complete for DLPFC_Br2020_C4_ribo.fastq.gz
+Approx 75% complete for DLPFC_Br2020_C4_ribo.fastq.gz
+Approx 80% complete for DLPFC_Br2020_C4_ribo.fastq.gz
+Approx 85% complete for DLPFC_Br2020_C4_ribo.fastq.gz
+Approx 90% complete for DLPFC_Br2020_C4_ribo.fastq.gz
+Approx 95% complete for DLPFC_Br2020_C4_ribo.fastq.gz
+Analysis complete for DLPFC_Br2020_C4_ribo.fastq.gz
+Started analysis of DLPFC_Br2020_C4_ribo_read2.fastq.gz
+Approx 5% complete for DLPFC_Br2020_C4_ribo_read2.fastq.gz
+Approx 10% complete for DLPFC_Br2020_C4_ribo_read2.fastq.gz
+Approx 15% complete for DLPFC_Br2020_C4_ribo_read2.fastq.gz
+Approx 20% complete for DLPFC_Br2020_C4_ribo_read2.fastq.gz
+Approx 25% complete for DLPFC_Br2020_C4_ribo_read2.fastq.gz
+Approx 30% complete for DLPFC_Br2020_C4_ribo_read2.fastq.gz
+Approx 35% complete for DLPFC_Br2020_C4_ribo_read2.fastq.gz
+Approx 40% complete for DLPFC_Br2020_C4_ribo_read2.fastq.gz
+Approx 45% complete for DLPFC_Br2020_C4_ribo_read2.fastq.gz
+Approx 50% complete for DLPFC_Br2020_C4_ribo_read2.fastq.gz
+Approx 55% complete for DLPFC_Br2020_C4_ribo_read2.fastq.gz
+Approx 60% complete for DLPFC_Br2020_C4_ribo_read2.fastq.gz
+Approx 65% complete for DLPFC_Br2020_C4_ribo_read2.fastq.gz
+Approx 70% complete for DLPFC_Br2020_C4_ribo_read2.fastq.gz
+Approx 75% complete for DLPFC_Br2020_C4_ribo_read2.fastq.gz
+Approx 80% complete for DLPFC_Br2020_C4_ribo_read2.fastq.gz
+Approx 85% complete for DLPFC_Br2020_C4_ribo_read2.fastq.gz
+Approx 90% complete for DLPFC_Br2020_C4_ribo_read2.fastq.gz
+Approx 95% complete for DLPFC_Br2020_C4_ribo_read2.fastq.gz
+Analysis complete for DLPFC_Br2020_C4_ribo_read2.fastq.gz
+**** Job ends ****
+Wed Feb  8 15:26:32 EST 2017

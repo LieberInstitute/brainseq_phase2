@@ -1,0 +1,10 @@
+**** Job starts ****
+Mon Feb 20 23:37:15 EST 2017
+**** JHPCE info ****
+User: ajaffe
+Job id: 9743238
+Job name: step5b-meanCoverage-DLPFC_polyA_degradation.hg38
+Hostname: compute-060
+Task id: 
+**** Job ends ****
+Tue Feb 21 00:04:58 EST 2017

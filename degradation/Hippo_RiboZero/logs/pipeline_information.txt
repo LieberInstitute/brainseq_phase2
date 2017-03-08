@@ -1,0 +1,187 @@
+**** Pipeline version: GitHub sha ****
+5a18917a8597e22c77ef13a30747a7020786d510
+**** BASH_FOLDER: ****
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/sh
+**** ANNO_FOLDER: ****
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation
+**** md5sum for ANNO_FOLDER ****
+da9c6704b47e7b0eb4f8017cb025280c
+**** ANNO_FOLDER contents ****
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation:
+total 220K
+drwxrwsr-x 2 lcollado lieber_jaffe  33K Jan 23 20:56 RSeQC
+drwxrwx--- 5 eburke   lieber_jaffe  33K Dec  6 14:19 junction_txdb
+-rwxrwx--- 1 eburke   lieber_jaffe  17K Nov 16 10:40 rn6.chrom.sizes.ensembl
+drwxrwx--- 3 eburke   lieber_jaffe  33K Nov  3 13:04 ensembl
+-rwxrwx--- 1 eburke   lieber_jaffe 1.1K Nov  2 09:35 mm10.chrom.sizes.gencode
+drwxrwx--- 5 eburke   lieber_jaffe  33K Oct 20 10:30 GENCODE
+-rwxrwx--- 1 eburke   lieber_jaffe 7.8K Sep 15 10:01 hg38.chrom.sizes.gencode
+-rwxrwx--- 1 eburke   lieber_jaffe 1.7K Sep 12 11:40 hg19.chrom.sizes.gencode
+drwxrwx--- 2 eburke   lieber_jaffe  33K Aug  4  2016 ERCC
+
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/RSeQC:
+total 3.4M
+-rw-rw-r-- 1 lcollado lieber_jaffe 4.7K Jan 23 20:56 prep_bed_log.txt
+-rw-rw-r-- 1 lcollado lieber_jaffe 1.4M Jan 23 20:56 mm10.bed
+-rw-rw-r-- 1 lcollado lieber_jaffe 1.7M Jan 23 20:55 hg38.bed
+-rw-rw-r-- 1 lcollado lieber_jaffe 1.8M Jan 23 20:52 hg19.bed
+-rw-rw-r-- 1 lcollado lieber_jaffe 860K Jan 23 20:49 rn6.bed
+-rw-rw-r-- 1 lcollado lieber_jaffe 1.1K Jan 23 16:26 prep_bed.R
+
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/junction_txdb:
+total 50M
+-rwxrwx--- 1 eburke lieber_jaffe 4.7M Dec  6 14:31 junction_annotation_mm10_gencode_vM11.rda
+-rwxrwx--- 1 eburke lieber_jaffe 5.2K Dec  6 14:18 make_txdb_from_gtf-mouse-rat.R
+-rwxrwx--- 1 eburke lieber_jaffe 7.9K Nov 14 22:27 feature_to_tx-gencode.R
+-rwxrwx--- 1 eburke lieber_jaffe  16M Nov 14 22:26 feature_to_Tx_hg38_gencode_v25.rda
+-rwxrwx--- 1 eburke lieber_jaffe  16M Nov 14 21:58 feature_to_Tx_hg19_gencode_v25lift37.rda
+-rwxrwx--- 1 eburke lieber_jaffe 9.5K Nov 14 21:33 make_txdb_from_gtf.R
+-rwxrwx--- 1 eburke lieber_jaffe 6.6M Nov 14 21:28 junction_annotation_hg38_gencode_v25.rda
+-rwxrwx--- 1 eburke lieber_jaffe 6.6M Nov 14 19:43 junction_annotation_hg19_gencode_v25lift37.rda
+-rwxrwx--- 1 eburke lieber_jaffe 3.0M Nov 14 11:21 junction_annotation_rn6_ensembl_v86.rda
+drwxrwx--- 2 eburke lieber_jaffe  33K Nov  8 11:17 ensembl
+-rwxrwx--- 1 eburke lieber_jaffe 4.4M Nov  3 13:33 junction_annotation_mm10_ensembl_v86.rda
+drwxrwx--- 2 eburke lieber_jaffe  33K Nov  3 13:30 refseq
+-rwxrwx--- 1 eburke lieber_jaffe 9.0K Nov  2 11:01 feature_to_tx.R
+drwxrwx--- 2 eburke lieber_jaffe  33K Oct 26 09:26 sample_counts
+
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/junction_txdb/ensembl:
+total 45M
+-rwxrwx--- 1 eburke lieber_jaffe  15M Oct 26 09:54 feature_to_Tx_ensembl_v85.rda
+-rwxrwx--- 1 eburke lieber_jaffe  15M Oct 26 09:32 feature_to_Tx_ensembl_v75.rda
+-rwxrwx--- 1 eburke lieber_jaffe 9.4M Oct  6 11:21 gene_exon_maps_ensembl_v75.rda
+-rwxrwx--- 1 eburke lieber_jaffe 6.2M Sep 27 14:01 junction_annotation_hg38_ensembl_v85.rda
+-rwxrwx--- 1 eburke lieber_jaffe 6.1M Sep 27 13:47 junction_annotation_hg19_ensembl_v75.rda
+
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/junction_txdb/refseq:
+total 5.1M
+-rwxrwx--- 1 eburke lieber_jaffe 3.5M Sep 27 14:07 junction_annotation_hg38_refseq_grch38.rda
+-rwxrwx--- 1 eburke lieber_jaffe 3.4M Sep 27 13:52 junction_annotation_hg19_refseq_grch37.rda
+
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/junction_txdb/sample_counts:
+total 39M
+-rwxrwx--- 1 eburke lieber_jaffe  61M Oct  5 18:40 R16-099_Gencode.v25.hg19_Exons.counts
+-rwxrwx--- 1 eburke lieber_jaffe  58M Oct  5 18:37 R16-099_Gencode.v25.hg38_Exons.counts
+-rwxrwx--- 1 eburke lieber_jaffe 9.8M Oct  5 18:36 R16-099_Gencode.v25.hg19_Genes.counts
+-rwxrwx--- 1 eburke lieber_jaffe 9.6M Oct  5 18:34 R16-099_Gencode.v25.hg38_Genes.counts
+
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/ensembl:
+total 437M
+-rwxrwx--- 1 eburke lieber_jaffe 852M Nov  3 13:02 Mus_musculus.GRCm38.86.gtf
+drwxrwx--- 2 eburke lieber_jaffe  33K Nov  2 12:23 Rnor_6.0
+-rwxrwx--- 1 eburke lieber_jaffe 1.4G Jul  9  2016 Homo_sapiens.GRCh38.85.gtf
+-rwxrwx--- 1 eburke lieber_jaffe 809M Feb  7  2014 Homo_sapiens.GRCh37.75.gtf
+
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/ensembl/Rnor_6.0:
+total 5.8G
+-rwxrwx--- 1 eburke lieber_jaffe 1.2G Nov  2 12:46 hisat2_Rnor6.0toplevel.5.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 663M Nov  2 12:46 hisat2_Rnor6.0toplevel.6.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 874M Nov  2 12:23 hisat2_Rnor6.0toplevel.1.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 651M Nov  2 12:23 hisat2_Rnor6.0toplevel.2.ht2
+-rwxrwx--- 1 eburke lieber_jaffe    8 Nov  2 11:45 hisat2_Rnor6.0toplevel.7.ht2
+-rwxrwx--- 1 eburke lieber_jaffe    8 Nov  2 11:45 hisat2_Rnor6.0toplevel.8.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 1.3M Nov  2 11:44 hisat2_Rnor6.0toplevel.3.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 651M Nov  2 11:44 hisat2_Rnor6.0toplevel.4.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 2.8G Nov  2 11:26 Rattus_norvegicus.Rnor_6.0.dna.toplevel.fa
+-rwxrwx--- 1 eburke lieber_jaffe 273M Sep 14 10:20 Rattus_norvegicus.Rnor_6.0.86.gtf
+
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE:
+total 98K
+drwxrwx--- 3 eburke lieber_jaffe 33K Feb  6 14:41 GRCm38_mm10
+drwxrwx--- 3 eburke lieber_jaffe 33K Jan 18 11:20 GRCh38_hg38
+drwxrwx--- 3 eburke lieber_jaffe 33K Jan 18 11:20 GRCh37_hg19
+
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCm38_mm10:
+total 5.7G
+drwxr-xr-x 3 eburke lieber_jaffe  33K Feb  6 14:52 transcripts
+-rwxrwx--- 1 eburke lieber_jaffe 1.1G Oct 20 11:48 hisat2_GRCm38primary.5.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 645M Oct 20 11:48 hisat2_GRCm38primary.6.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 848M Oct 20 11:27 hisat2_GRCm38primary.1.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 633M Oct 20 11:27 hisat2_GRCm38primary.2.ht2
+-rwxrwx--- 1 eburke lieber_jaffe    8 Oct 20 10:53 hisat2_GRCm38primary.7.ht2
+-rwxrwx--- 1 eburke lieber_jaffe    8 Oct 20 10:53 hisat2_GRCm38primary.8.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 6.0K Oct 20 10:52 hisat2_GRCm38primary.3.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 633M Oct 20 10:52 hisat2_GRCm38primary.4.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 773M Sep 20 10:12 gencode.vM11.annotation.gtf
+-rwxrwx--- 1 eburke lieber_jaffe 2.6G Sep 20 08:53 GRCm38.primary_assembly.genome.fa
+
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCm38_mm10/transcripts:
+total 106M
+drwxr-xr-x 2 eburke lieber_jaffe  33K Feb  6 14:46 salmon_index_gencode.vM11.transcripts
+-rw-r--r-- 1 eburke lieber_jaffe 206M Sep 20 09:33 gencode.vM11.transcripts.fa
+
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCm38_mm10/transcripts/salmon_index_gencode.vM11.transcripts:
+total 2.5G
+-rw-r--r-- 1 eburke lieber_jaffe 1.7G Feb  6 14:46 hash.bin
+-rw-r--r-- 1 eburke lieber_jaffe  182 Feb  6 14:46 header.json
+-rw-r--r-- 1 eburke lieber_jaffe  115 Feb  6 14:46 indexing.log
+-rw-r--r-- 1 eburke lieber_jaffe 8.7K Feb  6 14:46 quasi_index.log
+-rw-r--r-- 1 eburke lieber_jaffe   96 Feb  6 14:46 versionInfo.json
+-rw-r--r-- 1 eburke lieber_jaffe 767M Feb  6 14:45 sa.bin
+-rw-r--r-- 1 eburke lieber_jaffe  24M Feb  6 14:45 rsd.bin
+-rw-r--r-- 1 eburke lieber_jaffe 207M Feb  6 14:45 txpInfo.bin
+
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh38_hg38:
+total 6.4G
+drwxrwx--- 3 eburke lieber_jaffe  33K Jan 18 11:38 transcripts
+-rwxrwx--- 1 eburke lieber_jaffe 1.3G Sep  2 17:06 hisat2_GRCh38primary.5.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 716M Sep  2 17:06 hisat2_GRCh38primary.6.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 942M Sep  2 16:43 hisat2_GRCh38primary.1.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 704M Sep  2 16:43 hisat2_GRCh38primary.2.ht2
+-rwxrwx--- 1 eburke lieber_jaffe    8 Sep  2 16:10 hisat2_GRCh38primary.7.ht2
+-rwxrwx--- 1 eburke lieber_jaffe    8 Sep  2 16:10 hisat2_GRCh38primary.8.ht2
+-rwxrwx--- 1 eburke lieber_jaffe  12K Sep  2 16:10 hisat2_GRCh38primary.3.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 704M Sep  2 16:10 hisat2_GRCh38primary.4.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 1.2G Sep  2 13:51 gencode.v25.annotationGRCh38.gtf
+-rwxrwx--- 1 eburke lieber_jaffe 3.0G Jul 15  2016 GRCh38.primary_assembly.genome.fa
+
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh38_hg38/transcripts:
+total 141M
+drwxrwx--- 2 eburke lieber_jaffe  33K Jan 18 11:33 salmon_index_gencode.v25.transcripts
+-rwxrwx--- 1 eburke lieber_jaffe 304M Jul 15  2016 gencode.v25.transcripts.fa
+
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh38_hg38/transcripts/salmon_index_gencode.v25.transcripts:
+total 3.2G
+-rwxrwx--- 1 eburke lieber_jaffe 2.0G Jan 18 11:33 hash.bin
+-rwxrwx--- 1 eburke lieber_jaffe  182 Jan 18 11:33 header.json
+-rwxrwx--- 1 eburke lieber_jaffe  115 Jan 18 11:33 indexing.log
+-rwxrwx--- 1 eburke lieber_jaffe 9.5K Jan 18 11:33 quasi_index.log
+-rwxrwx--- 1 eburke lieber_jaffe   96 Jan 18 11:33 versionInfo.json
+-rwxrwx--- 1 eburke lieber_jaffe 1.1G Jan 18 11:24 sa.bin
+-rwxrwx--- 1 eburke lieber_jaffe 306M Jan 18 11:23 txpInfo.bin
+-rwxrwx--- 1 eburke lieber_jaffe  36M Jan 18 11:23 rsd.bin
+
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh37_hg19:
+total 6.3G
+drwxrwx--- 3 eburke lieber_jaffe  33K Jan 18 11:46 transcripts
+-rwxrwx--- 1 eburke lieber_jaffe 1.2G Sep  6 12:11 hisat2_GRCh37primary.5.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 696M Sep  6 12:11 hisat2_GRCh37primary.6.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 915M Sep  6 11:31 hisat2_GRCh37primary.1.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 684M Sep  6 11:31 hisat2_GRCh37primary.2.ht2
+-rwxrwx--- 1 eburke lieber_jaffe    8 Sep  6 10:15 hisat2_GRCh37primary.7.ht2
+-rwxrwx--- 1 eburke lieber_jaffe    8 Sep  6 10:15 hisat2_GRCh37primary.8.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 3.7K Sep  6 10:14 hisat2_GRCh37primary.3.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 684M Sep  6 10:14 hisat2_GRCh37primary.4.ht2
+-rwxrwx--- 1 eburke lieber_jaffe 1.4G Sep  2 13:50 gencode.v25lift37.annotation.gtf
+-rwxrwx--- 1 eburke lieber_jaffe 3.0G Mar 24  2016 GRCh37.primary_assembly.genome.fa
+
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh37_hg19/transcripts:
+total 142M
+drwxrwx--- 2 eburke lieber_jaffe  33K Jan 18 11:45 salmon_index_gencode.v25lift37.transcripts
+-rwxrwx--- 1 eburke lieber_jaffe 305M Jul 19  2016 gencode.v25lift37.transcripts.fa
+
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh37_hg19/transcripts/salmon_index_gencode.v25lift37.transcripts:
+total 3.2G
+-rwxrwx--- 1 eburke lieber_jaffe 2.0G Jan 18 11:45 hash.bin
+-rwxrwx--- 1 eburke lieber_jaffe  182 Jan 18 11:45 header.json
+-rwxrwx--- 1 eburke lieber_jaffe  115 Jan 18 11:45 indexing.log
+-rwxrwx--- 1 eburke lieber_jaffe  11K Jan 18 11:45 quasi_index.log
+-rwxrwx--- 1 eburke lieber_jaffe   96 Jan 18 11:45 versionInfo.json
+-rwxrwx--- 1 eburke lieber_jaffe 1.1G Jan 18 11:38 sa.bin
+-rwxrwx--- 1 eburke lieber_jaffe  36M Jan 18 11:37 rsd.bin
+-rwxrwx--- 1 eburke lieber_jaffe 307M Jan 18 11:37 txpInfo.bin
+
+/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/ERCC:
+total 1.5M
+-rwxrwx--- 1 eburke lieber_jaffe  84K Aug  4  2016 ERCC92.fa
+-rwxrwx--- 1 eburke lieber_jaffe 1.6M Jul 21  2016 ERCC92.idx

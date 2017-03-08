@@ -1,0 +1,5 @@
+**** Job starts ****
+Wed Feb  8 15:14:28 EST 2017
+HISAT2 alignment run on original untrimmed paired-end reads
+**** Job ends ****
+Wed Feb  8 15:33:54 EST 2017
