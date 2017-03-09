@@ -4,3 +4,9 @@ degradation/DLPFC_RiboZero/rawCounts_DLPFC_riboZero_degradation_hg38_n20.rda fil
 degradation/DLPFC_RiboZero/rpkmCounts_DLPFC_riboZero_degradation_hg38_n20.rda filter=lfs diff=lfs merge=lfs -text
 degradation/Hippo_RiboZero/rawCounts_HIPPO_riboZero_degradation_hg38_n12.rda filter=lfs diff=lfs merge=lfs -text
 degradation/Hippo_RiboZero/rpkmCounts_HIPPO_riboZero_degradation_hg38_n12.rda filter=lfs diff=lfs merge=lfs -text
+preprocessed_data/DLPFC_RiboZero/rawCounts_brainseq_dlpfc_n579.rda filter=lfs diff=lfs merge=lfs -text
+preprocessed_data/DLPFC_RiboZero/rpkmCounts_gene_exon_brainseq_dlpfc_n579.rda filter=lfs diff=lfs merge=lfs -text
+preprocessed_data/DLPFC_RiboZero/rpkmCounts_jxn_brainseq_dlpfc_n579.rda filter=lfs diff=lfs merge=lfs -text
+preprocessed_data/Hippo_RiboZero/rawCounts_brainseq_hippo_n483.rda filter=lfs diff=lfs merge=lfs -text
+preprocessed_data/Hippo_RiboZero/rpkmCounts_gene_exon_brainseq_hippo_n483.rda filter=lfs diff=lfs merge=lfs -text
+preprocessed_data/Hippo_RiboZero/rpkmCounts_jxn_brainseq_hippo_n483.rda filter=lfs diff=lfs merge=lfs -text
