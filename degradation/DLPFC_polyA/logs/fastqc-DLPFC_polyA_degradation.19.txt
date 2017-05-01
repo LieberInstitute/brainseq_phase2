@@ -1,11 +1,11 @@
 **** Job starts ****
-Mon Feb 20 14:33:25 EST 2017
+Fri Mar 17 11:24:26 EDT 2017
 **** JHPCE info ****
-User: ajaffe
-Job id: 9743231
+User: eburke
+Job id: 39173
 Job name: step1-fastqc-DLPFC_polyA_degradation.hg38
-Hostname: compute-068
-Task id: 
+Hostname: compute-087
+Task id: 19
 Started analysis of Br2074_D4_C68R6ACXX_CCGTCC_L004_R1_001.fastq.gz
 Approx 5% complete for Br2074_D4_C68R6ACXX_CCGTCC_L004_R1_001.fastq.gz
 Approx 10% complete for Br2074_D4_C68R6ACXX_CCGTCC_L004_R1_001.fastq.gz
@@ -49,4 +49,4 @@ Approx 90% complete for Br2074_D4_C68R6ACXX_CCGTCC_L004_R2_001.fastq.gz
 Approx 95% complete for Br2074_D4_C68R6ACXX_CCGTCC_L004_R2_001.fastq.gz
 Analysis complete for Br2074_D4_C68R6ACXX_CCGTCC_L004_R2_001.fastq.gz
 **** Job ends ****
-Mon Feb 20 14:52:01 EST 2017
+Fri Mar 17 11:37:34 EDT 2017

@@ -1,11 +1,11 @@
 **** Job starts ****
-Mon Feb 20 21:01:38 EST 2017
+Fri Mar 17 21:06:48 EDT 2017
 **** JHPCE info ****
-User: ajaffe
-Job id: 9743235
+User: eburke
+Job id: 39177
 Job name: step4-featCounts-DLPFC_polyA_degradation.hg38
-Hostname: compute-110
-Task id: 
+Hostname: compute-069
+Task id: 13
 
         ==========     _____ _    _ ____  _____  ______          _____  
         =====         / ____| |  | |  _ \|  __ \|  ____|   /\   |  __ \ 
@@ -27,7 +27,7 @@ Task id:
 ||                 Threads : 8                                                ||
 ||                   Level : meta-feature level                               ||
 ||              Paired-end : yes                                              ||
-||         Strand specific : reversely stranded                               ||
+||         Strand specific : no                                               ||
 ||      Multimapping reads : not counted                                      ||
 || Multi-overlapping reads : not counted                                      ||
 ||                                                                            ||
@@ -53,9 +53,9 @@ Task id:
 ||                                                                            ||
 ||    Read re-ordering is performed.                                          ||
 ||                                                                            ||
-||    Total fragments : 42507843                                              ||
-||    Successfully assigned fragments : 34589088 (81.4%)                      ||
-||    Running time : 0.69 minutes                                             ||
+||    Total fragments : 42507845                                              ||
+||    Successfully assigned fragments : 33995881 (80.0%)                      ||
+||    Running time : 1.11 minutes                                             ||
 ||                                                                            ||
 ||                         Read assignment finished.                          ||
 ||                                                                            ||
@@ -82,7 +82,7 @@ Task id:
 ||                 Threads : 8                                                ||
 ||                   Level : feature level                                    ||
 ||              Paired-end : yes                                              ||
-||         Strand specific : reversely stranded                               ||
+||         Strand specific : no                                               ||
 ||      Multimapping reads : not counted                                      ||
 || Multi-overlapping reads : counted                                          ||
 ||                                                                            ||
@@ -108,9 +108,9 @@ Task id:
 ||                                                                            ||
 ||    Read re-ordering is performed.                                          ||
 ||                                                                            ||
-||    Total fragments : 42507843                                              ||
-||    Successfully assigned fragments : 35578292 (83.7%)                      ||
-||    Running time : 0.68 minutes                                             ||
+||    Total fragments : 42507845                                              ||
+||    Successfully assigned fragments : 35968239 (84.6%)                      ||
+||    Running time : 1.25 minutes                                             ||
 ||                                                                            ||
 ||                         Read assignment finished.                          ||
 ||                                                                            ||
@@ -125,4 +125,4 @@ Maximum intron length: 500000
 Alignment: /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/Counts/junction/tmpdir/DLPFC_Br2020_C1_poly.bam
 Output file: /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/Counts/junction/DLPFC_Br2020_C1_poly_junctions_primaryOnly_regtools.bed
 **** Job ends ****
-Mon Feb 20 21:10:36 EST 2017
+Fri Mar 17 21:21:32 EDT 2017

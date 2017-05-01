@@ -8,3 +8,4 @@ degradation/*/Coverage
 degradation/*/FASTQ
 degradation/*/rpkmCounts*
 degradation/*/rawCounts*
+count_data/

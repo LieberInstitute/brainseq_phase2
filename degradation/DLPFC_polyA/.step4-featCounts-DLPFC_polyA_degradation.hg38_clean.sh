@@ -13,7 +13,7 @@ echo "User: ${USER}"
 echo "Job id: ${JOB_ID}"
 echo "Job name: ${JOB_NAME}"
 echo "Hostname: ${HOSTNAME}"
-echo "Task id: ${TASK_ID}"
+echo "Task id: ${SGE_TASK_ID}"
 
 
 ## Delete temporary files after they have been used

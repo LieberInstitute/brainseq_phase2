@@ -17,7 +17,7 @@ echo "User: ${USER}"
 echo "Job id: ${JOB_ID}"
 echo "Job name: ${JOB_NAME}"
 echo "Hostname: ${HOSTNAME}"
-echo "Task id: ${TASK_ID}"
+echo "Task id: ${SGE_TASK_ID}"
 
 # Directories
 mkdir -p /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/HISAT2_out/align_summaries
@@ -39,22 +39,22 @@ if [ -f /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/trimmed
 	RP=/dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/trimmed_fq/${ID}_trimmed_reverse_paired.fastq
 	RU=/dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/trimmed_fq/${ID}_trimmed_reverse_unpaired.fastq
 	
-	/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Software/hisat2-2.0.4/hisat2 -p 8 	-x /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh38_hg38/hisat2_GRCh38primary -1 $FP -2 $RP -U ${FU},${RU} 	-S /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/HISAT2_out/${ID}_hisat_out.sam --rna-strandness RF --phred33 	2>/dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/HISAT2_out/align_summaries/${ID}_summary.txt
+	/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Software/hisat2-2.0.4/hisat2 -p 8 	-x /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh38_hg38/hisat2_GRCh38primary -1 $FP -2 $RP -U ${FU},${RU} 	-S /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/HISAT2_out/${ID}_hisat_out.sam  --phred33 	2>/dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/HISAT2_out/align_summaries/${ID}_summary.txt
 	
 elif  [ -f /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/trimmed_fq/${ID}_trimmed.fastq ] ; then
 	## Trimmed, single-end
 	echo "HISAT2 alignment run on trimmed single-end reads"
-	/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Software/hisat2-2.0.4/hisat2 -p 8 	-x /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh38_hg38/hisat2_GRCh38primary -U /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/trimmed_fq/${ID}_trimmed.fastq 	-S /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/HISAT2_out/${ID}_hisat_out.sam --phred33 	2>/dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/HISAT2_out/align_summaries/${ID}_summary.txt
+	/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Software/hisat2-2.0.4/hisat2 -p 8 	-x /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh38_hg38/hisat2_GRCh38primary -U /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/trimmed_fq/${ID}_trimmed.fastq 	-S /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/HISAT2_out/${ID}_hisat_out.sam  --phred33 	2>/dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/HISAT2_out/align_summaries/${ID}_summary.txt
 
 elif [ TRUE == "TRUE" ] ; then
 	## Untrimmed, pair-end
 	echo "HISAT2 alignment run on original untrimmed paired-end reads"
-	/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Software/hisat2-2.0.4/hisat2 -p 8 	-x /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh38_hg38/hisat2_GRCh38primary -1 ${FILE1} -2 ${FILE2} 	-S /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/HISAT2_out/${ID}_hisat_out.sam --rna-strandness RF --phred33 	2>/dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/HISAT2_out/align_summaries/${ID}_summary.txt
+	/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Software/hisat2-2.0.4/hisat2 -p 8 	-x /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh38_hg38/hisat2_GRCh38primary -1 ${FILE1} -2 ${FILE2} 	-S /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/HISAT2_out/${ID}_hisat_out.sam  --phred33 	2>/dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/HISAT2_out/align_summaries/${ID}_summary.txt
 
 else
 	## Untrimmed, single-end
 	echo "HISAT2 alignment run on original untrimmed single-end reads"
-	/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Software/hisat2-2.0.4/hisat2 -p 8 	-x /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh38_hg38/hisat2_GRCh38primary -U ${FILE1} 	-S /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/HISAT2_out/${ID}_hisat_out.sam --phred33 	2>/dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/HISAT2_out/align_summaries/${ID}_summary.txt
+	/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Software/hisat2-2.0.4/hisat2 -p 8 	-x /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh38_hg38/hisat2_GRCh38primary -U ${FILE1} 	-S /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/HISAT2_out/${ID}_hisat_out.sam  --phred33 	2>/dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/HISAT2_out/align_summaries/${ID}_summary.txt
 fi
 
 

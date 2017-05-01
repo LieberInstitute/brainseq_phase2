@@ -1,11 +1,11 @@
 **** Job starts ****
-Mon Feb 20 20:53:25 EST 2017
+Fri Mar 17 20:16:52 EDT 2017
 **** JHPCE info ****
-User: ajaffe
-Job id: 9743235
+User: eburke
+Job id: 39177
 Job name: step4-featCounts-DLPFC_polyA_degradation.hg38
-Hostname: compute-067
-Task id: 
+Hostname: compute-064
+Task id: 2
 
         ==========     _____ _    _ ____  _____  ______          _____  
         =====         / ____| |  | |  _ \|  __ \|  ____|   /\   |  __ \ 
@@ -27,7 +27,7 @@ Task id:
 ||                 Threads : 8                                                ||
 ||                   Level : meta-feature level                               ||
 ||              Paired-end : yes                                              ||
-||         Strand specific : reversely stranded                               ||
+||         Strand specific : no                                               ||
 ||      Multimapping reads : not counted                                      ||
 || Multi-overlapping reads : not counted                                      ||
 ||                                                                            ||
@@ -54,8 +54,8 @@ Task id:
 ||    Read re-ordering is performed.                                          ||
 ||                                                                            ||
 ||    Total fragments : 51321167                                              ||
-||    Successfully assigned fragments : 42430166 (82.7%)                      ||
-||    Running time : 2.72 minutes                                             ||
+||    Successfully assigned fragments : 42059657 (82.0%)                      ||
+||    Running time : 4.21 minutes                                             ||
 ||                                                                            ||
 ||                         Read assignment finished.                          ||
 ||                                                                            ||
@@ -82,7 +82,7 @@ Task id:
 ||                 Threads : 8                                                ||
 ||                   Level : feature level                                    ||
 ||              Paired-end : yes                                              ||
-||         Strand specific : reversely stranded                               ||
+||         Strand specific : no                                               ||
 ||      Multimapping reads : not counted                                      ||
 || Multi-overlapping reads : counted                                          ||
 ||                                                                            ||
@@ -109,8 +109,8 @@ Task id:
 ||    Read re-ordering is performed.                                          ||
 ||                                                                            ||
 ||    Total fragments : 51321167                                              ||
-||    Successfully assigned fragments : 43735428 (85.2%)                      ||
-||    Running time : 2.67 minutes                                             ||
+||    Successfully assigned fragments : 44640853 (87.0%)                      ||
+||    Running time : 4.76 minutes                                             ||
 ||                                                                            ||
 ||                         Read assignment finished.                          ||
 ||                                                                            ||
@@ -125,4 +125,4 @@ Maximum intron length: 500000
 Alignment: /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/Counts/junction/tmpdir/DLPFC_Br1385_A2_poly.bam
 Output file: /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/Counts/junction/DLPFC_Br1385_A2_poly_junctions_primaryOnly_regtools.bed
 **** Job ends ****
-Mon Feb 20 21:09:54 EST 2017
+Fri Mar 17 20:40:14 EDT 2017

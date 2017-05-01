@@ -1,11 +1,11 @@
 **** Job starts ****
-Mon Feb 20 21:21:11 EST 2017
+Fri Mar 17 20:19:44 EDT 2017
 **** JHPCE info ****
-User: ajaffe
-Job id: 9743237
+User: eburke
+Job id: 39179
 Job name: step5-coverage-DLPFC_polyA_degradation.hg38
-Hostname: compute-104
-Task id: 
+Hostname: compute-052
+Task id: 19
 Calcualte wigsum ... 
 No alignments for GL383567.1. skipped
 Processing KI270509.1 ...
@@ -925,4 +925,4 @@ line 7028413 of /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA
 Skip multi-hits:False
 Run wigToBigWig /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/Coverage/DLPFC_Br2074_D4_poly.wig /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/hg38.chrom.sizes.gencode /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/Coverage/DLPFC_Br2074_D4_poly.bw 
 **** Job ends ****
-Mon Feb 20 21:56:08 EST 2017
+Fri Mar 17 21:36:37 EDT 2017

@@ -1,11 +1,11 @@
 **** Job starts ****
-Mon Feb 20 21:56:08 EST 2017
+Sat Mar 18 01:07:35 EDT 2017
 **** JHPCE info ****
-User: ajaffe
-Job id: 9743239
+User: eburke
+Job id: 39181
 Job name: step6-txQuant-DLPFC_polyA_degradation.hg38
-Hostname: compute-087
-Task id: 
+Hostname: compute-066
+Task id: 3
 Version Info: ### A newer version of Salmon is available. ####
 ###
 The newest version, available at https://github.com/COMBINE-lab/salmon/releases 
@@ -17,25 +17,25 @@ earliest convenience.
 ### [ command ] => quant 
 ### [ index ] => { /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh38_hg38/transcripts/salmon_index_gencode.v25.transcripts }
 ### [ threads ] => { 1 }
-### [ libType ] => { ISR }
+### [ libType ] => { IU }
 ### [ mates1 ] => { /dcs01/ajaffe/Brain/Degradation/FASTQ/Sample_Br1385_A4_C68R6ACXX/Br1385_A4_C68R6ACXX_CCGTCC_L001_R1_001.fastq.gz }
 ### [ mates2 ] => { /dcs01/ajaffe/Brain/Degradation/FASTQ/Sample_Br1385_A4_C68R6ACXX/Br1385_A4_C68R6ACXX_CCGTCC_L001_R2_001.fastq.gz }
 ### [ output ] => { /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/Salmon_tx/DLPFC_Br1385_A4_poly }
 Logs will be written to /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/Salmon_tx/DLPFC_Br1385_A4_poly/logs
-[1m[2017-02-20 21:56:09.732] [jointLog] [info] parsing read library format
-[00m[1m[2017-02-20 21:56:09.736] [jointLog] [info] There is 1 library.
-[00m[1m[2017-02-20 21:56:09.887] [jointLog] [info] Loading Quasi index
-[00m[1m[2017-02-20 21:56:09.893] [jointLog] [info] Loading 32-bit quasi index
-[00m[1m[2017-02-20 21:56:09.894] [stderrLog] [info] Loading Suffix Array 
-[00m[1m[2017-02-20 21:56:11.565] [stderrLog] [info] Loading Transcript Info 
-[00m[1m[2017-02-20 21:56:12.095] [stderrLog] [info] Loading Rank-Select Bit Array
-[00m[1m[2017-02-20 21:56:12.201] [stderrLog] [info] There were 198093 set bits in the bit array
-[00m[1m[2017-02-20 21:56:12.252] [stderrLog] [info] Computing transcript lengths
-[00m[1m[2017-02-20 21:56:12.253] [stderrLog] [info] Waiting to finish loading hash
-[00m[1m[2017-02-20 21:56:20.433] [stderrLog] [info] Successfully loaded position hash
-[00m[1m[2017-02-20 21:56:20.433] [stderrLog] [info] Done loading index
-[00m[1m[2017-02-20 21:56:20.433] [jointLog] [info] done
-[00m[1m[2017-02-20 21:56:20.463] [jointLog] [info] Index contained 198093 targets
+[1m[2017-03-18 01:07:35.938] [jointLog] [info] parsing read library format
+[00m[1m[2017-03-18 01:07:35.938] [jointLog] [info] There is 1 library.
+[00m[1m[2017-03-18 01:07:36.012] [jointLog] [info] Loading Quasi index
+[00m[1m[2017-03-18 01:07:36.034] [jointLog] [info] Loading 32-bit quasi index
+[00m[1m[2017-03-18 01:07:36.036] [stderrLog] [info] Loading Suffix Array 
+[00m[1m[2017-03-18 01:07:45.076] [stderrLog] [info] Loading Transcript Info 
+[00m[1m[2017-03-18 01:07:47.336] [stderrLog] [info] Loading Rank-Select Bit Array
+[00m[1m[2017-03-18 01:07:47.586] [stderrLog] [info] There were 198093 set bits in the bit array
+[00m[1m[2017-03-18 01:07:47.661] [stderrLog] [info] Computing transcript lengths
+[00m[1m[2017-03-18 01:07:47.663] [stderrLog] [info] Waiting to finish loading hash
+[00m[1m[2017-03-18 01:08:04.345] [jointLog] [info] done
+[00m[1m[2017-03-18 01:08:04.386] [jointLog] [info] Index contained 198093 targets
+[00m[1m[2017-03-18 01:08:04.344] [stderrLog] [info] Successfully loaded position hash
+[00m[1m[2017-03-18 01:08:04.345] [stderrLog] [info] Done loading index
 [00m
 
 
@@ -88,31 +88,31 @@ hits: 25429852, hits per frag:  1.27181
 
 
 
-[1m[2017-02-20 22:07:46.870] [jointLog] [info] Computed 171254 rich equivalence classes for further processing
-[00m[1m[2017-02-20 22:07:46.870] [jointLog] [info] Counted 14004487 total reads in the equivalence classes 
-[00m[1m[2017-02-20 22:07:46.872] [jointLog] [info] Mapping rate = 68.3509%
+[1m[2017-03-18 01:22:40.652] [jointLog] [info] Computed 171254 rich equivalence classes for further processing
+[00m[1m[2017-03-18 01:22:40.652] [jointLog] [info] Counted 14004487 total reads in the equivalence classes 
+[00m[1m[2017-03-18 01:22:40.657] [jointLog] [info] Mapping rate = 68.3509%
 
-[00m[1m[2017-02-20 22:07:46.872] [jointLog] [info] finished quantifyLibrary()
-[00m[1m[2017-02-20 22:07:46.873] [jointLog] [info] Starting optimizer
-[00m[1m[2017-02-20 22:07:47.097] [jointLog] [info] Marked 0 weighted equivalence classes as degenerate
-[00m[1m[2017-02-20 22:07:47.116] [jointLog] [info] iteration = 0 | max rel diff. = 40.6987
-[00m[1m[2017-02-20 22:07:48.977] [jointLog] [info] iteration = 100 | max rel diff. = 0.175248
-[00m[1m[2017-02-20 22:07:50.826] [jointLog] [info] iteration = 200 | max rel diff. = 0.0730236
-[00m[1m[2017-02-20 22:07:52.670] [jointLog] [info] iteration = 300 | max rel diff. = 0.0351454
-[00m[1m[2017-02-20 22:07:54.517] [jointLog] [info] iteration = 400 | max rel diff. = 0.0423474
-[00m[1m[2017-02-20 22:07:56.362] [jointLog] [info] iteration = 500 | max rel diff. = 0.0208908
-[00m[1m[2017-02-20 22:07:58.203] [jointLog] [info] iteration = 600 | max rel diff. = 0.0181129
-[00m[1m[2017-02-20 22:08:00.044] [jointLog] [info] iteration = 700 | max rel diff. = 0.0158963
-[00m[1m[2017-02-20 22:08:01.888] [jointLog] [info] iteration = 800 | max rel diff. = 0.0130613
-[00m[1m[2017-02-20 22:08:03.740] [jointLog] [info] iteration = 900 | max rel diff. = 0.0126701
-[00m[1m[2017-02-20 22:08:05.572] [jointLog] [info] iteration = 1000 | max rel diff. = 0.0108244
-[00m[1m[2017-02-20 22:08:05.609] [jointLog] [info] iteration = 1003 | max rel diff. = 0.00967416
-[00m[1m[2017-02-20 22:08:05.633] [jointLog] [info] Finished optimizer
-[00m[1m[2017-02-20 22:08:05.633] [jointLog] [info] writing output 
+[00m[1m[2017-03-18 01:22:40.657] [jointLog] [info] finished quantifyLibrary()
+[00m[1m[2017-03-18 01:22:40.704] [jointLog] [info] Starting optimizer
+[00m[1m[2017-03-18 01:22:40.958] [jointLog] [info] Marked 0 weighted equivalence classes as degenerate
+[00m[1m[2017-03-18 01:22:40.999] [jointLog] [info] iteration = 0 | max rel diff. = 40.4913
+[00m[1m[2017-03-18 01:22:45.251] [jointLog] [info] iteration = 100 | max rel diff. = 0.17504
+[00m[1m[2017-03-18 01:22:49.860] [jointLog] [info] iteration = 200 | max rel diff. = 0.0969845
+[00m[1m[2017-03-18 01:22:54.037] [jointLog] [info] iteration = 300 | max rel diff. = 0.0351453
+[00m[1m[2017-03-18 01:22:58.665] [jointLog] [info] iteration = 400 | max rel diff. = 0.0426934
+[00m[1m[2017-03-18 01:23:02.774] [jointLog] [info] iteration = 500 | max rel diff. = 0.0208812
+[00m[1m[2017-03-18 01:23:07.174] [jointLog] [info] iteration = 600 | max rel diff. = 0.0181132
+[00m[1m[2017-03-18 01:23:11.324] [jointLog] [info] iteration = 700 | max rel diff. = 0.0158963
+[00m[1m[2017-03-18 01:23:15.423] [jointLog] [info] iteration = 800 | max rel diff. = 0.0130613
+[00m[1m[2017-03-18 01:23:19.614] [jointLog] [info] iteration = 900 | max rel diff. = 0.0126712
+[00m[1m[2017-03-18 01:23:23.952] [jointLog] [info] iteration = 1000 | max rel diff. = 0.0108244
+[00m[1m[2017-03-18 01:23:24.038] [jointLog] [info] iteration = 1003 | max rel diff. = 0.00967416
+[00m[1m[2017-03-18 01:23:24.046] [jointLog] [info] Finished optimizer
+[00m[1m[2017-03-18 01:23:24.046] [jointLog] [info] writing output 
 
-[00m[33m[1m[2017-02-20 22:08:06.030] [jointLog] [warning] NOTE: Read Lib [( /dcs01/ajaffe/Brain/Degradation/FASTQ/Sample_Br1385_A4_C68R6ACXX/Br1385_A4_C68R6ACXX_CCGTCC_L001_R1_001.fastq.gz, /dcs01/ajaffe/Brain/Degradation/FASTQ/Sample_Br1385_A4_C68R6ACXX/Br1385_A4_C68R6ACXX_CCGTCC_L001_R2_001.fastq.gz )] :
+[00m[33m[1m[2017-03-18 01:23:24.580] [jointLog] [warning] NOTE: Read Lib [( /dcs01/ajaffe/Brain/Degradation/FASTQ/Sample_Br1385_A4_C68R6ACXX/Br1385_A4_C68R6ACXX_CCGTCC_L001_R1_001.fastq.gz, /dcs01/ajaffe/Brain/Degradation/FASTQ/Sample_Br1385_A4_C68R6ACXX/Br1385_A4_C68R6ACXX_CCGTCC_L001_R2_001.fastq.gz )] :
 
-Greater than 5% of the fragments disagreed with the provided library type; check the file: /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/Salmon_tx/DLPFC_Br1385_A4_poly/lib_format_counts.json for details
+Detected a *potential* strand bias > 1% in an unstranded protocol check the file: /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/Salmon_tx/DLPFC_Br1385_A4_poly/lib_format_counts.json for details
 
 [00m**** Job ends ****
-Mon Feb 20 22:08:06 EST 2017
+Sat Mar 18 01:23:25 EDT 2017

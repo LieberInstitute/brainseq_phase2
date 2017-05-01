@@ -18,6 +18,7 @@ spec <- matrix(c(
 	'experiment', 'e', 1, 'character', 'Experiment',
 	'prefix', 'p', 1, 'character', 'Prefix',
     'paired', 'l', 1, 'logical', 'Whether the reads are paired-end or not',
+	'stranded', 's', 1, 'character', "Strandedness of the data: Either 'FALSE', 'forward' or 'reverse'",
     'ercc', 'c', 1, 'logical', 'Whether the reads include ERCC or not',
     'cores', 't', 1, 'integer', 'Number of cores to use',
 	'help' , 'h', 0, 'logical', 'Display help'
@@ -38,9 +39,13 @@ if(FALSE){
         'experiment' = 'alzheimer',
         'prefix' = 'gsk_phaseII',
         'paired' = TRUE,
-        'ercc' = FALSE
+		'stranded' = 'reverse',
+        'ercc' = FALSE,
+		'cores' = 1
     )
 }
+
+stopifnot(opt$stranded %in% c('FALSE', 'forward', 'reverse'))
 
 if (opt$organism == "hg19") { 
 	library('BSgenome.Hsapiens.UCSC.hg19')
@@ -347,10 +352,8 @@ exonMap$gencodeTx = sapply(tx,paste0,collapse=";")
 
 ## import theJunctions annotation
 if (opt$organism == "hg19") { 
-	#load(file.path(RDIR, "junction_annotation_hg19_ensembl_v75.rda"))
 	load(file.path(RDIR, "junction_annotation_hg19_gencode_v25lift37.rda"))
 } else if (opt$organism == "hg38") { 
-	#load(file.path(RDIR, "junction_annotation_hg38_ensembl_v85.rda"))
 	load(file.path(RDIR, "junction_annotation_hg38_gencode_v25.rda"))
 }
 
@@ -358,7 +361,7 @@ if (opt$organism == "hg19") {
 junctionFiles <- file.path(opt$maindir, 'Counts', 'junction', paste0(metrics$SAMPLE_ID, '_junctions_primaryOnly_regtools.count'))
 stopifnot(all(file.exists(junctionFiles))) #  TRUE
 
-if (opt$paired == TRUE) {
+if (opt$stranded == TRUE) {
 	juncCounts = junctionCount(junctionFiles, metrics$SAMPLE_ID,
 		output = "Count", maxCores=opt$cores,strandSpecific=TRUE)
 } else {
@@ -424,14 +427,19 @@ g$newGeneSym[g$newGeneSym=="-"] = NA
 anno$newGeneID = g$newGene
 anno$newGeneSymbol = g$newGeneSym
 anno$isFusion = grepl("-", anno$newGeneID)
-
 anno$newGeneSymbol[anno$code =="InGen"] = anno$Symbol[anno$code =="InGen"]
 anno$newGeneID[anno$code =="InGen"] = anno$gencodeGeneID[anno$code =="InGen"]
-## extract out
+
+## extract out jMap
 jMap = anno
+colnames(mcols(jMap))[which(colnames(mcols(jMap))=="code")] = "Class"
+rm(anno)
+
+## jCounts
 jCounts = juncCounts$countDF
 jCounts = jCounts[names(jMap),gsub("-",".",metrics$SAMPLE_ID)]
 
+## jRpkm
 mappedPer10M = sapply(jCounts, sum)/10e6
 countsM = DataFrame(mapply(function(x,d) x/d, jCounts , mappedPer10M))
 rownames(jCounts) = rownames(countsM) = names(jMap)
@@ -439,16 +447,15 @@ jRpkm = as.data.frame(countsM)
 rownames(jRpkm) = names(jMap)
 colnames(jRpkm)  = colnames(geneRpkm)
 
-## sequence of acceptor/donor sites
-left = right = jMap
-end(left) = start(left) +1
-start(right) = end(right) -1
-
-jMap$leftSeq  = getSeq(Hsapiens, left)
-jMap$rightSeq = getSeq(Hsapiens, right)
-
 jMap$meanExprs= rowMeans(jRpkm)
-colnames(mcols(jMap))[which(colnames(mcols(jMap))=="code")] = "Class"
+
+
+# ## sequence of acceptor/donor sites
+# left = right = jMap
+# end(left) = start(left) +1
+# start(right) = end(right) -1
+# jMap$leftSeq  = getSeq(Hsapiens, left)
+# jMap$rightSeq = getSeq(Hsapiens, right)
 
 
 
