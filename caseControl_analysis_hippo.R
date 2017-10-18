@@ -27,10 +27,19 @@ load("count_data/degradation_rse_phase2_hippo.rda")
 keepIndex = which(rse_gene$Age > 17 & 
 	rse_gene$Kit == "HMR")
 rse_gene = rse_gene[,keepIndex]
+rse_exon = rse_exon[,keepIndex]
+rse_jxn = rse_jxn[,keepIndex]
+rse_tx = rse_tx[,keepIndex]
 cov_rse_hippo = cov_rse_hippo[,keepIndex]
 
 ## filter low expression
 geneIndex = which(rowMeans(getRPKM(rse_gene,"Length")) > 0.2)
+rse_gene = rse_gene[geneIndex,]
+
+exonIndex = which(rowMeans(getRPKM(rse_exon,"Length")) > 0.5)
+rse_exon = rse_exon[exonIndex,]
+
+jxnIndex = which(rowMeans(getRPM(rse_jxn)) > 0.5 & rowData(jMap)$Class != "Novel")
 rse_gene = rse_gene[geneIndex,]
 
 ## Ns
