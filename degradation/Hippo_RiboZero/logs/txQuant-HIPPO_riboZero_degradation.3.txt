@@ -1,115 +1,0 @@
-**** Job starts ****
-Wed Feb 22 10:32:41 EST 2017
-Version Info: ### A newer version of Salmon is available. ####
-###
-The newest version, available at https://github.com/COMBINE-lab/salmon/releases 
-contains new features, improvements, and minor bug fixes; please upgrade at your
-earliest convenience.
-###
-### salmon (mapping-based) v0.7.2
-### [ program ] => salmon 
-### [ command ] => quant 
-### [ index ] => { /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh38_hg38/transcripts/salmon_index_gencode.v25.transcripts }
-### [ threads ] => { 1 }
-### [ libType ] => { ISR }
-### [ mates1 ] => { /dcl01/lieber/ajaffe/Nina/161116_J00144_0062_AHC7KYBBXX/degradation/Br2623-4_HC7KYBBXX_S11_L008_R1_001.fastq.gz }
-### [ mates2 ] => { /dcl01/lieber/ajaffe/Nina/161116_J00144_0062_AHC7KYBBXX/degradation/Br2623-4_HC7KYBBXX_S11_L008_R2_001.fastq.gz }
-### [ output ] => { /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/Hippo_RiboZero/Salmon_tx/HIPPO_Br2623_D01_ribo }
-Logs will be written to /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/Hippo_RiboZero/Salmon_tx/HIPPO_Br2623_D01_ribo/logs
-[1m[2017-02-22 10:32:41.886] [jointLog] [info] parsing read library format
-[00m[1m[2017-02-22 10:32:41.886] [jointLog] [info] There is 1 library.
-[00m[1m[2017-02-22 10:32:41.993] [jointLog] [info] Loading Quasi index
-[00m[1m[2017-02-22 10:32:41.994] [jointLog] [info] Loading 32-bit quasi index
-[00m[1m[2017-02-22 10:32:41.995] [stderrLog] [info] Loading Suffix Array 
-[00m[1m[2017-02-22 10:32:43.064] [stderrLog] [info] Loading Transcript Info 
-[00m[1m[2017-02-22 10:32:43.589] [stderrLog] [info] Loading Rank-Select Bit Array
-[00m[1m[2017-02-22 10:32:43.714] [stderrLog] [info] There were 198093 set bits in the bit array
-[00m[1m[2017-02-22 10:32:43.769] [stderrLog] [info] Computing transcript lengths
-[00m[1m[2017-02-22 10:32:43.770] [stderrLog] [info] Waiting to finish loading hash
-[00m[1m[2017-02-22 10:32:52.405] [jointLog] [info] done
-[00m[1m[2017-02-22 10:32:52.406] [jointLog] [info] Index contained 198093 targets
-[00m[1m[2017-02-22 10:32:52.405] [stderrLog] [info] Successfully loaded position hash
-[00m[1m[2017-02-22 10:32:52.405] [stderrLog] [info] Done loading index
-[00m
-
-
-
-[A[32mprocessed[31m 500000 [32mfragments[0m
-hits: 337594, hits per frag:  0.682008[A[32mprocessed[31m 1000000 [32mfragments[0m
-hits: 668447, hits per frag:  0.671806[A[32mprocessed[31m 1500000 [32mfragments[0m
-hits: 998738, hits per frag:  0.668052[A[32mprocessed[31m 2000000 [32mfragments[0m
-hits: 1331843, hits per frag:  0.66759[A[32mprocessed[31m 2500000 [32mfragments[0m
-hits: 1653440, hits per frag:  0.662701[A[32mprocessed[31m 3000000 [32mfragments[0m
-hits: 1975264, hits per frag:  0.659521[A[32mprocessed[31m 3500000 [32mfragments[0m
-hits: 2297609, hits per frag:  0.657399[A[32mprocessed[31m 4000000 [32mfragments[0m
-hits: 2624593, hits per frag:  0.656969[A[32mprocessed[31m 4500000 [32mfragments[0m
-hits: 2953489, hits per frag:  0.657061[A[32mprocessed[31m 5000000 [32mfragments[0m
-hits: 3292757, hits per frag:  0.659211[A[32mprocessed[31m 5500000 [32mfragments[0m
-hits: 3630393, hits per frag:  0.660672[A[32mprocessed[31m 6000000 [32mfragments[0m
-hits: 3964873, hits per frag:  0.661363[A[32mprocessed[31m 6500000 [32mfragments[0m
-hits: 4295155, hits per frag:  0.661302[A[32mprocessed[31m 7000000 [32mfragments[0m
-hits: 4626390, hits per frag:  0.661385[A[32mprocessed[31m 7500000 [32mfragments[0m
-hits: 4959495, hits per frag:  0.661707[A[32mprocessed[31m 8000000 [32mfragments[0m
-hits: 5292691, hits per frag:  0.662[A[32mprocessed[31m 8500000 [32mfragments[0m
-hits: 5631388, hits per frag:  0.662906[A[32mprocessed[31m 9000000 [32mfragments[0m
-hits: 5973987, hits per frag:  0.664145[A[32mprocessed[31m 9500000 [32mfragments[0m
-hits: 6324608, hits per frag:  0.666099[A[32mprocessed[31m 10000000 [32mfragments[0m
-hits: 6673044, hits per frag:  0.667638[A[32mprocessed[31m 10500000 [32mfragments[0m
-hits: 7021735, hits per frag:  0.669055[A[32mprocessed[31m 11000000 [32mfragments[0m
-hits: 7364917, hits per frag:  0.669842[A[32mprocessed[31m 11500000 [32mfragments[0m
-hits: 7706308, hits per frag:  0.670405[A[32mprocessed[31m 12000000 [32mfragments[0m
-hits: 8045113, hits per frag:  0.670706[A[32mprocessed[31m 12500000 [32mfragments[0m
-hits: 8382581, hits per frag:  0.670875[A[32mprocessed[31m 13000000 [32mfragments[0m
-hits: 8721335, hits per frag:  0.67113[A[32mprocessed[31m 13500000 [32mfragments[0m
-hits: 9062843, hits per frag:  0.67157[A[32mprocessed[31m 14000000 [32mfragments[0m
-hits: 9404405, hits per frag:  0.671983[A[32mprocessed[31m 14500000 [32mfragments[0m
-hits: 9745265, hits per frag:  0.672319[A[32mprocessed[31m 15000000 [32mfragments[0m
-hits: 10091710, hits per frag:  0.673005[A[32mprocessed[31m 15500000 [32mfragments[0m
-hits: 10439652, hits per frag:  0.673743[A[32mprocessed[31m 16000000 [32mfragments[0m
-hits: 10786128, hits per frag:  0.674344[A[32mprocessed[31m 16500000 [32mfragments[0m
-hits: 11129669, hits per frag:  0.67473[A[32mprocessed[31m 17000000 [32mfragments[0m
-hits: 11465923, hits per frag:  0.674664[A[32mprocessed[31m 17500000 [32mfragments[0m
-hits: 11806368, hits per frag:  0.674842[A[32mprocessed[31m 18000000 [32mfragments[0m
-hits: 12150716, hits per frag:  0.675227[A[32mprocessed[31m 18500000 [32mfragments[0m
-hits: 12500750, hits per frag:  0.675899[A[32mprocessed[31m 19000000 [32mfragments[0m
-hits: 12854136, hits per frag:  0.676712[A[32mprocessed[31m 19500000 [32mfragments[0m
-hits: 13213600, hits per frag:  0.677794
-
-
-
-
-
-
-
-[1m[2017-02-22 11:01:14.448] [jointLog] [info] Computed 172581 rich equivalence classes for further processing
-[00m[1m[2017-02-22 11:01:14.448] [jointLog] [info] Counted 4617568 total reads in the equivalence classes 
-[00m[33m[1m[2017-02-22 11:01:14.471] [jointLog] [warning] Only 4617568 fragments were mapped, but the number of burn-in fragments was set to 5000000.
-The effective lengths have been computed using the observed mappings.
-
-[00m[1m[2017-02-22 11:01:14.471] [jointLog] [info] Mapping rate = 23.3674%
-
-[00m[1m[2017-02-22 11:01:14.471] [jointLog] [info] finished quantifyLibrary()
-[00m[1m[2017-02-22 11:01:14.499] [jointLog] [info] Starting optimizer
-[00m[1m[2017-02-22 11:01:14.746] [jointLog] [info] Marked 0 weighted equivalence classes as degenerate
-[00m[1m[2017-02-22 11:01:14.783] [jointLog] [info] iteration = 0 | max rel diff. = 10.5649
-[00m[1m[2017-02-22 11:01:19.172] [jointLog] [info] iteration = 100 | max rel diff. = 0.16828
-[00m[1m[2017-02-22 11:01:23.424] [jointLog] [info] iteration = 200 | max rel diff. = 0.0537267
-[00m[1m[2017-02-22 11:01:28.076] [jointLog] [info] iteration = 300 | max rel diff. = 0.0737231
-[00m[1m[2017-02-22 11:01:32.626] [jointLog] [info] iteration = 400 | max rel diff. = 0.02632
-[00m[1m[2017-02-22 11:01:36.999] [jointLog] [info] iteration = 500 | max rel diff. = 0.0314522
-[00m[1m[2017-02-22 11:01:41.369] [jointLog] [info] iteration = 600 | max rel diff. = 0.0312392
-[00m[1m[2017-02-22 11:01:45.877] [jointLog] [info] iteration = 700 | max rel diff. = 0.0367524
-[00m[1m[2017-02-22 11:01:50.191] [jointLog] [info] iteration = 800 | max rel diff. = 0.0140885
-[00m[1m[2017-02-22 11:01:54.485] [jointLog] [info] iteration = 900 | max rel diff. = 0.0140885
-[00m[1m[2017-02-22 11:01:59.041] [jointLog] [info] iteration = 1000 | max rel diff. = 0.0103997
-[00m[1m[2017-02-22 11:02:02.801] [jointLog] [info] iteration = 1100 | max rel diff. = 0.0103999
-[00m[1m[2017-02-22 11:02:05.373] [jointLog] [info] iteration = 1175 | max rel diff. = 0.00914739
-[00m[1m[2017-02-22 11:02:05.379] [jointLog] [info] Finished optimizer
-[00m[1m[2017-02-22 11:02:05.379] [jointLog] [info] writing output 
-
-[00m[33m[1m[2017-02-22 11:02:05.752] [jointLog] [warning] NOTE: Read Lib [( /dcl01/lieber/ajaffe/Nina/161116_J00144_0062_AHC7KYBBXX/degradation/Br2623-4_HC7KYBBXX_S11_L008_R1_001.fastq.gz, /dcl01/lieber/ajaffe/Nina/161116_J00144_0062_AHC7KYBBXX/degradation/Br2623-4_HC7KYBBXX_S11_L008_R2_001.fastq.gz )] :
-
-Greater than 5% of the fragments disagreed with the provided library type; check the file: /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/Hippo_RiboZero/Salmon_tx/HIPPO_Br2623_D01_ribo/lib_format_counts.json for details
-
-[00m**** Job ends ****
-Wed Feb 22 11:02:06 EST 2017

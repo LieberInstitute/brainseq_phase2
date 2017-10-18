@@ -9,3 +9,10 @@ degradation/*/FASTQ
 degradation/*/rpkmCounts*
 degradation/*/rawCounts*
 count_data/
+degradation/*sum.tsv
+degradation/*bed
+rdas
+eqtl_tables
+qcChecks
+caseControl/*.rda
+genotype_data

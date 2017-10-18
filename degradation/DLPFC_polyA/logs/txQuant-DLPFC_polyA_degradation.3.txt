@@ -1,118 +1,0 @@
-**** Job starts ****
-Sat Mar 18 01:07:35 EDT 2017
-**** JHPCE info ****
-User: eburke
-Job id: 39181
-Job name: step6-txQuant-DLPFC_polyA_degradation.hg38
-Hostname: compute-066
-Task id: 3
-Version Info: ### A newer version of Salmon is available. ####
-###
-The newest version, available at https://github.com/COMBINE-lab/salmon/releases 
-contains new features, improvements, and minor bug fixes; please upgrade at your
-earliest convenience.
-###
-### salmon (mapping-based) v0.7.2
-### [ program ] => salmon 
-### [ command ] => quant 
-### [ index ] => { /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh38_hg38/transcripts/salmon_index_gencode.v25.transcripts }
-### [ threads ] => { 1 }
-### [ libType ] => { IU }
-### [ mates1 ] => { /dcs01/ajaffe/Brain/Degradation/FASTQ/Sample_Br1385_A4_C68R6ACXX/Br1385_A4_C68R6ACXX_CCGTCC_L001_R1_001.fastq.gz }
-### [ mates2 ] => { /dcs01/ajaffe/Brain/Degradation/FASTQ/Sample_Br1385_A4_C68R6ACXX/Br1385_A4_C68R6ACXX_CCGTCC_L001_R2_001.fastq.gz }
-### [ output ] => { /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/Salmon_tx/DLPFC_Br1385_A4_poly }
-Logs will be written to /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/Salmon_tx/DLPFC_Br1385_A4_poly/logs
-[1m[2017-03-18 01:07:35.938] [jointLog] [info] parsing read library format
-[00m[1m[2017-03-18 01:07:35.938] [jointLog] [info] There is 1 library.
-[00m[1m[2017-03-18 01:07:36.012] [jointLog] [info] Loading Quasi index
-[00m[1m[2017-03-18 01:07:36.034] [jointLog] [info] Loading 32-bit quasi index
-[00m[1m[2017-03-18 01:07:36.036] [stderrLog] [info] Loading Suffix Array 
-[00m[1m[2017-03-18 01:07:45.076] [stderrLog] [info] Loading Transcript Info 
-[00m[1m[2017-03-18 01:07:47.336] [stderrLog] [info] Loading Rank-Select Bit Array
-[00m[1m[2017-03-18 01:07:47.586] [stderrLog] [info] There were 198093 set bits in the bit array
-[00m[1m[2017-03-18 01:07:47.661] [stderrLog] [info] Computing transcript lengths
-[00m[1m[2017-03-18 01:07:47.663] [stderrLog] [info] Waiting to finish loading hash
-[00m[1m[2017-03-18 01:08:04.345] [jointLog] [info] done
-[00m[1m[2017-03-18 01:08:04.386] [jointLog] [info] Index contained 198093 targets
-[00m[1m[2017-03-18 01:08:04.344] [stderrLog] [info] Successfully loaded position hash
-[00m[1m[2017-03-18 01:08:04.345] [stderrLog] [info] Done loading index
-[00m
-
-
-
-[A[32mprocessed[31m 500000 [32mfragments[0m
-hits: 641323, hits per frag:  1.2956[A[32mprocessed[31m 1000000 [32mfragments[0m
-hits: 1280385, hits per frag:  1.28682[A[32mprocessed[31m 1500000 [32mfragments[0m
-hits: 1920089, hits per frag:  1.28434[A[32mprocessed[31m 2000000 [32mfragments[0m
-hits: 2556441, hits per frag:  1.28142[A[32mprocessed[31m 2500000 [32mfragments[0m
-hits: 3187556, hits per frag:  1.27758[A[32mprocessed[31m 3000000 [32mfragments[0m
-hits: 3824979, hits per frag:  1.27712[A[32mprocessed[31m 3500000 [32mfragments[0m
-hits: 4458005, hits per frag:  1.27554[A[32mprocessed[31m 4000000 [32mfragments[0m
-hits: 5097505, hits per frag:  1.27597[A[32mprocessed[31m 4500000 [32mfragments[0m
-hits: 5732873, hits per frag:  1.27539[A[32mprocessed[31m 5000000 [32mfragments[0m
-hits: 6366657, hits per frag:  1.27461[A[32mprocessed[31m 5500000 [32mfragments[0m
-hits: 7002935, hits per frag:  1.27442[A[32mprocessed[31m 6000000 [32mfragments[0m
-hits: 7635145, hits per frag:  1.27359[A[32mprocessed[31m 6500000 [32mfragments[0m
-hits: 8262850, hits per frag:  1.27219[A[32mprocessed[31m 7000000 [32mfragments[0m
-hits: 8894453, hits per frag:  1.27154[A[32mprocessed[31m 7500000 [32mfragments[0m
-hits: 9533830, hits per frag:  1.27203[A[32mprocessed[31m 8000000 [32mfragments[0m
-hits: 10170373, hits per frag:  1.27209[A[32mprocessed[31m 8500000 [32mfragments[0m
-hits: 10807352, hits per frag:  1.2722[A[32mprocessed[31m 9000000 [32mfragments[0m
-hits: 11440265, hits per frag:  1.27185[A[32mprocessed[31m 9500000 [32mfragments[0m
-hits: 12069825, hits per frag:  1.27118[A[32mprocessed[31m 10000000 [32mfragments[0m
-hits: 12697219, hits per frag:  1.27036[A[32mprocessed[31m 10500000 [32mfragments[0m
-hits: 13335595, hits per frag:  1.27066[A[32mprocessed[31m 11000000 [32mfragments[0m
-hits: 13975381, hits per frag:  1.27107[A[32mprocessed[31m 11500000 [32mfragments[0m
-hits: 14614589, hits per frag:  1.27139[A[32mprocessed[31m 12000000 [32mfragments[0m
-hits: 15250965, hits per frag:  1.27144[A[32mprocessed[31m 12500000 [32mfragments[0m
-hits: 15885919, hits per frag:  1.27138[A[32mprocessed[31m 13000000 [32mfragments[0m
-hits: 16522040, hits per frag:  1.27142[A[32mprocessed[31m 13500000 [32mfragments[0m
-hits: 17158622, hits per frag:  1.27148[A[32mprocessed[31m 14000000 [32mfragments[0m
-hits: 17801146, hits per frag:  1.27196[A[32mprocessed[31m 14500000 [32mfragments[0m
-hits: 18437751, hits per frag:  1.27201[A[32mprocessed[31m 15000000 [32mfragments[0m
-hits: 19074915, hits per frag:  1.27209[A[32mprocessed[31m 15500000 [32mfragments[0m
-hits: 19707962, hits per frag:  1.27189[A[32mprocessed[31m 16000000 [32mfragments[0m
-hits: 20343898, hits per frag:  1.27189[A[32mprocessed[31m 16500000 [32mfragments[0m
-hits: 20979037, hits per frag:  1.27184[A[32mprocessed[31m 17000000 [32mfragments[0m
-hits: 21613368, hits per frag:  1.27175[A[32mprocessed[31m 17500000 [32mfragments[0m
-hits: 22255377, hits per frag:  1.2721[A[32mprocessed[31m 18000000 [32mfragments[0m
-hits: 22892121, hits per frag:  1.27214[A[32mprocessed[31m 18500000 [32mfragments[0m
-hits: 23526884, hits per frag:  1.27207[A[32mprocessed[31m 19000000 [32mfragments[0m
-hits: 24159614, hits per frag:  1.27189[A[32mprocessed[31m 19500000 [32mfragments[0m
-hits: 24793915, hits per frag:  1.27181[A[32mprocessed[31m 20000000 [32mfragments[0m
-hits: 25429852, hits per frag:  1.27181
-
-
-
-
-
-
-
-[1m[2017-03-18 01:22:40.652] [jointLog] [info] Computed 171254 rich equivalence classes for further processing
-[00m[1m[2017-03-18 01:22:40.652] [jointLog] [info] Counted 14004487 total reads in the equivalence classes 
-[00m[1m[2017-03-18 01:22:40.657] [jointLog] [info] Mapping rate = 68.3509%
-
-[00m[1m[2017-03-18 01:22:40.657] [jointLog] [info] finished quantifyLibrary()
-[00m[1m[2017-03-18 01:22:40.704] [jointLog] [info] Starting optimizer
-[00m[1m[2017-03-18 01:22:40.958] [jointLog] [info] Marked 0 weighted equivalence classes as degenerate
-[00m[1m[2017-03-18 01:22:40.999] [jointLog] [info] iteration = 0 | max rel diff. = 40.4913
-[00m[1m[2017-03-18 01:22:45.251] [jointLog] [info] iteration = 100 | max rel diff. = 0.17504
-[00m[1m[2017-03-18 01:22:49.860] [jointLog] [info] iteration = 200 | max rel diff. = 0.0969845
-[00m[1m[2017-03-18 01:22:54.037] [jointLog] [info] iteration = 300 | max rel diff. = 0.0351453
-[00m[1m[2017-03-18 01:22:58.665] [jointLog] [info] iteration = 400 | max rel diff. = 0.0426934
-[00m[1m[2017-03-18 01:23:02.774] [jointLog] [info] iteration = 500 | max rel diff. = 0.0208812
-[00m[1m[2017-03-18 01:23:07.174] [jointLog] [info] iteration = 600 | max rel diff. = 0.0181132
-[00m[1m[2017-03-18 01:23:11.324] [jointLog] [info] iteration = 700 | max rel diff. = 0.0158963
-[00m[1m[2017-03-18 01:23:15.423] [jointLog] [info] iteration = 800 | max rel diff. = 0.0130613
-[00m[1m[2017-03-18 01:23:19.614] [jointLog] [info] iteration = 900 | max rel diff. = 0.0126712
-[00m[1m[2017-03-18 01:23:23.952] [jointLog] [info] iteration = 1000 | max rel diff. = 0.0108244
-[00m[1m[2017-03-18 01:23:24.038] [jointLog] [info] iteration = 1003 | max rel diff. = 0.00967416
-[00m[1m[2017-03-18 01:23:24.046] [jointLog] [info] Finished optimizer
-[00m[1m[2017-03-18 01:23:24.046] [jointLog] [info] writing output 
-
-[00m[33m[1m[2017-03-18 01:23:24.580] [jointLog] [warning] NOTE: Read Lib [( /dcs01/ajaffe/Brain/Degradation/FASTQ/Sample_Br1385_A4_C68R6ACXX/Br1385_A4_C68R6ACXX_CCGTCC_L001_R1_001.fastq.gz, /dcs01/ajaffe/Brain/Degradation/FASTQ/Sample_Br1385_A4_C68R6ACXX/Br1385_A4_C68R6ACXX_CCGTCC_L001_R2_001.fastq.gz )] :
-
-Detected a *potential* strand bias > 1% in an unstranded protocol check the file: /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_polyA/Salmon_tx/DLPFC_Br1385_A4_poly/lib_format_counts.json for details
-
-[00m**** Job ends ****
-Sat Mar 18 01:23:25 EDT 2017

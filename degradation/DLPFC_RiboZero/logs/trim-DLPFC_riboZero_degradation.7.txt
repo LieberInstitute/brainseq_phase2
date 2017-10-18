@@ -1,7 +1,0 @@
-**** Job starts ****
-Wed Feb  8 15:55:22 EST 2017
-grep: /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_RiboZero/FastQC/Untrimmed/DLPFC_Br1729_B3_ribo/DLPFC_Br1729_B3_ribo_R1_fastqc/summary.txt: No such file or directory
-grep: /dcl01/lieber/ajaffe/lab/brainseq_phase2/degradation/DLPFC_RiboZero/FastQC/Untrimmed/DLPFC_Br1729_B3_ribo/DLPFC_Br1729_B3_ribo_R2_fastqc/summary.txt: No such file or directory
-No trimming required!
-**** Job ends ****
-Wed Feb  8 15:55:22 EST 2017
