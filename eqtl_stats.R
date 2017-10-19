@@ -31,3 +31,21 @@ sapply(hippoList, function(x) signif(quantile(abs(x$beta), c(0.25,0.5,0.75)),3))
 
 sapply(hippoList, function(x) table(x$Class[!duplicated(x$gene)]))$Jxn
 sapply(hippoList, function(x) prop.table(table(x$Class)))$Jxn
+
+##########################
+## dlpfc only ######
+##########################
+dlpfcList = split(dlpfcEqtl, factor(dlpfcEqtl$Type,
+	levels=c("Gene","Exon","Jxn", "Tx")))
+
+sapply(dlpfcList, function(x) max(x$pvalue))
+
+sapply(dlpfcList, function(x) length(unique(x$EnsemblGeneID)))
+sapply(dlpfcList, function(x) length(unique(x$Symbol)))
+sapply(dlpfcList, function(x) length(unique(x$snps)))
+
+sapply(dlpfcList, function(x) signif(quantile(abs(x$beta), c(0.25,0.5,0.75)),3))
+
+sapply(dlpfcList, function(x) table(x$Class[!duplicated(x$gene)]))$Jxn
+sapply(dlpfcList, function(x) prop.table(table(x$Class)))$Jxn
+

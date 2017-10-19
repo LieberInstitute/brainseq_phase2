@@ -39,6 +39,7 @@ rse_gene = rse_gene[geneIndex,]
 exonIndex = which(rowMeans(getRPKM(rse_exon,"Length")) > 0.5)
 rse_exon = rse_exon[exonIndex,]
 
+rowData(rse_jxn)$bp_length=100 # to trick getRPKM to be RP10M
 jxnIndex = which(rowMeans(getRPM(rse_jxn)) > 0.5 & rowData(jMap)$Class != "Novel")
 rse_gene = rse_gene[geneIndex,]
 

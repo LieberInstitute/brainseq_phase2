@@ -70,4 +70,4 @@ eBGene = eBayes(fitGene)
 sigGene = topTable(eBGene,coef=2,
 	p.value = 1,number=nrow(rse_gene))
 outGene = sigGene[rownames(rse_gene),]
-save(outGene, file = "caseControl/dxStats_hippo_filtered_qSVA.rda")
+save(outGene, file = "caseControl/dxStats_dlpfc_filtered_qSVA.rda")
