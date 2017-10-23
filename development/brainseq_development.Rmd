@@ -1,7 +1,7 @@
 ---
 title: "DLPFC brain development"
 author: "Leo"
-date: "10/19/2017"
+date: "10/23/2017"
 output:
   html_document:
     code_folding: show
@@ -264,6 +264,59 @@ gene_explore(ef_obj_hippo, de_odp_hippo, get_mods(colData(rse[[2]]), only_pd = T
 ## both
 gene_explore(ef_obj, de_lrt, pd_all)
 #gene_explore(ef_obj, de_odp, pd_all)
+```
+
+## Limma
+
+This portion uses `limma` to fit the region by age interaction model and calculate a global F statistic.
+
+```{r}
+library('limma')
+library('edgeR')
+library('qvalue')
+
+ind <- data.frame(
+    brnum = c(colData(rse[[1]])$BrNum, colData(rse[[2]])$BrNum),
+    rnum = c(colData(rse[[1]])$RNum, colData(rse[[2]])$RNum),
+    stringsAsFactors = FALSE
+)
+
+brnum <- ind$brnum[match(rownames(pd_all), ind$rnum)]
+
+design <- mods$mod
+
+
+counts <- do.call(cbind, lapply(rse, assay))[keepIdx, ]
+dge <- DGEList(counts = counts)
+dge <- calcNormFactors(dge)
+v <- voom(dge, design, plot = TRUE)
+
+## Page 49 (50 in the pdf) of limmaUsersGuide()
+## Didn't run in my laptop (likely needs more mem)
+if(FALSE) {
+    corfit <- duplicateCorrelation(v$E, design, block=brnum)
+    corfit$consensus
+    fit <- lmFit(v, design, correlation = corfit$consensus)
+} else {
+    fit <- lmFit(v, design)
+}
+
+fit <- eBayes(fit)
+
+colnames(design)[grep(':', colnames(design))]
+top <- topTable(fit, coef = grep(':', colnames(design)), n = nrow(counts))
+
+
+qval <- qvalue(top$P.Value)
+summary(qval)
+hist(qval)
+summary(qval$qvalues)
+
+sapply(c(1e-04, 0.001, 0.01, 0.025, 0.05, 0.1, 1), function(x) { sum(top$adj.P.Val < x)})
+
+# log2FC <- fit$coefficients[, 2]
+# pvalue <- fit$p.value[, 2]
+# qvalue <- qvalue(pvalue)$qvalues
 ```
 
 
