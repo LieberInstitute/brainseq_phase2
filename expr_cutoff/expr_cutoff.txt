@@ -1,10 +1,10 @@
 **** Job starts ****
-Fri Oct 27 16:41:31 EDT 2017
+Tue Oct 31 15:25:02 EDT 2017
 **** JHPCE info ****
 User: lcollado
-Job id: 3248426
+Job id: 3469940
 Job name: expr_cutoff
-Hostname: compute-094
+Hostname: compute-097
 Task id: 
 Loading conda_R/3.4.x
 Using the following user library: ~/R/x86_64-pc-linux-gnu-library/3.4.x
@@ -83,23 +83,23 @@ The following object is masked from ‘package:rafalib’:
     install_bioc
 
 Gene
-2017-10-27 19:06:04 the suggested expression cutoff is 0.21
+2017-10-31 16:10:22 the suggested expression cutoff is 0.21
 0.25 0.17
 Exon
-2017-10-27 19:08:57 the suggested expression cutoff is 0.26
+2017-10-31 16:18:51 the suggested expression cutoff is 0.26
 0.3 0.22
 Jxn
-2017-10-27 19:10:16 the suggested expression cutoff is 0.4
+2017-10-31 16:20:21 the suggested expression cutoff is 0.4
 0.33 0.46
 Tx
-2017-10-27 19:11:39 the suggested expression cutoff is 0.32
+2017-10-31 16:21:37 the suggested expression cutoff is 0.32
 0.38 0.25
 Gene Exon  Jxn   Tx 
 0.25 0.30 0.46 0.38 
 [1] "Reproducibility information:"
-[1] "2017-10-27 20:51:54 EDT"
-     user    system   elapsed 
- 6215.349  8782.141 15018.408 
+[1] "2017-10-31 17:54:32 EDT"
+    user   system  elapsed 
+5860.303 3021.245 8966.878 
 Session info ----------------------------------------------------------------------------------------------------------
  setting  value                                      
  version  R version 3.4.2 Patched (2017-10-12 r73550)
@@ -108,7 +108,7 @@ Session info -------------------------------------------------------------------
  language (EN)                                       
  collate  en_US.UTF-8                                
  tz       <NA>                                       
- date     2017-10-27                                 
+ date     2017-10-31                                 
 
 Packages --------------------------------------------------------------------------------------------------------------
  package              * version  date       source                                   
@@ -141,7 +141,7 @@ Packages -----------------------------------------------------------------------
  DBI                    0.7      2017-06-18 CRAN (R 3.4.1)                           
  DelayedArray         * 0.3.21   2017-09-29 Bioconductor                             
  derfinder              1.11.10  2017-10-16 Bioconductor                             
- derfinderHelper        1.11.4   2017-10-16 Bioconductor                             
+ derfinderHelper        1.11.4   2017-10-30 Bioconductor                             
  devtools             * 1.13.3   2017-08-02 CRAN (R 3.4.1)                           
  digest                 0.6.12   2017-01-27 CRAN (R 3.4.1)                           
  doRNG                  1.6.6    2017-04-10 CRAN (R 3.4.1)                           
@@ -233,4 +233,4 @@ Packages -----------------------------------------------------------------------
  XVector                0.17.2   2017-10-27 Bioconductor                             
  zlibbioc               1.23.0   2017-08-06 Bioconductor                             
 **** Job ends ****
-Fri Oct 27 20:52:05 EDT 2017
+Tue Oct 31 17:54:36 EDT 2017

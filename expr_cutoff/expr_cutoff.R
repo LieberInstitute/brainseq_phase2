@@ -78,6 +78,9 @@ jxn_col <- do.call(rbind, lapply(all[types == 'Jxn'], function(r) {
 }))
 
 rse_jxn <- SummarizedExperiment(assays = list(counts = jxn), rowRanges = jxn_gr, colData = jxn_col)
+# fix junction row names
+rownames(rse_jxn) <- paste0(seqnames(rse_jxn), ":", start(rse_jxn), "-",
+    end(rse_jxn), "(", strand(rse_jxn), ")")
 assays(rse_jxn)$rp10m <- recount::getRPKM(rse_jxn, 'Length')
 
 
