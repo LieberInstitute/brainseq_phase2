@@ -40,8 +40,12 @@ exonIndex = which(rowMeans(getRPKM(rse_exon,"Length")) > 0.5)
 rse_exon = rse_exon[exonIndex,]
 
 rowData(rse_jxn)$bp_length=100 # to trick getRPKM to be RP10M
-jxnIndex = which(rowMeans(getRPM(rse_jxn)) > 0.5 & rowData(jMap)$Class != "Novel")
-rse_gene = rse_gene[geneIndex,]
+jxnIndex = which(rowMeans(getRPKM(rse_jxn)) > 0.5 & 
+	rowData(rse_jxn)$Class != "Novel")
+rse_jxn = rse_jxn[jxnIndex,]
+
+txIndex = which(rowMeans(assays(rse_tx)$tpm) > 0.2)
+rse_tx = rse_tx[txIndex,]
 
 ## Ns
 table(rse_gene$Dx)
@@ -66,21 +70,56 @@ qSVs = pcaDeg$x[,1:k]
 getPcaVars(pcaDeg)[1:k]
 modQsva = cbind(mod, qSVs)
 
-## modeling
+###################
+## modeling #######
+
+##### GENE ######
 dge = DGEList(counts = assays(rse_gene)$counts, 
 	genes = rowData(rse_gene))
 dge = calcNormFactors(dge)
-
-## mean-variance
 vGene = voom(dge,modQsva, plot=TRUE)
-
-## do analysis
 fitGene = lmFit(vGene)
 ebGene = ebayes(fitGene)
-
-## top table
 eBGene = eBayes(fitGene)
 sigGene = topTable(eBGene,coef=2,
 	p.value = 1,number=nrow(rse_gene))
 outGene = sigGene[rownames(rse_gene),]
 save(outGene, file = "caseControl/dxStats_hippo_filtered_qSVA.rda")
+
+##### Exon ######
+dee = DGEList(counts = assays(rse_exon)$counts, 
+	genes = rowData(rse_exon))
+dee = calcNormFactors(dee)
+vExon = voom(dee,modQsva, plot=TRUE)
+fitExon = lmFit(vExon)
+ebExon = ebayes(fitExon)
+eBExon = eBayes(fitExon)
+sigExon = topTable(eBExon,coef=2,
+	p.value = 1,number=nrow(rse_exon))
+outExon = sigExon[rownames(rse_exon),]
+
+##### Junction ######
+dje = DGEList(counts = assays(rse_jxn)$counts, 
+	genes = rowData(rse_jxn))
+dje = calcNormFactors(dje)
+vJxn = voom(dje,modQsva, plot=TRUE)
+fitJxn = lmFit(vJxn)
+ebJxn = ebayes(fitJxn)
+eBJxn = eBayes(fitJxn)
+sigJxn = topTable(eBJxn,coef=2,
+	p.value = 1,number=nrow(rse_jxn))
+outJxn = sigJxn[rownames(rse_jxn),]
+
+##### Transcript ######
+dte = DGEList(counts = assays(rse_tx)$tpm, 
+	genes = rowData(rse_tx))
+# dte = calcNormFactors(dte) # already TPM
+vTx = voom(dte,modQsva, plot=TRUE)
+fitTx = lmFit(vTx)
+ebTx = ebayes(fitTx)
+eBTx = eBayes(fitTx)
+sigTx = topTable(eBTx,coef=2,
+	p.value = 1,number=nrow(rse_tx))
+outTx = sigTx[rownames(rse_tx),]
+save(outGene, outExon, outJxn,outTx,
+	file = "caseControl/dxStats_hippo_filtered_qSVA.rda")

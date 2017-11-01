@@ -1,98 +1,51 @@
-####
-
 ### libraries
 library(SummarizedExperiment)
 library(jaffelab)
 library(MatrixEQTL)
 library(sva)
 
+######################
+### load data ####
+######################
 
-######## DLPFC ####
-load("count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseTx_merged_n449.rda")
-rse_tx_dlpfc = rse_tx
-load("count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseJxn_merged_n449.rda")
-rse_jxn_dlpfc = rse_jxn
-load("count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseExon_merged_n449.rda")
-rse_exon_dlpfc = rse_exon
-load("count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseGene_merged_n449.rda")
-rse_gene_dlpfc = rse_gene
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_gene.Rdata")
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_exon.Rdata")
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_jxn.Rdata")
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_tx.Rdata")
 
-# sum totalMapped IntegerLists (so getRPKM works later)
-colData(rse_tx_dlpfc)$totalMapped =
-	colData(rse_jxn_dlpfc)$totalMapped =
-	colData(rse_exon_dlpfc)$totalMapped = 
-	colData(rse_gene_dlpfc)$totalMapped  = sapply(colData(rse_gene_dlpfc)$totalMapped, sum)
+# fix junction row names
+rownames(rse_jxn) = paste0(seqnames(rse_jxn),":",start(rse_jxn),"-",end(rse_jxn),"(",strand(rse_jxn),")")
 
+# # sum totalMapped IntegerLists (so getRPKM works later)
+# colData(rse_tx)$totalMapped =
+	# colData(rse_jxn)$totalMapped =
+	# colData(rse_exon)$totalMapped = 
+	# colData(rse_gene)$totalMapped  = sapply(colData(rse_gene)$totalMapped, sum)
 
-######## Hippo ####
-load("count_data/hippo_brainseq_phase2_hg38_rseTx_merged_n442.rda")
-rse_tx_hippo = rse_tx
-load("count_data/hippo_brainseq_phase2_hg38_rseJxn_merged_n442.rda")
-rse_jxn_hippo = rse_jxn
-load("count_data/hippo_brainseq_phase2_hg38_rseExon_merged_n442.rda")
-rse_exon_hippo = rse_exon
-load("count_data/hippo_brainseq_phase2_hg38_rseGene_merged_n442.rda")
-rse_gene_hippo = rse_gene
+## keep adult samples - keep both regions
+keepInd = which(colData(rse_gene)$Age > 13)
+rse_gene = rse_gene[,keepInd]
+rse_exon = rse_exon[,keepInd]
+rse_jxn = rse_jxn[,keepInd]
+rse_tx = rse_tx[,keepInd]
 
-## sum totalMapped IntegerLists (so getRPKM works later)
-colData(rse_tx_hippo)$totalMapped =
-	colData(rse_jxn_hippo)$totalMapped =
-	colData(rse_exon_hippo)$totalMapped = 
-	colData(rse_gene_hippo)$totalMapped  = sapply(colData(rse_gene_hippo)$totalMapped, sum)
+## extract pd and rpkms
+pd = colData(rse_gene)
+geneRpkm = assays(rse_gene)$rpkm
+exonRpkm = assays(rse_exon)$rpkm
+jxnRp10m = assays(rse_jxn)$rp10m
+txTpm = assays(rse_tx)$tpm
 
 print("....data loaded....")
 
-###################### 
-# merge phenotype ####
-pd_dlpfc = colData(rse_gene_dlpfc)
-pd_hippo = colData(rse_gene_hippo)
-cn = intersect(colnames(pd_dlpfc), colnames(pd_hippo))
-pd = rbind(pd_dlpfc[,cn], pd_hippo[,cn])
 
 
-###################### 
-# merge expression ###
+######################
+### snp data ####
+######################
 
-# genes
-temp1 = getRPKM(rse_gene_dlpfc)
-temp2 = getRPKM(rse_gene_hippo)
-geneRpkm = cbind(temp1,temp2)
-
-# exons
-temp1 = getRPKM(rse_exon_dlpfc)
-temp2 = getRPKM(rse_exon_hippo)
-exonRpkm = cbind(temp1,temp2)
-
-# jxns
-temp1 = getRPM(rse_jxn_dlpfc)
-temp2 = getRPM(rse_jxn_hippo)
-rn = intersect(rownames(rse_jxn_dlpfc), rownames(rse_jxn_hippo))
-temp1 = temp1[rn,]
-temp2 = temp2[rn,]
-jxnRp80m = cbind(temp1,temp2)
-
-rse_jxn_dlpfc = rse_jxn_dlpfc[rn,]
-rse_jxn_hippo = rse_jxn_hippo[rn,]
-mcols(rse_jxn_dlpfc) = mcols(rse_jxn_hippo) = mcols(rse_jxn_hippo)[,-16]
-colData(rse_jxn_dlpfc) = pd_dlpfc[,cn]
-colData(rse_jxn_hippo) = pd_hippo[,cn]
-rse_jxn = cbind(rse_jxn_dlpfc,rse_jxn_hippo)
-
-# tx
-temp1 = assays(rse_tx_dlpfc)$tpm
-temp2 = assays(rse_tx_hippo)$tpm
-txTpm = cbind(temp1,temp2)
-
-rm(temp1,temp2, rse_gene_hippo,rse_exon_hippo,rse_jxn_hippo,rse_tx_hippo,
-				rse_gene_dlpfc,rse_exon_dlpfc,rse_jxn_dlpfc,rse_tx_dlpfc,
-				pd_dlpfc, pd_hippo)
-
-print("....data merged....")
-
-###################### 
 ## load SNP data
 load("genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n546.rda")
-
 
 ### make mds and snp dimensions equal to N
 ###(repeat rows or columns for BrNum replicates)
@@ -110,6 +63,7 @@ snp = snp[keepIndex,]
 ######################
 # statistical model ##
 ######################
+
 pd$Dx = factor(pd$Dx,
 	levels = c("Control", "Schizo"))
 
@@ -127,61 +81,33 @@ theSnps$ResliceCombined(sliceSize = 50000)
 snpspos = snpMap[,c("SNP","chr_hg38","pos_hg38")]
 colnames(snpspos) = c("name","chr","pos")
 
-######################
-# create expression ##
-######################
-
-## gene
-geneIndex = rowMeans(geneRpkm) > 0.5  ## both regions
-geneRpkm = geneRpkm[geneIndex,]
-
-## exon
-exonIndex = rowMeans(exonRpkm) > 0.5
-exonRpkm = exonRpkm[exonIndex,]
-
-## junction
-jxnIndex = rowMeans(jxnRp80m) > 0.5 & rowData(rse_jxn)$Class != "Novel"
-jxnRp80m = jxnRp80m[jxnIndex,]
-
-## transcript
-txIndex = rowMeans(txTpm) > 0.5 
-txTpm = txTpm[txIndex,]
-
-rm(geneIndex, exonIndex, jxnIndex, txIndex)
-print("....rpkms created....")
-
 #######################
 ####### do PCA ########
 #######################
 
 # pcaGene = prcomp(t(log2(geneRpkm+1)))
-# # kGene = num.sv(log2(geneRpkm+1), mod)
-# # kGene = ifelse(kGene>25,25,kGene)
-# kGene = 25
+# kGene = num.sv(log2(geneRpkm+1), mod)
+# kGene = min(kGene, 25)
 # genePCs = pcaGene$x[,1:kGene]
 
 # pcaExon = prcomp(t(log2(exonRpkm+1)))
-# # kExon = num.sv(log2(exonRpkm+1), mod, vfilter=50000)
-# # kExon = ifelse(kExon>25,25,kExon)
-# kExon = 25
+# kExon = num.sv(log2(exonRpkm+1), mod, vfilter=50000)
+# kExon = min(kExon, 25)
 # exonPCs = pcaExon$x[,1:kExon]
 
-# pcaJxn = prcomp(t(log2(jxnRp80m+1)))
-# # kJxn = num.sv(log2(jxnRp80m+1), mod, vfilter=50000)
-# # kJxn = ifelse(kJxn>25,25,kJxn)
-# kJxn = 25
+# pcaJxn = prcomp(t(log2(jxnRp10m+1)))
+# kJxn = num.sv(log2(jxnRp10m+1), mod, vfilter=50000)
+# kJxn = min(kJxn, 25)
 # jxnPCs = pcaJxn$x[,1:kJxn]
 
 # pcaTx = prcomp(t(log2(txTpm+1)))
-# # kTx = num.sv(log2(txTpm+1), mod, vfilter=50000)
-# # kTx = ifelse(kTx>25,25,kTx)
-# kTx = 25
+# kTx = num.sv(log2(txTpm+1), mod, vfilter=50000)
+# kTx = min(kTx, 25)
 # txPCs = pcaTx$x[,1:kTx]
 
 # save(genePCs, exonPCs, jxnPCs, txPCs, 
-	# file="rdas/pcs_4features_combined_regions.rda")
-
-load("rdas/pcs_4features_combined_regions.rda")
+	# file="rdas/pcs_4features_combined_regions_filtered_over13.rda")
+load("rdas/pcs_4features_combined_regions_filtered_over13.rda")
 
 ## make covs and move BrainRegion to end
 modReg = grep("Region",colnames(mod))
@@ -194,12 +120,10 @@ covsTx = SlicedData$new(t(cbind(mod[,-c(1,modReg)], txPCs, mod[,modReg])))
 rownames(covsGene)[nrow(covsGene)] = rownames(covsExon)[nrow(covsExon)] = 
 	rownames(covsJxn)[nrow(covsJxn)] = rownames(covsTx)[nrow(covsTx)] = colnames(mod)[modReg]
 
-
-
-covsGene = SlicedData$new(t(cbind(mod[,-1],genePCs)))
-covsExon = SlicedData$new(t(cbind(mod[,-1],exonPCs)))
-covsJxn = SlicedData$new(t(cbind(mod[,-1],jxnPCs)))
-covsTx = SlicedData$new(t(cbind(mod[,-1],txPCs)))
+# covsGene = SlicedData$new(t(cbind(mod[,-1],genePCs)))
+# covsExon = SlicedData$new(t(cbind(mod[,-1],exonPCs)))
+# covsJxn = SlicedData$new(t(cbind(mod[,-1],jxnPCs)))
+# covsTx = SlicedData$new(t(cbind(mod[,-1],txPCs)))
 
 rm(genePCs, exonPCs, jxnPCs, txPCs)
 print("....pcas created....")
@@ -235,7 +159,7 @@ names(posTx)[2:4] = c("Chr", "Start","End")
 ### sliced expression data ##
 geneSlice = SlicedData$new(log2(geneRpkm+1))
 exonSlice = SlicedData$new(log2(exonRpkm+1))
-jxnSlice = SlicedData$new(log2(jxnRp80m+1))
+jxnSlice = SlicedData$new(log2(jxnRp10m+1))
 txSlice = SlicedData$new(log2(txTpm+1))
 
 geneSlice$ResliceCombined(sliceSize = 5000)
@@ -260,7 +184,6 @@ meGene = Matrix_eQTL_main(snps=theSnps, gene = geneSlice,
 	snpspos = snpspos, genepos = posGene, 
 	useModel = modelLINEAR_CROSS,	cisDist=2.5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
-
 save(meGene, file="eqtl_tables/matrixEqtl_output_interaction_gene.rda")
 	
 meExon = Matrix_eQTL_main(snps=theSnps, gene = exonSlice, 
@@ -269,7 +192,6 @@ meExon = Matrix_eQTL_main(snps=theSnps, gene = exonSlice,
 	snpspos = snpspos, genepos = posExon, 
 	useModel = modelLINEAR_CROSS,	cisDist=2.5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
-
 save(meExon, file="eqtl_tables/matrixEqtl_output_interaction_exon.rda")
 	
 meJxn = Matrix_eQTL_main(snps=theSnps, gene = jxnSlice, 
@@ -278,7 +200,6 @@ meJxn = Matrix_eQTL_main(snps=theSnps, gene = jxnSlice,
 	snpspos = snpspos, genepos = posJxn, 
 	useModel = modelLINEAR_CROSS,	cisDist=2.5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
-
 save(meJxn,	file="eqtl_tables/matrixEqtl_output_interaction_jxn.rda")
 	
 meTx = Matrix_eQTL_main(snps=theSnps, gene = txSlice, 
@@ -287,7 +208,6 @@ meTx = Matrix_eQTL_main(snps=theSnps, gene = txSlice,
 	snpspos = snpspos, genepos = posTx, 
 	useModel = modelLINEAR_CROSS,	cisDist=2.5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
-
 save(meTx, file="eqtl_tables/matrixEqtl_output_interaction_tx.rda")
 	
 	
