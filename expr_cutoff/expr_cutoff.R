@@ -126,6 +126,22 @@ cutoffs
 # Gene Exon  Jxn   Tx
 # 0.25 0.30 0.46 0.38
 
+### More recent output (after adding 4 samples)
+# Gene
+# 2017-11-09 14:44:14 the suggested expression cutoff is 0.21
+# 0.25 0.17
+# Exon
+# 2017-11-09 14:45:59 the suggested expression cutoff is 0.26
+# 0.3 0.22
+# Jxn
+# 2017-11-09 14:47:16 the suggested expression cutoff is 0.4
+# 0.35 0.46
+# Tx
+# 2017-11-09 14:48:31 the suggested expression cutoff is 0.32
+# 0.38 0.25
+# Gene Exon  Jxn   Tx
+# 0.25 0.30 0.46 0.38
+
 means <- lapply(exprs, rowMeans)
 
 ## Add the mean expressions, whether it passes the expression cutoff

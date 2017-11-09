@@ -59,9 +59,9 @@ matchInd[matchInd$RnaInfo %in% matchInd$RnaInfo[
 # Br1563_h650 0.9586196 Br1563_h650    Br1563   R5497   Br1563
 # Br2407_1M   0.9586196   Br2407_1M    Br2407   R5497   Br1563
 	
-## drop Br1142,Br1143, Br1779, Br1178, Br1563, Br2407 genotype 
-pd = pd[ ! pd$BrNum %in% c("Br1794", "Br1143", "Br1142", "Br1779", 
-	"Br1178", "Br2407", "Br2448", "Br1563"),]
+
+## drop DNAs: Br1779_1M, Br1178_1M, Br1142_h650, Br11836_Omni5M, 
+	##			Br2407_1M, Br1357_1M, Br2173_1M
 
 pd = pd[pd$RNum %in% matchInd$RnaInfo,] # one sample
 
@@ -103,9 +103,12 @@ txFiles = paste0(txPath, pd$SAMPLE_ID, "/quant.sf")
 names(txFiles) = rownames(pd)
 table(file.exists(txFiles))
 
-txList = lapply(txFiles, read.delim, row.names=1, as.is=TRUE)
-tpmMat = sapply(txList, "[[", "TPM")
-rownames(tpmMat) = ss(rownames(txList[[1]]),"|", fixed=TRUE)
+## subset 
+txTpm = txTpm[,pd$SAMPLE_ID]
+
+# txList = lapply(txFiles, read.delim, row.names=1, as.is=TRUE)
+# tpmMat = sapply(txList, "[[", "TPM")
+# rownames(tpmMat) = ss(rownames(txList[[1]]),"|", fixed=TRUE)
 
 ##################
 ## compare full counts
@@ -128,34 +131,34 @@ jCountMerge = sapply(sIndexes, function(ii) {
 })
 
 ## transcripts
-combineTxQuant = function (sampID1, sampID2, salmonDir)
-{    
+combineTxQuant = function (sampIDs, salmonDir) {    
     ##get names of transcripts
-    txNames = read.table(file.path(salmonDir, sampID1, "quant.sf"),header = TRUE)$Name
+    txNames = read.table(file.path(salmonDir, sampIDs[1], "quant.sf"),header = TRUE)$Name
     txNames = as.character(txNames)
     gencodeTx = ss(txNames, "\\|",1)
     
-    txQuant1 = read.table(file.path(salmonDir, sampID1, "quant.sf"),header = TRUE)
-    txQuant2 = read.table(file.path(salmonDir, sampID2, "quant.sf"),header = TRUE)
+	## read in
+	txList = lapply(paste0(salmonDir, sampIDs, "/quant.sf"), read.table, header=TRUE)
+	
+	## initiate output
+    txQuant = data.frame(EffectiveLength=rep(NA,length(gencodeTx)), 
+		NumReads=NA, RPK=NA, TPM=NA, row.names=gencodeTx)
     
-    txQuant = data.frame(EffectiveLength=rep(NA,length(gencodeTx)), NumReads=NA, RPK=NA, TPM=NA, row.names=gencodeTx)
-    
-    txQuant$EffectiveLength = txQuant1$EffectiveLength + txQuant2$EffectiveLength
-    txQuant$NumReads = txQuant1$NumReads + txQuant2$NumReads
+	## run calculations
+    txQuant$EffectiveLength = rowSums(sapply(txList, "[[", "EffectiveLength"))
+    txQuant$NumReads = rowSums(sapply(txList, "[[", "NumReads"))
     txQuant$RPK = txQuant$NumReads/txQuant$EffectiveLength
     txQuant$TPM = 1e6 * (txQuant$NumReads/txQuant$EffectiveLength) / sum(txQuant$RPK)
 
     return(txQuant)
 }
-doubleSamples = lapply(sIndexes[lengths(sIndexes)>1], function(ii) pd$SAMPLE_ID[ii])
-doubleSamples = do.call("rbind",doubleSamples)
 
-doubleTxCombine = apply(doubleSamples, 1, function(x) {
-	cat(".")
-	combineTxQuant(x[1], x[2], txPath)
-})
+## run for multiples
+doubleSamples = lapply(sIndexes[lengths(sIndexes)>1], function(ii) pd$SAMPLE_ID[ii])
+doubleTxCombine = mclapply(doubleSamples, combineTxQuant, salmonDir=txPath,mc.cores=4)
 doubleTx = sapply(doubleTxCombine, "[[", "TPM")
-singleTx = tpmMat[,unlist(sIndexes[lengths(sIndexes) == 1])]
+
+singleTx = txTpm[,unlist(sIndexes[lengths(sIndexes) == 1])]
 tpmMatMerge = cbind(singleTx, doubleTx)
 colnames(tpmMatMerge) = ss(colnames(tpmMatMerge), "_")
 tpmMatMerge = tpmMatMerge[,names(sIndexes)]
@@ -212,36 +215,19 @@ rse_jxn = SummarizedExperiment(
 gtf = import("/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh38_hg38/gencode.v25.annotationGRCh38.gtf")
 tx = gtf[which(gtf$type == "transcript")]
 names(tx) = tx$transcript_id
-txMap = tx[rownames(tpmMat)]
+txMap = tx[rownames(txTpm)]
 rse_tx = SummarizedExperiment(
 	assays = list('tpm' = tpmMatMerge),
     colData = pdMerge, rowRanges = txMap)
 	
-#### function for RPKM
-getRPKM = function(rse) {
-	require(SummarizedExperiment)
-	bg = matrix(rep(colData(rse)$totalMapped), 
-		nc = ncol(rse), nr = nrow(rse),	byrow=TRUE)
-	wid = matrix(rep(rowData(rse)$Length), 
-		nr = nrow(rse), nc = ncol(rse),	byrow=FALSE)
-	assays(rse)$counts/(wid/1000)/(bg/1e6)
-}
-
-getRPM = function(rse, target = 80e6) {
-	require(SummarizedExperiment)
-	bg = matrix(rep(colData(rse)$totalMapped/target), 
-		nc = ncol(rse), nr = nrow(rse),	byrow=TRUE)
-	assays(rse)$counts/bg
-}
-
 ################
 ## save ########
-save(rse_gene, getRPKM, compress=TRUE,
-	file = "count_data/hippo_brainseq_phase2_hg38_rseGene_merged_n442.rda")
-save(rse_exon, getRPKM, compress=TRUE,
-	file = "count_data/hippo_brainseq_phase2_hg38_rseExon_merged_n442.rda")
-save(rse_jxn, getRPM, compress=TRUE,
-	file = "count_data/hippo_brainseq_phase2_hg38_rseJxn_merged_n442.rda")
+save(rse_gene, compress=TRUE,
+	file = "count_data/hippo_brainseq_phase2_hg38_rseGene_merged_n447.rda")
+save(rse_exon, compress=TRUE,
+	file = "count_data/hippo_brainseq_phase2_hg38_rseExon_merged_n447.rda")
+save(rse_jxn, compress=TRUE,
+	file = "count_data/hippo_brainseq_phase2_hg38_rseJxn_merged_n447.rda")
 save(rse_tx, compress=TRUE,
-	file = "count_data/hippo_brainseq_phase2_hg38_rseTx_merged_n442.rda")
+	file = "count_data/hippo_brainseq_phase2_hg38_rseTx_merged_n447.rda")
 

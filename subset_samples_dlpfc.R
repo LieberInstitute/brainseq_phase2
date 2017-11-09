@@ -80,11 +80,47 @@ matchInd[matchInd$RnaInfo %in% matchInd$RnaInfo[
 # Br1143_1M         0.9666436       Br1143_1M    Br1143  R12330   Br1143
 # Br1143_h650       0.9666436     Br1143_h650    Br1143  R12330   Br1143
 	
-## drop Br1794, Br1143, Br1142, Br1779, Br1178, Br2407 Br2448, Br1563 
+## drop DNAs: Br1779_1M, Br1178_1M, Br2407_1M
+## change DNAs label: Br1060 --> Br1061
+## drop RNAs: Br2448
 
-pd = pd[ ! pd$BrNum %in% c("Br1794", "Br1143", "Br1142", "Br1779", 
-	"Br1178", "Br2407", "Br2448", "Br1563"),]
-pd = pd[pd$RNum %in% matchInd$RnaInfo,] # 8 brains
+pd = pd[ ! pd$BrNum %in% c("Br2448"),]
+
+table(pd$RNum %in% matchInd$RnaInfo)
+table(pd$BrNum[! pd$RNum  %in% matchInd$RnaInfo])
+table(pd$RNum[! pd$RNum  %in% matchInd$RnaInfo])
+
+br = ss(rownames(snpCor2), "_")
+br[nchar(br)==7] = paste0("Br", substr(br[nchar(br)==7], 4, 7))
+table(pd$BrNum[! pd$RNum  %in% matchInd$RnaInfo] %in% br)
+check = pd[! pd$RNum  %in% matchInd$RnaInfo, c("BrNum", "RNum")]
+check = check[!duplicated(check$RNum),]
+rownames(check) = check$BrNum
+
+## matrix
+checkGeno = snpCor2[match(check$BrNum, br), 
+	ss(colnames(snpCor2), "_") %in% pd$RNum[! pd$RNum  %in% matchInd$RnaInfo]]
+rownames(checkGeno) = check$BrNum
+colnames(checkGeno) = ss(colnames(checkGeno), "_")
+round(checkGeno, 2)
+check
+apply(check, 1, function(x) checkGeno[x[1], x[2]])
+
+pd_all_geno[pd_all_geno$RNum %in% 
+	ss(names(which(snpCor2[grep("Br5168",rownames(snpCor2)),]  > 0.4)),"_"),]
+
+
+##### drops more samples
+secondDrop = check$BrNum
+secondDrop = secondDrop[! secondDrop %in% c("Br5168")] # this looked okay
+
+### previous sex swap drops
+sexDrops = readxl::read_excel("/users/ajaffe/Lieber/Projects/Imputation/Postmortem/sex_swaps_genotypes_LIBD_4platform.xlsx")
+table(pd$BrNum[! pd$RNum  %in% matchInd$RnaInfo] %in% sexDrops$BrNum )
+table(secondDrop %in% sexDrops$BrNum )
+
+## drop those 11 samples
+pd = pd[which(! pd$BrNum %in% secondDrop),]
 
 write.table(matchInd, file="qcChecks/genotype_checking_table_DLPFC.txt",
 	sep="\t", row.names=FALSE, col.names=FALSE)
@@ -103,6 +139,9 @@ jIndex = which(jMap$meanExprs > 0.05)
 jCounts = jCounts[jIndex,]
 jMap = jMap[jIndex,]
 
+# convert to matrix
+jCounts = as.matrix(as.data.frame(jCounts[,pd$SAMPLE_ID]))
+
 ## update junction annotation class
 tt = rowSums(!is.na(as.data.frame(mcols(jMap)[,
 	c("startExon", "endExon")])))
@@ -115,9 +154,12 @@ txFiles = paste0(txPath, pd$SAMPLE_ID, "/quant.sf")
 names(txFiles) = rownames(pd)
 table(file.exists(txFiles))
 
-txList = lapply(txFiles, read.delim, row.names=1, as.is=TRUE)
-tpmMat = sapply(txList, "[[", "TPM")
-rownames(tpmMat) = ss(rownames(txList[[1]]),"|", fixed=TRUE)
+# subset
+txTpm = txTpm[,pd$SAMPLE_ID]
+
+# txList = lapply(txFiles, read.delim, row.names=1, as.is=TRUE)
+# tpmMat = sapply(txList, "[[", "TPM")
+# rownames(tpmMat) = ss(rownames(txList[[1]]),"|", fixed=TRUE)
 
 ##################
 ## compare full counts
@@ -164,10 +206,10 @@ combineTxQuant = function (sampIDs, salmonDir) {
 
 ## run for multiples
 doubleSamples = lapply(sIndexes[lengths(sIndexes)>1], function(ii) pd$SAMPLE_ID[ii])
-doubleTxCombine = lapply(doubleSamples, combineTxQuant, salmonDir=txPath)
-
+doubleTxCombine = mclapply(doubleSamples, combineTxQuant, salmonDir=txPath,mc.cores=4)
 doubleTx = sapply(doubleTxCombine, "[[", "TPM")
-singleTx = tpmMat[,unlist(sIndexes[lengths(sIndexes) == 1])]
+
+singleTx = txTpm[,unlist(sIndexes[lengths(sIndexes) == 1])]
 tpmMatMerge = cbind(singleTx, doubleTx)
 colnames(tpmMatMerge) = ss(colnames(tpmMatMerge), "_")
 tpmMatMerge = tpmMatMerge[,names(sIndexes)]
@@ -226,36 +268,20 @@ rse_jxn = SummarizedExperiment(
 gtf = import("/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh38_hg38/gencode.v25.annotationGRCh38.gtf")
 tx = gtf[which(gtf$type == "transcript")]
 names(tx) = tx$transcript_id
-txMap = tx[rownames(tpmMat)]
+txMap = tx[rownames(txTpm)]
 rse_tx = SummarizedExperiment(
 	assays = list('tpm' = tpmMatMerge),
     colData = pdMerge, rowRanges = txMap)
 	
-#### function for RPKM
-getRPKM = function(rse) {
-	require(SummarizedExperiment)
-	bg = matrix(rep(colData(rse)$totalMapped), 
-		nc = ncol(rse), nr = nrow(rse),	byrow=TRUE)
-	wid = matrix(rep(rowData(rse)$Length), 
-		nr = nrow(rse), nc = ncol(rse),	byrow=FALSE)
-	assays(rse)$counts/(wid/1000)/(bg/1e6)
-}
-
-getRPM = function(rse, target = 80e6) {
-	require(SummarizedExperiment)
-	bg = matrix(rep(colData(rse)$totalMapped/target), 
-		nc = ncol(rse), nr = nrow(rse),	byrow=TRUE)
-	assays(rse)$counts/bg
-}
 
 ################
 ## save ########
-save(rse_gene, getRPKM, compress=TRUE,
-	file = "count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseGene_merged_n449.rda")
-save(rse_exon, getRPKM, compress=TRUE,
-	file = "count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseExon_merged_n449.rda")
-save(rse_jxn, getRPM, compress=TRUE,
-	file = "count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseJxn_merged_n449.rda")
+save(rse_gene, compress=TRUE,
+	file = "count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseGene_merged_n453.rda")
+save(rse_exon, compress=TRUE,
+	file = "count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseExon_merged_n453.rda")
+save(rse_jxn, compress=TRUE,
+	file = "count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseJxn_merged_n453.rda")
 save(rse_tx, compress=TRUE,
-	file = "count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseTx_merged_n449.rda")
+	file = "count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseTx_merged_n453.rda")
 

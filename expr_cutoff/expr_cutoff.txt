@@ -1,10 +1,10 @@
 **** Job starts ****
-Tue Oct 31 15:25:02 EDT 2017
+Thu Nov  9 14:36:55 EST 2017
 **** JHPCE info ****
 User: lcollado
-Job id: 3469940
+Job id: 3872233
 Job name: expr_cutoff
-Hostname: compute-097
+Hostname: compute-095
 Task id: 
 Loading conda_R/3.4.x
 Using the following user library: ~/R/x86_64-pc-linux-gnu-library/3.4.x
@@ -83,23 +83,23 @@ The following object is masked from ‘package:rafalib’:
     install_bioc
 
 Gene
-2017-10-31 16:10:22 the suggested expression cutoff is 0.21
+2017-11-09 14:44:14 the suggested expression cutoff is 0.21
 0.25 0.17
 Exon
-2017-10-31 16:18:51 the suggested expression cutoff is 0.26
+2017-11-09 14:45:59 the suggested expression cutoff is 0.26
 0.3 0.22
 Jxn
-2017-10-31 16:20:21 the suggested expression cutoff is 0.4
-0.33 0.46
+2017-11-09 14:47:16 the suggested expression cutoff is 0.4
+0.35 0.46
 Tx
-2017-10-31 16:21:37 the suggested expression cutoff is 0.32
+2017-11-09 14:48:31 the suggested expression cutoff is 0.32
 0.38 0.25
 Gene Exon  Jxn   Tx 
 0.25 0.30 0.46 0.38 
 [1] "Reproducibility information:"
-[1] "2017-10-31 17:54:32 EDT"
+[1] "2017-11-09 16:17:10 EST"
     user   system  elapsed 
-5860.303 3021.245 8966.878 
+5952.145   52.775 6012.520 
 Session info ----------------------------------------------------------------------------------------------------------
  setting  value                                      
  version  R version 3.4.2 Patched (2017-10-12 r73550)
@@ -108,7 +108,7 @@ Session info -------------------------------------------------------------------
  language (EN)                                       
  collate  en_US.UTF-8                                
  tz       <NA>                                       
- date     2017-10-31                                 
+ date     2017-11-09                                 
 
 Packages --------------------------------------------------------------------------------------------------------------
  package              * version  date       source                                   
@@ -120,7 +120,7 @@ Packages -----------------------------------------------------------------------
  base64enc              0.1-3    2015-07-28 CRAN (R 3.4.1)                           
  bindr                  0.1      2016-11-13 CRAN (R 3.4.1)                           
  bindrcpp               0.2      2017-06-17 CRAN (R 3.4.1)                           
- Biobase              * 2.37.2   2017-08-06 Bioconductor                             
+ Biobase              * 2.38.0   2017-11-07 Bioconductor                             
  BiocGenerics         * 0.23.4   2017-10-27 Bioconductor                             
  BiocParallel           1.11.13  2017-10-27 Bioconductor                             
  biomaRt                2.33.4   2017-08-10 Bioconductor                             
@@ -139,7 +139,7 @@ Packages -----------------------------------------------------------------------
  data.table             1.10.4-3 2017-10-27 CRAN (R 3.4.2)                           
  datasets             * 3.4.2    2017-10-13 local                                    
  DBI                    0.7      2017-06-18 CRAN (R 3.4.1)                           
- DelayedArray         * 0.3.21   2017-09-29 Bioconductor                             
+ DelayedArray         * 0.4.1    2017-11-07 Bioconductor                             
  derfinder              1.11.10  2017-10-16 Bioconductor                             
  derfinderHelper        1.11.4   2017-10-30 Bioconductor                             
  devtools             * 1.13.3   2017-08-02 CRAN (R 3.4.1)                           
@@ -156,7 +156,7 @@ Packages -----------------------------------------------------------------------
  GenomicFeatures        1.29.15  2017-10-27 Bioconductor                             
  GenomicFiles           1.13.10  2017-08-10 Bioconductor                             
  GenomicRanges        * 1.29.15  2017-10-16 Bioconductor                             
- GEOquery               2.45.2   2017-09-29 Bioconductor                             
+ GEOquery               2.46.0   2017-11-07 Bioconductor                             
  ggplot2                2.2.1    2016-12-30 CRAN (R 3.4.1)                           
  glue                   1.1.1    2017-06-21 CRAN (R 3.4.1)                           
  graphics             * 3.4.2    2017-10-13 local                                    
@@ -177,7 +177,7 @@ Packages -----------------------------------------------------------------------
  knitr                  1.17     2017-08-10 CRAN (R 3.4.1)                           
  lattice                0.20-35  2017-03-25 CRAN (R 3.4.2)                           
  latticeExtra           0.6-28   2016-02-09 CRAN (R 3.4.1)                           
- lazyeval               0.2.0    2016-06-12 CRAN (R 3.4.1)                           
+ lazyeval               0.2.1    2017-10-29 CRAN (R 3.4.2)                           
  limma                  3.33.14  2017-10-16 Bioconductor                             
  locfit                 1.5-9.1  2013-04-20 CRAN (R 3.4.1)                           
  magrittr               1.5      2014-11-22 CRAN (R 3.4.1)                           
@@ -205,7 +205,7 @@ Packages -----------------------------------------------------------------------
  registry               0.3      2015-07-08 CRAN (R 3.4.1)                           
  rentrez                1.1.0    2017-06-01 CRAN (R 3.4.1)                           
  reshape2               1.4.2    2016-10-22 CRAN (R 3.4.1)                           
- rlang                  0.1.2    2017-08-09 CRAN (R 3.4.1)                           
+ rlang                  0.1.4    2017-11-05 CRAN (R 3.4.2)                           
  rngtools               1.2.4    2014-03-06 CRAN (R 3.4.1)                           
  rpart                  4.1-11   2017-03-13 CRAN (R 3.4.2)                           
  Rsamtools              1.29.1   2017-08-28 Bioconductor                             
@@ -226,11 +226,11 @@ Packages -----------------------------------------------------------------------
  tools                  3.4.2    2017-10-13 local                                    
  utils                * 3.4.2    2017-10-13 local                                    
  VariantAnnotation      1.23.9   2017-10-16 Bioconductor                             
- withr                  2.0.0    2017-07-28 CRAN (R 3.4.1)                           
+ withr                  2.1.0    2017-11-01 CRAN (R 3.4.2)                           
  XML                    3.98-1.9 2017-06-19 CRAN (R 3.4.1)                           
  xml2                   1.1.1    2017-01-24 CRAN (R 3.4.1)                           
  xtable                 1.8-2    2016-02-05 CRAN (R 3.4.1)                           
  XVector                0.17.2   2017-10-27 Bioconductor                             
- zlibbioc               1.23.0   2017-08-06 Bioconductor                             
+ zlibbioc               1.24.0   2017-11-07 Bioconductor                             
 **** Job ends ****
-Tue Oct 31 17:54:36 EDT 2017
+Thu Nov  9 16:17:11 EST 2017
