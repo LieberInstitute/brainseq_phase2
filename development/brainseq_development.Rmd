@@ -1,7 +1,7 @@
 ---
 title: "DLPFC brain development"
 author: "Leo"
-date: "10/23/2017"
+date: "11/17/2017"
 output:
   html_document:
     code_folding: show
@@ -12,7 +12,7 @@ output:
 
 ## Setup
 
-```{r}
+```{r 'setup'}
 library('SummarizedExperiment')
 library('recount')
 library('edge')
@@ -20,30 +20,52 @@ library('devtools')
 library('ggplot2')
 library('reshape2')
 
+## Load gene data and keep controls only
+load('../expr_cutoff/rse_gene.Rdata')
+rse_gene <- rse_gene[, colData(rse_gene)$Dx == 'Control']
+
+## Add mds info
 load('../genotype_data/mds_extracted_from_BrainSeq_Phase2_RiboZero_Genotypes_n546.Rdata')
+m <- match(colData(rse_gene)$BrNum, rownames(mds))
 
-rse <- lapply(c('../count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseGene_merged_n449.rda', '../count_data/hippo_brainseq_phase2_hg38_rseGene_merged_n442.rda'), function(f) {
-    load(f)
-    rowRanges(rse_gene)$meanExprs <- NA
-    
-    ## Add mds info
-    m <- match(colData(rse_gene)$BrNum, rownames(mds))
-    colData(rse_gene) <- cbind(colData(rse_gene), mds[m, ])
-    return(rse_gene)
-})
+## Drop those that don't match
+colData(rse_gene)$BrNum[which(is.na(m))]
 
-rse <- lapply(rse, function(r) { r[, colData(r)$Dx == 'Control']})
-rpkm <- lapply(rse, recount::getRPKM, 'Length')
+rse_gene <- rse_gene[, !is.na(m)]
+colData(rse_gene) <- cbind(colData(rse_gene), mds[m[!is.na(m)], ])
+rm(m, mds)
 
-rpkm_all <- do.call(cbind, rpkm)
+## Set as factor
+colData(rse_gene)$Region <- relevel(factor(colData(rse_gene)$Region), 'DLPFC')
+colData(rse_gene)$Race <- relevel(factor(colData(rse_gene)$Race), ref = 'CAUC')
+colData(rse_gene)$Sex <- relevel(factor(colData(rse_gene)$Sex), ref = 'F')
 
-meanRPKM <- rowMeans(rpkm_all)
-keepIdx <- meanRPKM > 0.5
-table(keepIdx)
+## Add age linear splines
+fetal <- ifelse(colData(rse_gene)$Age < 0, 1,0)
+birth <- colData(rse_gene)$Age
+birth[birth < 0] <- 0 # linear spline
+infant <- colData(rse_gene)$Age - 1
+infant[infant < 0] <- 0 # linear spline
+child <- colData(rse_gene)$Age - 10
+child[child < 0] <- 0 # linear spline
+teen <- colData(rse_gene)$Age - 20
+teen[teen < 0] <- 0 # linear spline
+adult <- colData(rse_gene)$Age - 50
+adult[adult < 0] <- 0 # linear spline
 
+colData(rse_gene)$fetal <- fetal
+colData(rse_gene)$birth <- birth
+colData(rse_gene)$infant <- infant
+colData(rse_gene)$child <- child
+colData(rse_gene)$teen <- teen
+colData(rse_gene)$adult <- adult
+rm(fetal, birth, infant, child, teen, adult)
 
-colData(rse[[1]])$Region <- 'DLPFC'
-colData(rse[[2]])$Region <- 'HIPPO'
+## To simplify later code
+pd <- as.data.frame(colData(rse_gene))
+pd <- pd[, match(c('Age', 'fetal', 'birth', 'infant', 'child', 'teen', 'adult', 'Sex', 'snpPC1', 'snpPC2', 'snpPC3', 'snpPC4', 'snpPC5', 'Region', 'Race'), colnames(pd))]
+rpkm <- assays(rse_gene)$rpkm
+DLPFC <- colData(rse_gene)$Region == 'DLPFC'
 
 ## Define models
 fm_mod <-  ~Age + fetal + birth + infant + child + teen + adult + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5
@@ -52,41 +74,7 @@ fm_mod_all <- ~Age *Region + fetal * Region + birth *Region + infant *Region + c
 fm_mod0_all <- ~ Age + fetal + birth + infant + child + teen + adult + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5
 
 
-get_mods <- function(pd, int = FALSE, only_pd = FALSE) {
-    
-    if(int) {
-        pd <- rbind(
-            pd[[1]][, c('Age', 'Race', 'Sex', 'Region', 'snpPC1', 'snpPC2', 'snpPC3', 'snpPC4', 'snpPC5')],
-            pd[[2]][, c('Age', 'Race', 'Sex', 'Region', 'snpPC1', 'snpPC2', 'snpPC3', 'snpPC4', 'snpPC5')])
-        pd$Region <- relevel(factor(pd$Region), ref = 'DLPFC')
-    }
-    
-    fetal = ifelse(pd$Age < 0, 1,0)
-    birth = pd$Age
-    birth[birth < 0] = 0 # linear spline
-    infant = pd$Age - 1
-    infant[infant < 0] = 0 # linear spline
-    child = pd$Age - 10
-    child[child < 0] = 0 # linear spline
-    teen = pd$Age - 20
-    teen[teen < 0] = 0 # linear spline
-    adult = pd$Age - 50
-    adult[adult < 0] = 0 # linear spline
-    
-    pd$Race <- relevel(factor(pd$Race), ref = 'CAUC')
-    pd$Sex <- relevel(factor(pd$Sex), ref = 'F')
-    
-    pd$fetal <- fetal
-    pd$birth <- birth
-    pd$infant <- infant
-    pd$child <- child
-    pd$teen <- teen
-    pd$adult <- adult
-    
-    if(only_pd) {
-        return(as.data.frame(pd))
-    }
-    
+get_mods <- function(pd, int = FALSE) {    
     ### adjust for race, sex
     if(int) {
         mod = model.matrix(fm_mod_all, data=pd)
@@ -95,8 +83,6 @@ get_mods <- function(pd, int = FALSE, only_pd = FALSE) {
         mod = model.matrix(fm_mod, data=pd)
         mod0 = model.matrix(fm_mod0, data=pd)
     }
-    
-         
     return(list(mod = mod, mod0 = mod0))
 }
 ```
@@ -104,66 +90,41 @@ get_mods <- function(pd, int = FALSE, only_pd = FALSE) {
 ## DLPFC
 
 
-```{r}
+```{r 'dlpfc'}
 ### DLPFC
-
-if(!file.exists('edge_dlpfc.Rdata')) {
-    de_obj_dlpfc <- build_models(data = rpkm[[1]][keepIdx, ], full.model = fm_mod, null.model = fm_mod0, cov = get_mods(colData(rse[[1]]), only_pd = TRUE))
-    ef_obj_dlpfc <- fit_models(de_obj_dlpfc, stat.type = "lrt")
-    de_lrt_dlpfc <- lrt(de_obj_dlpfc, nullDistn = "normal")
-    system.time( de_odp_dlpfc <- odp(de_obj_dlpfc, bs.its = 100, verbose = FALSE, n.mods = 50) )
-    save(de_obj_dlpfc, ef_obj_dlpfc, de_lrt_dlpfc, de_odp_dlpfc, file = 'edge_dlpfc.Rdata')
-} else {
-    load('edge_dlpfc.Rdata')
-}
+de_obj_dlpfc <- build_models(data = rpkm[, DLPFC], full.model = fm_mod, null.model = fm_mod0, cov = pd[DLPFC, ])
+ef_obj_dlpfc <- fit_models(de_obj_dlpfc, stat.type = "lrt")
+de_lrt_dlpfc <- lrt(de_obj_dlpfc, nullDistn = "normal")
 
 summary(de_lrt_dlpfc)
 hist(qvalueObj(de_lrt_dlpfc))
 summary(qvalueObj(de_lrt_dlpfc)$qvalues)
-
-summary(de_odp_dlpfc)
-hist(qvalueObj(de_odp_dlpfc))
-summary(qvalueObj(de_odp_dlpfc)$qvalues)
 ```
 
 
 ## HIPPO
 
-```{r}
+```{r 'hippo'}
 ### HIPPO
-
-if(!file.exists('edge_hippo.Rdata')) {
-    de_obj_hippo <- build_models(data = rpkm[[2]][keepIdx, ], full.model = fm_mod, null.model = fm_mod0, cov = get_mods(colData(rse[[2]]), only_pd = TRUE))
-    ef_obj_hippo <- fit_models(de_obj_hippo, stat.type = "lrt")
-    de_lrt_hippo <- lrt(de_obj_hippo, nullDistn = "normal")
-    system.time( de_odp_hippo <- odp(de_obj_hippo, bs.its = 100, verbose = FALSE, n.mods = 50) )
-    save(de_obj_hippo, ef_obj_hippo, de_lrt_hippo, de_odp_hippo, file = 'edge_hippo.Rdata')
-} else {
-    load('edge_hippo.Rdata')
-}
+de_obj_hippo <- build_models(data = rpkm[, !DLPFC], full.model = fm_mod, null.model = fm_mod0, cov = pd[!DLPFC, ])
+ef_obj_hippo <- fit_models(de_obj_hippo, stat.type = "lrt")
+de_lrt_hippo <- lrt(de_obj_hippo, nullDistn = "normal")
 
 summary(de_lrt_hippo)
 hist(qvalueObj(de_lrt_hippo))
 summary(qvalueObj(de_lrt_hippo)$qvalues)
-
-summary(de_odp_hippo)
-hist(qvalueObj(de_odp_hippo))
-summary(qvalueObj(de_odp_hippo)$qvalues)
 ```
 
 
 ## Quick region comparison
 
-```{r}
+```{r 'quick_comp'}
 ### Compare quickly
-
 stopifnot(identical(rownames(de_obj_dlpfc), rownames(de_obj_hippo)))
 
 comp <- data.frame(
     DLPFC = qvalueObj(de_lrt_dlpfc)$qvalues,
     HIPPO = qvalueObj(de_lrt_hippo)$qvalues,
-    DLPFC_odp = qvalueObj(de_odp_dlpfc)$qvalues,
-    HIPPO_odp = qvalueObj(de_odp_hippo)$qvalues,
     gene_id = rownames(de_obj_dlpfc),
     stringsAsFactors = FALSE
 )
@@ -172,53 +133,20 @@ dim(comp)
 ## Using the LRT model results
 table(comp$DLPFC < 1e-04, comp$HIPPO < 1e-04)
 
-## Using the ODP results
-table(comp$DLPFC_odp < 1e-04, comp$HIPPO_odp < 1e-04)
-
-save(comp, file = 'edge_comp.Rdata')
+#save(comp, file = 'edge_comp.Rdata')
 ```
 
 
 ## Both regions
 
-```{r}
-### Both
-mods <-  get_mods( list(colData(rse[[1]]), colData(rse[[2]])), int = TRUE)
-sapply(mods, colnames)
-
-pd_all <- get_mods( list(colData(rse[[1]]), colData(rse[[2]])), int = TRUE, only_pd = TRUE)
-
-if(!file.exists('edge_both.Rdata')) {
-
-    de_obj <- build_models(data = rpkm_all[keepIdx, ], full.model = fm_mod_all, null.model = fm_mod0_all, cov = pd_all)
-    system.time( ef_obj <- fit_models(de_obj, stat.type = "lrt") )
-    system.time( de_lrt <- lrt(de_obj, nullDistn = "normal") )
-    
-    ## odp.stat and null.stat are full of NaNs, which eventually
-    ## leads to qvalue() to fail. 
-    # de.fit <- fit_models(de_obj, stat.type = 'odp')
-    # odp.parms <- kl_clust(de_obj, de.fit, n.mods = 50)
-    # odp.stat <- edge:::odpStat(n.res = de.fit@res.null, clustParms = odp.parms)
-    # null.stat <- edge:::bootstrap(object = de_obj, obs.fit = de.fit, clustParms = odp.parms, bs.its = 2, verbose = FALSE)
-    # pval <- qvalue::empPvals(stat = odp.stat, stat0 = null.stat)
-    # qval <- qvalue::qvalue(pval)
-    #
-    
-    #system.time( de_odp <- odp(de_obj, bs.its = 100, verbose = FALSE, n.mods = 50) )
-    
-    #save(de_obj, ef_obj, de_lrt, de_odp, file = 'edge_both.Rdata')
-    save(de_obj, ef_obj, de_lrt, file = 'edge_both.Rdata')
-} else {
-    load('edge_both.Rdata')
-}
+```{r 'interaction_mod'}
+de_obj <- build_models(data = rpkm, full.model = fm_mod_all, null.model = fm_mod0_all, cov = pd)
+system.time( ef_obj <- fit_models(de_obj, stat.type = "lrt") )
+system.time( de_lrt <- lrt(de_obj, nullDistn = "normal") )
 
 summary(de_lrt)
 hist(qvalueObj(de_lrt))
 summary(qvalueObj(de_lrt)$qvalues)
-
-#summary(de_odp)
-#hist(qvalueObj(de_odp))
-#summary(qvalueObj(de_odp)$qvalues)
 ```
 
 
@@ -226,7 +154,7 @@ summary(qvalueObj(de_lrt)$qvalues)
 
 The following code explores a single gene based on the `de_lrt_dlpfc`, `de_odp_dlpfc`, `de_lrt_hippo`, `de_odp_hippo` and `de_lrt` results.
 
-```{r, fig.width = 14, fig.height = 7}
+```{r 'explore_gene', fig.width = 14, fig.height = 7}
 
 gene_explore <- function(ef, de, pd) {
     fitVals <- fitFull(ef)
@@ -248,46 +176,41 @@ gene_explore <- function(ef, de, pd) {
 }
 
 ## DLPFC lrt
-gene_explore(ef_obj_dlpfc, de_lrt_dlpfc, get_mods(colData(rse[[1]]), only_pd = TRUE))
-
-## DLPFC odp
-gene_explore(ef_obj_dlpfc, de_odp_dlpfc, get_mods(colData(rse[[1]]), only_pd = TRUE))
+gene_explore(ef_obj_dlpfc, de_lrt_dlpfc, pd[DLPFC, ])
 
 ## HIPPO lrt
-gene_explore(ef_obj_hippo, de_lrt_hippo, get_mods(colData(rse[[2]]), only_pd = TRUE))
-
-## HIPPO odp
-gene_explore(ef_obj_hippo, de_odp_hippo, get_mods(colData(rse[[2]]), only_pd = TRUE))
+gene_explore(ef_obj_hippo, de_lrt_hippo, pd[!DLPFC, ])
 ```
 
-```{r, fig.width = 14, fig.height = 10}
+```{r 'explore_gene_both', fig.width = 14, fig.height = 10}
 ## both
-gene_explore(ef_obj, de_lrt, pd_all)
-#gene_explore(ef_obj, de_odp, pd_all)
+gene_explore(ef_obj, de_lrt, pd)
 ```
 
 ## Limma
 
 This portion uses `limma` to fit the region by age interaction model and calculate a global F statistic.
 
-```{r}
+```{r 'limma'}
+### Both
+mods <-  get_mods( colData(rse_gene), int = TRUE)
+sapply(mods, colnames)
+
 library('limma')
 library('edgeR')
 library('qvalue')
 
 ind <- data.frame(
-    brnum = c(colData(rse[[1]])$BrNum, colData(rse[[2]])$BrNum),
-    rnum = c(colData(rse[[1]])$RNum, colData(rse[[2]])$RNum),
+    brnum = colData(rse_gene)$BrNum,
+    rnum = colData(rse_gene)$RNum,
     stringsAsFactors = FALSE
 )
 
-brnum <- ind$brnum[match(rownames(pd_all), ind$rnum)]
+brnum <- ind$brnum[match(rownames(pd), ind$rnum)]
 
 design <- mods$mod
 
-
-counts <- do.call(cbind, lapply(rse, assay))[keepIdx, ]
-dge <- DGEList(counts = counts)
+dge <- DGEList(counts = assays(rse_gene)$counts)
 dge <- calcNormFactors(dge)
 v <- voom(dge, design, plot = TRUE)
 
@@ -304,13 +227,14 @@ if(FALSE) {
 fit <- eBayes(fit)
 
 colnames(design)[grep(':', colnames(design))]
-top <- topTable(fit, coef = grep(':', colnames(design)), n = nrow(counts))
+top <- topTable(fit, coef = grep(':', colnames(design)), n = nrow(rse_gene))
 
 
 qval <- qvalue(top$P.Value)
 summary(qval)
 hist(qval)
 summary(qval$qvalues)
+summary(top$adj.P.Val)
 
 sapply(c(1e-04, 0.001, 0.01, 0.025, 0.05, 0.1, 1), function(x) { sum(top$adj.P.Val < x)})
 
@@ -318,8 +242,6 @@ sapply(c(1e-04, 0.001, 0.01, 0.025, 0.05, 0.1, 1), function(x) { sum(top$adj.P.V
 # pvalue <- fit$p.value[, 2]
 # qvalue <- qvalue(pvalue)$qvalues
 ```
-
-
 
 ## Reproducibility
 
