@@ -217,9 +217,23 @@ v <- voom(dge, design, plot = TRUE)
 ## Page 49 (50 in the pdf) of limmaUsersGuide()
 ## Didn't run in my laptop (likely needs more mem)
 if(FALSE) {
-    corfit <- duplicateCorrelation(v$E, design, block=brnum)
-    corfit$consensus
-    fit <- lmFit(v, design, correlation = corfit$consensus)
+    corfit <- duplicateCorrelation(v$E, design, block=brnum) ## Takes like 4-5 hrs to run
+    corfit$consensus.correlation
+# [1] 0.2358895
+# > sapply(corfit, head)
+# $consensus.correlation
+# [1] 0.2358895
+#
+# $cor
+# [1] 0.2358895
+#
+# $atanh.correlations
+# [1] 0.5662411 0.3102444 0.2684879 0.5457452 0.8571016 0.4324565
+#
+# > sapply(corfit, length)
+# consensus.correlation                   cor    atanh.correlations
+#                     1                     1                 24652
+    fit <- lmFit(v, design, block=brnum, correlation = corfit$consensus.correlation) ## Takes like 32 min to run
 } else {
     fit <- lmFit(v, design)
 }
@@ -227,7 +241,7 @@ if(FALSE) {
 fit <- eBayes(fit)
 
 colnames(design)[grep(':', colnames(design))]
-top <- topTable(fit, coef = grep(':', colnames(design)), n = nrow(rse_gene))
+top <- topTable(fit, coef = grep(':', colnames(design)), n = nrow(rse_gene), sort.by = 'none')
 
 
 qval <- qvalue(top$P.Value)
@@ -242,6 +256,135 @@ sapply(c(1e-04, 0.001, 0.01, 0.025, 0.05, 0.1, 1), function(x) { sum(top$adj.P.V
 # pvalue <- fit$p.value[, 2]
 # qvalue <- qvalue(pvalue)$qvalues
 ```
+
+```{r, eval = FALSE}
+fit2 <- eBayes(lmFit(v, design))
+top2 <- topTable(fit2, coef = grep(':', colnames(design)), n = nrow(rse_gene), sort.by = 'none')
+stopifnot(identical(rownames(top), rownames(top2)))
+save(v, design, corfit, fit, top, brnum, fit2, top2, file = 'test_corfit_nov20.Rdata')
+summary(qval)
+
+addmargins(table('Using corr' = top$adj.P.Val < 0.05, 'Naive' = top2$adj.P.Val < 0.05))
+
+# Call:
+# qvalue(p = top$P.Value)
+#
+# pi0:    0.05126835
+#
+# Cumulative number of significant calls:
+#
+#           <1e-04 <0.001 <0.01 <0.025 <0.05  <0.1    <1
+# p-value    18289  19225 20441  21017 21552 22103 24652
+# q-value    19398  20722 22645  23739 24621 24652 24652
+# local FDR  17828  18734 19951  20539 21099 21745 24647
+summary(qvalue(top2$P.Value))
+# Call:
+# qvalue(p = top2$P.Value)
+#
+# pi0:    0.07523708
+#
+# Cumulative number of significant calls:
+#
+#           <1e-04 <0.001 <0.01 <0.025 <0.05  <0.1    <1
+# p-value    17668  18584 19834  20451 20998 21598 24652
+# q-value    18585  19884 21766  22839 23929 24652 24652
+# local FDR  17065  17925 19089  19708 20252 20866 24652
+
+rho <- tanh(corfit$atanh.correlations)
+# > summary(corfit$atanh.correlations)
+#    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+# -0.2825  0.1274  0.2314  0.2648  0.3600  2.1013
+# > summary(rho)
+#    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+# -0.2752  0.1267  0.2273  0.2478  0.3452  0.9705
+
+add.alpha <- function(col, alpha=1){
+  if(missing(col))
+    stop("Please provide a vector of colours.")
+  apply(sapply(col, col2rgb)/255, 2, 
+                     function(x) 
+                       rgb(x[1], x[2], x[3], alpha=alpha))  
+}
+
+pdf('test_corfit.pdf')
+hist(qval)
+hist(qvalue(top2$P.Value))
+plot(density(corfit$atanh.correlations))
+plot(density(rho))
+plot(top$F, top2$F, col = add.alpha('black', 1/10), pch = 20)
+abline(a = 0, b = 1, col = 'red')
+plot(log10(top$F + 1), log10(top2$F + 1), col = add.alpha('black', 1/10), pch = 20)
+abline(a = 0, b = 1, col = 'red')
+
+plot((log10(top$F + 1) + log10(top2$F + 1) ) / 2, log10(top$F + 1) - log10(top2$F + 1), col = add.alpha('black', 1/10), pch = 20)
+abline(h = 0, col = 'red')
+abline(v = 3, col = 'blue')
+abline(h = 0.1, col = 'grey80')
+abline(h = - 0.1, col = 'grey80')
+
+addmargins(table('close to 0 on Y' = abs(log10(top$F + 1) - log10(top2$F + 1)) < 0.1, 'less than 3 on x' = (log10(top$F + 1) + log10(top2$F + 1) ) / 2 < 3))
+#                less than 3 on x
+# close to 0 on Y FALSE  TRUE   Sum
+#           FALSE   640  9165  9805
+#           TRUE   1702 13145 14847
+#           Sum    2342 22310 24652
+plot(-log10(top$P.Value), -log10(top2$P.Value), col = add.alpha('black', 1/10), pch = 20)
+abline(a = 0, b = 1, col = 'red')
+plot(-log10(top$adj.P.Val), -log10(top2$adj.P.Val), col = add.alpha('black', 1/10), pch = 20)
+abline(a = 0, b = 1, col = 'red')
+
+
+
+stopifnot(identical(colnames(top), colnames(top2)))
+for(i in grep('Region', colnames(top))) {
+    plot(top[, i], top2[, i], main = colnames(top)[i], xlab = 'Coef: using corr', ylab = 'Coef: naive', col = add.alpha('black', 1/10), pch = 20)
+    abline(h = 0, col = 'grey80')
+    abline(v = 0, col = 'grey80')
+}
+
+#plot(rowSums(top[, grep('Region', colnames(top))]), rowSums(top2[, grep('Region', colnames(top))]), main = 'Coef sums', xlab = 'Coef: using corr', ylab = 'Coef: naive')
+
+dev.off()
+
+
+
+pdf('test_corfit_anon.pdf')
+plot(density(corfit$atanh.correlations))
+plot(density(tanh(corfit$atanh.correlations)))
+plot(top$F, top2$F, col = add.alpha('black', 1/10), pch = 20, xlab = 'F-stat: using corr', ylab = 'F-stat: naive')
+abline(a = 0, b = 1, col = 'red')
+plot(log10(top$F + 1), log10(top2$F + 1), col = add.alpha('black', 1/10), pch = 20, xlab = 'log10(F-stat + 1): using corr', ylab = 'log10(F-stat + 1): naive')
+abline(a = 0, b = 1, col = 'red')
+
+plot((log10(top$F + 1) + log10(top2$F + 1) ) / 2, log10(top$F + 1) - log10(top2$F + 1), col = add.alpha('black', 1/10), pch = 20, xlab = '[log10(F-stat corr + 1) + log10(F-stat naive + 1) ] / 2', ylab = 'log10(F-stat corr + 1) - log10(F-stat naive + 1)')
+abline(h = 0, col = 'red')
+abline(v = 3, col = 'blue')
+abline(h = 0.1, col = 'grey80')
+abline(h = - 0.1, col = 'grey80')
+
+addmargins(table('close to 0 on Y' = abs(log10(top$F + 1) - log10(top2$F + 1)) < 0.1, 'less than 3 on x' = (log10(top$F + 1) + log10(top2$F + 1) ) / 2 < 3))
+#                less than 3 on x
+# close to 0 on Y FALSE  TRUE   Sum
+#           FALSE   640  9165  9805
+#           TRUE   1702 13145 14847
+#           Sum    2342 22310 24652
+
+plot(-log10(top$P.Value), -log10(top2$P.Value), xlab = '-log10(P.Value): using corr', ylab = '-log10(P.Value): naive')
+abline(a = 0, b = 1, col = 'red')
+plot(-log10(top$adj.P.Val), -log10(top2$adj.P.Val), xlab = '-log10(adj.P.Val): using corr', ylab = '-log10(adj.P.Val): naive')
+abline(a = 0, b = 1, col = 'red')
+
+stopifnot(identical(colnames(top), colnames(top2)))
+for(i in grep('Region', colnames(top))) {
+    plot(top[, i], top2[, i], main = paste('Coef', i), xlab = 'Coef: using corr', ylab = 'Coef: naive', col = add.alpha('black', 1/10), pch = 20)
+    abline(h = 0, col = 'grey80')
+    abline(v = 0, col = 'grey80')
+}
+dev.off()
+
+
+```
+
 
 ## Reproducibility
 
