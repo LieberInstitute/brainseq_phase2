@@ -5,7 +5,7 @@
 
 mkdir -p logs
 
-for featuretype in gene exon jxn
+for featuretype in gene exon jxn tx
 do
 
 SHORT="limma_dev_${featuretype}"

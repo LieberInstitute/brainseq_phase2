@@ -1,5 +1,4 @@
 library('SummarizedExperiment')
-library('recount')
 library('getopt')
 library('limma')
 library('edgeR')
@@ -11,6 +10,11 @@ spec <- matrix(c(
 	'help' , 'h', 0, 'logical', 'Display help'
 ), byrow=TRUE, ncol=5)
 opt <- getopt(spec)
+
+## For testing
+if(FALSE){
+    opt <- list('type' = 'gene')
+}
 
 ## if help was asked for print a friendly message
 ## and exit with a non-zero error code
@@ -35,7 +39,6 @@ load_foo <- function(type) {
     } else if (type == 'jxn') {
         rse <- rse_jxn
     } else if (type == 'tx') {
-        stop('Type tx is not supported yet')
         rse <- rse_tx
     }
     ## Keep controls only
@@ -45,9 +48,14 @@ load_foo <- function(type) {
      load(file.path('/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data', 
          'mds_extracted_from_BrainSeq_Phase2_RiboZero_Genotypes_n551.Rdata'))
     m <- match(colData(rse)$BrNum, rownames(mds))
+    print('Number of missing brains in the MDS data')
+    print(table(is.na(m)))
 
     ## Drop those that don't match
-    colData(rse)$BrNum[which(is.na(m))]
+    if(any(is.na(m))) {
+        print(colData(rse)$BrNum[which(is.na(m))])
+    }
+    
 
     rse <- rse[, !is.na(m)]
     colData(rse) <- cbind(colData(rse), mds[m[!is.na(m)], ])
@@ -76,6 +84,8 @@ load_foo <- function(type) {
     colData(rse)$child <- child
     colData(rse)$teen <- teen
     colData(rse)$adult <- adult
+    
+    return(rse)
 }
 
 rse <- load_foo(opt$type)
@@ -117,20 +127,29 @@ ind <- data.frame(
 brnum <- ind$brnum[match(rownames(pd), ind$rnum)]
 design <- mods$mod
 
-dge <- DGEList(counts = assays(rse)$counts)
-dge <- calcNormFactors(dge)
-v <- voom(dge, design, plot = TRUE)
-system.time( corfit <- duplicateCorrelation(v$E, design, block=brnum) )
+if(opt$type != 'tx') {
+    dge <- DGEList(counts = assays(rse)$counts)
+    dge <- calcNormFactors(dge)
+    v <- voom(dge, design, plot = TRUE)
+    system.time( corfit <- duplicateCorrelation(v$E, design, block=brnum) )
+    
+    ## Main fit steps
+    system.time( fit <- lmFit(v, design, block=brnum,
+        correlation = corfit$consensus.correlation) )
+} else {
+    system.time( corfit <- duplicateCorrelation(assays(rse)$tpm, design, block=brnum) )
+
+    ## Main fit steps
+    system.time( fit <- lmFit(assays(rse)$tpm, design, block=brnum,
+        correlation = corfit$consensus.correlation) )
+}
+system.time( fit <- eBayes(fit) )
 
 print('Consensus correlation and summary (also after tanh transform)')
 corfit$consensus.correlation
 summary(corfit$atanh.correlations)
 summary(tanh(corfit$atanh.correlations))
 
-## Main fit steps
-system.time( fit <- lmFit(v, design, block=brnum,
-    correlation = corfit$consensus.correlation) )
-system.time( fit <- eBayes(fit) )
 
 ## Extract top results
 colnames(design)[grep(':', colnames(design))]
