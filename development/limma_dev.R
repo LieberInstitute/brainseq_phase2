@@ -130,7 +130,10 @@ design <- mods$mod
 if(opt$type != 'tx') {
     dge <- DGEList(counts = assays(rse)$counts)
     dge <- calcNormFactors(dge)
+    pdf(paste0('limma_dev_interaction_', opt$type, '.pdf'))
     v <- voom(dge, design, plot = TRUE)
+    dev.off()
+    
     system.time( corfit <- duplicateCorrelation(v$E, design, block=brnum) )
     
     ## Main fit steps
