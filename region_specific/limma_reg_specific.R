@@ -98,7 +98,7 @@ get_mods <- function(pd) {
 }
 
 ## Interaction model
-mods <-  get_mods( colData(rse), int = TRUE)
+mods <-  get_mods( colData(rse) )
 sapply(mods, colnames)
 
 
