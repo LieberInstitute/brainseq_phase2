@@ -13,7 +13,7 @@ do
 SHORT="limma_reg_specific_${featuretype}_${agegroup}"
 
 # Construct shell file
-echo "Creating script for feature type ${featuretype} and age group ${age}"
+echo "Creating script for feature type ${featuretype} and age group ${agegroup}"
 
 cat > .${SHORT}.sh <<EOF
 #!/bin/bash
