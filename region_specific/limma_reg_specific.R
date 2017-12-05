@@ -73,6 +73,12 @@ load_foo <- function(type, age) {
     colData(rse)$Race <- relevel(factor(colData(rse)$Race), ref = 'CAUC')
     colData(rse)$Sex <- relevel(factor(colData(rse)$Sex), ref = 'F')
     
+    ## Add means
+    colData(rse)$mean_mitoRate <- mean(colData(rse)$mitoRate)
+    colData(rse)$mean_totalAssignedGene <- mean(colData(rse)$totalAssignedGene)
+    colData(rse)$mean_rRNA_rate <- mean(colData(rse)$rRNA_rate)
+    colData(rse)$mean_RIN <- mean(colData(rse)$RIN)
+    
     print('Dimensions of the data used')
     print(dim(rse))
     
@@ -83,11 +89,11 @@ rse <- load_foo(opt$type, opt$age)
 
 ## To simplify later code
 pd <- as.data.frame(colData(rse))
-pd <- pd[, match(c('Age', 'Sex', 'snpPC1', 'snpPC2', 'snpPC3', 'snpPC4', 'snpPC5', 'Region', 'Race'), colnames(pd))]
+pd <- pd[, match(c('Age', 'Sex', 'snpPC1', 'snpPC2', 'snpPC3', 'snpPC4', 'snpPC5', 'Region', 'Race', 'mean_mitoRate', 'mean_totalAssignedGene', 'mean_rRNA_rate'), colnames(pd))]
 
 ## Define models
-fm_mod <- ~Region + Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5
-fm_mod0 <- ~Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5
+fm_mod <- ~Region + Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_rRNA_rate + mean_RIN
+fm_mod0 <- ~Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_rRNA_rate + mean_RIN
 
 
 get_mods <- function(pd) {    
@@ -101,7 +107,14 @@ get_mods <- function(pd) {
 mods <-  get_mods( colData(rse) )
 sapply(mods, colnames)
 
+## Get pieces needed for running duplication correlation
+ind <- data.frame(
+    brnum = colData(rse)$BrNum,
+    rnum = colData(rse)$RNum,
+    stringsAsFactors = FALSE
+)
 
+brnum <- ind$brnum[match(rownames(pd), ind$rnum)]
 design <- mods$mod
 
 if(opt$type != 'tx') {
@@ -111,13 +124,27 @@ if(opt$type != 'tx') {
     v <- voom(dge, design, plot = TRUE)
     dev.off()
         
+    system.time( corfit <- duplicateCorrelation(v$E, design, block=brnum) )
+    
     ## Main fit steps
-    system.time( fit <- lmFit(v, design) )
+    system.time( fit <- lmFit(v, design, block=brnum,
+        correlation = corfit$consensus.correlation) )
+        
+    exprsNorm <- v$E
 } else {
+    system.time( corfit <- duplicateCorrelation(assays(rse)$tpm, design, block=brnum) )
+
     ## Main fit steps
-    system.time( fit <- lmFit(assays(rse)$tpm, design) )
+    system.time( fit <- lmFit(assays(rse)$tpm, design, block=brnum,
+        correlation = corfit$consensus.correlation) )
+    exprsNorm <- assays(rse)$tpm
 }
 system.time( fit <- eBayes(fit) )
+
+print('Consensus correlation and summary (also after tanh transform)')
+corfit$consensus.correlation
+summary(corfit$atanh.correlations)
+summary(tanh(corfit$atanh.correlations))
 
 
 ## Extract top results
@@ -125,7 +152,7 @@ colnames(design)[grep('Region', colnames(design))]
 top <- topTable(fit, coef = grep('Region', colnames(design)), n = nrow(rse),
     sort.by = 'none')
 
-save(fit, top,
+save(corfit, fit, top, exprsNorm,
     file = paste0('limma_region_specific_', opt$age, '_', opt$type, '.Rdata'))
 
 ## Reproducibility information
