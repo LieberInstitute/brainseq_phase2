@@ -120,7 +120,7 @@ design <- mods$mod
 if(opt$type != 'tx') {
     dge <- DGEList(counts = assays(rse)$counts)
     dge <- calcNormFactors(dge)
-    pdf(paste0('limma_region_specific_', opt$age, '_', opt$type, '.pdf'))
+    pdf(paste0('pdf/limma_region_specific_', opt$age, '_', opt$type, '.pdf'))
     v <- voom(dge, design, plot = TRUE)
     dev.off()
         
@@ -153,7 +153,7 @@ top <- topTable(fit, coef = grep('Region', colnames(design)), n = nrow(rse),
     sort.by = 'none')
 
 save(corfit, fit, top, exprsNorm,
-    file = paste0('limma_region_specific_', opt$age, '_', opt$type, '.Rdata'))
+    file = paste0('rda/limma_region_specific_', opt$age, '_', opt$type, '.Rdata'))
 
 ## Reproducibility information
 print('Reproducibility information:')

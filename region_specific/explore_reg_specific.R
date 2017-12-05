@@ -79,7 +79,7 @@ get_mods <- function(pd) {
 
 
 top <- mapply(function(age, type) {
-    load(paste0('limma_region_specific_', age, '_', type, '.Rdata'))
+    load(paste0('rda/limma_region_specific_', age, '_', type, '.Rdata'))
     top$age <- age
     top$type <- type
     return(top)
@@ -87,12 +87,12 @@ top <- mapply(function(age, type) {
 names(top) <- paste0(rep(c('adult', 'fetal'), each = 4), "_", rep(c('gene', 'exon', 'jxn', 'tx'), 2))
 
 fit <- mapply(function(age, type) {
-    load(paste0('limma_region_specific_', age, '_', type, '.Rdata'))
+    load(paste0('rda/limma_region_specific_', age, '_', type, '.Rdata'))
     return(fit)
 }, rep(c('adult', 'fetal'), each = 4), rep(c('gene', 'exon', 'jxn', 'tx'), 2), SIMPLIFY = FALSE)
 
 exprsNorm <- mapply(function(age, type) {
-    load(paste0('limma_region_specific_', age, '_', type, '.Rdata'))
+    load(paste0('rda/limma_region_specific_', age, '_', type, '.Rdata'))
     return(exprsNorm)
 }, rep(c('adult', 'fetal'), each = 4), rep(c('gene', 'exon', 'jxn', 'tx'), 2), SIMPLIFY = FALSE)
 

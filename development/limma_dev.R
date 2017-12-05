@@ -136,7 +136,7 @@ design <- mods$mod
 if(opt$type != 'tx') {
     dge <- DGEList(counts = assays(rse)$counts)
     dge <- calcNormFactors(dge)
-    pdf(paste0('limma_dev_interaction_', opt$type, '.pdf'))
+    pdf(paste0('pdf/limma_dev_interaction_', opt$type, '.pdf'))
     v <- voom(dge, design, plot = TRUE)
     dev.off()
     
@@ -169,7 +169,7 @@ top <- topTable(fit, coef = grep(':', colnames(design)), n = nrow(rse),
     sort.by = 'none')
 
 save(corfit, fit, top, exprsNorm,
-    file = paste0('limma_dev_interaction_', opt$type, '.Rdata'))
+    file = paste0('rda/limma_dev_interaction_', opt$type, '.Rdata'))
 
 ## Reproducibility information
 print('Reproducibility information:')
