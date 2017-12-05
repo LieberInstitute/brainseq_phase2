@@ -1,7 +1,6 @@
 library('limma')
 library('SummarizedExperiment')
 library('jaffelab')
-library('edgeR')
 library('devtools')
 
 ## Load data
@@ -91,7 +90,13 @@ fit <- mapply(function(age, type) {
     load(paste0('limma_region_specific_', age, '_', type, '.Rdata'))
     return(fit)
 }, rep(c('adult', 'fetal'), each = 4), rep(c('gene', 'exon', 'jxn', 'tx'), 2), SIMPLIFY = FALSE)
-names(fit) <- names(top)
+
+exprsNorm <- mapply(function(age, type) {
+    load(paste0('limma_region_specific_', age, '_', type, '.Rdata'))
+    return(exprsNorm)
+}, rep(c('adult', 'fetal'), each = 4), rep(c('gene', 'exon', 'jxn', 'tx'), 2), SIMPLIFY = FALSE)
+
+names(exprsNorm) <- names(fit) <- names(top)
 
 sapply(top, function(x) {
     table(x$adj.P.Val < 0.05)
@@ -129,37 +134,14 @@ rse_jxn <- load_foo('jxn', 'adult')
 
 ## Reg specific model
 design <- get_mods( colData(rse) )$mod
-v <- voom(calcNormFactors(DGEList(counts = assays(rse)$counts)), design, plot = FALSE)
-
-
-cleaned <- cleaningY(assays(rse)$counts, design, 2)
 
 min(top$adult_gene$adj.P.Val)
 which.min(top$adult_gene$adj.P.Val)
 which(rank(top$adult_gene$adj.P.Val) == 1)
 
-top$adult_gene[which(rank(top$adult_gene$adj.P.Val) == 1), ]
 
-boxplot(cleaned[which(rank(top$adult_gene$adj.P.Val) == 1), ] ~ colData(rse)$Region)
 
-boxplot(assays(rse)$rpkm[which(rank(top$adult_gene$adj.P.Val) == 1), ] ~ colData(rse)$Region)
-boxplot(assays(rse)$rpkm[which(rank(top$adult_gene$adj.P.Val) == 1), ] ~ colData(rse)$Region)
-boxplot(log(assays(rse)$rpkm[which(rank(top$adult_gene$adj.P.Val) == 1), ] + 1) ~ colData(rse)$Region)
-
-cleanedRPKM <- cleaningY(assays(rse)$rpkm, design, 2)
-
-boxplot(cleanedRPKM[which(rank(top$adult_gene$adj.P.Val) == 1), ] ~ colData(rse)$Region)
-
-cleanedLogRPKM <- cleaningY(log(assays(rse)$rpkm + 1), design, 2)
-
-boxplot(cleanedLogRPKM[which(rank(top$adult_gene$adj.P.Val) == 1), ] ~ colData(rse)$Region)
-
-# x <- assays(rse)$counts
-# y <- calcNormFactors(DGEList(counts = assays(rse)$counts))
-# z <- colSums(x)
-# identical(log2( (x[, 1] + 0.5 ) / (z[1] * y$samples$norm.factors[1] + 1) * 1e6) , v$E[, 1])
-
-cleanedVoom <- cleaningY(v$E, design, 2)
+cleanedVoom <- cleaningY(exprsNorm$adult_gene, design, 2)
 
 boxplot(v$E[which(rank(top$adult_gene$adj.P.Val) == 1), ] ~ colData(rse)$Region)
 t.test(v$E[which(rank(top$adult_gene$adj.P.Val) == 1), ] ~ colData(rse)$Region)
