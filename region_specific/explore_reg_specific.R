@@ -74,29 +74,19 @@ get_mods <- function(pd) {
     return(list(mod = mod, mod0 = mod0))
 }
 
-
-
-
-
-top <- mapply(function(age, type) {
+raw <- mapply(function(age, type) {
     load(paste0('rda/limma_region_specific_', age, '_', type, '.Rdata'))
     top$age <- age
     top$type <- type
-    return(top)
+    return(list(top = top, fit = fit, exprsNorm = exprsNorm))
 }, rep(c('adult', 'fetal'), each = 4), rep(c('gene', 'exon', 'jxn', 'tx'), 2), SIMPLIFY = FALSE)
-names(top) <- paste0(rep(c('adult', 'fetal'), each = 4), "_", rep(c('gene', 'exon', 'jxn', 'tx'), 2))
+names(raw) <- paste0(rep(c('adult', 'fetal'), each = 4), "_", rep(c('gene', 'exon', 'jxn', 'tx'), 2))
 
-fit <- mapply(function(age, type) {
-    load(paste0('rda/limma_region_specific_', age, '_', type, '.Rdata'))
-    return(fit)
-}, rep(c('adult', 'fetal'), each = 4), rep(c('gene', 'exon', 'jxn', 'tx'), 2), SIMPLIFY = FALSE)
 
-exprsNorm <- mapply(function(age, type) {
-    load(paste0('rda/limma_region_specific_', age, '_', type, '.Rdata'))
-    return(exprsNorm)
-}, rep(c('adult', 'fetal'), each = 4), rep(c('gene', 'exon', 'jxn', 'tx'), 2), SIMPLIFY = FALSE)
+top <- lapply(raw, '[[', 'top')
+fit <- lapply(raw, '[[', 'fit')
+exprsNorm <- lapply(raw, '[[', 'exprsNorm')
 
-names(exprsNorm) <- names(fit) <- names(top)
 
 sapply(top, function(x) {
     table(x$adj.P.Val < 0.05)
@@ -124,12 +114,38 @@ sapply(top, function(x) {
     round(table(p.adjust(x$P.Value, 'bonferroni') < 0.05) / nrow(x) * 100, 2)
 })
 
+sapply(top, function(x) {
+    table(p.adjust(x$P.Value, 'bonferroni') < 0.01)
+})
+
+sapply(top, function(x) {
+    round(table(p.adjust(x$P.Value, 'bonferroni') < 0.01) / nrow(x) * 100, 2)
+})
+
+
+pcheck <- do.call(rbind, lapply(top, function(x) {
+    x$P.Bonf <- p.adjust(x$P.Value, 'bonferroni')
+    return(x)
+}))
+pcheck$global_fdr <- p.adjust(pcheck$P.Value, 'fdr')
+pcheck$global_bonf <- p.adjust(pcheck$P.Value, 'bonferroni')
+
+plot(-log10(pcheck$global_fdr), -log10(pcheck$adj.P.Val), col = c('gene' = 'blue', 'exon' = 'orange', 'jxn' = 'grey20', 'tx' = 'light blue')[pcheck$type], pch = c('adult' = 21, 'fetal' = 22)[pcheck$age])
+abline(a = 0, b = 1, col = 'red')
+
+table('Global FDR' = pcheck$global_fdr < 0.05, 'FDR' = pcheck$adj.P.Val < 0.05, 'Age group' = pcheck$age, 'Feature type' = pcheck$type)
+table('Global FDR' = pcheck$global_fdr < 0.01, 'FDR' = pcheck$adj.P.Val < 0.01, 'Age group' = pcheck$age, 'Feature type' = pcheck$type)
+
+table('Global Bonf' = pcheck$global_bonf < 0.05, 'Bonf' = pcheck$P.Bonf < 0.05, 'Age group' = pcheck$age, 'Feature type' = pcheck$type)
+table('Global Bonf' = pcheck$global_bonf < 0.01, 'Bonf' = pcheck$P.Bonf < 0.01, 'Age group' = pcheck$age, 'Feature type' = pcheck$type)
 
 
 rse <- load_foo('gene', 'adult')
 rse_tx <- load_foo('tx', 'adult')
 rse_exon <- load_foo('exon', 'adult')
 rse_jxn <- load_foo('jxn', 'adult')
+
+
 
 
 ## Reg specific model
@@ -141,17 +157,25 @@ which(rank(top$adult_gene$adj.P.Val) == 1)
 
 
 
+
 cleanedVoom <- cleaningY(exprsNorm$adult_gene, design, 2)
 
-boxplot(v$E[which(rank(top$adult_gene$adj.P.Val) == 1), ] ~ colData(rse)$Region)
-t.test(v$E[which(rank(top$adult_gene$adj.P.Val) == 1), ] ~ colData(rse)$Region)
+
+top$adult_gene[which(rank(top$adult_gene$adj.P.Val) == 1), ]
+boxplot(exprsNorm$adult_gene[which(rank(top$adult_gene$adj.P.Val) == 1), ] ~ colData(rse)$Region)
+t.test(exprsNorm$adult_gene[which(rank(top$adult_gene$adj.P.Val) == 1), ] ~ colData(rse)$Region)
 
 boxplot(cleanedVoom[which(rank(top$adult_gene$adj.P.Val) == 1), ] ~ colData(rse)$Region)
 t.test(cleanedVoom[which(rank(top$adult_gene$adj.P.Val) == 1), ] ~ colData(rse)$Region)
 
 top$adult_gene[which(rank(top$adult_gene$adj.P.Val) == 2), ]
-boxplot(cleaned[which(rank(top$adult_gene$adj.P.Val) == 2), ] ~ colData(rse)$Region)
+boxplot(exprsNorm$adult_gene[which(rank(top$adult_gene$adj.P.Val) == 2), ] ~ colData(rse)$Region)
+t.test(exprsNorm$adult_gene[which(rank(top$adult_gene$adj.P.Val) == 2), ] ~ colData(rse)$Region)
 
+boxplot(cleanedVoom[which(rank(top$adult_gene$adj.P.Val) == 2), ] ~ colData(rse)$Region)
+t.test(cleanedVoom[which(rank(top$adult_gene$adj.P.Val) == 2), ] ~ colData(rse)$Region)
+
+boxplot(assays(rse)$rpkm[which(rank(top$adult_gene$adj.P.Val) == 2), ] ~ colData(rse)$Region)
 
 
 
