@@ -38,7 +38,8 @@ span_subset <- function(rse, rse_span, exon = FALSE) {
     colData(rse_span)$Race <- relevel(factor(race), ref = 'CAUC')
     colData(rse_span)$Sex <- relevel(factor(colData(rse_span)$Sex), ref = 'F')
     
-    ## Add means
+    ## Add means (these are just the same numbers, but for consistency with
+    ## the rest of the BrainSeq code I'll call them means)
     colData(rse_span)$mean_mitoRate <- colData(rse_span)$mitoRate
     colData(rse_span)$mean_totalAssignedGene <- colData(rse_span)$totalAssignedGene
     colData(rse_span)$mean_rRNA_rate <- colData(rse_span)$rRNA_rate
