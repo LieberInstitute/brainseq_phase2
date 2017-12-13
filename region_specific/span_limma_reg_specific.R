@@ -29,7 +29,7 @@ stopifnot(opt$age %in% c('adult', 'fetal'))
 ## Load data
 load_foo <- function(type, age) {
     load_file <- file.path(
-        '/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff',
+        '/dcl01/lieber/ajaffe/lab/brainseq_phase2/brainspan',
         paste0('rse_span_', type, '.Rdata'))
     stopifnot(file.exists(load_file))
     load(load_file)
