@@ -108,13 +108,7 @@ mods <-  get_mods( colData(rse) )
 sapply(mods, colnames)
 
 ## Get pieces needed for running duplication correlation
-ind <- data.frame(
-    brnum = colData(rse)$BrNum,
-    rnum = colData(rse)$RNum,
-    stringsAsFactors = FALSE
-)
-
-brnum <- ind$brnum[match(rownames(pd), ind$rnum)]
+brnum <- colData(rse)$BrNum
 design <- mods$mod
 
 if(opt$type != 'tx') {
