@@ -13,8 +13,8 @@ load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_exon.Rdata")
 load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_jxn.Rdata")
 load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_tx.Rdata")
 
-# fix junction row names
-rownames(rse_jxn) = paste0(seqnames(rse_jxn),":",start(rse_jxn),"-",end(rse_jxn),"(",strand(rse_jxn),")")
+# # fix junction row names
+# rownames(rse_jxn) = paste0(seqnames(rse_jxn),":",start(rse_jxn),"-",end(rse_jxn),"(",strand(rse_jxn),")")
 
 # # sum totalMapped IntegerLists (so getRPKM works later)
 # colData(rse_tx)$totalMapped =
@@ -45,7 +45,7 @@ print("....data loaded....")
 ######################
 
 ## load SNP data
-load("genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n546.rda")
+load("genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n551.rda")
 
 ### make mds and snp dimensions equal to N
 ###(repeat rows or columns for BrNum replicates)
@@ -85,29 +85,29 @@ colnames(snpspos) = c("name","chr","pos")
 ####### do PCA ########
 #######################
 
-# pcaGene = prcomp(t(log2(geneRpkm+1)))
-# kGene = num.sv(log2(geneRpkm+1), mod)
-# kGene = min(kGene, 25)
-# genePCs = pcaGene$x[,1:kGene]
+pcaGene = prcomp(t(log2(geneRpkm+1)))
+kGene = num.sv(log2(geneRpkm+1), mod)
+kGene = min(kGene, 25)
+genePCs = pcaGene$x[,1:kGene]
 
-# pcaExon = prcomp(t(log2(exonRpkm+1)))
-# kExon = num.sv(log2(exonRpkm+1), mod, vfilter=50000)
-# kExon = min(kExon, 25)
-# exonPCs = pcaExon$x[,1:kExon]
+pcaExon = prcomp(t(log2(exonRpkm+1)))
+kExon = num.sv(log2(exonRpkm+1), mod, vfilter=50000)
+kExon = min(kExon, 25)
+exonPCs = pcaExon$x[,1:kExon]
 
-# pcaJxn = prcomp(t(log2(jxnRp10m+1)))
-# kJxn = num.sv(log2(jxnRp10m+1), mod, vfilter=50000)
-# kJxn = min(kJxn, 25)
-# jxnPCs = pcaJxn$x[,1:kJxn]
+pcaJxn = prcomp(t(log2(jxnRp10m+1)))
+kJxn = num.sv(log2(jxnRp10m+1), mod, vfilter=50000)
+kJxn = min(kJxn, 25)
+jxnPCs = pcaJxn$x[,1:kJxn]
 
-# pcaTx = prcomp(t(log2(txTpm+1)))
-# kTx = num.sv(log2(txTpm+1), mod, vfilter=50000)
-# kTx = min(kTx, 25)
-# txPCs = pcaTx$x[,1:kTx]
+pcaTx = prcomp(t(log2(txTpm+1)))
+kTx = num.sv(log2(txTpm+1), mod, vfilter=50000)
+kTx = min(kTx, 25)
+txPCs = pcaTx$x[,1:kTx]
 
-# save(genePCs, exonPCs, jxnPCs, txPCs, 
-	# file="rdas/pcs_4features_combined_regions_filtered_over13.rda")
-load("rdas/pcs_4features_combined_regions_filtered_over13.rda")
+save(genePCs, exonPCs, jxnPCs, txPCs, 
+	file="rdas/pcs_4features_combined_regions_filtered_over13.rda")
+# load("rdas/pcs_4features_combined_regions_filtered_over13.rda")
 
 ## make covs and move BrainRegion to end
 modReg = grep("Region",colnames(mod))

@@ -5,12 +5,14 @@ library(SummarizedExperiment)
 library(sva)
 library(edgeR)
 library(limma)
+library(recount)
 
-## load gene
-load("count_data/hippo_brainseq_phase2_hg38_rseGene_merged_n442.rda")
-load("count_data/hippo_brainseq_phase2_hg38_rseExon_merged_n442.rda")
-load("count_data/hippo_brainseq_phase2_hg38_rseJxn_merged_n442.rda")
-load("count_data/hippo_brainseq_phase2_hg38_rseTx_merged_n442.rda")
+## load expression data
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_gene.Rdata")
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_exon.Rdata")
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_jxn.Rdata")
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_tx.Rdata")
+
 colData(rse_gene)$RIN = sapply(colData(rse_gene)$RIN,"[",1)
 colData(rse_gene)$totalAssignedGene = sapply(colData(rse_gene)$totalAssignedGene,"[",1)
 colData(rse_gene)$mitoRate = sapply(colData(rse_gene)$mitoRate,"[",1)
@@ -18,20 +20,21 @@ colData(rse_gene)$overallMapRate = sapply(colData(rse_gene)$overallMapRate,"[",1
 colData(rse_gene)$rRNA_rate = sapply(colData(rse_gene)$rRNA_rate,"[",1)
 colData(rse_gene)$ERCCsumLogErr = sapply(colData(rse_gene)$ERCCsumLogErr,"[",1)
 colData(rse_gene)$Kit = ifelse(colData(rse_gene)$mitoRate < 0.05, "Gold", "HMR")
-getRPKM = recount::getRPKM
 
-## load qSVs
-load("count_data/degradation_rse_phase2_hippo.rda")
-
-## filter for age
+##################
+## filter for age and to hippocampus
 keepIndex = which(rse_gene$Age > 17 & 
-	rse_gene$Kit == "HMR")
+	rse_gene$Kit == "HMR" & rse_gene$Region == "HIPPO")
 rse_gene = rse_gene[,keepIndex]
 rse_exon = rse_exon[,keepIndex]
 rse_jxn = rse_jxn[,keepIndex]
 rse_tx = rse_tx[,keepIndex]
-cov_rse_hippo = cov_rse_hippo[,keepIndex]
 
+## load qSVs and line up
+load("count_data/degradation_rse_phase2_hippo.rda")
+cov_rse_hippo = cov_rse_hippo[,sapply(rse_gene$SAMPLE_ID, "[", 1)]
+
+###################
 ## filter low expression
 geneIndex = which(rowMeans(getRPKM(rse_gene,"Length")) > 0.2)
 rse_gene = rse_gene[geneIndex,]
@@ -51,7 +54,7 @@ rse_tx = rse_tx[txIndex,]
 table(rse_gene$Dx)
 
 ## add mds data
-mds = read.table("/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n546_maf05_geno10_hwe1e6.mds",
+mds = read.table("/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n551_maf05_geno10_hwe1e6.mds",
 	header=TRUE,as.is=TRUE, row.names=1)
 mds = mds[colData(rse_gene)$BrNum,3:7]
 colnames(mds) = paste0("snpPC", 1:5)

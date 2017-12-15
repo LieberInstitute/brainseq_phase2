@@ -11,7 +11,7 @@ library(SummarizedExperiment)
 #######################
 
 ## read manifest
-load("count_data/hippo_brainseq_phase2_hg38_rseGene_merged_n442.rda")
+load("count_data/hippo_brainseq_phase2_hg38_rseGene_merged_n447.rda")
 pdHippo = colData(rse_gene)
 	
 ## import degradation regions
@@ -61,7 +61,7 @@ save(cov_rse_hippo, file = "count_data/degradation_rse_phase2_hippo.rda")
 ############################
 
 ## read manifest
-load("count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseGene_merged_n449.rda")
+load("count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseGene_merged_n453.rda")
 pdDlpfc = colData(rse_gene)
 	
 ## import degradation regions

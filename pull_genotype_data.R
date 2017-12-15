@@ -8,9 +8,16 @@ library(stringr)
 library(GenomicRanges)
 
 ## load data
-load("count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseGene_merged_n449.rda")
+# load("count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseGene_merged_n449.rda")
+# pdDlpfc = colData(rse_gene)
+# load("count_data/hippo_brainseq_phase2_hg38_rseGene_merged_n442.rda")
+# pdHippo = colData(rse_gene)
+
+##### now with a couple added samples that were originally dropped
+## load data
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseGene_merged_n453.rda")
 pdDlpfc = colData(rse_gene)
-load("count_data/hippo_brainseq_phase2_hg38_rseGene_merged_n442.rda")
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/count_data/hippo_brainseq_phase2_hg38_rseGene_merged_n447.rda")
 pdHippo = colData(rse_gene)
 rm(rse_gene)
 
@@ -35,23 +42,23 @@ write.table(famOut[,1:2], "samples_to_extract.txt",
 	
 #### overall extraction
 bfile = "/dcs01/ajaffe/Imputation/Merged/LIBD_Brain_Illumina_h650_1M_Omni5M_Omni2pt5_Macrogen_imputed_run2_maf005_hwe10_geno10"
-newbfile = "/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n546_maf05_geno10_hwe1e6"
+newbfile = "/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n551_maf05_geno10_hwe1e6"
 
 ## extract
-system(paste("plink --bfile", bfile, 
+system(paste("/users/ajaffe/bin/plink --bfile", bfile, 
 	"--keep samples_to_extract.txt --geno 0.1 --maf 0.05 --hwe 0.000001 --make-bed --out", 
 	newbfile, " --memory 225000"))
 
 # ## independent and cluster
-system(paste("plink --bfile", newbfile, "--indep 100 10 1.25 --out", newbfile))
+system(paste("/users/ajaffe/bin/plink --bfile", newbfile, "--indep 100 10 1.25 --out", newbfile))
 
 ## MDS components	
-system(paste0("plink --bfile ", newbfile, 
+system(paste0("/users/ajaffe/bin/plink --bfile ", newbfile, 
 	" --cluster --mds-plot 10 --extract ",
 	newbfile, ".prune.in --out ", newbfile))
 
 # ## A transpose
-system(paste("plink --bfile", newbfile,
+system(paste("/users/ajaffe/bin/plink --bfile", newbfile,
 	"--recode A-transpose --out", newbfile))
 	
 ################
@@ -84,4 +91,4 @@ rownames(mds)[ii] = colnames(snp)[ii]= "Br1061"
 
 ### save
 save(mds, snp, snpMap, compress=TRUE,
-	file = "genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n546.rda")
+	file = "genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n551.rda")

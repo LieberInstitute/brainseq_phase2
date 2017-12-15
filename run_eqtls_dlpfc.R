@@ -15,8 +15,8 @@ load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_exon.Rdata")
 load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_jxn.Rdata")
 load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_tx.Rdata")
 
-# fix junction row names
-rownames(rse_jxn) = paste0(seqnames(rse_jxn),":",start(rse_jxn),"-",end(rse_jxn),"(",strand(rse_jxn),")")
+# # fix junction row names
+# rownames(rse_jxn) = paste0(seqnames(rse_jxn),":",start(rse_jxn),"-",end(rse_jxn),"(",strand(rse_jxn),")")
 
 # # sum totalMapped IntegerLists (so getRPKM works later)
 # colData(rse_tx)$totalMapped =
@@ -44,7 +44,7 @@ txTpm = assays(rse_tx)$tpm
 ######################
 
 ## load SNP data
-load("genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n546.rda")
+load("genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n551.rda")
 
 ### make mds and snp dimensions equal to N
 ###(repeat rows or columns for BrNum replicates)
@@ -86,25 +86,25 @@ colnames(snpspos) = c("name","chr","pos")
 ####### do PCA ########
 #######################
 
-# pcaGene = prcomp(t(log2(geneRpkm+1)))
-# kGene = num.sv(log2(geneRpkm+1), mod)
-# genePCs = pcaGene$x[,1:kGene]
+pcaGene = prcomp(t(log2(geneRpkm+1)))
+kGene = num.sv(log2(geneRpkm+1), mod)
+genePCs = pcaGene$x[,1:kGene]
 
-# pcaExon = prcomp(t(log2(exonRpkm+1)))
-# kExon = num.sv(log2(exonRpkm+1), mod, vfilter=50000)
-# exonPCs = pcaExon$x[,1:kExon]
+pcaExon = prcomp(t(log2(exonRpkm+1)))
+kExon = num.sv(log2(exonRpkm+1), mod, vfilter=50000)
+exonPCs = pcaExon$x[,1:kExon]
 
-# pcaJxn = prcomp(t(log2(jxnRp10m+1)))
-# kJxn = num.sv(log2(jxnRp10m+1), mod, vfilter=50000)
-# jxnPCs = pcaJxn$x[,1:kJxn]
+pcaJxn = prcomp(t(log2(jxnRp10m+1)))
+kJxn = num.sv(log2(jxnRp10m+1), mod, vfilter=50000)
+jxnPCs = pcaJxn$x[,1:kJxn]
 
-# pcaTx = prcomp(t(log2(txTpm+1)))
-# kTx = num.sv(log2(txTpm+1), mod, vfilter=50000)
-# txPCs = pcaTx$x[,1:kTx]
+pcaTx = prcomp(t(log2(txTpm+1)))
+kTx = num.sv(log2(txTpm+1), mod, vfilter=50000)
+txPCs = pcaTx$x[,1:kTx]
 
-# save(genePCs, exonPCs, jxnPCs, txPCs, 
-	# file="rdas/pcs_dlpfc_4features_filtered_over13.rda")
-load("rdas/pcs_dlpfc_4features_filtered_over13.rda")
+save(genePCs, exonPCs, jxnPCs, txPCs, 
+	file="rdas/pcs_dlpfc_4features_filtered_over13.rda")
+# load("rdas/pcs_dlpfc_4features_filtered_over13.rda")
 
 covsGene = SlicedData$new(t(cbind(mod[,-1],genePCs)))
 covsExon = SlicedData$new(t(cbind(mod[,-1],exonPCs)))
@@ -162,15 +162,13 @@ meGene = Matrix_eQTL_main(snps=theSnps, gene = geneSlice,
 	snpspos = snpspos, genepos = posGene, 
 	useModel = modelLINEAR,	cisDist=5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
-save(meGene, file="eqtl_tables/matrixEqtl_output_dlpfc_4features_gene.rda")
-	
+
 meExon = Matrix_eQTL_main(snps=theSnps, gene = exonSlice, 
 	cvrt = covsExon, output_file_name.cis =  ".ctxt" ,
 	pvOutputThreshold.cis = 0.001,  pvOutputThreshold=0,
 	snpspos = snpspos, genepos = posExon, 
 	useModel = modelLINEAR,	cisDist=5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
-save(meExon, file="eqtl_tables/matrixEqtl_output_dlpfc_4features_exon.rda")
 
 meJxn = Matrix_eQTL_main(snps=theSnps, gene = jxnSlice, 
 	cvrt = covsJxn, output_file_name.cis =  ".ctxt" ,
@@ -178,7 +176,6 @@ meJxn = Matrix_eQTL_main(snps=theSnps, gene = jxnSlice,
 	snpspos = snpspos, genepos = posJxn, 
 	useModel = modelLINEAR,	cisDist=5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
-save(meJxn, file="eqtl_tables/matrixEqtl_output_dlpfc_4features_jxn.rda")
 	
 meTx = Matrix_eQTL_main(snps=theSnps, gene = txSlice, 
 	cvrt = covsTx, output_file_name.cis =  ".ctxt" ,
@@ -186,7 +183,6 @@ meTx = Matrix_eQTL_main(snps=theSnps, gene = txSlice,
 	snpspos = snpspos, genepos = posTx, 
 	useModel = modelLINEAR,	cisDist=5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
-save(meTx, file="eqtl_tables/matrixEqtl_output_dlpfc_4features_tx.rda")
 
 save(meGene, meExon, meJxn, meTx,
 	file="eqtl_tables/matrixEqtl_output_dlpfc_4features.rda")
