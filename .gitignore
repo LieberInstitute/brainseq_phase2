@@ -16,3 +16,4 @@ eqtl_tables
 qcChecks
 caseControl/*.rda
 genotype_data
+.ctxt

@@ -64,12 +64,59 @@ The following object is masked from ‘package:base’:
 
     apply
 
-null device 
-          1 
+Loading objects:
+  rse_exon
+Loading objects:
+  rse_gene
+Loading objects:
+  rse_jxn
+Loading objects:
+  rse_tx
+Loading objects:
+  rse_span_exon
+Loading objects:
+  rse_span_gene
+Loading objects:
+  rse_span_jxn
+Loading objects:
+  rse_span_tx
+[1] "Missing features"
+
+FALSE 
+24652 
+[1] "Dimensions of the data"
+[1] 24652    79
+[1] "Missing features"
+
+ FALSE 
+396579 
+[1] "Dimensions of the data"
+[1] 396579     79
+
+     +      -      * 
+154116 143065      0 
+
+      +       -       * 
+      0       0 7896178 
+[1] "Missing features"
+
+ FALSE 
+272605 
+[1] "Dimensions of the data"
+[1] 297181     79
+
+     +      -      * 
+154116 143065      0 
+[1] "Missing features"
+
+FALSE 
+92732 
+[1] "Dimensions of the data"
+[1] 92732    79
 [1] "Reproducibility information:"
-[1] "2017-12-04 15:27:27 EST"
+[1] "2017-12-15 12:14:42 EST"
    user  system elapsed 
- 13.934   0.436  14.506 
+788.076  19.929 810.569 
 Session info ----------------------------------------------------------------------------------------------------------
  setting  value                                      
  version  R version 3.4.2 Patched (2017-10-12 r73550)
@@ -78,7 +125,7 @@ Session info -------------------------------------------------------------------
  language (EN)                                       
  collate  en_US.UTF-8                                
  tz       <NA>                                       
- date     2017-12-04                                 
+ date     2017-12-15                                 
 
 Packages --------------------------------------------------------------------------------------------------------------
  package              * version  date       source                            

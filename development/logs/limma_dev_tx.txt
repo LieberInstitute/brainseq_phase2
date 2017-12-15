@@ -1,0 +1,122 @@
+**** Job starts ****
+Tue Dec  5 11:46:01 EST 2017
+**** JHPCE info ****
+User: lcollado
+Job id: 
+Job name: 
+Hostname: jhpce01
+Task id: 
+Loading conda_R/3.4.x
+Using the following user library: ~/R/x86_64-pc-linux-gnu-library/3.4.x
+Loading required package: methods
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, cbind, colMeans, colnames,
+    colSums, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+    grepl, intersect, is.unsorted, lapply, lengths, Map, mapply, match,
+    mget, order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rowMeans, rownames, rowSums, sapply, setdiff, sort,
+    table, tapply, union, unique, unsplit, which, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:base’:
+
+    expand.grid
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: DelayedArray
+Loading required package: matrixStats
+
+Attaching package: ‘matrixStats’
+
+The following objects are masked from ‘package:Biobase’:
+
+    anyMissing, rowMedians
+
+
+Attaching package: ‘DelayedArray’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+
+The following object is masked from ‘package:base’:
+
+    apply
+
+
+Attaching package: ‘limma’
+
+The following object is masked from ‘package:BiocGenerics’:
+
+    plotMA
+
+[1] "Number of missing brains in the MDS data"
+
+FALSE 
+  614 
+$mod
+ [1] "(Intercept)"            "Age"                    "RegionHIPPO"           
+ [4] "fetal"                  "birth"                  "infant"                
+ [7] "child"                  "teen"                   "adult"                 
+[10] "SexM"                   "snpPC1"                 "snpPC2"                
+[13] "snpPC3"                 "snpPC4"                 "snpPC5"                
+[16] "mean_mitoRate"          "mean_totalAssignedGene" "mean_rRNA_rate"        
+[19] "mean_RIN"               "Age:RegionHIPPO"        "RegionHIPPO:fetal"     
+[22] "RegionHIPPO:birth"      "RegionHIPPO:infant"     "RegionHIPPO:child"     
+[25] "RegionHIPPO:teen"       "RegionHIPPO:adult"     
+
+$mod0
+ [1] "(Intercept)"            "Age"                    "fetal"                 
+ [4] "birth"                  "infant"                 "child"                 
+ [7] "teen"                   "adult"                  "SexM"                  
+[10] "RegionHIPPO"            "snpPC1"                 "snpPC2"                
+[13] "snpPC3"                 "snpPC4"                 "snpPC5"                
+[16] "mean_mitoRate"          "mean_totalAssignedGene" "mean_rRNA_rate"        
+[19] "mean_RIN"              
+
+   user  system elapsed 
+  2.696   0.130   2.825 
+[1] "Consensus correlation and summary (also after tanh transform)"
+[1] 0.07778422
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+-1.32524  0.01136  0.07321  0.09576  0.14864  2.63108 
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+-0.86808  0.01136  0.07307  0.09193  0.14756  0.98969 
+[1] "Age:RegionHIPPO"    "RegionHIPPO:fetal"  "RegionHIPPO:birth" 
+[4] "RegionHIPPO:infant" "RegionHIPPO:child"  "RegionHIPPO:teen"  
+[7] "RegionHIPPO:adult" 
+Error in topTableF(fit, number = number, genelist = genelist, adjust.method = adjust.method,  : 
+  F-statistics not found in fit
+Calls: topTable -> topTableF
+Execution halted
+**** Job ends ****
+Wed Dec  6 02:05:48 EST 2017

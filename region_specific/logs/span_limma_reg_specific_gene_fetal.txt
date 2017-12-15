@@ -1,0 +1,161 @@
+**** Job starts ****
+Wed Dec 13 15:09:15 EST 2017
+**** JHPCE info ****
+User: lcollado
+Job id: 4121329
+Job name: span_limma_reg_specific_gene_fetal
+Hostname: compute-097
+Task id: 
+Loading conda_R/3.4.x
+Using the following user library: ~/R/x86_64-pc-linux-gnu-library/3.4.x
+Loading required package: methods
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, cbind, colMeans, colnames,
+    colSums, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+    grepl, intersect, is.unsorted, lapply, lengths, Map, mapply, match,
+    mget, order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rowMeans, rownames, rowSums, sapply, setdiff, sort,
+    table, tapply, union, unique, unsplit, which, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:base’:
+
+    expand.grid
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: DelayedArray
+Loading required package: matrixStats
+
+Attaching package: ‘matrixStats’
+
+The following objects are masked from ‘package:Biobase’:
+
+    anyMissing, rowMedians
+
+
+Attaching package: ‘DelayedArray’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+
+The following object is masked from ‘package:base’:
+
+    apply
+
+
+Attaching package: ‘limma’
+
+The following object is masked from ‘package:BiocGenerics’:
+
+    plotMA
+
+[1] "Dimensions of the data used"
+[1] 24652    36
+$mod
+ [1] "(Intercept)"            "RegionHIP"              "Age"                   
+ [4] "SexM"                   "snpPC1"                 "snpPC2"                
+ [7] "snpPC3"                 "snpPC4"                 "snpPC5"                
+[10] "mean_mitoRate"          "mean_totalAssignedGene" "mean_rRNA_rate"        
+[13] "mean_RIN"              
+
+$mod0
+ [1] "(Intercept)"            "Age"                    "SexM"                  
+ [4] "snpPC1"                 "snpPC2"                 "snpPC3"                
+ [7] "snpPC4"                 "snpPC5"                 "mean_mitoRate"         
+[10] "mean_totalAssignedGene" "mean_rRNA_rate"         "mean_RIN"              
+
+   user  system elapsed 
+  0.553   0.003   0.557 
+[1] "Consensus correlation and summary (also after tanh transform)"
+[1] 0.386951
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+-1.58512  0.08401  0.42089  0.40407  0.72135  2.49431 
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+-0.91940  0.08382  0.39768  0.32967  0.61775  0.98646 
+[1] "RegionHIP"
+[1] "Reproducibility information:"
+[1] "2017-12-13 15:11:22 EST"
+   user  system elapsed 
+ 98.949   0.812 112.770 
+Session info ----------------------------------------------------------------------------------------------------------
+ setting  value                                      
+ version  R version 3.4.2 Patched (2017-10-12 r73550)
+ system   x86_64, linux-gnu                          
+ ui       X11                                        
+ language (EN)                                       
+ collate  en_US.UTF-8                                
+ tz       <NA>                                       
+ date     2017-12-13                                 
+
+Packages --------------------------------------------------------------------------------------------------------------
+ package              * version  date       source        
+ base                 * 3.4.2    2017-10-13 local         
+ Biobase              * 2.38.0   2017-11-07 Bioconductor  
+ BiocGenerics         * 0.24.0   2017-11-29 Bioconductor  
+ bitops                 1.0-6    2013-08-17 CRAN (R 3.4.1)
+ compiler               3.4.2    2017-10-13 local         
+ datasets             * 3.4.2    2017-10-13 local         
+ DelayedArray         * 0.4.1    2017-11-07 Bioconductor  
+ devtools             * 1.13.4   2017-11-09 CRAN (R 3.4.2)
+ digest                 0.6.12   2017-01-27 CRAN (R 3.4.1)
+ edgeR                * 3.20.1   2017-11-29 Bioconductor  
+ GenomeInfoDb         * 1.14.0   2017-11-29 Bioconductor  
+ GenomeInfoDbData       0.99.1   2017-08-06 Bioconductor  
+ GenomicRanges        * 1.30.0   2017-11-29 Bioconductor  
+ getopt               * 1.20.1   2017-11-29 CRAN (R 3.4.2)
+ graphics             * 3.4.2    2017-10-13 local         
+ grDevices            * 3.4.2    2017-10-13 local         
+ grid                   3.4.2    2017-10-13 local         
+ IRanges              * 2.12.0   2017-11-29 Bioconductor  
+ lattice                0.20-35  2017-03-25 CRAN (R 3.4.2)
+ limma                * 3.34.2   2017-11-29 Bioconductor  
+ locfit                 1.5-9.1  2013-04-20 CRAN (R 3.4.1)
+ Matrix                 1.2-11   2017-08-21 CRAN (R 3.4.2)
+ matrixStats          * 0.52.2   2017-04-14 CRAN (R 3.4.1)
+ memoise                1.1.0    2017-04-21 CRAN (R 3.4.1)
+ methods              * 3.4.2    2017-10-13 local         
+ parallel             * 3.4.2    2017-10-13 local         
+ Rcpp                   0.12.14  2017-11-23 CRAN (R 3.4.2)
+ RCurl                  1.95-4.8 2016-03-01 CRAN (R 3.4.1)
+ S4Vectors            * 0.16.0   2017-11-29 Bioconductor  
+ statmod                1.4.30   2017-06-18 CRAN (R 3.4.1)
+ stats                * 3.4.2    2017-10-13 local         
+ stats4               * 3.4.2    2017-10-13 local         
+ SummarizedExperiment * 1.8.0    2017-11-29 Bioconductor  
+ tools                  3.4.2    2017-10-13 local         
+ utils                * 3.4.2    2017-10-13 local         
+ withr                  2.1.0    2017-11-01 CRAN (R 3.4.2)
+ XVector                0.18.0   2017-11-29 Bioconductor  
+ zlibbioc               1.24.0   2017-11-07 Bioconductor  
+**** Job ends ****
+Wed Dec 13 15:11:23 EST 2017
