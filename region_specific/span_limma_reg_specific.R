@@ -43,10 +43,6 @@ load_foo <- function(type, age) {
         rse <- rse_span_exon
     } else if (type == 'jxn') {
         rse <- rse_span_jxn
-        load(file.path(
-            '/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff',
-            'rse_jxn.Rdata'))
-        rownames(rse) <- rownames(rse_jxn)
     } else if (type == 'tx') {
         rse <- rse_span_tx
     }
@@ -93,28 +89,26 @@ design <- mods$mod
 
 
 if(opt$type != 'tx') {
-    dge <- DGEList(counts = assays(rse)$counts)
+    if(opt$type == 'jxn') {
+        ## as.matrix(assays(rse)$counts) fails due to some rownames length issue
+        ## even after dropping the rownames, so here I build the matrix manually
+        cts <- matrix(0, nrow = nrow(rse), ncol = ncol(rse))
+        rownames(cts) <- rownames(rse)
+        colnames(cts) <- colnames(rse)
+        for(i in seq_len(ncol(rse))) cts[, i] <- as.vector(assays(rse)$counts[, i])
+        rm(i)
+        dge <- DGEList(counts = cts)
+    } else {
+        dge <- DGEList(counts = assays(rse)$counts)
+    }
+    
     dge <- calcNormFactors(dge)
     pdf(paste0('pdf/span_limma_region_specific_', opt$age, '_', opt$type, '.pdf'))
     v <- voom(dge, design, plot = TRUE)
     dev.off()
         
-    system.time( corfit <- duplicateCorrelation(v$E, design, block=brnum) )
-    if(corfit$consensus.correlation %in% c(-1, 1)) {
-        ## With the adult gene data using
-        # usdm::vif(as.data.frame(design[, -1]))
-        ## revealed a very high VIF for the 5 snpPCs. Dropping them reduces the
-        ## vif of the age term, while totalAssignedGene is still high-ish
-        # usdm::vif(as.data.frame(design[, -c(1, 5:9)]))
-        ## Dropping totalAssignedGene reduces all the VIF terms to less than 10
-        # usdm::vif(as.data.frame(design[, -c(1, 5:9, 11)]))
-        print('Dropped the snpPC columns for running duplicateCorrelation()')
-        system.time( corfit <- duplicateCorrelation(v$E, design[, -grep('snpPC|totalAssignedGene', colnames(design))], block=brnum) )
-    
-        ## Just using the intercept and the group variable leads to higher
-        ## correlation estimates (in the adult gene data)
-        # system.time( corfit <- duplicateCorrelation(v$E, design[, 1:2], block=brnum) )
-    }
+    system.time( corfit <- duplicateCorrelation(v$E, design[, c('(Intercept)',
+        'RegionHIPPO')], block=brnum) )
     
     ## Main fit steps
     system.time( fit <- lmFit(v, design, block=brnum,
