@@ -17,11 +17,18 @@ for(f in rse_files) system.time(load(f, verbose = TRUE))
 rm(f)
 
 ## Subset each rse_span object by the genes expressed in brainseq phase 2
-span_subset <- function(rse, rse_span, exon = FALSE) {
+span_subset <- function(rse, rse_span, exon = FALSE, jxn = FALSE) {
     ## Match by feature name
-    if(exon) {
-        ov <- findOverlaps(rowRanges(rse_exon), rowRanges(rse_span_exon), type = 'equal', ignore.strand = FALSE)
+    if(exon | jxn) {
+        ov <- findOverlaps(rowRanges(rse), rowRanges(rse_span), type = 'equal', ignore.strand = FALSE)
         m <- subjectHits(ov)
+        if(jxn) {
+            jxn_df <- DataFrame(lapply(seq_len(ncol(rse_span)), function(x) Rle(0, nrow(rse)) ))
+            colnames(jxn_df) <- colnames(rse_span)
+            jxn_df[queryHits(ov), ] <- assays(rse_span)$counts[m, ]
+            rownames(jxn_df) <- rownames(rse)
+            rse_span <- SummarizedExperiment(assays = list(counts = jxn_df), rowRanges = rowRanges(rse), colData = colData(rse_span))
+        }
     } else {
         m <- match(rownames(rse), rownames(rse_span))
     }
@@ -29,7 +36,11 @@ span_subset <- function(rse, rse_span, exon = FALSE) {
     print(table(is.na(m)))
     
     ## Subset and keep only the DLPFC and HIPPO regions
-    rse_span <- rse_span[m, rse_span$Regioncode %in% c('DFC', 'HIP')]
+    if (!jxn) {
+        rse_span <- rse_span[m, rse_span$Regioncode %in% c('DFC', 'HIP')]
+    } else {
+        rse_span <- rse_span[, rse_span$Regioncode %in% c('DFC', 'HIP')]
+    }
     
     ## Set as factor
     colData(rse_span)$Region <- relevel(factor(colData(rse_span)$Regioncode), 'DFC')
@@ -56,7 +67,7 @@ rse_span_exon <- span_subset(rse_exon, rse_span_exon, exon = TRUE)
 ## Note here that the BrainSpan data set is unstranded while the BrainSeq phase 2 data is stranded...
 table(strand(rse_jxn))
 table(strand(rse_span_jxn))
-rse_span_jxn <- span_subset(rse_jxn, rse_span_jxn, exon = TRUE)
+rse_span_jxn <- span_subset(rse_jxn, rse_span_jxn, jxn = TRUE)
 table(strand(rse_span_jxn))
 rse_span_tx <- span_subset(rse_tx, rse_span_tx)
 
