@@ -15,6 +15,8 @@ opt <- getopt(spec)
 ## For testing
 if(FALSE){
     opt <- list('type' = 'gene', 'age' = 'fetal')
+    opt <- list('type' = 'gene', 'age' = 'adult')
+    opt <- list('type' = 'jxn', 'age' = 'adult')
 }
 
 ## if help was asked for print a friendly message
@@ -41,6 +43,10 @@ load_foo <- function(type, age) {
         rse <- rse_span_exon
     } else if (type == 'jxn') {
         rse <- rse_span_jxn
+        load(file.path(
+            '/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff',
+            'rse_jxn.Rdata'))
+        rownames(rse) <- rownames(rse_jxn)
     } else if (type == 'tx') {
         rse <- rse_span_tx
     }
@@ -84,6 +90,8 @@ sapply(mods, colnames)
 brnum <- colData(rse)$Braincode
 design <- mods$mod
 
+
+
 if(opt$type != 'tx') {
     dge <- DGEList(counts = assays(rse)$counts)
     dge <- calcNormFactors(dge)
@@ -92,6 +100,21 @@ if(opt$type != 'tx') {
     dev.off()
         
     system.time( corfit <- duplicateCorrelation(v$E, design, block=brnum) )
+    if(corfit$consensus.correlation %in% c(-1, 1)) {
+        ## With the adult gene data using
+        # usdm::vif(as.data.frame(design[, -1]))
+        ## revealed a very high VIF for the 5 snpPCs. Dropping them reduces the
+        ## vif of the age term, while totalAssignedGene is still high-ish
+        # usdm::vif(as.data.frame(design[, -c(1, 5:9)]))
+        ## Dropping totalAssignedGene reduces all the VIF terms to less than 10
+        # usdm::vif(as.data.frame(design[, -c(1, 5:9, 11)]))
+        print('Dropped the snpPC columns for running duplicateCorrelation()')
+        system.time( corfit <- duplicateCorrelation(v$E, design[, -grep('snpPC|totalAssignedGene', colnames(design))], block=brnum) )
+    
+        ## Just using the intercept and the group variable leads to higher
+        ## correlation estimates (in the adult gene data)
+        # system.time( corfit <- duplicateCorrelation(v$E, design[, 1:2], block=brnum) )
+    }
     
     ## Main fit steps
     system.time( fit <- lmFit(v, design, block=brnum,
