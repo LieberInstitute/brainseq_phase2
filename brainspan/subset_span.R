@@ -23,11 +23,13 @@ span_subset <- function(rse, rse_span, exon = FALSE, jxn = FALSE) {
         ov <- findOverlaps(rowRanges(rse), rowRanges(rse_span), type = 'equal', ignore.strand = FALSE)
         m <- subjectHits(ov)
         if(jxn) {
-            jxn_df <- DataFrame(lapply(seq_len(ncol(rse_span)), function(x) Rle(0, nrow(rse)) ))
+            jxn_df <- DataFrame(lapply(seq_len(ncol(rse_span)),
+                function(x) Rle(0, nrow(rse)) ))
             colnames(jxn_df) <- colnames(rse_span)
             jxn_df[queryHits(ov), ] <- assays(rse_span)$counts[m, ]
             rownames(jxn_df) <- rownames(rse)
-            rse_span <- SummarizedExperiment(assays = list(counts = jxn_df), rowRanges = rowRanges(rse), colData = colData(rse_span))
+            rse_span <- SummarizedExperiment(assays = list(counts = jxn_df),
+                rowRanges = rowRanges(rse), colData = colData(rse_span))
         }
     } else {
         m <- match(rownames(rse), rownames(rse_span))
@@ -43,7 +45,8 @@ span_subset <- function(rse, rse_span, exon = FALSE, jxn = FALSE) {
     }
     
     ## Set as factor
-    colData(rse_span)$Region <- relevel(factor(colData(rse_span)$Regioncode), 'DFC')
+    colData(rse_span)$Region <- relevel(factor(c('DFC' = 'DLPFC',
+        'HIP' = 'HIPPO')[colData(rse_span)$Regioncode]), 'DLPFC')
     race <- colData(rse_span)$Ethnicity
     race[race == 'European'] <- 'CAUC'
     colData(rse_span)$Race <- relevel(factor(race), ref = 'CAUC')
