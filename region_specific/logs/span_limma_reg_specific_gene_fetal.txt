@@ -1,10 +1,10 @@
 **** Job starts ****
-Wed Dec 13 15:09:15 EST 2017
+Fri Dec 15 15:01:15 EST 2017
 **** JHPCE info ****
 User: lcollado
-Job id: 4121329
+Job id: 4131091
 Job name: span_limma_reg_specific_gene_fetal
-Hostname: compute-097
+Hostname: compute-099
 Task id: 
 Loading conda_R/3.4.x
 Using the following user library: ~/R/x86_64-pc-linux-gnu-library/3.4.x
@@ -82,7 +82,7 @@ The following object is masked from ‘package:BiocGenerics’:
 [1] "Dimensions of the data used"
 [1] 24652    36
 $mod
- [1] "(Intercept)"            "RegionHIP"              "Age"                   
+ [1] "(Intercept)"            "RegionHIPPO"            "Age"                   
  [4] "SexM"                   "snpPC1"                 "snpPC2"                
  [7] "snpPC3"                 "snpPC4"                 "snpPC5"                
 [10] "mean_mitoRate"          "mean_totalAssignedGene" "mean_rRNA_rate"        
@@ -95,18 +95,18 @@ $mod0
 [10] "mean_totalAssignedGene" "mean_rRNA_rate"         "mean_RIN"              
 
    user  system elapsed 
-  0.553   0.003   0.557 
+  0.526   0.012   0.538 
 [1] "Consensus correlation and summary (also after tanh transform)"
-[1] 0.386951
-    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
--1.58512  0.08401  0.42089  0.40407  0.72135  2.49431 
-    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
--0.91940  0.08382  0.39768  0.32967  0.61775  0.98646 
-[1] "RegionHIP"
+[1] 0.5164877
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+-0.6775  0.3416  0.5395  0.5869  0.8307  2.5031 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+-0.5899  0.3289  0.4926  0.4832  0.6808  0.9867 
+[1] "RegionHIPPO"
 [1] "Reproducibility information:"
-[1] "2017-12-13 15:11:22 EST"
+[1] "2017-12-15 15:02:32 EST"
    user  system elapsed 
- 98.949   0.812 112.770 
+ 73.465   0.407  74.168 
 Session info ----------------------------------------------------------------------------------------------------------
  setting  value                                      
  version  R version 3.4.2 Patched (2017-10-12 r73550)
@@ -115,7 +115,7 @@ Session info -------------------------------------------------------------------
  language (EN)                                       
  collate  en_US.UTF-8                                
  tz       <NA>                                       
- date     2017-12-13                                 
+ date     2017-12-15                                 
 
 Packages --------------------------------------------------------------------------------------------------------------
  package              * version  date       source        
@@ -158,4 +158,4 @@ Packages -----------------------------------------------------------------------
  XVector                0.18.0   2017-11-29 Bioconductor  
  zlibbioc               1.24.0   2017-11-07 Bioconductor  
 **** Job ends ****
-Wed Dec 13 15:11:23 EST 2017
+Fri Dec 15 15:02:32 EST 2017

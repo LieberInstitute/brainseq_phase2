@@ -20,7 +20,7 @@ echo "Creating script for feature type ${featuretype} and age group ${agegroup}"
 cat > .${SHORT}.sh <<EOF
 #!/bin/bash
 #$ -cwd
-#$ -l bluejay,mem_free=40G,h_vmem=40G,h_fsize=100G
+#$ -l bluejay,mem_free=5G,h_vmem=6G,h_fsize=100G
 #$ -N ${SHORT}
 #$ -o ./logs/${SHORT}.txt
 #$ -e ./logs/${SHORT}.txt

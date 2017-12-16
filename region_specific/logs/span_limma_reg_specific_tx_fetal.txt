@@ -1,10 +1,10 @@
 **** Job starts ****
-Wed Dec 13 15:10:21 EST 2017
+Fri Dec 15 15:02:45 EST 2017
 **** JHPCE info ****
 User: lcollado
-Job id: 4121335
+Job id: 4131097
 Job name: span_limma_reg_specific_tx_fetal
-Hostname: compute-096
+Hostname: compute-094
 Task id: 
 Loading conda_R/3.4.x
 Using the following user library: ~/R/x86_64-pc-linux-gnu-library/3.4.x
@@ -82,7 +82,7 @@ The following object is masked from ‘package:BiocGenerics’:
 [1] "Dimensions of the data used"
 [1] 92732    36
 $mod
- [1] "(Intercept)"            "RegionHIP"              "Age"                   
+ [1] "(Intercept)"            "RegionHIPPO"            "Age"                   
  [4] "SexM"                   "snpPC1"                 "snpPC2"                
  [7] "snpPC3"                 "snpPC4"                 "snpPC5"                
 [10] "mean_mitoRate"          "mean_totalAssignedGene" "mean_rRNA_rate"        
@@ -94,42 +94,21 @@ $mod0
  [7] "snpPC4"                 "snpPC5"                 "mean_mitoRate"         
 [10] "mean_totalAssignedGene" "mean_rRNA_rate"         "mean_RIN"              
 
-Warning messages:
-1: In glmgam.fit(dx, dy, coef.start = start, tol = tol, maxit = maxit,  :
-  Too much damping - convergence tolerance not achievable
-2: In glmgam.fit(dx, dy, coef.start = start, tol = tol, maxit = maxit,  :
-  Too much damping - convergence tolerance not achievable
-3: In glmgam.fit(dx, dy, coef.start = start, tol = tol, maxit = maxit,  :
-  Too much damping - convergence tolerance not achievable
-4: In glmgam.fit(dx, dy, coef.start = start, tol = tol, maxit = maxit,  :
-  Too much damping - convergence tolerance not achievable
-5: In glmgam.fit(dx, dy, coef.start = start, tol = tol, maxit = maxit,  :
-  Too much damping - convergence tolerance not achievable
-6: In glmgam.fit(dx, dy, coef.start = start, tol = tol, maxit = maxit,  :
-  Too much damping - convergence tolerance not achievable
-7: In glmgam.fit(dx, dy, coef.start = start, tol = tol, maxit = maxit,  :
-  Too much damping - convergence tolerance not achievable
-8: In glmgam.fit(dx, dy, coef.start = start, tol = tol, maxit = maxit,  :
-  Too much damping - convergence tolerance not achievable
-9: In glmgam.fit(dx, dy, coef.start = start, tol = tol, maxit = maxit,  :
-  Too much damping - convergence tolerance not achievable
-10: In glmgam.fit(dx, dy, coef.start = start, tol = tol, maxit = maxit,  :
-  Too much damping - convergence tolerance not achievable
    user  system elapsed 
-  1.855   0.002   1.857 
+  1.883   0.003   1.886 
 Warning message:
 Zero sample variances detected, have been offset away from zero 
 [1] "Consensus correlation and summary (also after tanh transform)"
-[1] 0.3910865
+[1] 0.3986782
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
--2.9912  0.0660  0.4169  0.3866  0.7561  6.9030    1581 
+-0.8500  0.1268  0.4230  0.4469  0.7154  6.6956    1581 
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
--0.9950  0.0660  0.3943  0.3144  0.6388  1.0000    1581 
-[1] "RegionHIP"
+-0.6911  0.1261  0.3995  0.3708  0.6140  1.0000    1581 
+[1] "RegionHIPPO"
 [1] "Reproducibility information:"
-[1] "2017-12-13 15:15:32 EST"
+[1] "2017-12-15 15:06:47 EST"
    user  system elapsed 
-299.953   0.641 301.040 
+212.596  25.967 238.755 
 Session info ----------------------------------------------------------------------------------------------------------
  setting  value                                      
  version  R version 3.4.2 Patched (2017-10-12 r73550)
@@ -138,7 +117,7 @@ Session info -------------------------------------------------------------------
  language (EN)                                       
  collate  en_US.UTF-8                                
  tz       <NA>                                       
- date     2017-12-13                                 
+ date     2017-12-15                                 
 
 Packages --------------------------------------------------------------------------------------------------------------
  package              * version  date       source        
@@ -181,4 +160,4 @@ Packages -----------------------------------------------------------------------
  XVector                0.18.0   2017-11-29 Bioconductor  
  zlibbioc               1.24.0   2017-11-07 Bioconductor  
 **** Job ends ****
-Wed Dec 13 15:15:32 EST 2017
+Fri Dec 15 15:06:47 EST 2017
