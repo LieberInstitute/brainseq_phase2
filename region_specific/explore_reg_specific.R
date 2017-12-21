@@ -2,6 +2,7 @@ library('limma')
 library('SummarizedExperiment')
 library('jaffelab')
 library('devtools')
+library('ggplot2')
 
 ## Load data
 load_foo <- function(type, age) {
@@ -62,6 +63,37 @@ load_foo <- function(type, age) {
     return(rse)
 }
 
+load_span <- function(type, age) {
+    load_file <- file.path(
+        '/dcl01/lieber/ajaffe/lab/brainseq_phase2/brainspan',
+        paste0('rse_span_', type, '.Rdata'))
+    stopifnot(file.exists(load_file))
+    load(load_file)
+    
+    ## Get the appropriate object
+    if(type == 'gene') {
+        rse <- rse_span_gene
+    } else if (type == 'exon') {
+        rse <- rse_span_exon
+    } else if (type == 'jxn') {
+        rse <- rse_span_jxn
+    } else if (type == 'tx') {
+        rse <- rse_span_tx
+    }
+    
+    ## Keep the corresponding age group
+    if(age == 'adult') {
+        rse <- rse[, colData(rse)$Age >= 18]
+    } else if (age == 'fetal') {
+        rse <- rse[, colData(rse)$Age <= 0]
+    }
+    
+    print('Dimensions of the data used')
+    print(dim(rse))
+    
+    return(rse)
+}
+
 ## Define models
 fm_mod <- ~Region + Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_rRNA_rate + mean_RIN
 fm_mod0 <- ~Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_rRNA_rate + mean_RIN
@@ -74,6 +106,7 @@ get_mods <- function(pd) {
     return(list(mod = mod, mod0 = mod0))
 }
 
+## Load BrainSeq model results
 raw <- mapply(function(age, type) {
     load(paste0('rda/limma_region_specific_', age, '_', type, '.Rdata'))
     top$age <- age
@@ -81,54 +114,161 @@ raw <- mapply(function(age, type) {
     return(list(top = top, fit = fit, exprsNorm = exprsNorm))
 }, rep(c('adult', 'fetal'), each = 4), rep(c('gene', 'exon', 'jxn', 'tx'), 2), SIMPLIFY = FALSE)
 names(raw) <- paste0(rep(c('adult', 'fetal'), each = 4), "_", rep(c('gene', 'exon', 'jxn', 'tx'), 2))
-
-
 top <- lapply(raw, '[[', 'top')
 fit <- lapply(raw, '[[', 'fit')
 exprsNorm <- lapply(raw, '[[', 'exprsNorm')
 
 
-sapply(top, function(x) {
-    table(x$adj.P.Val < 0.05)
-})
-
-sapply(top, function(x) {
-    round(table(x$adj.P.Val < 0.05) / nrow(x) * 100, 2)
-})
-
-sapply(top, function(x) {
-    table(x$adj.P.Val < 0.01)
-})
-
-sapply(top, function(x) {
-    round(table(x$adj.P.Val < 0.01) / nrow(x) * 100, 2)
-})
 
 
+## Fix top exons data
+rse_exon <- load_foo('exon', 'adult')
+rse_exon_span <- load_span('exon', 'adult')
+ov <- findOverlaps(rowRanges(rse_exon), rowRanges(rse_exon_span), type = 'equal', ignore.strand = FALSE)
+rowRanges(rse_exon)[which(!seq_len(length(rse_exon)) %in% queryHits(ov))]
+top$adult_exon <- top$adult_exon[queryHits(ov), ]
+top$fetal_exon <- top$fetal_exon[queryHits(ov), ]
 
-sapply(top, function(x) {
-    table(p.adjust(x$P.Value, 'bonferroni') < 0.05)
-})
+## Load BrainSpan model results
+raw_span <- mapply(function(age, type) {
+    load(paste0('rda/span_limma_region_specific_', age, '_', type, '.Rdata'))
+    top$age <- age
+    top$type <- type
+    return(list(top = top, fit = fit, exprsNorm = exprsNorm))
+}, rep(c('adult', 'fetal'), each = 4), rep(c('gene', 'exon', 'jxn', 'tx'), 2), SIMPLIFY = FALSE)
+names(raw_span) <- paste0(rep(c('adult', 'fetal'), each = 4), "_", rep(c('gene', 'exon', 'jxn', 'tx'), 2))
+top_span <- lapply(raw_span, '[[', 'top')
+fit_span <- lapply(raw_span, '[[', 'fit')
+exprsNorm_span <- lapply(raw_span, '[[', 'exprsNorm')
 
-sapply(top, function(x) {
-    round(table(p.adjust(x$P.Value, 'bonferroni') < 0.05) / nrow(x) * 100, 2)
-})
+get_pcheck <- function(top_table) {
+    pcheck <- do.call(rbind, lapply(top_table, function(x) {
+        x$P.Bonf <- p.adjust(x$P.Value, 'bonferroni')
+        return(x)
+    }))
+    pcheck$global_fdr <- p.adjust(pcheck$P.Value, 'fdr')
+    pcheck$global_bonf <- p.adjust(pcheck$P.Value, 'bonferroni')
+    return(pcheck)
+}
 
-sapply(top, function(x) {
-    table(p.adjust(x$P.Value, 'bonferroni') < 0.01)
-})
+pcheck <- get_pcheck(top)
+pcheck_span <- get_pcheck(top_span)
+pcheck_span_tmp <- pcheck_span[, -c(7, 8)]
+colnames(pcheck_span_tmp) <- paste0('span_', colnames(pcheck_span_tmp))
+pcheck_both <- cbind(pcheck, pcheck_span_tmp)
+rm(pcheck_span_tmp)
 
-sapply(top, function(x) {
-    round(table(p.adjust(x$P.Value, 'bonferroni') < 0.01) / nrow(x) * 100, 2)
-})
 
 
-pcheck <- do.call(rbind, lapply(top, function(x) {
-    x$P.Bonf <- p.adjust(x$P.Value, 'bonferroni')
-    return(x)
-}))
-pcheck$global_fdr <- p.adjust(pcheck$P.Value, 'fdr')
-pcheck$global_bonf <- p.adjust(pcheck$P.Value, 'bonferroni')
+
+
+p_summary <- function(pvar = 'FDR', cut = 0.05, pchk) {
+    top_table <- split(pchk, paste0(pchk$age, '_', pchk$type))
+
+    num <- sapply(top_table, function(x) { 
+        if (pvar == 'FDR') {
+            table(factor(x$adj.P.Val < cut, levels = c('FALSE', 'TRUE')))
+        } else if (pvar == 'bonf') {
+            table(factor(x$P.Bonf < cut, levels = c('FALSE', 'TRUE')))
+        } else if (pvar == 'global_bonf') {
+            table(factor(x$global_bonf < cut, levels = c('FALSE', 'TRUE')))
+        } else if (pvar == 'global_fdr') {
+            table(factor(x$global_fdr < cut, levels = c('FALSE', 'TRUE')))
+        }
+        
+    })
+    perc <- sweep(num, 2, colSums(num), function(x, y) { round(x / y * 100, 2)} )
+    res <- rbind(num, perc)
+    status <- as.logical(rownames(res))
+    rownames(res) <- NULL
+    res <- as.data.frame(res)
+    res$DEstatus <- status
+    res$method <- pvar
+    res$cutoff <- cut
+    res$unit <- rep(c('number', 'percent'), each = 2)
+    return(res)
+}
+
+p_summ_run <- function(pchk) {
+    do.call(rbind, mapply(p_summary, rep(c('FDR', 'bonf', 'global_bonf'),
+        each = 2), rep(c(0.05, 0.01), 3), MoreArgs = list(pchk = pchk),
+        SIMPLIFY = FALSE, USE.NAMES = FALSE))
+}
+
+
+p_sum <- p_summ_run(pcheck)
+p_sum
+
+p_sum_span <- p_summ_run(pcheck_span)
+p_sum_span
+
+
+summary(pcheck_both$logFC)
+summary(pcheck_both$span_logFC)
+table('brainseq' = abs(pcheck_both$logFC) > 10, 'span' = abs(pcheck_both$span_logFC) > 10)
+table('brainseq' = abs(pcheck_both$logFC) > 20, 'span' = abs(pcheck_both$span_logFC) > 20)
+table('brainseq' = abs(pcheck_both$logFC) > 100, 'span' = abs(pcheck_both$span_logFC) > 100)
+table('brainseq' = abs(pcheck_both$logFC) > 1000, 'span' = abs(pcheck_both$span_logFC) > 1000)
+
+weird <- which(abs(pcheck_both$logFC) > 10 | abs(pcheck_both$span_logFC) > 10)
+table(pcheck_both$type[weird])
+
+summary(c(pcheck_both$logFC[pcheck_both$type == 'jxn'], pcheck_both$span_logFC[pcheck_both$type == 'jxn']))
+max(abs(c(pcheck_both$logFC[pcheck_both$type == 'jxn'], pcheck_both$span_logFC[pcheck_both$type == 'jxn'])))
+
+table(pcheck_both$type[which(abs(pcheck_both$logFC) > 16 | abs(pcheck_both$span_logFC) > 16)])
+
+
+
+# pdf('pdf/compare_with_span_logFC.pdf')
+# ggplot(pcheck_both, aes(x = logFC, y = span_logFC, alpha = 1/10)) +
+#     facet_grid(age ~ type) + ylab('BrainSpan log FC') +
+#     xlab('BrainSeq log FC') + geom_point() + xlim(-16, 16) + ylim(-16, 16) +
+#     geom_smooth(method=lm, se=FALSE)
+# dev.off()
+
+png('pdf/compare_with_span_logFC.png', type = 'cairo')
+ggplot(pcheck_both, aes(x = logFC, y = span_logFC, alpha = 1/10)) +
+    facet_grid(age ~ type) + ylab('BrainSpan log FC') +
+    xlab('BrainSeq log FC') + geom_point() + xlim(-16, 16) + ylim(-16, 16) +
+    geom_smooth(method=lm, se=FALSE)
+dev.off()
+
+pdf('pdf/compare_with_span_logFC_density.pdf')
+ggplot(pcheck_both, aes(x = logFC, y = span_logFC, alpha = 1/10)) +
+    facet_grid(age ~ type) + ylab('BrainSpan log FC') +
+    xlab('BrainSeq log FC') + stat_density2d() + xlim(-16, 16) + ylim(-16, 16) +
+    geom_smooth(method=lm, se=FALSE)
+dev.off()
+
+head(fit$fetal_gene$design)
+head(fit_span$fetal_gene$design)
+nrow(fit$fetal_gene$design)
+nrow(fit_span$fetal_gene$design)
+summary(fit$fetal_gene$design)
+summary(fit_span$fetal_gene$design)
+summary(fit$fetal_gene$design[, 'mean_RIN'])
+summary(fit_span$fetal_gene$design[, 'mean_RIN'])
+sort(fit$fetal_gene$design[, 'mean_RIN'])
+sort(fit_span$fetal_gene$design[, 'mean_RIN'])
+
+summary(fit$fetal_gene$design[, 'Age'])
+summary(fit_span$fetal_gene$design[, 'Age'])
+t.test(fit$fetal_gene$design[, 'Age'], fit_span$fetal_gene$design[, 'Age'])
+t.test(fit$fetal_gene$design[, 'mean_mitoRate'], fit_span$fetal_gene$design[, 'mean_mitoRate'])
+t.test(fit$fetal_gene$design[, 'mean_totalAssignedGene'], fit_span$fetal_gene$design[, 'mean_totalAssignedGene']) ## Diff
+t.test(fit$fetal_gene$design[, 'mean_rRNA_rate'], fit_span$fetal_gene$design[, 'mean_rRNA_rate']) ## Diff
+t.test(fit$fetal_gene$design[, 'mean_RIN'], fit_span$fetal_gene$design[, 'mean_RIN'])
+
+plot(fit$fetal_gene$design[, 'snpPC1'], fit$fetal_gene$design[, 'snpPC2'])
+plot(fit_span$fetal_gene$design[, 'snpPC1'], fit_span$fetal_gene$design[, 'snpPC2'])
+
+t.test(fit$fetal_gene$design[fit$fetal_gene$design[, 'RegionHIPPO'] == 1, 'mean_totalAssignedGene'], fit_span$fetal_gene$design[fit_span$fetal_gene$design[, 'RegionHIPPO'] == 1, 'mean_totalAssignedGene'])
+t.test(fit$fetal_gene$design[fit$fetal_gene$design[, 'RegionHIPPO'] == 0, 'mean_totalAssignedGene'], fit_span$fetal_gene$design[fit_span$fetal_gene$design[, 'RegionHIPPO'] == 0, 'mean_totalAssignedGene'])
+t.test(fit$fetal_gene$design[, 'mean_totalAssignedGene'] ~ fit$fetal_gene$design[, 'RegionHIPPO'])
+t.test(fit_span$fetal_gene$design[, 'mean_totalAssignedGene'] ~ fit_span$fetal_gene$design[, 'RegionHIPPO'])
+
+
 
 plot(-log10(pcheck$global_fdr), -log10(pcheck$adj.P.Val), col = c('gene' = 'blue', 'exon' = 'orange', 'jxn' = 'grey20', 'tx' = 'light blue')[pcheck$type], pch = c('adult' = 21, 'fetal' = 22)[pcheck$age])
 abline(a = 0, b = 1, col = 'red')
@@ -140,10 +280,24 @@ table('Global Bonf' = pcheck$global_bonf < 0.05, 'Bonf' = pcheck$P.Bonf < 0.05, 
 table('Global Bonf' = pcheck$global_bonf < 0.01, 'Bonf' = pcheck$P.Bonf < 0.01, 'Age group' = pcheck$age, 'Feature type' = pcheck$type)
 
 
-rse <- load_foo('gene', 'adult')
+
+
+rse_gene <- load_foo('gene', 'fetal')
+
+
+corfit <- duplicateCorrelation(exprsNorm$fetal_gene, fit$fetal_gene$design[, c('(Intercept)',
+       'RegionHIPPO')], block=colData(rse_gene)$BrNum)
+print('Consensus correlation and summary (also after tanh transform)')
+corfit$consensus.correlation
+summary(corfit$atanh.correlations)
+summary(tanh(corfit$atanh.correlations))
+
 rse_tx <- load_foo('tx', 'adult')
-rse_exon <- load_foo('exon', 'adult')
 rse_jxn <- load_foo('jxn', 'adult')
+
+rse_gene_span <- load_span('gene', 'adult')
+rse_tx_span <- load_span('tx', 'adult')
+rse_jxn_span <- load_span('jxn', 'adult')
 
 
 
