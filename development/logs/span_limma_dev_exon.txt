@@ -1,0 +1,128 @@
+**** Job starts ****
+Thu Dec 21 16:16:33 EST 2017
+**** JHPCE info ****
+User: lcollado
+Job id: 
+Job name: 
+Hostname: jhpce01
+Task id: 
+Loading conda_R/3.4.x
+Using the following user library: ~/R/x86_64-pc-linux-gnu-library/3.4.x
+Loading required package: methods
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, cbind, colMeans, colnames,
+    colSums, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+    grepl, intersect, is.unsorted, lapply, lengths, Map, mapply, match,
+    mget, order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rowMeans, rownames, rowSums, sapply, setdiff, sort,
+    table, tapply, union, unique, unsplit, which, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:base’:
+
+    expand.grid
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: DelayedArray
+Loading required package: matrixStats
+
+Attaching package: ‘matrixStats’
+
+The following objects are masked from ‘package:Biobase’:
+
+    anyMissing, rowMedians
+
+
+Attaching package: ‘DelayedArray’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+
+The following object is masked from ‘package:base’:
+
+    apply
+
+
+Attaching package: ‘limma’
+
+The following object is masked from ‘package:BiocGenerics’:
+
+    plotMA
+
+[1] "Dimensions of the data used"
+[1] 396579     79
+$mod
+ [1] "(Intercept)"            "Age"                    "RegionHIPPO"           
+ [4] "fetal"                  "birth"                  "infant"                
+ [7] "child"                  "teen"                   "adult"                 
+[10] "SexM"                   "snpPC1"                 "snpPC2"                
+[13] "snpPC3"                 "snpPC4"                 "snpPC5"                
+[16] "mean_mitoRate"          "mean_totalAssignedGene" "mean_rRNA_rate"        
+[19] "mean_RIN"               "Age:RegionHIPPO"        "RegionHIPPO:fetal"     
+[22] "RegionHIPPO:birth"      "RegionHIPPO:infant"     "RegionHIPPO:child"     
+[25] "RegionHIPPO:teen"       "RegionHIPPO:adult"     
+
+$mod0
+ [1] "(Intercept)"            "Age"                    "fetal"                 
+ [4] "birth"                  "infant"                 "child"                 
+ [7] "teen"                   "adult"                  "SexM"                  
+[10] "RegionHIPPO"            "snpPC1"                 "snpPC2"                
+[13] "snpPC3"                 "snpPC4"                 "snpPC5"                
+[16] "mean_mitoRate"          "mean_totalAssignedGene" "mean_rRNA_rate"        
+[19] "mean_RIN"              
+
+Coefficients not estimable: adult RegionHIPPO:adult 
+Coefficients not estimable: adult RegionHIPPO:adult 
+Warning messages:
+1: Partial NA coefficients for 396579 probe(s) 
+2: Partial NA coefficients for 396579 probe(s) 
+   user  system elapsed 
+ 10.966   0.525  11.490 
+Warning message:
+In ebayes(fit = fit, proportion = proportion, stdev.coef.lim = stdev.coef.lim,  :
+  Estimation of var.prior failed - set to default value
+[1] "Consensus correlation and summary (also after tanh transform)"
+[1] 0.5610736
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+-0.5305  0.4264  0.6319  0.6437  0.8440  2.6405 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+-0.4858  0.4023  0.5594  0.5333  0.6879  0.9899 
+[1] "Age:RegionHIPPO"    "RegionHIPPO:fetal"  "RegionHIPPO:birth" 
+[4] "RegionHIPPO:infant" "RegionHIPPO:child"  "RegionHIPPO:teen"  
+[7] "RegionHIPPO:adult" 
+Error in object$cov.coefficients[j, j, drop = FALSE] : 
+  subscript out of bounds
+Calls: topTable -> [ -> [.MArrayLM
+Execution halted
+**** Job ends ****
+Thu Dec 21 16:51:29 EST 2017

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## Usage:
-# sh run_limma_dev.sh
+# sh span_run_limma_dev.sh
 
 mkdir -p logs
 mkdir -p rda
@@ -10,7 +10,7 @@ mkdir -p pdf
 for featuretype in gene exon jxn tx
 do
 
-SHORT="limma_dev_${featuretype}"
+SHORT="span_limma_dev_${featuretype}"
 
 # Construct shell file
 echo "Creating script for feature type ${featuretype}"
@@ -35,7 +35,7 @@ echo "Hostname: ${HOSTNAME}"
 echo "Task id: ${TASK_ID}"
 
 module load conda_R/3.4.x
-Rscript limma_dev.R -t ${featuretype}
+Rscript span_limma_dev.R -t ${featuretype}
 
 echo "**** Job ends ****"
 date

@@ -26,46 +26,25 @@ if (!is.null(opt$help)) {
 ## Load data
 load_foo <- function(type) {
     load_file <- file.path(
-        '/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff',
-        paste0('rse_', type, '.Rdata'))
+        '/dcl01/lieber/ajaffe/lab/brainseq_phase2/brainspan',
+        paste0('rse_span_', type, '.Rdata'))
     stopifnot(file.exists(load_file))
     load(load_file)
     
     ## Get the appropriate object
     if(type == 'gene') {
-        rse <- rse_gene
+        rse <- rse_span_gene
     } else if (type == 'exon') {
-        ## Drop those 4 exons not present in BrainSpan
-        rse <- rse_exon[-c(175584, 175585, 175586, 175604), ]
+        rse <- rse_span_exon
     } else if (type == 'jxn') {
-        rse <- rse_jxn
+        rse <- rse_span_jxn
     } else if (type == 'tx') {
-        rse <- rse_tx
-    }
-    ## Keep controls only
-    rse <- rse[, colData(rse)$Dx == 'Control']
-    
-    ## Add mds info
-     load(file.path('/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data', 
-         'mds_extracted_from_BrainSeq_Phase2_RiboZero_Genotypes_n551.Rdata'))
-    m <- match(colData(rse)$BrNum, rownames(mds))
-    print('Number of missing brains in the MDS data')
-    print(table(is.na(m)))
-
-    ## Drop those that don't match
-    if(any(is.na(m))) {
-        print(colData(rse)$BrNum[which(is.na(m))])
+        rse <- rse_span_tx
     }
     
-
-    rse <- rse[, !is.na(m)]
-    colData(rse) <- cbind(colData(rse), mds[m[!is.na(m)], ])
+    print('Dimensions of the data used')
+    print(dim(rse))
     
-    ## Set as factor
-    colData(rse)$Region <- relevel(factor(colData(rse)$Region), 'DLPFC')
-    colData(rse)$Race <- relevel(factor(colData(rse)$Race), ref = 'CAUC')
-    colData(rse)$Sex <- relevel(factor(colData(rse)$Sex), ref = 'F')
-
     ## Add age linear splines
     fetal <- ifelse(colData(rse)$Age < 0, 1,0)
     birth <- colData(rse)$Age
@@ -85,12 +64,6 @@ load_foo <- function(type) {
     colData(rse)$child <- child
     colData(rse)$teen <- teen
     colData(rse)$adult <- adult
-    
-    ## Add means
-    colData(rse)$mean_mitoRate <- mean(colData(rse)$mitoRate)
-    colData(rse)$mean_totalAssignedGene <- mean(colData(rse)$totalAssignedGene)
-    colData(rse)$mean_rRNA_rate <- mean(colData(rse)$rRNA_rate)
-    colData(rse)$mean_RIN <- mean(colData(rse)$RIN)
     
     return(rse)
 }
@@ -125,13 +98,25 @@ mods <-  get_mods( colData(rse), int = TRUE)
 sapply(mods, colnames)
 
 ## Get pieces needed for running duplication correlation
-brnum <- colData(rse)$BrNum
+brnum <- colData(rse)$Braincode
 design <- mods$mod
 
 if(opt$type != 'tx') {
-    dge <- DGEList(counts = assays(rse)$counts)
+    if(opt$type == 'jxn') {
+        ## as.matrix(assays(rse)$counts) fails due to some rownames length issue
+        ## even after dropping the rownames, so here I build the matrix manually
+        cts <- matrix(0, nrow = nrow(rse), ncol = ncol(rse))
+        rownames(cts) <- rownames(rse)
+        colnames(cts) <- colnames(rse)
+        for(i in seq_len(ncol(rse))) cts[, i] <- as.vector(assays(rse)$counts[, i])
+        rm(i)
+        dge <- DGEList(counts = cts)
+    } else {
+        dge <- DGEList(counts = assays(rse)$counts)
+    }
+    
     dge <- calcNormFactors(dge)
-    pdf(paste0('pdf/limma_dev_interaction_', opt$type, '.pdf'))
+    pdf(paste0('pdf/span_limma_dev_interaction_', opt$type, '.pdf'))
     v <- voom(dge, design, plot = TRUE)
     dev.off()
     
@@ -159,10 +144,6 @@ corfit$consensus.correlation
 summary(corfit$atanh.correlations)
 summary(tanh(corfit$atanh.correlations))
 
-## Save to check top
-message(paste(Sys.time(), 'for checking why topTable is failing'))
-save(corfit, fit, exprsNorm,
-    file = paste0('rda/limma_dev_interaction_', opt$type, '.Rdata'))
 
 ## Extract top results
 colnames(design)[grep(':', colnames(design))]
@@ -170,7 +151,7 @@ top <- topTable(fit, coef = grep(':', colnames(design)), n = nrow(rse),
     sort.by = 'none')
 
 save(corfit, fit, top, exprsNorm,
-    file = paste0('rda/limma_dev_interaction_', opt$type, '.Rdata'))
+    file = paste0('rda/span_limma_dev_interaction_', opt$type, '.Rdata'))
 
 ## Reproducibility information
 print('Reproducibility information:')
