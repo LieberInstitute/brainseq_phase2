@@ -1,5 +1,5 @@
 **** Job starts ****
-Tue Dec  5 11:46:02 EST 2017
+Thu Dec 21 16:16:31 EST 2017
 **** JHPCE info ****
 User: lcollado
 Job id: 
@@ -99,23 +99,22 @@ $mod0
 [10] "mean_totalAssignedGene" "mean_rRNA_rate"         "mean_RIN"              
 
 Warning message:
-In glmgam.fit(dx, dy, coef.start = start, tol = tol, maxit = maxit,  :
-  Too much damping - convergence tolerance not achievable
+In sqrt(dfitted.values) : NaNs produced
    user  system elapsed 
-  1.601   0.052   1.653 
+  1.640   0.052   1.692 
 Warning message:
 Zero sample variances detected, have been offset away from zero 
 [1] "Consensus correlation and summary (also after tanh transform)"
-[1] -0.0455374
+[1] 0.002013254
     Min.  1st Qu.   Median     Mean  3rd Qu.     Max.     NA's 
--3.58467 -0.21934 -0.05365 -0.02479  0.13531 10.53832       52 
+    -Inf -0.13855 -0.00774     -Inf  0.15237  3.52514       52 
     Min.  1st Qu.   Median     Mean  3rd Qu.     Max.     NA's 
--0.99846 -0.21588 -0.05359 -0.03066  0.13449  1.00000       52 
+-1.00000 -0.13767 -0.00774  0.01549  0.15121  0.99827       52 
 [1] "RegionHIPPO"
 [1] "Reproducibility information:"
-[1] "2017-12-05 11:53:55 EST"
+[1] "2017-12-21 16:24:13 EST"
    user  system elapsed 
-467.270   1.852 469.647 
+458.254   1.052 459.414 
 Session info ----------------------------------------------------------------------------------------------------------
  setting  value                                      
  version  R version 3.4.2 Patched (2017-10-12 r73550)
@@ -124,7 +123,7 @@ Session info -------------------------------------------------------------------
  language (EN)                                       
  collate  en_US.UTF-8                                
  tz       <NA>                                       
- date     2017-12-05                                 
+ date     2017-12-21                                 
 
 Packages --------------------------------------------------------------------------------------------------------------
  package              * version  date       source        
@@ -167,4 +166,4 @@ Packages -----------------------------------------------------------------------
  XVector                0.18.0   2017-11-29 Bioconductor  
  zlibbioc               1.24.0   2017-11-07 Bioconductor  
 **** Job ends ****
-Tue Dec  5 11:53:55 EST 2017
+Thu Dec 21 16:24:14 EST 2017

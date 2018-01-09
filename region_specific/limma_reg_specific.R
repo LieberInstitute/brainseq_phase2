@@ -38,7 +38,8 @@ load_foo <- function(type, age) {
     if(type == 'gene') {
         rse <- rse_gene
     } else if (type == 'exon') {
-        rse <- rse_exon
+        ## Drop those 4 exons not present in BrainSpan
+        rse <- rse_exon[-c(175584, 175585, 175586, 175604), ]
     } else if (type == 'jxn') {
         rse <- rse_jxn
     } else if (type == 'tx') {
@@ -118,7 +119,8 @@ if(opt$type != 'tx') {
     v <- voom(dge, design, plot = TRUE)
     dev.off()
         
-    system.time( corfit <- duplicateCorrelation(v$E, design, block=brnum) )
+    system.time( corfit <- duplicateCorrelation(v$E, design[, c('(Intercept)',
+        'RegionHIPPO')], block=brnum) )
     
     ## Main fit steps
     system.time( fit <- lmFit(v, design, block=brnum,
@@ -126,7 +128,8 @@ if(opt$type != 'tx') {
         
     exprsNorm <- v$E
 } else {
-    system.time( corfit <- duplicateCorrelation(assays(rse)$tpm, design, block=brnum) )
+    system.time( corfit <- duplicateCorrelation(assays(rse)$tpm, design[,
+        c('(Intercept)', 'RegionHIPPO')], block=brnum) )
 
     ## Main fit steps
     system.time( fit <- lmFit(assays(rse)$tpm, design, block=brnum,

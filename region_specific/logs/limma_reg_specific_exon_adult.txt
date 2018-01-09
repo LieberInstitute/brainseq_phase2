@@ -1,5 +1,5 @@
 **** Job starts ****
-Tue Dec  5 11:46:04 EST 2017
+Thu Dec 21 16:16:32 EST 2017
 **** JHPCE info ****
 User: lcollado
 Job id: 
@@ -84,7 +84,7 @@ The following object is masked from ‘package:BiocGenerics’:
 FALSE 
   460 
 [1] "Dimensions of the data used"
-[1] 396583    460
+[1] 396579    460
 $mod
  [1] "(Intercept)"            "RegionHIPPO"            "Age"                   
  [4] "SexM"                   "snpPC1"                 "snpPC2"                
@@ -99,18 +99,18 @@ $mod0
 [10] "mean_totalAssignedGene" "mean_rRNA_rate"         "mean_RIN"              
 
    user  system elapsed 
-  6.844   0.000   6.842 
+  6.735   0.000   6.735 
 [1] "Consensus correlation and summary (also after tanh transform)"
-[1] 0.09979589
+[1] 0.1575462
     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
--0.89999  0.02221  0.09439  0.11971  0.18307  2.08881 
+-0.85413  0.06583  0.14985  0.18165  0.26046  2.27233 
     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
--0.71629  0.02220  0.09412  0.11481  0.18105  0.96979 
+-0.69322  0.06573  0.14874  0.17251  0.25473  0.97898 
 [1] "RegionHIPPO"
 [1] "Reproducibility information:"
-[1] "2017-12-06 17:28:52 EST"
+[1] "2017-12-22 22:09:58 EST"
       user     system    elapsed 
-106950.189     17.518 106965.045 
+107517.075     83.123 107603.195 
 Session info ----------------------------------------------------------------------------------------------------------
  setting  value                                      
  version  R version 3.4.2 Patched (2017-10-12 r73550)
@@ -119,7 +119,7 @@ Session info -------------------------------------------------------------------
  language (EN)                                       
  collate  en_US.UTF-8                                
  tz       <NA>                                       
- date     2017-12-06                                 
+ date     2017-12-22                                 
 
 Packages --------------------------------------------------------------------------------------------------------------
  package              * version  date       source        
@@ -162,4 +162,4 @@ Packages -----------------------------------------------------------------------
  XVector                0.18.0   2017-11-29 Bioconductor  
  zlibbioc               1.24.0   2017-11-07 Bioconductor  
 **** Job ends ****
-Wed Dec  6 17:28:52 EST 2017
+Fri Dec 22 22:09:59 EST 2017

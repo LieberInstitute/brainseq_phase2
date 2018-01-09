@@ -1,5 +1,5 @@
 **** Job starts ****
-Tue Dec  5 11:46:05 EST 2017
+Thu Dec 21 16:16:32 EST 2017
 **** JHPCE info ****
 User: lcollado
 Job id: 
@@ -99,18 +99,18 @@ $mod0
 [10] "mean_totalAssignedGene" "mean_rRNA_rate"         "mean_RIN"              
 
    user  system elapsed 
-  5.077   0.000   5.077 
+  5.086   0.000   5.085 
 [1] "Consensus correlation and summary (also after tanh transform)"
-[1] 0.04215332
+[1] 0.09685783
     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
--2.44571 -0.15675  0.02067  0.05120  0.25527  3.42781 
+-2.28161 -0.07938  0.09267  0.10703  0.27892  2.98959 
     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
--0.98509 -0.15548  0.02066  0.04284  0.24987  0.99790 
+-0.97936 -0.07921  0.09240  0.09574  0.27190  0.99495 
 [1] "RegionHIPPO"
 [1] "Reproducibility information:"
-[1] "2017-12-05 12:13:44 EST"
+[1] "2017-12-21 16:42:15 EST"
     user   system  elapsed 
-1650.330    5.810 1656.246 
+1534.494    5.787 1540.548 
 Session info ----------------------------------------------------------------------------------------------------------
  setting  value                                      
  version  R version 3.4.2 Patched (2017-10-12 r73550)
@@ -119,7 +119,7 @@ Session info -------------------------------------------------------------------
  language (EN)                                       
  collate  en_US.UTF-8                                
  tz       <NA>                                       
- date     2017-12-05                                 
+ date     2017-12-21                                 
 
 Packages --------------------------------------------------------------------------------------------------------------
  package              * version  date       source        
@@ -162,4 +162,4 @@ Packages -----------------------------------------------------------------------
  XVector                0.18.0   2017-11-29 Bioconductor  
  zlibbioc               1.24.0   2017-11-07 Bioconductor  
 **** Job ends ****
-Tue Dec  5 12:13:45 EST 2017
+Thu Dec 21 16:42:16 EST 2017
