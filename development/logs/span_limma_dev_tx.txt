@@ -1,10 +1,10 @@
 **** Job starts ****
-Thu Dec 21 16:16:29 EST 2017
+Wed Jan 10 14:23:25 EST 2018
 **** JHPCE info ****
 User: lcollado
 Job id: 
 Job name: 
-Hostname: jhpce01
+Hostname: compute-066
 Task id: 
 Loading conda_R/3.4.x
 Using the following user library: ~/R/x86_64-pc-linux-gnu-library/3.4.x
@@ -84,32 +84,25 @@ The following object is masked from ‘package:BiocGenerics’:
 $mod
  [1] "(Intercept)"            "Age"                    "RegionHIPPO"           
  [4] "fetal"                  "birth"                  "infant"                
- [7] "child"                  "teen"                   "adult"                 
-[10] "SexM"                   "snpPC1"                 "snpPC2"                
-[13] "snpPC3"                 "snpPC4"                 "snpPC5"                
-[16] "mean_mitoRate"          "mean_totalAssignedGene" "mean_rRNA_rate"        
-[19] "mean_RIN"               "Age:RegionHIPPO"        "RegionHIPPO:fetal"     
-[22] "RegionHIPPO:birth"      "RegionHIPPO:infant"     "RegionHIPPO:child"     
-[25] "RegionHIPPO:teen"       "RegionHIPPO:adult"     
+ [7] "child"                  "teen"                   "SexM"                  
+[10] "snpPC1"                 "snpPC2"                 "snpPC3"                
+[13] "snpPC4"                 "snpPC5"                 "mean_mitoRate"         
+[16] "mean_totalAssignedGene" "mean_RIN"               "Age:RegionHIPPO"       
+[19] "RegionHIPPO:fetal"      "RegionHIPPO:birth"      "RegionHIPPO:infant"    
+[22] "RegionHIPPO:child"      "RegionHIPPO:teen"      
 
 $mod0
  [1] "(Intercept)"            "Age"                    "fetal"                 
  [4] "birth"                  "infant"                 "child"                 
- [7] "teen"                   "adult"                  "SexM"                  
-[10] "RegionHIPPO"            "snpPC1"                 "snpPC2"                
-[13] "snpPC3"                 "snpPC4"                 "snpPC5"                
-[16] "mean_mitoRate"          "mean_totalAssignedGene" "mean_rRNA_rate"        
-[19] "mean_RIN"              
+ [7] "teen"                   "SexM"                   "RegionHIPPO"           
+[10] "snpPC1"                 "snpPC2"                 "snpPC3"                
+[13] "snpPC4"                 "snpPC5"                 "mean_mitoRate"         
+[16] "mean_totalAssignedGene" "mean_RIN"              
 
-Coefficients not estimable: adult RegionHIPPO:adult 
-Warning message:
-Partial NA coefficients for 92732 probe(s) 
    user  system elapsed 
-  2.627   0.132   2.757 
-Warning messages:
-1: Zero sample variances detected, have been offset away from zero 
-2: In ebayes(fit = fit, proportion = proportion, stdev.coef.lim = stdev.coef.lim,  :
-  Estimation of var.prior failed - set to default value
+  1.603   0.075   1.681 
+Warning message:
+Zero sample variances detected, have been offset away from zero 
 [1] "Consensus correlation and summary (also after tanh transform)"
 [1] 0.4339315
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
@@ -118,10 +111,59 @@ Warning messages:
 -0.9945  0.1792  0.4323  0.4057  0.6340  0.9979     489 
 [1] "Age:RegionHIPPO"    "RegionHIPPO:fetal"  "RegionHIPPO:birth" 
 [4] "RegionHIPPO:infant" "RegionHIPPO:child"  "RegionHIPPO:teen"  
-[7] "RegionHIPPO:adult" 
-Error in object$cov.coefficients[j, j, drop = FALSE] : 
-  subscript out of bounds
-Calls: topTable -> [ -> [.MArrayLM
-Execution halted
+[1] "Reproducibility information:"
+[1] "2018-01-10 14:28:42 EST"
+   user  system elapsed 
+310.868   0.723 313.485 
+Session info ----------------------------------------------------------------------------------------------------------
+ setting  value                                      
+ version  R version 3.4.2 Patched (2017-10-12 r73550)
+ system   x86_64, linux-gnu                          
+ ui       X11                                        
+ language (EN)                                       
+ collate  en_US.UTF-8                                
+ tz       <NA>                                       
+ date     2018-01-10                                 
+
+Packages --------------------------------------------------------------------------------------------------------------
+ package              * version   date       source        
+ base                 * 3.4.2     2017-10-13 local         
+ Biobase              * 2.38.0    2017-11-07 Bioconductor  
+ BiocGenerics         * 0.24.0    2017-11-29 Bioconductor  
+ bitops                 1.0-6     2013-08-17 CRAN (R 3.4.1)
+ compiler               3.4.2     2017-10-13 local         
+ datasets             * 3.4.2     2017-10-13 local         
+ DelayedArray         * 0.4.1     2017-11-07 Bioconductor  
+ devtools             * 1.13.4    2017-11-09 CRAN (R 3.4.2)
+ digest                 0.6.13    2017-12-14 CRAN (R 3.4.2)
+ edgeR                * 3.20.5    2018-01-09 Bioconductor  
+ GenomeInfoDb         * 1.14.0    2017-11-29 Bioconductor  
+ GenomeInfoDbData       1.0.0     2018-01-09 Bioconductor  
+ GenomicRanges        * 1.30.1    2018-01-09 Bioconductor  
+ getopt               * 1.20.1    2017-11-29 CRAN (R 3.4.2)
+ graphics             * 3.4.2     2017-10-13 local         
+ grDevices            * 3.4.2     2017-10-13 local         
+ grid                   3.4.2     2017-10-13 local         
+ IRanges              * 2.12.0    2017-11-29 Bioconductor  
+ lattice                0.20-35   2017-03-25 CRAN (R 3.4.2)
+ limma                * 3.34.5    2018-01-09 Bioconductor  
+ locfit                 1.5-9.1   2013-04-20 CRAN (R 3.4.1)
+ Matrix                 1.2-11    2017-08-21 CRAN (R 3.4.2)
+ matrixStats          * 0.52.2    2017-04-14 CRAN (R 3.4.1)
+ memoise                1.1.0     2017-04-21 CRAN (R 3.4.1)
+ methods              * 3.4.2     2017-10-13 local         
+ parallel             * 3.4.2     2017-10-13 local         
+ Rcpp                   0.12.14   2017-11-23 CRAN (R 3.4.2)
+ RCurl                  1.95-4.10 2018-01-04 CRAN (R 3.4.2)
+ S4Vectors            * 0.16.0    2017-11-29 Bioconductor  
+ statmod                1.4.30    2017-06-18 CRAN (R 3.4.1)
+ stats                * 3.4.2     2017-10-13 local         
+ stats4               * 3.4.2     2017-10-13 local         
+ SummarizedExperiment * 1.8.1     2018-01-09 Bioconductor  
+ tools                  3.4.2     2017-10-13 local         
+ utils                * 3.4.2     2017-10-13 local         
+ withr                  2.1.1     2017-12-19 CRAN (R 3.4.2)
+ XVector                0.18.0    2017-11-29 Bioconductor  
+ zlibbioc               1.24.0    2017-11-07 Bioconductor  
 **** Job ends ****
-Thu Dec 21 16:23:19 EST 2017
+Wed Jan 10 14:28:42 EST 2018

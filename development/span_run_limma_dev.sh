@@ -18,7 +18,7 @@ echo "Creating script for feature type ${featuretype}"
 cat > .${SHORT}.sh <<EOF
 #!/bin/bash
 #$ -cwd
-#$ -l bluejay,mem_free=45G,h_vmem=45G,h_fsize=100G
+#$ -l mem_free=25G,h_vmem=25G,h_fsize=100G
 #$ -N ${SHORT}
 #$ -o ./logs/${SHORT}.txt
 #$ -e ./logs/${SHORT}.txt

@@ -77,7 +77,8 @@ load_foo <- function(type, age) {
     ## Add means
     colData(rse)$mean_mitoRate <- mean(colData(rse)$mitoRate)
     colData(rse)$mean_totalAssignedGene <- mean(colData(rse)$totalAssignedGene)
-    colData(rse)$mean_rRNA_rate <- mean(colData(rse)$rRNA_rate)
+    ## Makes the design matrix not full rank in one of the models
+#    colData(rse)$mean_rRNA_rate <- mean(colData(rse)$rRNA_rate)
     colData(rse)$mean_RIN <- mean(colData(rse)$RIN)
     
     print('Dimensions of the data used')
@@ -90,11 +91,11 @@ rse <- load_foo(opt$type, opt$age)
 
 ## To simplify later code
 pd <- as.data.frame(colData(rse))
-pd <- pd[, match(c('Age', 'Sex', 'snpPC1', 'snpPC2', 'snpPC3', 'snpPC4', 'snpPC5', 'Region', 'Race', 'mean_mitoRate', 'mean_totalAssignedGene', 'mean_rRNA_rate'), colnames(pd))]
+pd <- pd[, match(c('Age', 'Sex', 'snpPC1', 'snpPC2', 'snpPC3', 'snpPC4', 'snpPC5', 'Region', 'Race', 'mean_mitoRate', 'mean_totalAssignedGene'), colnames(pd))]
 
 ## Define models
-fm_mod <- ~Region + Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_rRNA_rate + mean_RIN
-fm_mod0 <- ~Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_rRNA_rate + mean_RIN
+fm_mod <- ~Region + Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN
+fm_mod0 <- ~Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN
 
 
 get_mods <- function(pd) {    
@@ -111,6 +112,7 @@ sapply(mods, colnames)
 ## Get pieces needed for running duplication correlation
 brnum <- colData(rse)$BrNum
 design <- mods$mod
+stopifnot(is.fullrank(design))
 
 if(opt$type != 'tx') {
     dge <- DGEList(counts = assays(rse)$counts)

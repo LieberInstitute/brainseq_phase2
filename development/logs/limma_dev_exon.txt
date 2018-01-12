@@ -1,10 +1,10 @@
 **** Job starts ****
-Tue Dec  5 11:46:06 EST 2017
+Wed Jan 10 14:23:26 EST 2018
 **** JHPCE info ****
 User: lcollado
 Job id: 
 Job name: 
-Hostname: jhpce01
+Hostname: compute-066
 Task id: 
 Loading conda_R/3.4.x
 Using the following user library: ~/R/x86_64-pc-linux-gnu-library/3.4.x
@@ -89,10 +89,10 @@ $mod
  [7] "child"                  "teen"                   "adult"                 
 [10] "SexM"                   "snpPC1"                 "snpPC2"                
 [13] "snpPC3"                 "snpPC4"                 "snpPC5"                
-[16] "mean_mitoRate"          "mean_totalAssignedGene" "mean_rRNA_rate"        
-[19] "mean_RIN"               "Age:RegionHIPPO"        "RegionHIPPO:fetal"     
-[22] "RegionHIPPO:birth"      "RegionHIPPO:infant"     "RegionHIPPO:child"     
-[25] "RegionHIPPO:teen"       "RegionHIPPO:adult"     
+[16] "mean_mitoRate"          "mean_totalAssignedGene" "mean_RIN"              
+[19] "Age:RegionHIPPO"        "RegionHIPPO:fetal"      "RegionHIPPO:birth"     
+[22] "RegionHIPPO:infant"     "RegionHIPPO:child"      "RegionHIPPO:teen"      
+[25] "RegionHIPPO:adult"     
 
 $mod0
  [1] "(Intercept)"            "Age"                    "fetal"                 
@@ -100,23 +100,5 @@ $mod0
  [7] "teen"                   "adult"                  "SexM"                  
 [10] "RegionHIPPO"            "snpPC1"                 "snpPC2"                
 [13] "snpPC3"                 "snpPC4"                 "snpPC5"                
-[16] "mean_mitoRate"          "mean_totalAssignedGene" "mean_rRNA_rate"        
-[19] "mean_RIN"              
+[16] "mean_mitoRate"          "mean_totalAssignedGene" "mean_RIN"              
 
-   user  system elapsed 
- 12.081   0.000  12.080 
-[1] "Consensus correlation and summary (also after tanh transform)"
-[1] 0.1048597
-    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
--0.69033  0.03516  0.10010  0.12347  0.17980  2.03858 
-    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
--0.59819  0.03515  0.09977  0.11907  0.17789  0.96665 
-[1] "Age:RegionHIPPO"    "RegionHIPPO:fetal"  "RegionHIPPO:birth" 
-[4] "RegionHIPPO:infant" "RegionHIPPO:child"  "RegionHIPPO:teen"  
-[7] "RegionHIPPO:adult" 
-Error in topTableF(fit, number = number, genelist = genelist, adjust.method = adjust.method,  : 
-  F-statistics not found in fit
-Calls: topTable -> topTableF
-Execution halted
-**** Job ends ****
-Fri Dec  8 09:46:48 EST 2017

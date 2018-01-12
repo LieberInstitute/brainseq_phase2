@@ -89,7 +89,8 @@ load_foo <- function(type) {
     ## Add means
     colData(rse)$mean_mitoRate <- mean(colData(rse)$mitoRate)
     colData(rse)$mean_totalAssignedGene <- mean(colData(rse)$totalAssignedGene)
-    colData(rse)$mean_rRNA_rate <- mean(colData(rse)$rRNA_rate)
+    ## Makes the design matrix not full rank in one of the models
+#    colData(rse)$mean_rRNA_rate <- mean(colData(rse)$rRNA_rate)
     colData(rse)$mean_RIN <- mean(colData(rse)$RIN)
     
     return(rse)
@@ -99,13 +100,13 @@ rse <- load_foo(opt$type)
 
 ## To simplify later code
 pd <- as.data.frame(colData(rse))
-pd <- pd[, match(c('Age', 'fetal', 'birth', 'infant', 'child', 'teen', 'adult', 'Sex', 'snpPC1', 'snpPC2', 'snpPC3', 'snpPC4', 'snpPC5', 'Region', 'Race', 'mean_mitoRate', 'mean_totalAssignedGene', 'mean_rRNA_rate'), colnames(pd))]
+pd <- pd[, match(c('Age', 'fetal', 'birth', 'infant', 'child', 'teen', 'adult', 'Sex', 'snpPC1', 'snpPC2', 'snpPC3', 'snpPC4', 'snpPC5', 'Region', 'Race', 'mean_mitoRate', 'mean_totalAssignedGene'), colnames(pd))]
 
 ## Define models
-fm_mod <-  ~Age + fetal + birth + infant + child + teen + adult + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_rRNA_rate + mean_RIN
-fm_mod0 <- ~ Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_rRNA_rate + mean_RIN
-fm_mod_all <- ~Age *Region + fetal * Region + birth *Region + infant *Region + child * Region + teen * Region + adult * Region + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_rRNA_rate + mean_RIN
-fm_mod0_all <- ~ Age + fetal + birth + infant + child + teen + adult + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_rRNA_rate + mean_RIN
+fm_mod <-  ~Age + fetal + birth + infant + child + teen + adult + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN
+fm_mod0 <- ~ Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN
+fm_mod_all <- ~Age *Region + fetal * Region + birth *Region + infant *Region + child * Region + teen * Region + adult * Region + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN
+fm_mod0_all <- ~ Age + fetal + birth + infant + child + teen + adult + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN
 
 
 get_mods <- function(pd, int = FALSE) {    
@@ -127,6 +128,7 @@ sapply(mods, colnames)
 ## Get pieces needed for running duplication correlation
 brnum <- colData(rse)$BrNum
 design <- mods$mod
+stopifnot(is.fullrank(design))
 
 if(opt$type != 'tx') {
     dge <- DGEList(counts = assays(rse)$counts)
@@ -158,11 +160,6 @@ print('Consensus correlation and summary (also after tanh transform)')
 corfit$consensus.correlation
 summary(corfit$atanh.correlations)
 summary(tanh(corfit$atanh.correlations))
-
-## Save to check top
-message(paste(Sys.time(), 'for checking why topTable is failing'))
-save(corfit, fit, exprsNorm,
-    file = paste0('rda/limma_dev_interaction_', opt$type, '.Rdata'))
 
 ## Extract top results
 colnames(design)[grep(':', colnames(design))]

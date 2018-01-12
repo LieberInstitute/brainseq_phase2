@@ -1,10 +1,10 @@
 **** Job starts ****
-Thu Dec 21 16:16:16 EST 2017
+Wed Jan 10 14:23:56 EST 2018
 **** JHPCE info ****
 User: lcollado
 Job id: 
 Job name: 
-Hostname: jhpce01
+Hostname: compute-066
 Task id: 
 Loading conda_R/3.4.x
 Using the following user library: ~/R/x86_64-pc-linux-gnu-library/3.4.x
@@ -85,17 +85,16 @@ $mod
  [1] "(Intercept)"            "RegionHIPPO"            "Age"                   
  [4] "SexM"                   "snpPC1"                 "snpPC2"                
  [7] "snpPC3"                 "snpPC4"                 "snpPC5"                
-[10] "mean_mitoRate"          "mean_totalAssignedGene" "mean_rRNA_rate"        
-[13] "mean_RIN"              
+[10] "mean_mitoRate"          "mean_totalAssignedGene" "mean_RIN"              
 
 $mod0
  [1] "(Intercept)"            "Age"                    "SexM"                  
  [4] "snpPC1"                 "snpPC2"                 "snpPC3"                
  [7] "snpPC4"                 "snpPC5"                 "mean_mitoRate"         
-[10] "mean_totalAssignedGene" "mean_rRNA_rate"         "mean_RIN"              
+[10] "mean_totalAssignedGene" "mean_RIN"              
 
    user  system elapsed 
-  7.788   0.136   7.923 
+  4.466   7.327  11.927 
 [1] "Consensus correlation and summary (also after tanh transform)"
 [1] 0.4824518
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
@@ -104,9 +103,9 @@ $mod0
 -0.9462  0.2036  0.4797  0.4174  0.6905  0.9975 
 [1] "RegionHIPPO"
 [1] "Reproducibility information:"
-[1] "2017-12-21 16:30:18 EST"
+[1] "2018-01-10 14:36:01 EST"
    user  system elapsed 
-836.973   1.505 838.660 
+682.841  36.885 721.693 
 Session info ----------------------------------------------------------------------------------------------------------
  setting  value                                      
  version  R version 3.4.2 Patched (2017-10-12 r73550)
@@ -115,47 +114,47 @@ Session info -------------------------------------------------------------------
  language (EN)                                       
  collate  en_US.UTF-8                                
  tz       <NA>                                       
- date     2017-12-21                                 
+ date     2018-01-10                                 
 
 Packages --------------------------------------------------------------------------------------------------------------
- package              * version  date       source        
- base                 * 3.4.2    2017-10-13 local         
- Biobase              * 2.38.0   2017-11-07 Bioconductor  
- BiocGenerics         * 0.24.0   2017-11-29 Bioconductor  
- bitops                 1.0-6    2013-08-17 CRAN (R 3.4.1)
- compiler               3.4.2    2017-10-13 local         
- datasets             * 3.4.2    2017-10-13 local         
- DelayedArray         * 0.4.1    2017-11-07 Bioconductor  
- devtools             * 1.13.4   2017-11-09 CRAN (R 3.4.2)
- digest                 0.6.12   2017-01-27 CRAN (R 3.4.1)
- edgeR                * 3.20.1   2017-11-29 Bioconductor  
- GenomeInfoDb         * 1.14.0   2017-11-29 Bioconductor  
- GenomeInfoDbData       0.99.1   2017-08-06 Bioconductor  
- GenomicRanges        * 1.30.0   2017-11-29 Bioconductor  
- getopt               * 1.20.1   2017-11-29 CRAN (R 3.4.2)
- graphics             * 3.4.2    2017-10-13 local         
- grDevices            * 3.4.2    2017-10-13 local         
- grid                   3.4.2    2017-10-13 local         
- IRanges              * 2.12.0   2017-11-29 Bioconductor  
- lattice                0.20-35  2017-03-25 CRAN (R 3.4.2)
- limma                * 3.34.2   2017-11-29 Bioconductor  
- locfit                 1.5-9.1  2013-04-20 CRAN (R 3.4.1)
- Matrix                 1.2-11   2017-08-21 CRAN (R 3.4.2)
- matrixStats          * 0.52.2   2017-04-14 CRAN (R 3.4.1)
- memoise                1.1.0    2017-04-21 CRAN (R 3.4.1)
- methods              * 3.4.2    2017-10-13 local         
- parallel             * 3.4.2    2017-10-13 local         
- Rcpp                   0.12.14  2017-11-23 CRAN (R 3.4.2)
- RCurl                  1.95-4.8 2016-03-01 CRAN (R 3.4.1)
- S4Vectors            * 0.16.0   2017-11-29 Bioconductor  
- statmod                1.4.30   2017-06-18 CRAN (R 3.4.1)
- stats                * 3.4.2    2017-10-13 local         
- stats4               * 3.4.2    2017-10-13 local         
- SummarizedExperiment * 1.8.0    2017-11-29 Bioconductor  
- tools                  3.4.2    2017-10-13 local         
- utils                * 3.4.2    2017-10-13 local         
- withr                  2.1.0    2017-11-01 CRAN (R 3.4.2)
- XVector                0.18.0   2017-11-29 Bioconductor  
- zlibbioc               1.24.0   2017-11-07 Bioconductor  
+ package              * version   date       source        
+ base                 * 3.4.2     2017-10-13 local         
+ Biobase              * 2.38.0    2017-11-07 Bioconductor  
+ BiocGenerics         * 0.24.0    2017-11-29 Bioconductor  
+ bitops                 1.0-6     2013-08-17 CRAN (R 3.4.1)
+ compiler               3.4.2     2017-10-13 local         
+ datasets             * 3.4.2     2017-10-13 local         
+ DelayedArray         * 0.4.1     2017-11-07 Bioconductor  
+ devtools             * 1.13.4    2017-11-09 CRAN (R 3.4.2)
+ digest                 0.6.13    2017-12-14 CRAN (R 3.4.2)
+ edgeR                * 3.20.5    2018-01-09 Bioconductor  
+ GenomeInfoDb         * 1.14.0    2017-11-29 Bioconductor  
+ GenomeInfoDbData       1.0.0     2018-01-09 Bioconductor  
+ GenomicRanges        * 1.30.1    2018-01-09 Bioconductor  
+ getopt               * 1.20.1    2017-11-29 CRAN (R 3.4.2)
+ graphics             * 3.4.2     2017-10-13 local         
+ grDevices            * 3.4.2     2017-10-13 local         
+ grid                   3.4.2     2017-10-13 local         
+ IRanges              * 2.12.0    2017-11-29 Bioconductor  
+ lattice                0.20-35   2017-03-25 CRAN (R 3.4.2)
+ limma                * 3.34.5    2018-01-09 Bioconductor  
+ locfit                 1.5-9.1   2013-04-20 CRAN (R 3.4.1)
+ Matrix                 1.2-11    2017-08-21 CRAN (R 3.4.2)
+ matrixStats          * 0.52.2    2017-04-14 CRAN (R 3.4.1)
+ memoise                1.1.0     2017-04-21 CRAN (R 3.4.1)
+ methods              * 3.4.2     2017-10-13 local         
+ parallel             * 3.4.2     2017-10-13 local         
+ Rcpp                   0.12.14   2017-11-23 CRAN (R 3.4.2)
+ RCurl                  1.95-4.10 2018-01-04 CRAN (R 3.4.2)
+ S4Vectors            * 0.16.0    2017-11-29 Bioconductor  
+ statmod                1.4.30    2017-06-18 CRAN (R 3.4.1)
+ stats                * 3.4.2     2017-10-13 local         
+ stats4               * 3.4.2     2017-10-13 local         
+ SummarizedExperiment * 1.8.1     2018-01-09 Bioconductor  
+ tools                  3.4.2     2017-10-13 local         
+ utils                * 3.4.2     2017-10-13 local         
+ withr                  2.1.1     2017-12-19 CRAN (R 3.4.2)
+ XVector                0.18.0    2017-11-29 Bioconductor  
+ zlibbioc               1.24.0    2017-11-07 Bioconductor  
 **** Job ends ****
-Thu Dec 21 16:30:18 EST 2017
+Wed Jan 10 14:36:01 EST 2018
