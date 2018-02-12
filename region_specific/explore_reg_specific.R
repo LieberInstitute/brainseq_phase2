@@ -95,8 +95,8 @@ load_span <- function(type, age) {
 }
 
 ## Define models
-fm_mod <- ~Region + Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_rRNA_rate + mean_RIN
-fm_mod0 <- ~Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_rRNA_rate + mean_RIN
+fm_mod <- ~Region + Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN
+fm_mod0 <- ~Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN
 
 
 get_mods <- function(pd) {    
@@ -117,17 +117,6 @@ names(raw) <- paste0(rep(c('adult', 'fetal'), each = 4), "_", rep(c('gene', 'exo
 top <- lapply(raw, '[[', 'top')
 fit <- lapply(raw, '[[', 'fit')
 exprsNorm <- lapply(raw, '[[', 'exprsNorm')
-
-
-
-
-## Fix top exons data
-rse_exon <- load_foo('exon', 'adult')
-rse_exon_span <- load_span('exon', 'adult')
-ov <- findOverlaps(rowRanges(rse_exon), rowRanges(rse_exon_span), type = 'equal', ignore.strand = FALSE)
-rowRanges(rse_exon)[which(!seq_len(length(rse_exon)) %in% queryHits(ov))]
-top$adult_exon <- top$adult_exon[queryHits(ov), ]
-top$fetal_exon <- top$fetal_exon[queryHits(ov), ]
 
 ## Load BrainSpan model results
 raw_span <- mapply(function(age, type) {
@@ -197,6 +186,7 @@ p_summ_run <- function(pchk) {
 
 
 p_sum <- p_summ_run(pcheck)
+options(width = 140)
 p_sum
 
 p_sum_span <- p_summ_run(pcheck_span)
@@ -227,20 +217,64 @@ table(pcheck_both$type[which(abs(pcheck_both$logFC) > 16 | abs(pcheck_both$span_
 #     geom_smooth(method=lm, se=FALSE)
 # dev.off()
 
-png('pdf/compare_with_span_logFC.png', type = 'cairo')
-ggplot(pcheck_both, aes(x = logFC, y = span_logFC, alpha = 1/10)) +
+png('pdf/compare_with_span_logFC.png', type = 'cairo'
+)
+ggplot(pcheck_both, aes(x = logFC, y = span_logFC, alpha = 1/20)) +
     facet_grid(age ~ type) + ylab('BrainSpan log FC') +
     xlab('BrainSeq log FC') + geom_point() + xlim(-16, 16) + ylim(-16, 16) +
     geom_smooth(method=lm, se=FALSE)
 dev.off()
 
+png('pdf/compare_with_span_logFC_noTx.png', type = 'cairo')
+ggplot(subset(pcheck_both, type != 'tx'), aes(x = logFC, y = span_logFC,
+    alpha = 1/20)) +
+    facet_grid(age ~ type) + ylab('BrainSpan log FC') +
+    xlab('BrainSeq log FC') + geom_point() + xlim(-7.5, 7.5) + ylim(-7.5, 7.5) +
+    geom_smooth(method=lm, se=FALSE)
+dev.off()
+
+# pdf('pdf/compare_with_span_logFC_noTx.pdf')
+# ggplot(subset(pcheck_both, type != 'tx'), aes(x = logFC, y = span_logFC,
+#     alpha = 1/10)) +
+#     facet_grid(age ~ type) + ylab('BrainSpan log FC') +
+#     xlab('BrainSeq log FC') + geom_point() + xlim(-7.5, 7.5) + ylim(-7.5, 7.5) +
+#     geom_smooth(method=lm, se=FALSE)
+# dev.off()
+
+
 pdf('pdf/compare_with_span_logFC_density.pdf')
-ggplot(pcheck_both, aes(x = logFC, y = span_logFC, alpha = 1/10)) +
+ggplot(pcheck_both, aes(x = logFC, y = span_logFC)) +
     facet_grid(age ~ type) + ylab('BrainSpan log FC') +
     xlab('BrainSeq log FC') + stat_density2d() + xlim(-16, 16) + ylim(-16, 16) +
     geom_smooth(method=lm, se=FALSE)
 dev.off()
 
+pdf('pdf/compare_with_span_logFC_density_noTx.pdf')
+ggplot(subset(pcheck_both, type != 'tx'), aes(x = logFC, y = span_logFC)) +
+    facet_grid(age ~ type) + ylab('BrainSpan log FC') +
+    xlab('BrainSeq log FC') + stat_density2d() + xlim(-7.5, 7.5) +
+    ylim(-7.5, 7.5) +
+    geom_smooth(method=lm, se=FALSE)
+dev.off()
+
+
+## Replication (p < 0.05) & same direction
+
+rep_span <- do.call(rbind, mapply(function(pvar, cut, type_sub, age_sub) {
+    pinfo <- subset(pcheck_both, type == type_sub & age == age_sub)
+    n <- sum(sign(pinfo$logFC) == sign(pinfo$span_logFC) & pinfo$span_P.Value < 0.05 & pinfo[, pvar] < cut)
+    data.frame(pvar = pvar, cutoff = cut, type = type_sub, age = age_sub, replicated = n, number_de = sum(pinfo[, pvar] < cut), total = nrow(pinfo), stringsAsFactors = FALSE)
+}, pvar = rep(rep(c('adj.P.Val', 'P.Bonf'), each = 6), 4 * 2), cut = rep(c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001), 2 * 4 * 2), type_sub = rep(rep(unique(pcheck_both$type), each = 6 * 2), 2), age_sub = rep(unique(pcheck_both$age), each = 4 * 6 * 2), SIMPLIFY = FALSE, USE.NAMES = FALSE))
+
+pdf('pdf/replication_exploration.pdf', width = 14)
+ggplot(rep_span, aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated / number_de, color = pvar)) + facet_grid(age ~ type) + ylab('Replication rate') + xlab('p-threshold') + geom_point() + theme_grey(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(color='P-value method')
+
+ggplot(rep_span, aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = number_de, color = pvar)) + facet_grid(age ~ type) + ylab('Number of DE features') + xlab('p-threshold') + geom_point() + theme_grey(base_size = 18) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + scale_y_log10() + labs(color='P-value method')
+dev.off()
+
+
+
+## Explore some of the adjustment variables
 head(fit$fetal_gene$design)
 head(fit_span$fetal_gene$design)
 nrow(fit$fetal_gene$design)
@@ -257,7 +291,6 @@ summary(fit_span$fetal_gene$design[, 'Age'])
 t.test(fit$fetal_gene$design[, 'Age'], fit_span$fetal_gene$design[, 'Age'])
 t.test(fit$fetal_gene$design[, 'mean_mitoRate'], fit_span$fetal_gene$design[, 'mean_mitoRate'])
 t.test(fit$fetal_gene$design[, 'mean_totalAssignedGene'], fit_span$fetal_gene$design[, 'mean_totalAssignedGene']) ## Diff
-t.test(fit$fetal_gene$design[, 'mean_rRNA_rate'], fit_span$fetal_gene$design[, 'mean_rRNA_rate']) ## Diff
 t.test(fit$fetal_gene$design[, 'mean_RIN'], fit_span$fetal_gene$design[, 'mean_RIN'])
 
 plot(fit$fetal_gene$design[, 'snpPC1'], fit$fetal_gene$design[, 'snpPC2'])
