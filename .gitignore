@@ -18,3 +18,4 @@ caseControl/*.rda
 genotype_data
 .ctxt
 jxns
+.Rproj.user
