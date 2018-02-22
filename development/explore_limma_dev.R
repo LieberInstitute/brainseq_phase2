@@ -444,6 +444,147 @@ for(i in 1:100) {
 dev.off()
 
 
+## Numbers for BOG2018 abstract
+pinfo <- lapply(unique(pcheck_both$type), function(feat)  {
+    pinfo <- subset(pcheck_both, type == feat)
+    pinfo[sign(pinfo$F) == sign(pinfo$span_F) & pinfo$span_P.Value < 0.05 & pinfo$P.Bonf < 0.01, ]
+})
+names(pinfo) <- unique(pcheck_both$type)
+
+
+rses <- lapply(unique(pcheck_both$type), load_foo)
+names(rses) <- unique(pcheck_both$type)
+
+sapply(pinfo, nrow)
+
+de_genes <- lapply(names(pinfo), function(feat) {
+    m <- match(gsub('gene.|exon.|jxn.|tx.', '', rownames(pinfo[[feat]])), names(rses[[feat]]))
+    print(table(!is.na(m)))
+    if(feat %in% c('gene', 'exon')) {
+        res <- rowRanges(rses[[feat]])$gencodeID[m]
+    } else if(feat == 'jxn') {
+        res <- rowRanges(rses[[feat]])$gencodeGeneID[m]
+        res <- res[!is.na(res)]
+    } else {
+        res <- rowRanges(rses[[feat]])$gene_id[m]
+    }
+    return(unique(res))
+})
+names(de_genes) <- names(pinfo)
+sapply(de_genes, length)
+
+
+library(gplots)
+
+pdf('pdf/venn_de_features.pdf')
+venn(de_genes) + title('DE features grouped by gene id')
+venn(de_genes[c('gene', 'exon', 'jxn')]) + title('DE features grouped by gene id')
+dev.off()
+
+load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/caseControl/dxStats_hippo_filtered_qSVA.rda')
+
+outInfo <- list('gene' = outGene, 'exon' = outExon, 'jxn' = outJxn, 'tx' = outTx)
+case_genes <- lapply(names(pinfo), function(feat) {
+    m <- match(rownames(outInfo[[feat]][outInfo[[feat]]$adj.P.Val < 0.05, ]), names(rses[[feat]]))
+    print(table(!is.na(m)))
+    m <- m[!is.na(m)]
+    if(feat %in% c('gene', 'exon')) {
+        res <- rowRanges(rses[[feat]])$gencodeID[m]
+    } else if(feat == 'jxn') {
+        res <- rowRanges(rses[[feat]])$gencodeGeneID[m]
+        res <- res[!is.na(res)]
+    } else {
+        res <- rowRanges(rses[[feat]])$gene_id[m]
+    }
+    return(unique(res))
+})
+names(case_genes) <- names(pinfo)
+sapply(case_genes, length)
+
+pdf('pdf/venn_de_features_caseControl.pdf')
+venn(case_genes) + title('DE features grouped by gene id')
+venn(case_genes[c('gene', 'exon', 'jxn')]) + title('DE features grouped by gene id')
+dev.off()
+
+
+load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/eqtl_tables/matrixEqtl_output_interaction_4features.rda', verbose = TRUE)
+
+me <- list('gene'= meGene$cis$eqtls, 'exon' = meExon$cis$eqtls, 'jxn' = meJxn$cis$eqtls, 'tx' = meTx$cis$eqtls)
+
+me_genes <- lapply(names(pinfo), function(feat) {
+    m <- match(me[[feat]]$gene[me[[feat]]$FDR < 0.01], names(rses[[feat]]))
+    print(table(!is.na(m)))
+    m <- m[!is.na(m)]
+    if(feat %in% c('gene', 'exon')) {
+        res <- rowRanges(rses[[feat]])$gencodeID[m]
+    } else if(feat == 'jxn') {
+        res <- rowRanges(rses[[feat]])$gencodeGeneID[m]
+        res <- res[!is.na(res)]
+    } else {
+        res <- rowRanges(rses[[feat]])$gene_id[m]
+    }
+    return(unique(res))
+})
+names(me_genes) <- names(pinfo)
+sapply(me_genes, length)
+
+pdf('pdf/venn_eQTL_interaction.pdf')
+venn(me_genes) + title('eQTLs grouped by gene id')
+venn(me_genes[c('gene', 'exon', 'jxn')]) + title('eQTLs grouped by gene id')
+dev.off()
+
+length(unique(unlist(me_genes[c('gene', 'exon', 'jxn')])))
+
+
+riskLoci = read.csv("/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/PGC_risk_loci.csv", stringsAsFactors=FALSE)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n551.rda", verbose = TRUE)
+keepIndex = which(!is.na(snpMap$chr_hg38))
+snpMap = snpMap[keepIndex,]
+snpMap$pos_hg19 = paste0(snpMap$CHR, ":", snpMap$POS)
+
+in_risk <- lapply(me, function(eqtl) {
+    m <- match(eqtl$snps, rownames(snpMap))
+    print(table(!is.na(m)))
+    m <- m[!is.na(m)]
+    snpMap$pos_hg19[m] %in% riskLoci$hg19POS
+    res <- snpMap$pos_hg19[m] %in% riskLoci$hg19POS
+    names(res) <- eqtl$gene
+    return(res)
+})
+sapply(in_risk, sum)
+sapply(in_risk, mean) * 100
+
+in_riskFDR <- lapply(me, function(eqtl) {
+    if(length(eqtl$snps[eqtl$FDR < 0.01]) == 0) return(NULL)
+    m <- match(eqtl$snps[eqtl$FDR < 0.01], rownames(snpMap))
+    print(table(!is.na(m)))
+    m <- m[!is.na(m)]
+    res <- snpMap$pos_hg19[m] %in% riskLoci$hg19POS
+    names(res) <- eqtl$gene[eqtl$FDR < 0.01]
+    return(res)
+})
+sapply(in_riskFDR, sum)
+sapply(in_riskFDR, mean) * 100
+
+qtls <- lapply(me, function(eqtl) {
+    eqtl$snps[eqtl$FDR < 0.01]
+})
+venn(qtls)
+venn(qtls[c('gene', 'exon', 'jxn')])
+qtl_v <- venn(qtls[c('gene', 'exon', 'jxn')], show.plot = FALSE)
+sum(sapply(attr(qtl_v, 'intersections'), length))
+
+
+
+
+sapply(in_riskFDR, sum) / sapply(in_risk, sum) / ( sapply(in_riskFDR, length) /  sapply(in_risk, length))
+
+
+v_me <- venn(me_genes[c('gene', 'exon', 'jxn')], show.plot = FALSE)
+risk3 <- lapply(list(all = in_risk$gene, FDR = in_riskFDR$gene), function(rk) {
+    names(rk[rk]) %in% c(attr(v_me, 'intersections')[['gene:exon:jxn']], attr(v_me, 'intersections')[['jxn']])
+} )
+sapply(risk3, sum)
 
 ## Reproducibility information
 print('Reproducibility information:')
