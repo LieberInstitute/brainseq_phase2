@@ -14,11 +14,11 @@ load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_jxn.Rdata")
 load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_tx.Rdata")
 
 colData(rse_gene)$RIN = sapply(colData(rse_gene)$RIN,"[",1)
-colData(rse_gene)$totalAssignedGene = sapply(colData(rse_gene)$totalAssignedGene,"[",1)
-colData(rse_gene)$mitoRate = sapply(colData(rse_gene)$mitoRate,"[",1)
-colData(rse_gene)$overallMapRate = sapply(colData(rse_gene)$overallMapRate,"[",1)
-colData(rse_gene)$rRNA_rate = sapply(colData(rse_gene)$rRNA_rate,"[",1)
-colData(rse_gene)$ERCCsumLogErr = sapply(colData(rse_gene)$ERCCsumLogErr,"[",1)
+colData(rse_gene)$totalAssignedGene = sapply(colData(rse_gene)$totalAssignedGene, mean)
+colData(rse_gene)$mitoRate = sapply(colData(rse_gene)$mitoRate,mean)
+colData(rse_gene)$overallMapRate = sapply(colData(rse_gene)$overallMapRate, mean)
+colData(rse_gene)$rRNA_rate = sapply(colData(rse_gene)$rRNA_rate,mean)
+colData(rse_gene)$ERCCsumLogErr = sapply(colData(rse_gene)$ERCCsumLogErr,mean)
 colData(rse_gene)$Kit = ifelse(colData(rse_gene)$mitoRate < 0.05, "Gold", "HMR")
 
 ##################
@@ -30,28 +30,8 @@ rse_exon = rse_exon[,keepIndex]
 rse_jxn = rse_jxn[,keepIndex]
 rse_tx = rse_tx[,keepIndex]
 
-## load qSVs and line up
 load("count_data/degradation_rse_phase2_hippo.rda")
 cov_rse_hippo = cov_rse_hippo[,sapply(rse_gene$SAMPLE_ID, "[", 1)]
-
-###################
-## filter low expression
-geneIndex = which(rowMeans(getRPKM(rse_gene,"Length")) > 0.2)
-rse_gene = rse_gene[geneIndex,]
-
-exonIndex = which(rowMeans(getRPKM(rse_exon,"Length")) > 0.5)
-rse_exon = rse_exon[exonIndex,]
-
-rowData(rse_jxn)$bp_length=100 # to trick getRPKM to be RP10M
-jxnIndex = which(rowMeans(getRPKM(rse_jxn)) > 0.5 & 
-	rowData(rse_jxn)$Class != "Novel")
-rse_jxn = rse_jxn[jxnIndex,]
-
-txIndex = which(rowMeans(assays(rse_tx)$tpm) > 0.2)
-rse_tx = rse_tx[txIndex,]
-
-## Ns
-table(rse_gene$Dx)
 
 ## add mds data
 mds = read.table("/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n551_maf05_geno10_hwe1e6.mds",
@@ -87,7 +67,15 @@ eBGene = eBayes(fitGene)
 sigGene = topTable(eBGene,coef=2,
 	p.value = 1,number=nrow(rse_gene))
 outGene = sigGene[rownames(rse_gene),]
-save(outGene, file = "caseControl/dxStats_hippo_filtered_qSVA.rda")
+
+## no qSVA
+vGene0 = voom(dge,mod, plot=TRUE)
+fitGene0 = lmFit(vGene0)
+eBGene0 = eBayes(fitGene0)
+sigGene0 = topTable(eBGene0,coef=2,
+	p.value = 1,number=nrow(rse_gene))
+outGene0 = sigGene0[rownames(rse_gene),]
+save(outGene, outGene0,file = "caseControl/dxStats_hippo_filtered_qSVA_geneLevel.rda")
 
 ##### Exon ######
 dee = DGEList(counts = assays(rse_exon)$counts, 
@@ -114,11 +102,7 @@ sigJxn = topTable(eBJxn,coef=2,
 outJxn = sigJxn[rownames(rse_jxn),]
 
 ##### Transcript ######
-dte = DGEList(counts = assays(rse_tx)$tpm, 
-	genes = rowData(rse_tx))
-# dte = calcNormFactors(dte) # already TPM
-vTx = voom(dte,modQsva, plot=TRUE)
-fitTx = lmFit(vTx)
+fitTx = lmFit(assays(rse_tx)$tpm, modQsva)
 ebTx = ebayes(fitTx)
 eBTx = eBayes(fitTx)
 sigTx = topTable(eBTx,coef=2,

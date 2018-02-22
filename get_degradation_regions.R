@@ -3,6 +3,7 @@
 library(jaffelab)
 library(rtracklayer)
 library(recount)
+library(recount.bwtool)
 library(BiocParallel)
 library(SummarizedExperiment)
 
@@ -60,28 +61,24 @@ save(cov_rse_hippo, file = "count_data/degradation_rse_phase2_hippo.rda")
 ### DLPFC ########################
 ############################
 
-## read manifest
-load("count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseGene_merged_n453.rda")
-pdDlpfc = colData(rse_gene)
-	
 ## import degradation regions
-bed = import("/dcl01/lieber/ajaffe/lab/degradation_experiments/DLPFC_RiboZero/bed/DLPFC_RiboZero_degradation_regions_bonf.bed")
+bedDlpfc = import("/dcl01/lieber/ajaffe/lab/degradation_experiments/DLPFC_RiboZero/bed/DLPFC_RiboZero_degradation_regions_bonf.bed")
 
 ## designate bigwigs
-forwardBw = paste0("preprocessed_data/DLPFC_RiboZero/Coverage/",
-	sapply(pdDlpfc$SAMPLE_ID,"[",1),".Forward.bw")
-reverseBw = paste0("preprocessed_data/DLPFC_RiboZero/Coverage/",
-	sapply(pdDlpfc$SAMPLE_ID,"[",1), ".Reverse.bw")
+forwardBw = paste0("preprocessed_data/Hippo_RiboZero/Coverage/",
+	sapply(pdHippo$SAMPLE_ID,"[",1),".Forward.bw")
+reverseBw = paste0("preprocessed_data/Hippo_RiboZero/Coverage/",
+	sapply(pdHippo$SAMPLE_ID,"[",1), ".Reverse.bw")
 all(file.exists(c(forwardBw,reverseBw))) # TRUE
-names(forwardBw) = names(reverseBw) = sapply(pdDlpfc$SAMPLE_ID,"[",1)
+names(forwardBw) = names(reverseBw) = sapply(pdHippo$SAMPLE_ID,"[",1)
 
 ## try coverage tool
-covForward = coverage_bwtool(forwardBw, bed, strand = "+", 
+covForward = coverage_bwtool(forwardBw, bedDlpfc, strand = "+", 
 	sumsdir = "degradation", bpparam = MulticoreParam(8))
 covForward$bigwig_path = NULL
 covForward$bigwig_file = NULL
 
-covReverse = coverage_bwtool(reverseBw, bed, strand = "-", 
+covReverse = coverage_bwtool(reverseBw, bedDlpfc, strand = "-", 
 	sumsdir = "degradation", bpparam = MulticoreParam(8))
 covReverse$bigwig_path = NULL
 covReverse$bigwig_file = NULL
@@ -89,7 +86,7 @@ covReverse$bigwig_file = NULL
 ## combine
 cov_rse = rbind(covForward, covReverse)	
 rownames(cov_rse) = rowData(cov_rse)$name
-cov_rse = cov_rse[bed$name,]
+cov_rse = cov_rse[bedDlpfc$name,]
 
 ## divide by number of reads
 assays(cov_rse)$counts = assays(cov_rse)$counts/100 # divide by read length
@@ -98,8 +95,47 @@ assays(cov_rse)$counts = assays(cov_rse)$counts/100 # divide by read length
 assays(cov_rse)$counts = abs(assays(cov_rse)$counts) 
 
 ## save to final people
-cov_rse_dlpfc = cov_rse
-save(cov_rse_dlpfc, file = "count_data/degradation_rse_phase2_dlpfc.rda")
+cov_rse_hippo = cov_rse
+save(cov_rse_hippo, file = "count_data/degradation_rse_phase2_hippo.rda")
+
+
+##############################################
+## HIPPO DATA w/ DLPFC DEGRADATION REGIONS ###
+##############################################
+
+## designate bigwigs from hippo
+forwardBw = paste0("preprocessed_data/Hippo_RiboZero/Coverage/",
+	sapply(pdHippo$SAMPLE_ID,"[",1),".Forward.bw")
+reverseBw = paste0("preprocessed_data/Hippo_RiboZero/Coverage/",
+	sapply(pdHippo$SAMPLE_ID,"[",1), ".Reverse.bw")
+all(file.exists(c(forwardBw,reverseBw))) # TRUE
+names(forwardBw) = names(reverseBw) = sapply(pdHippo$SAMPLE_ID,"[",1)
+
+## try coverage tool w/ dlpfc regions
+covForward = coverage_bwtool(forwardBw, bedDlpfc, strand = "+", 
+	sumsdir = "degradation", bpparam = MulticoreParam(8))
+covForward$bigwig_path = NULL
+covForward$bigwig_file = NULL
+
+covReverse = coverage_bwtool(reverseBw, bedDlpfc, strand = "-", 
+	sumsdir = "degradation", bpparam = MulticoreParam(8))
+covReverse$bigwig_path = NULL
+covReverse$bigwig_file = NULL
+
+## combine
+cov_rse = rbind(covForward, covReverse)	
+rownames(cov_rse) = rowData(cov_rse)$name
+cov_rse = cov_rse[bedDlpfc$name,]
+
+## divide by number of reads
+assays(cov_rse)$counts = assays(cov_rse)$counts/100 # divide by read length
+
+## make positive
+assays(cov_rse)$counts = abs(assays(cov_rse)$counts) 
+
+## save to final people
+cov_rse_hippo_dlpfc_qSV = cov_rse
+save(cov_rse_hippo_dlpfc_qSV, file = "count_data/degradation_rse_phase2_hippo_usingDlpfcDegrade.rda")
 
 
 #################

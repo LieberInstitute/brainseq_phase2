@@ -19,3 +19,4 @@ genotype_data
 .ctxt
 jxns
 .Rproj.user
+degradation_strand*/*sum.tsv
