@@ -1,0 +1,491 @@
+
+R version 3.4.3 Patched (2018-01-20 r74142) -- "Kite-Eating Tree"
+Copyright (C) 2018 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+Using the following user library: ~/R/x86_64-pc-linux-gnu-library/3.4.x
+> #qsub -l bluejay,mf=150G,h_vmem=150G,h_fsize=200G,h_stack=256M -cwd -b y -M stephensemick@gmail.com -o log -e log R CMD BATCH --no-save 03a_meQTL_Hippo.R
+> 
+> ### libraries
+> library(SummarizedExperiment)
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, cbind, colMeans, colnames,
+    colSums, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+    grepl, intersect, is.unsorted, lapply, lengths, Map, mapply, match,
+    mget, order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rowMeans, rownames, rowSums, sapply, setdiff, sort,
+    table, tapply, union, unique, unsplit, which, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:base’:
+
+    expand.grid
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: DelayedArray
+Loading required package: matrixStats
+
+Attaching package: ‘matrixStats’
+
+The following objects are masked from ‘package:Biobase’:
+
+    anyMissing, rowMedians
+
+
+Attaching package: ‘DelayedArray’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+
+The following object is masked from ‘package:base’:
+
+    apply
+
+> library(jaffelab)
+Loading required package: rafalib
+> library(MatrixEQTL)
+> library(sva)
+Loading required package: mgcv
+Loading required package: nlme
+
+Attaching package: ‘nlme’
+
+The following object is masked from ‘package:IRanges’:
+
+    collapse
+
+This is mgcv 1.8-22. For overview type 'help("mgcv-package")'.
+Loading required package: genefilter
+
+Attaching package: ‘genefilter’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    rowSds, rowVars
+
+Loading required package: BiocParallel
+> library(minfi)
+Loading required package: Biostrings
+Loading required package: XVector
+
+Attaching package: ‘Biostrings’
+
+The following object is masked from ‘package:DelayedArray’:
+
+    type
+
+The following object is masked from ‘package:base’:
+
+    strsplit
+
+Loading required package: bumphunter
+Loading required package: foreach
+Loading required package: iterators
+Loading required package: locfit
+locfit 1.5-9.1 	 2013-03-22
+Setting options('download.file.method.GEOquery'='auto')
+Setting options('GEOquery.inmemory.gpl'=FALSE)
+> library(GenomicRanges)
+> 
+> ######################
+> ### load data ####
+> ######################
+> load('/dcl01/lieber/ajaffe/Steve/Hippo_meQTL/rdas/cleanSamples_n694_processed_data_postfiltered.rda')
+> 
+> ## keep adult samples - keep both regions
+> keepInd = which(pd$Age > 13 & pd$`Brain.Region`=="Hippo")
+> pd = pd[keepInd, ]
+> meth = as.matrix(bVals[,keepInd])
+> 
+> ##### Subset to probes available
+> load('/dcl01/lieber/ajaffe/Steve/meth450k_annotation_hg38/hg38_out/rdas/hg38_goldset_annotation.rda') #load hg38 position annotation
+> mp = rownames(meth)[rownames(meth)%in%goldset$Name]
+> table(rownames(meth)%in%goldset$Name)
+
+ FALSE   TRUE 
+ 25238 439511 
+> meth=meth[mp,] #drop probes that don't map to hg38
+> goldset = goldset[match(mp,goldset$Name),]
+> 
+> print("....data loaded....")
+[1] "....data loaded...."
+> 
+> ######################
+> ### snp data #########
+> ######################
+> 
+> ## load SNP data
+> load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n551.rda')
+> ### make mds and snp dimensions equal to N
+> ###(repeat rows or columns for BrNum replicates)
+> mds = mds[pd$BrNum,]
+> snp = snp[,pd$BrNum]
+> rownames(mds) = colnames(snp) = pd$Chip
+> 
+> ## drop SNPs not mapping to hg38
+> keepIndex = which(!is.na(snpMap$chr_hg38))
+> snpMap = snpMap[keepIndex,]
+> snp = snp[keepIndex,]
+> 
+> ## subset to PGC2 SNPs of interest 
+> load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_DNAm_mediation/PGC2_theSnps_full.rda')
+> keep_PGC_SNP_index = which(paste0('chr',snpMap$CHR,':',snpMap$POS) %in% theSnps$chrpos)
+> snpMap = snpMap[keep_PGC_SNP_index,]
+> snp = snp[keep_PGC_SNP_index,]
+> 
+> length(keep_PGC_SNP_index)
+[1] 89469
+> #[1] 89469
+> 
+> ######################
+> # statistical model ##
+> ######################
+> pd$Dx = factor(pd$Dx, levels = c("Control", "Schizo"))
+> pd$Sex <- as.factor(pd$Sex)
+> 
+> mod = model.matrix(~Dx + Sex + as.matrix(mds[,1:5]), data = pd)
+> colnames(mod)[4:8] = colnames(mds)[1:5]
+> 
+> ######################
+> # create SNP objects #
+> ######################
+> 
+> theSnps = SlicedData$new(as.matrix(snp))
+> theSnps$ResliceCombined(sliceSize = 50000)
+> 
+> snpspos = snpMap[,c("SNP","chr_hg38","pos_hg38")]
+> colnames(snpspos) = c("name","chr","pos")
+> 
+> #######################
+> ####### do PCA ########
+> #######################
+> 
+> #pcaMeth = prcomp(t(meth))
+> #kMeth = num.sv(meth, mod)
+> #kMeth = min(kMeth, 25)
+> #methPCs = pcaMeth$x[,1:kMeth]
+> #
+> #save(methPCs, file="rdas/pcs_methPCs_regions_filtered_over13_Hippo_only.rda")
+> load("/dcl01/lieber/ajaffe/Steve/Hippo_meQTL/rdas/pcs_methPCs_regions_filtered_over13_Hippo_only.rda")
+> 
+> print("....pcas created....")
+[1] "....pcas created...."
+> 
+> ######################
+> # create covariate objects #
+> ######################
+> covs = SlicedData$new(t(cbind(mod[,-1], methPCs ) ) )
+> 
+> print("....covariate object created....")
+[1] "....covariate object created...."
+> 
+> #######################
+> # create meth objects #
+> #######################
+> 		
+> #### make meth objects
+> meth = SlicedData$new(meth)
+> meth$ResliceCombined(sliceSize = 5000)
+> 
+> ### meth position
+> posMeth = data.frame(probeid = goldset$Name,
++ 	chr = goldset$chr_hg38, start = goldset$predictedPos, end=goldset$predictedPos)
+> 
+> #######################
+> # Run matrix eQTL #
+> #######################
+> 
+> print("....beginning eQTL analysis....")
+[1] "....beginning eQTL analysis...."
+> 	
+> meMeth = Matrix_eQTL_main(snps=theSnps, 
++ 						 gene = meth, 
++ 						 cvrt = covs, 
++ 						 output_file_name.cis =  "HippoMeth.ctxt" ,
++ 						 pvOutputThreshold.cis = 1, 
++ 						 pvOutputThreshold=0,
++ 						 snpspos = snpspos, 
++ 						 genepos = posMeth, 
++ 						 useModel = modelLINEAR,
++ 						 cisDist=2e4,
++ 						 pvalue.hist = 100,
++ 						 min.pv.by.genesnp = TRUE)
+Matching data files and location files
+439511of439511 genes matched
+89469of89469 SNPs matched
+
+Task finished in 0.336999999999534 seconds
+Reordering SNPs
+
+Task finished in 12.3730000000014 seconds
+Reordering genes
+
+Task finished in 339.605 seconds
+Processing covariates
+Task finished in 0.00499999999919964 seconds
+Processing gene expression data (imputation, residualization)
+Task finished in 727.505000000001 seconds
+Creating output file(s)
+Task finished in 0.0900000000001455 seconds
+Performing eQTL analysis
+ 0.56% done, 3,657 cis-eQTLs
+ 1.13% done, 10,578 cis-eQTLs
+ 1.70% done, 20,088 cis-eQTLs
+ 2.27% done, 29,389 cis-eQTLs
+ 2.84% done, 36,592 cis-eQTLs
+ 3.40% done, 48,701 cis-eQTLs
+ 3.97% done, 55,096 cis-eQTLs
+ 4.54% done, 63,793 cis-eQTLs
+ 5.11% done, 69,038 cis-eQTLs
+ 5.68% done, 83,885 cis-eQTLs
+ 6.25% done, 91,279 cis-eQTLs
+ 6.81% done, 95,437 cis-eQTLs
+ 7.38% done, 101,443 cis-eQTLs
+ 7.95% done, 113,182 cis-eQTLs
+ 8.52% done, 116,764 cis-eQTLs
+ 9.09% done, 123,332 cis-eQTLs
+ 9.65% done, 138,268 cis-eQTLs
+10.22% done, 148,454 cis-eQTLs
+10.79% done, 153,660 cis-eQTLs
+11.36% done, 154,651 cis-eQTLs
+11.93% done, 156,982 cis-eQTLs
+12.50% done, 162,150 cis-eQTLs
+13.06% done, 165,382 cis-eQTLs
+13.63% done, 165,676 cis-eQTLs
+14.20% done, 173,088 cis-eQTLs
+14.77% done, 181,488 cis-eQTLs
+15.34% done, 202,022 cis-eQTLs
+15.90% done, 203,034 cis-eQTLs
+16.47% done, 224,598 cis-eQTLs
+17.04% done, 237,951 cis-eQTLs
+17.61% done, 237,951 cis-eQTLs
+18.18% done, 243,701 cis-eQTLs
+18.75% done, 250,309 cis-eQTLs
+19.31% done, 251,812 cis-eQTLs
+19.88% done, 282,382 cis-eQTLs
+20.45% done, 286,546 cis-eQTLs
+21.02% done, 292,315 cis-eQTLs
+21.59% done, 303,806 cis-eQTLs
+22.15% done, 308,225 cis-eQTLs
+22.72% done, 320,032 cis-eQTLs
+72.72% done, 325,883 cis-eQTLs
+73.29% done, 333,188 cis-eQTLs
+73.86% done, 336,410 cis-eQTLs
+74.43% done, 347,376 cis-eQTLs
+75.00% done, 352,226 cis-eQTLs
+75.56% done, 354,402 cis-eQTLs
+76.13% done, 359,390 cis-eQTLs
+76.70% done, 362,882 cis-eQTLs
+77.27% done, 376,132 cis-eQTLs
+77.84% done, 378,398 cis-eQTLs
+78.40% done, 378,426 cis-eQTLs
+78.97% done, 382,179 cis-eQTLs
+79.54% done, 394,148 cis-eQTLs
+80.11% done, 400,570 cis-eQTLs
+80.68% done, 404,121 cis-eQTLs
+81.25% done, 420,399 cis-eQTLs
+81.81% done, 422,447 cis-eQTLs
+82.38% done, 426,247 cis-eQTLs
+82.95% done, 435,495 cis-eQTLs
+83.52% done, 444,849 cis-eQTLs
+84.09% done, 447,714 cis-eQTLs
+84.65% done, 451,979 cis-eQTLs
+85.22% done, 458,354 cis-eQTLs
+85.79% done, 463,478 cis-eQTLs
+86.36% done, 475,095 cis-eQTLs
+86.93% done, 479,891 cis-eQTLs
+87.50% done, 485,047 cis-eQTLs
+88.06% done, 500,902 cis-eQTLs
+88.63% done, 505,461 cis-eQTLs
+89.20% done, 512,184 cis-eQTLs
+89.77% done, 523,693 cis-eQTLs
+90.34% done, 536,604 cis-eQTLs
+90.90% done, 543,761 cis-eQTLs
+91.47% done, 553,718 cis-eQTLs
+92.04% done, 565,575 cis-eQTLs
+92.61% done, 567,714 cis-eQTLs
+93.18% done, 571,960 cis-eQTLs
+93.75% done, 578,014 cis-eQTLs
+94.31% done, 580,573 cis-eQTLs
+94.88% done, 581,200 cis-eQTLs
+95.45% done, 592,420 cis-eQTLs
+96.02% done, 596,182 cis-eQTLs
+96.59% done, 596,465 cis-eQTLs
+97.15% done, 604,624 cis-eQTLs
+97.72% done, 609,446 cis-eQTLs
+98.29% done, 614,214 cis-eQTLs
+98.86% done, 633,796 cis-eQTLs
+Task finished in 62288.598 seconds
+
+> save(meMeth, file="PGC2_meqtl/PGC2_cis_raw_output_hippo_methylation_adultsOnly.rda")
+> 
+> #######
+> ## annotate
+> #load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_DNAm_mediation/PGC2_meqtl/PGC2_cis_raw_output_hippo_methylation_adultsOnly.rda')
+> ### filter
+> meqtl = meMeth$cis$eqtl
+> meqtl$snps = as.character(meqtl$snps)
+> colnames(meqtl)[1:2] = c("SNP","cpg")
+> meqtl$cpg = as.character(meqtl$cpg)
+> #
+> ### annotate
+> m = match(meqtl$SNP, snpMap$SNP)
+> meqtl$snpChr = snpMap$chr_hg38[m]
+> meqtl$snpPos = snpMap$pos_hg38[m]
+> meqtl$snpRsNum = snpMap$name[m]
+> meqtl$snpCounted = snpMap$newCount[m]
+> meqtl$snpAlt = snpMap$newRef[m]
+> meqtl$snpType=snpMap$Type[m]
+> meqtl$inSampleMAF = rowSums(snp[m,],na.rm=TRUE)/ (2*rowSums(!is.na(snp[m,])))
+> #	
+> #### see if SNP distrupts a CpG
+> library(BSgenome.Hsapiens.UCSC.hg38)
+Loading required package: BSgenome
+Loading required package: rtracklayer
+> meqtl$snpChr = gsub("chr23","chrX", meqtl$snpChr)
+> gr = GRanges(meqtl$snpChr, IRanges(meqtl$snpPos-1, meqtl$snpPos+1))
+> trio = getSeq(Hsapiens, gr)
+> meqtl$disruptCpG = vcountPattern("CG", trio)
+> #
+> cpgIndex=match(meqtl$cpg, goldset$Name)
+> meqtl$methChr = as.character(goldset[cpgIndex,'chr_hg38'])
+> meqtl$methPos = as.numeric(goldset[cpgIndex,'predictedPos'])
+> meqtl$methProbeRs = as.character(goldset[cpgIndex,'Probe_rs'])
+> meqtl$methCpgRs = as.character(goldset[cpgIndex,'CpG_rs'])
+> meqtl$methSbeRs = as.character(goldset[cpgIndex,'SBE_rs'])
+> meqtl$methRelationToIsland = as.character(goldset[cpgIndex,'Relation_to_Island'])
+> #
+> meqtl$distMethToSnp = meqtl$methPos - meqtl$snpPos
+> meqtl$meanMeth = rowMeans(meth)[meqtl$cpg]
+> #
+> save(meqtl, file='PGC2_meqtl/PGC2_cis_annotated_output_hippo_methylation_adultsOnly.rda')
+> 
+> #### take best per meqtl
+> #sig = meqtl[!duplicated(meqtl$cpg),]
+> #
+> #tt = table(meqtl$cpg)
+> #sig$numSnps = tt[sig$cpg]
+> #dis = sapply(split(meqtl$disruptCpG, meqtl$cpg),sum)
+> #sig$disruptCpG = dis[sig$cpg]
+> #
+> #snprange = t(sapply(split(meqtl$snpPos, meqtl$cpg), range))
+> #snprange= snprange[sig$cpg,]
+> #sig$startSnpLD = snprange[,1]
+> #sig$endSnpLD = snprange[,2]
+> #sig$snpLDLength = snprange[,2]-snprange[,1]
+> #
+> #### add gene info
+> #library(bumphunter)
+> #library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+> #theTranscripts = annotateTranscripts(
+> #	TxDb.Hsapiens.UCSC.hg38.knownGene,codingOnly=TRUE)
+> #
+> #an = annotateNearest(map, theTranscripts)	
+> #map$nearestGene = as.character(theTranscripts$Gene)[an$subjectHits]
+> #map$nearestGeneDist = an$dist
+> 
+> #sig$nearestGene = map$nearestGene[match(sig$cpg, names(map))]	
+> #sig$nearestGeneDist = map$nearestGeneDist[match(sig$cpg, names(map))]	
+> #meqtl$nearestGene = map$nearestGene[match(meqtl$cpg, names(map))]	
+> #meqtl$nearestGeneDist = map$nearestGeneDist[match(meqtl$cpg, names(map))]	
+> #
+> ##### add fetal effect
+> #fIndex=which(pd$Age < 0)
+> #pdFetal= pd[fIndex,]
+> #pcaFetal = prcomp(t(p[,fIndex]))
+> #modFetal = model.matrix(~ pdFetal$snpPC1+
+> #	pdFetal$snpPC2 + pdFetal$snpPC3)
+> #nsvFetal = num.sv(p[,fIndex], modFetal)
+> #
+> #snpFetal = as.matrix(snp[match(sig$snps,rownames(snp)),fIndex])
+> #pFetal = as.matrix(p[sig$cpg,fIndex])
+> #outFetal = matrix(nrow = nrow(sig), nc = 3)
+> #for(j in 1:nrow(sig)) {
+> #	if(j %% 5000 == 0) cat(".")
+> #	outFetal[j,] = summary(lm(pFetal[j,]~snpFetal[j,] + 
+> #		cbind(modFetal[,-1], pcaFetal$x[,1:nsvFetal])))$coef[2,c(1,3,4)]
+> #}
+> #colnames(outFetal) = paste0("fetal_", c("slope","tstat","pval"))
+> #sig = cbind(sig, outFetal)
+> #sig$fetal_MAF = rowSums(snpFetal, na.rm=TRUE)/(2*rowSums(!is.na(snpFetal)))
+> #
+> #### add adult effect
+> #aIndex=which(pd$Age >13)
+> #pdAdult= pd[aIndex,]
+> #pcaAdult = prcomp(t(p[,aIndex]))
+> #modAdult = model.matrix(~ pdAdult$snpPC1+
+> #	pdAdult$snpPC2 + pdAdult$snpPC3)
+> #nsvAdult = num.sv(p[,aIndex], modAdult)
+> #
+> #snpAdult = as.matrix(snp[match(sig$snps,rownames(snp)),aIndex])
+> #pAdult = as.matrix(p[sig$cpg,aIndex])
+> #outAdult = matrix(nrow = nrow(sig), nc = 3)
+> #for(j in 1:nrow(sig)) {
+> #	if(j %% 5000 == 0) cat(".")
+> #	outAdult[j,] = summary(lm(pAdult[j,]~snpAdult[j,] + 
+> #		cbind(modAdult[,-1], pcaAdult$x[,1:nsvAdult])))$coef[2,c(1,3,4)]
+> #}
+> #colnames(outAdult) = paste0("adult_", c("slope","tstat","pval"))
+> #sig = cbind(sig, outAdult)
+> #sig$adult_MAF = rowSums(snpAdult, na.rm=TRUE)/(2*rowSums(!is.na(snpAdult)))
+> #
+> #
+> ### race MAF
+> #rIndexes=split(seq(along=pd2$Race), pd2$Race)
+> #mafRace = sapply(rIndexes, function(ii){
+> #	ssnp = as.matrix(snp2[sig$snps,ii])
+> #	rowSums(ssnp, na.rm=TRUE)/(2*rowSums(!is.na(ssnp)))
+> #})
+> #colnames(mafRace) = paste0(colnames(mafRace),"_inSampleMAF")
+> #sig = cbind(sig, mafRace)
+> #	
+> #save(sig, meqtl, compress=TRUE)
+> #
+> 
+> proc.time()
+    user   system  elapsed 
+10071.30 66453.50 76561.41 
