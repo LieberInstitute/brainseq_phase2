@@ -77,7 +77,7 @@ load_foo <- function(type) {
     return(rse)
 }
 
-load_span <- function(type, age) {
+load_span <- function(type) {
     load_file <- file.path(
         '/dcl01/lieber/ajaffe/lab/brainseq_phase2/brainspan',
         paste0('rse_span_', type, '.Rdata'))
@@ -95,15 +95,30 @@ load_span <- function(type, age) {
         rse <- rse_span_tx
     }
 
-    ## Keep the corresponding age group
-    if(age == 'adult') {
-        rse <- rse[, colData(rse)$Age >= 18]
-    } else if (age == 'fetal') {
-        rse <- rse[, colData(rse)$Age <= 0]
-    }
-
     print('Dimensions of the data used')
     print(dim(rse))
+
+    ## Add age linear splines
+    fetal <- ifelse(colData(rse)$Age < 0, 1,0)
+    birth <- colData(rse)$Age
+    birth[birth < 0] <- 0 # linear spline
+    infant <- colData(rse)$Age - 1
+    infant[infant < 0] <- 0 # linear spline
+    child <- colData(rse)$Age - 10
+    child[child < 0] <- 0 # linear spline
+    teen <- colData(rse)$Age - 20
+    teen[teen < 0] <- 0 # linear spline
+    adult <- colData(rse)$Age - 50
+    adult[adult < 0] <- 0 # linear spline
+
+    colData(rse)$fetal <- fetal
+    colData(rse)$birth <- birth
+    colData(rse)$infant <- infant
+    colData(rse)$child <- child
+    colData(rse)$teen <- teen
+
+    ## None are adult in the BrainSpan data set
+    colData(rse)$adult <- adult
 
     return(rse)
 }
@@ -359,30 +374,75 @@ which(rank(top$gene$adj.P.Val) == 1)
 
 pinfo <- subset(pcheck_both, type == 'gene')
 pinfo <- pinfo[order(pinfo$P.Bonf), ]
-pinfo <- pinfo[sign(pinfo$F) == sign(pinfo$span_F) & pinfo$span_P.Value < 0.05 & pinfo$P.Bonf < 0.000001, ]
+pinfo <- pinfo[sign(pinfo$F) == sign(pinfo$span_F) & pinfo$span_P.Value < 0.05 & pinfo$P.Bonf < 0.01, ]
 
 
-tocheck <- match(gsub('gene.', '', head(rownames(pinfo))), rownames(rse))
+tocheck <- match(gsub('gene.', '', head(rownames(pinfo), 100)), rownames(rse))
 tocheck
 
 
 ## Re-organize design before cleaningY
+protect <- grepl(':RegionHIPPO|RegionHIPPO:|Intercept', colnames(design))
+design <- cbind(design[, protect], design[, !protect])
 
-
-cleanedVoom <- cleaningY(exprsNorm$gene, design, 2)
+cleanedVoom <- cleaningY(exprsNorm$gene, design, sum(protect))
 
 i <- 1
-
 top$gene[tocheck[i], ]
 
+get_main <- function(i) {
+    j <- tocheck[i]
+    paste(with(rowRanges(rse)[j, ], paste(gencodeID, Symbol)), 'p-bonf', signif(pinfo$P.Bonf[i], 3))
+}
 
-plot(exprsNorm$gene[tocheck[i], ] ~ colData(rse)$Age, col = ifelse(colData(rse)$Region == 'HIPPO', 'blue', 'orange'))
-t.test(exprsNorm$gene[tocheck[i], ] ~ colData(rse)$Region)
+plot_age_mod <-
+    design[, c(
+        '(Intercept)',
+        'Age',
+        'RegionHIPPO',
+        'fetal',
+        'birth',
+        'infant',
+        'child',
+        'teen',
+        'adult'
+    )]
+p_cols <- ifelse(colData(rse)$Region == 'HIPPO', 'blue', 'orange')
+l_cols <- c('lightgoldenrod', 'light blue')
+age_brks <- c(-1, 0, 1, 10, 20, 50, 100)
 
-boxplot(cleanedVoom[tocheck[i], ] ~ colData(rse)$Region)
-t.test(cleanedVoom[tocheck[i], ] ~ colData(rse)$Region)
+pdf('pdf/top_gene_replicated_exprNorm.pdf', width = 14)
+for(i in 1:100) {
+    agePlotter(
+        exprsNorm$gene[tocheck[i],],
+        colData(rse)$Age,
+        pointColor = p_cols,
+        ageBreaks = age_brks,
+        mainText = get_main(i),
+        lineColor = l_cols,
+        mod = plot_age_mod,
+        ylab = 'Voom-normalized expression'
+    )
+    legend('bottom', c('DLPFC', 'HIPPO'), col = l_cols, lwd = 3, bty = 'n', ncol = 2)
+}
+dev.off()
 
-boxplot(assays(rse)$rpkm[which(rank(top$gene$adj.P.Val) == 2), ] ~ colData(rse)$Region)
+pdf('pdf/top_gene_replicated_cleanedVoom.pdf', width = 14)
+for(i in 1:100) {
+    agePlotter(
+        cleanedVoom[tocheck[i],],
+        colData(rse)$Age,
+        pointColor = p_cols,
+        ageBreaks = age_brks,
+        mainText = get_main(i),
+        lineColor = l_cols,
+        mod = plot_age_mod,
+        ylab = 'Voom-normalized expression with covariate effects removed'
+    )
+    legend('bottom', c('DLPFC', 'HIPPO'), col = l_cols, lwd = 3, bty = 'n', ncol = 2)
+}
+dev.off()
+
 
 
 ## Reproducibility information
