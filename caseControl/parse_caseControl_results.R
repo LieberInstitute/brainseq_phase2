@@ -11,6 +11,7 @@ outGene0_DLPFC = outGene0
 rm(outGene, outGene0)
 identical(rownames(outGene_DLPFC), rownames(outGene_HIPPO))
 
+
 ### compare
 sum(outGene_HIPPO$adj.P.Val < 0.05)
 sum(outGene_DLPFC$adj.P.Val < 0.05)
@@ -60,7 +61,21 @@ plot(outGene0_DLPFC$t, geneStats_DLPFC_Old$CMC_tstat_adj[mmEns])
 library(clusterProfiler)
 univ = as.character(outGene_HIPPO$Entrez[!is.na(outGene_HIPPO$Entrez)])
 
-sigGene_HIPPO = outGene_HIPPO[outGene_HIPPO$adj.P.Val < 0.1,]
+sigGene_HIPPO = outGene_HIPPO[outGene_HIPPO$adj.P.Val < 0.05,]
+table(outGene_DLPFC$P.Value[outGene_HIPPO$adj.P.Val < 0.05] < 0.05,
+		sign(outGene_DLPFC$t[outGene_HIPPO$adj.P.Val < 0.05]) == 
+		sign(sigGene_HIPPO$t) )
+which(outGene_DLPFC$P.Value[outGene_HIPPO$adj.P.Val < 0.05] < 0.05 &
+		sign(outGene_DLPFC$t[outGene_HIPPO$adj.P.Val < 0.05]) !=  
+			sign(sigGene_HIPPO$t) )
+
+
+table(outGene_DLPFC$adj.P.Val[outGene_HIPPO$adj.P.Val < 0.05] < 0.05,
+	sign(outGene_DLPFC$t[outGene_HIPPO$adj.P.Val < 0.05]) == 
+		sign(sigGene_HIPPO$t) )
+
+plot(sigGene_HIPPO$t, outGene_DLPFC$t[outGene_HIPPO$adj.P.Val < 0.05])
+
 geneList = split(sigGene_HIPPO$Entrez, sign(sigGene_HIPPO$logFC))
 names(geneList) = c("SZ<Cont", "SZ>Cont")
 geneList = lapply(geneList, function(x) as.character(x[!is.na(x)]))
@@ -69,4 +84,24 @@ goBP = compareCluster(geneList, fun = "enrichGO",
 	OrgDb = "org.Hs.eg.db", ont = "BP",universe = univ)
 goMF = compareCluster(geneList, fun = "enrichGO", 
 	OrgDb = "org.Hs.eg.db", ont = "MF",universe = univ)
+kegg = compareCluster(geneList, fun = "enrichKEGG", 
+	universe = univ)
+	
+## features?
+load("dxStats_hippo_filtered_qSVA.rda")
+length(unique(outExon$ensemblID[outExon$adj.P.Val < 0.05]))
+
+sigExon = outExon[outExon$adj.P.Val < 0.05,]
+
+geneList = split(sigExon$Entrez, sign(sigExon$logFC))
+names(geneList) = c("SZ<Cont", "SZ>Cont")
+geneList = lapply(geneList, function(x) as.character(x[!is.na(x)]))
+univ = unique(as.character(outExon$Entrez[!is.na(outExon$Entrez)]))
+
+goBP = compareCluster(geneList, fun = "enrichGO", 
+	OrgDb = "org.Hs.eg.db", ont = "BP",universe = univ)
+goMF = compareCluster(geneList, fun = "enrichGO", 
+	OrgDb = "org.Hs.eg.db", ont = "MF",universe = univ)
+kegg = compareCluster(geneList, fun = "enrichKEGG", 
+	universe = univ)
 	
