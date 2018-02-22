@@ -11,7 +11,7 @@ load_foo <- function(type, age) {
         paste0('rse_', type, '.Rdata'))
     stopifnot(file.exists(load_file))
     load(load_file)
-    
+
     ## Get the appropriate object
     if(type == 'gene') {
         rse <- rse_gene
@@ -24,16 +24,16 @@ load_foo <- function(type, age) {
     }
     ## Keep controls only
     rse <- rse[, colData(rse)$Dx == 'Control']
-    
+
     ## Keep the corresponding age group
     if(age == 'adult') {
         rse <- rse[, colData(rse)$Age >= 18]
     } else if (age == 'fetal') {
         rse <- rse[, colData(rse)$Age <= 0]
     }
-    
+
     ## Add mds info
-     load(file.path('/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data', 
+     load(file.path('/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data',
          'mds_extracted_from_BrainSeq_Phase2_RiboZero_Genotypes_n551.Rdata'))
     m <- match(colData(rse)$BrNum, rownames(mds))
     print('Number of missing brains in the MDS data')
@@ -45,21 +45,21 @@ load_foo <- function(type, age) {
     }
     rse <- rse[, !is.na(m)]
     colData(rse) <- cbind(colData(rse), mds[m[!is.na(m)], ])
-    
+
     ## Set as factor
     colData(rse)$Region <- relevel(factor(colData(rse)$Region), 'DLPFC')
     colData(rse)$Race <- relevel(factor(colData(rse)$Race), ref = 'CAUC')
     colData(rse)$Sex <- relevel(factor(colData(rse)$Sex), ref = 'F')
-    
+
     ## Add means
     colData(rse)$mean_mitoRate <- mean(colData(rse)$mitoRate)
     colData(rse)$mean_totalAssignedGene <- mean(colData(rse)$totalAssignedGene)
     colData(rse)$mean_rRNA_rate <- mean(colData(rse)$rRNA_rate)
     colData(rse)$mean_RIN <- mean(colData(rse)$RIN)
-    
+
     print('Dimensions of the data used')
     print(dim(rse))
-    
+
     return(rse)
 }
 
@@ -69,7 +69,7 @@ load_span <- function(type, age) {
         paste0('rse_span_', type, '.Rdata'))
     stopifnot(file.exists(load_file))
     load(load_file)
-    
+
     ## Get the appropriate object
     if(type == 'gene') {
         rse <- rse_span_gene
@@ -80,17 +80,17 @@ load_span <- function(type, age) {
     } else if (type == 'tx') {
         rse <- rse_span_tx
     }
-    
+
     ## Keep the corresponding age group
     if(age == 'adult') {
         rse <- rse[, colData(rse)$Age >= 18]
     } else if (age == 'fetal') {
         rse <- rse[, colData(rse)$Age <= 0]
     }
-    
+
     print('Dimensions of the data used')
     print(dim(rse))
-    
+
     return(rse)
 }
 
@@ -99,10 +99,10 @@ fm_mod <- ~Region + Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mea
 fm_mod0 <- ~Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN
 
 
-get_mods <- function(pd) {    
+get_mods <- function(pd) {
     mod = model.matrix(fm_mod, data=pd)
     mod0 = model.matrix(fm_mod0, data=pd)
-    
+
     return(list(mod = mod, mod0 = mod0))
 }
 
@@ -142,7 +142,7 @@ get_pcheck <- function(top_table) {
 
 pcheck <- get_pcheck(top)
 pcheck_span <- get_pcheck(top_span)
-pcheck_span_tmp <- pcheck_span[, -c(7, 8)]
+pcheck_span_tmp <- pcheck_span[, -which(colnames(pcheck_span) %in% c('global_fdr', 'global_bonf'))]
 colnames(pcheck_span_tmp) <- paste0('span_', colnames(pcheck_span_tmp))
 pcheck_both <- cbind(pcheck, pcheck_span_tmp)
 rm(pcheck_span_tmp)
@@ -154,7 +154,7 @@ rm(pcheck_span_tmp)
 p_summary <- function(pvar = 'FDR', cut = 0.05, pchk) {
     top_table <- split(pchk, paste0(pchk$age, '_', pchk$type))
 
-    num <- sapply(top_table, function(x) { 
+    num <- sapply(top_table, function(x) {
         if (pvar == 'FDR') {
             table(factor(x$adj.P.Val < cut, levels = c('FALSE', 'TRUE')))
         } else if (pvar == 'bonf') {
@@ -164,7 +164,7 @@ p_summary <- function(pvar = 'FDR', cut = 0.05, pchk) {
         } else if (pvar == 'global_fdr') {
             table(factor(x$global_fdr < cut, levels = c('FALSE', 'TRUE')))
         }
-        
+
     })
     perc <- sweep(num, 2, colSums(num), function(x, y) { round(x / y * 100, 2)} )
     res <- rbind(num, perc)
@@ -268,11 +268,13 @@ rep_span <- do.call(rbind, mapply(function(pvar, cut, type_sub, age_sub) {
 }, pvar = rep(rep(c('adj.P.Val', 'P.Bonf'), each = 6), 4 * 2), cut = rep(c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001), 2 * 4 * 2), type_sub = rep(rep(unique(pcheck_both$type), each = 6 * 2), 2), age_sub = rep(unique(pcheck_both$age), each = 4 * 6 * 2), SIMPLIFY = FALSE, USE.NAMES = FALSE))
 
 pdf('pdf/replication_exploration.pdf', width = 14)
-ggplot(rep_span, aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated / number_de, color = pvar)) + facet_grid(age ~ type) + ylab('Replication rate') + xlab('p-threshold') + geom_point() + theme_grey(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(color='P-value method')
+ggplot(rep_span, aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated / number_de, color = pvar)) + facet_grid(age ~ type) + ylab('Replication rate') + xlab('p-threshold') + geom_point() + theme_grey(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(color='P-value method') + ylim(c(0, 1))
 
 ggplot(rep_span, aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = number_de, color = pvar)) + facet_grid(age ~ type) + ylab('Number of DE features') + xlab('p-threshold') + geom_point() + theme_grey(base_size = 18) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + scale_y_log10() + labs(color='P-value method')
 
-ggplot(rep_span, aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated_sign / number_de, color = pvar)) + facet_grid(age ~ type) + ylab('Replication rate (sign only)') + xlab('p-threshold') + geom_point() + theme_grey(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(color='P-value method')
+ggplot(rep_span, aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = number_de / total * 100, color = pvar)) + facet_grid(age ~ type) + ylab('Percent of DE features') + xlab('p-threshold') + geom_point() + theme_grey(base_size = 18) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(color='P-value method') + ylim(c(0, 100))
+
+ggplot(rep_span, aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated_sign / number_de, color = pvar)) + facet_grid(age ~ type) + ylab('Replication rate (sign only)') + xlab('p-threshold') + geom_point() + theme_grey(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(color='P-value method') + ylim(c(0, 1))
 dev.off()
 
 
