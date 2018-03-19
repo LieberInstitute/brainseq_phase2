@@ -318,8 +318,71 @@ table('Global Bonf' = pcheck$global_bonf < 0.05, 'Bonf' = pcheck$P.Bonf < 0.05, 
 table('Global Bonf' = pcheck$global_bonf < 0.01, 'Bonf' = pcheck$P.Bonf < 0.01, 'Age group' = pcheck$age, 'Feature type' = pcheck$type)
 
 
+## Numbers for BrainSeq phase 2 update
+pinfo <- lapply(unique(pcheck_both$type), function(feat)  {
+    res <- lapply(unique(pcheck_both$age), function(agegrp) {
+        pinfo <- subset(pcheck_both, type == feat & age == agegrp)
+        pinfo[sign(pinfo$t) == sign(pinfo$span_t) & pinfo$span_P.Value < 0.05 & pinfo$P.Bonf < 0.01, ]
+    })
+    names(res) <- unique(pcheck_both$age)
+    return(res)
+})
+names(pinfo) <- unique(pcheck_both$type)
+sapply(pinfo, function(x) sapply(x, nrow))
+#       gene  exon  jxn   tx
+# adult 1612 15442 5561 1750
+# fetal   29    65   16    0
+
+rses <- lapply(unique(pcheck_both$type), function(type) {
+    load_foo(type, 'fetal')
+})
+names(rses) <- unique(pcheck_both$type)
+
+## If all of them are needed
+# rses <- lapply(unique(pcheck_both$type), function(type) {
+#     res <- lapply(unique(pcheck_both$age), function(agegrp) load_foo(type, agegrp))
+#     names(res) <- unique(pcheck_both$age)
+#     return(res)
+# })
 
 
+de_genes <- lapply(names(pinfo[[1]]), function(agegrp) {
+     res2 <- lapply(names(pinfo), function(feat) {
+        m <- match(gsub('.*gene.|.*exon.|.*jxn.|.*tx.', '', rownames(pinfo[[feat]][[agegrp]])), names(rses[[feat]]))
+        print(table(!is.na(m)))
+        if(feat %in% c('gene', 'exon')) {
+            res <- rowRanges(rses[[feat]])$gencodeID[m]
+        } else if(feat == 'jxn') {
+            res <- rowRanges(rses[[feat]])$gencodeGeneID[m]
+            res <- res[!is.na(res)]
+        } else {
+            res <- rowRanges(rses[[feat]])$gene_id[m]
+        }
+        return(unique(res))
+    })
+    names(res2) <- names(pinfo)
+    return(res2)
+})
+names(de_genes) <- names(pinfo$gene)
+sapply(de_genes, function(x) sapply(x, length))
+#      adult fetal
+# gene  1612    29
+# exon  2686    11
+# jxn   1897     7
+# tx    1438     0
+
+library(gplots)
+
+pdf('pdf/venn_de_features.pdf')
+venn(de_genes$adult) + title('DE features grouped by gene id (adult)')
+venn(de_genes$adult[c('gene', 'exon', 'jxn')]) + title('DE features grouped by gene id (adult)')
+venn(de_genes$fetal) + title('DE features grouped by gene id (fetal)')
+venn(de_genes$fetal[c('gene', 'exon', 'jxn')]) + title('DE features grouped by gene id (fetal)')
+dev.off()
+
+
+
+##
 rse_gene <- load_foo('gene', 'fetal')
 
 
