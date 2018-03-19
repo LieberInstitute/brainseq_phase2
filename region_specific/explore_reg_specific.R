@@ -404,16 +404,40 @@ rse_jxn_span <- load_span('jxn', 'adult')
 
 
 ## Reg specific model
+rse <- load_foo('gene', 'adult')
 design <- get_mods( colData(rse) )$mod
 
 min(top$adult_gene$adj.P.Val)
 which.min(top$adult_gene$adj.P.Val)
 which(rank(top$adult_gene$adj.P.Val) == 1)
 
-
-
-
 cleanedVoom <- cleaningY(exprsNorm$adult_gene, design, 2)
+
+
+pdf('pdf/top100_hits_adult_gene.pdf', useDingbats = FALSE)
+for(j in seq_len(100)) {
+    i <- seq_len(nrow(top$adult_gene))[order(top$adult_gene$adj.P.Val)][j]
+    set.seed(20180319)
+    boxplot(cleanedVoom[i, ] ~ colData(rse)$Region, ylab = 'Norm. Expr - adj covariates removed', main = paste(rownames(top$adult_gene)[i], rowRanges(rse)$Symbol[rowRanges(rse)$gencodeID == rownames(top$adult_gene)[i]], 'FDR', signif(top$adult_gene$adj.P.Val[i], 3)), col = c('lightgoldenrod', 'light blue'), ylim = abs(range(cleanedVoom[i, ])) * 1.05 * sign(range(cleanedVoom[i, ])), outline = FALSE)
+    points(cleanedVoom[i, ] ~ jitter(as.integer(colData(rse)$Region), 1), pch = 21, bg = c('darkgoldenrod2', 'steelblue1')[as.integer(colData(rse)$Region)])
+}
+dev.off()
+
+rse <- load_foo('gene', 'fetal')
+design <- get_mods( colData(rse) )$mod
+cleanedVoom <- cleaningY(exprsNorm$fetal_gene, design, 2)
+
+pdf('pdf/top100_hits_fetal_gene.pdf', useDingbats = FALSE)
+for(j in seq_len(100)) {
+    i <- seq_len(nrow(top$fetal_gene))[order(top$fetal_gene$adj.P.Val)][j]
+    set.seed(20180319)
+    boxplot(cleanedVoom[i, ] ~ colData(rse)$Region, ylab = 'Norm. Expr - adj covariates removed', main = paste(rownames(top$fetal_gene)[i], rowRanges(rse)$Symbol[rowRanges(rse)$gencodeID == rownames(top$fetal_gene)[i]], 'FDR', signif(top$fetal_gene$adj.P.Val[i], 3)), col = c('lightgoldenrod', 'light blue'), ylim = abs(range(cleanedVoom[i, ])) * 1.05 * sign(range(cleanedVoom[i, ])), outline = FALSE)
+    points(cleanedVoom[i, ] ~ jitter(as.integer(colData(rse)$Region), 1), pch = 21, bg = c('darkgoldenrod2', 'steelblue1')[as.integer(colData(rse)$Region)])
+}
+dev.off()
+
+
+
 
 
 top$adult_gene[which(rank(top$adult_gene$adj.P.Val) == 1), ]
