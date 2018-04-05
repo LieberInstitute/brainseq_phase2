@@ -59,7 +59,26 @@ cleanedVoom <- cleaningY(exprsNorm[[opt$type]], design, sum(protect))
 
 get_main <- function(i) {
     j <- tocheck[i]
-    paste(with(rowRanges(rse)[j, ], paste(gencodeID, Symbol)), 'p-bonf', signif(pinfo$P.Bonf[i], 3))
+    if(opt$type %in% c('gene', 'exon')) {
+        res <- with(rowRanges(rse)[j, ], paste(gencodeID, Symbol))
+    } else if(opt$type == 'jxn') {
+        res <- with(rowRanges(rse)[j, ], paste(gencodeGeneID, Symbol))
+    } else {
+        res <- with(rowRanges(rse)[j, ], paste(gene_id, gene_name))
+    }
+    res <- paste(res, 'p-bonf', signif(pinfo$P.Bonf[i], 3))
+    return(res)
+}
+
+get_ylab <- function(type, cleaned = FALSE) {
+    if(type %in% c('gene', 'exon', 'jxn')) {
+        res <- 'Voom-normalized expression'
+    } else {
+        res <- 'TPM'
+    }
+
+    if(cleaned) res <- paste(res, 'with covariate effects removed')
+    return(res)
 }
 
 plot_age_mod <-
@@ -88,7 +107,7 @@ for(i in 1:100) {
         mainText = get_main(i),
         lineColor = l_cols,
         mod = plot_age_mod,
-        ylab = 'Voom-normalized expression'
+        ylab = get_ylab(opt$type)
     )
     legend('bottom', c('DLPFC', 'HIPPO'), col = l_cols, lwd = 3, bty = 'n', ncol = 2)
 }
@@ -104,7 +123,7 @@ for(i in 1:100) {
         mainText = get_main(i),
         lineColor = l_cols,
         mod = plot_age_mod,
-        ylab = 'Voom-normalized expression with covariate effects removed'
+        ylab = get_ylab(opt$type, cleaned = TRUE)
     )
     legend('bottom', c('DLPFC', 'HIPPO'), col = l_cols, lwd = 3, bty = 'n', ncol = 2)
 }

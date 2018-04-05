@@ -1,3 +1,7 @@
+# qrsh -l bluejay,mem_free=150G,h_vmem=150G,h_fsize=100G
+# mkdir -p logs
+# Rscript explore_limma_dev.R > logs/explore_limma_dev.txt 2>&1
+
 library('limma')
 library('SummarizedExperiment')
 library('jaffelab')
@@ -5,6 +9,7 @@ library('devtools')
 library('ggplot2')
 library('gplots')
 library('VennDiagram')
+library('RColorBrewer')
 
 source('load_funs.R')
 dir.create('rda', showWarnings = FALSE)
@@ -13,13 +18,17 @@ dir.create('pdf', showWarnings = FALSE)
 ## Load BrainSeq model results
 if(!file.exists('rda/raw.Rdata')) {
     raw <- lapply(c('gene', 'exon', 'jxn', 'tx'), function(type) {
-        load(paste0('rda/limma_dev_interaction_', type, '.Rdata'))
+        f <- paste0('rda/limma_dev_interaction_', type, '.Rdata')
+        message(paste(Sys.time(), 'loading', f))
+        load(f, verbose = TRUE)
         top$type <- type
         return(list(top = top, fit = fit, exprsNorm = exprsNorm))
     })
     names(raw) <- c('gene', 'exon', 'jxn', 'tx')
+    message(paste(Sys.time(), 'saving rda/raw.Rdata'))
     save(raw, file = 'rda/raw.Rdata')
 } else {
+    message(paste(Sys.time(), 'loading rda/raw.Rdata'))
     load('rda/raw.Rdata', verbose = TRUE)
 }
 
@@ -30,13 +39,17 @@ exprsNorm <- lapply(raw, '[[', 'exprsNorm')
 ## Load BrainSpan model results
 if(!file.exists('rda/raw_span.Rdata')) {
     raw_span <- lapply(c('gene', 'exon', 'jxn', 'tx'), function(type) {
-        load(paste0('rda/span_limma_dev_interaction_', type, '.Rdata'))
+        f <- paste0('rda/span_limma_dev_interaction_', type, '.Rdata')
+        message(paste(Sys.time(), 'loading', f))
+        load(f, verbose = TRUE)
         top$type <- type
         return(list(top = top, fit = fit, exprsNorm = exprsNorm))
     })
     names(raw_span) <- c('gene', 'exon', 'jxn', 'tx')
+    message(paste(Sys.time(), 'saving rda/raw_span.Rdata'))
     save(raw_span, file = 'rda/raw_span.Rdata')
 } else {
+    message(paste(Sys.time(), 'loading rda/raw_span.Rdata'))
     load('rda/raw_span.Rdata', verbose = TRUE)
 }
 
@@ -54,8 +67,6 @@ get_pcheck <- function(top_table) {
     pcheck$global_bonf <- p.adjust(pcheck$P.Value, 'bonferroni')
     return(pcheck)
 }
-
-
 if(!file.exists('rda/pcheck_both.Rdata')) {
     pcheck <- get_pcheck(top)
     pcheck_span <- get_pcheck(top_span)
@@ -65,9 +76,9 @@ if(!file.exists('rda/pcheck_both.Rdata')) {
     rm(pcheck_span_tmp)
     save(pcheck_both, file = 'rda/pcheck_both.Rdata')
 } else {
+    message(paste(Sys.time(), 'loading rda/pcheck_both.Rdata'))
     load('rda/pcheck_both.Rdata', verbose = TRUE)
 }
-
 
 p_summary <- function(pvar = 'FDR', cut = 0.05, pchk) {
     top_table <- split(pchk, pchk$type)
@@ -102,12 +113,12 @@ p_summ_run <- function(pchk) {
         SIMPLIFY = FALSE, USE.NAMES = FALSE))
 }
 
-
 if(!file.exists('rda/p_sum.Rdata')) {
     p_sum <- p_summ_run(pcheck)
     p_sum_span <- p_summ_run(pcheck_span)
     save(p_sum, p_sum_span, file = 'rda/p_sum.Rdata')
 } else {
+    message(paste(Sys.time(), 'loading rda/p_sum.Rdata'))
     load('rda/p_sum.Rdata', verbose = TRUE)
 }
 
@@ -164,7 +175,7 @@ dev.off()
 
 
 ## Replication (p < 0.05) & same direction
-if(!file.exists(rda/rep_span.Rdata)) {
+if(!file.exists('rda/rep_span.Rdata')) {
     rep_span <- do.call(rbind, mapply(function(pvar, cut, type_sub) {
     pinfo <- subset(pcheck_both, type == type_sub)
     vars <- gsub('span_', '', colnames(pcheck_both)[grep('Region', colnames(pcheck_both))])
@@ -178,6 +189,7 @@ if(!file.exists(rda/rep_span.Rdata)) {
 rep_span$term_clean <- tolower(gsub('\\.|RegionHIPPO', '', rep_span$term))
     save(rep_span, file = 'rda/rep_span.Rdata')
 } else {
+    message(paste(Sys.time(), 'rda/rep_span.Rdata'))
     load('rda/rep_span.Rdata', verbose = TRUE)
 }
 
@@ -193,6 +205,15 @@ ggplot(rep_span, aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01,
 
 ggplot(rep_span, aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated_sign / number_de, color = pvar)) + facet_grid(term_clean ~ type) + ylab('Replication rate (sign only)') + xlab('p-threshold') + geom_point() + theme_grey(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(color='P-value method') + ylim(c(0, 1))
 dev.off()
+
+
+pdf('pdf/replication_exploration_subset.pdf', width = 14, height =  10, useDingbats = FALSE)
+
+ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated / number_de)) + facet_grid(type ~ term_clean) + ylab('Replication rate') + xlab('p-threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylim(c(0, 1))
+
+
+dev.off()
+
 
 
 ## Explore some of the adjustment variables
@@ -235,13 +256,6 @@ table('Global Bonf' = pcheck$global_bonf < 0.01, 'Bonf' = pcheck$P.Bonf < 0.01, 
 
 
 
-
-
-
-
-
-
-
 ## Numbers for BOG2018 abstract
 pinfo <- lapply(unique(pcheck_both$type), function(feat)  {
     pinfo <- subset(pcheck_both, type == feat)
@@ -273,14 +287,27 @@ if(!file.exists('rda/de_genes.Rdata')) {
     sapply(de_genes, length)
     save(pinfo, de_genes, file = 'rda/de_genes.Rdata')
 } else {
+    message(paste(Sys.time(), 'loading rda/de_genes.Rdata'))
     load('rda/de_genes.Rdata', verbose = TRUE)
 }
 
-
+## Pretty venn code
+venn_cols <- brewer.pal('Set1', n = 4)
+names(venn_cols) <- names(de_genes)
+make_venn <- function(genes, title = 'DE features grouped by gene id') {
+    v <- venn.diagram(genes, filename = NULL,
+        main = title,
+        col = 'transparent', fill = venn_cols[names(genes)],
+        alpha = 0.5, margin = 0,
+        main.cex = 2, cex = 2, cat.fontcase = 'bold', cat.cex = 2,
+        cat.col = venn_cols[names(genes)])
+    grid.newpage()
+    grid.draw(v)
+}
 
 pdf('pdf/venn_de_features.pdf', useDingbats = FALSE)
-venn(de_genes) + title('DE features grouped by gene id')
-venn(de_genes[c('gene', 'exon', 'jxn')]) + title('DE features grouped by gene id')
+make_venn(de_genes)
+make_venn(de_genes[c('gene', 'exon', 'jxn')])
 dev.off()
 
 
@@ -305,13 +332,16 @@ if(!file.exists('rda/case_genes.Rdata')) {
     names(case_genes) <- names(pinfo)
     save(case_genes, file = 'rda/case_genes.Rdata')
 } else {
+    message(paste(Sys.time(), 'loading rda/case_genes.Rdata'))
     load('rda/case_genes.Rdata', verbose = TRUE)
 }
 sapply(case_genes, length)
 
+
+
 pdf('pdf/venn_de_features_caseControl.pdf', useDingbats = FALSE)
-venn(case_genes) + title('DE features grouped by gene id')
-venn(case_genes[c('gene', 'exon', 'jxn')]) + title('DE features grouped by gene id')
+make_venn(case_genes)
+make_venn(case_genes[c('gene', 'exon', 'jxn')])
 dev.off()
 
 
@@ -336,14 +366,15 @@ if(!file.exists('rda/me_genes.Rdata')) {
     names(me_genes) <- names(pinfo)
     save(me_genes, file = 'rda/me_genes.Rdata')
 } else {
+    message(paste(Sys.time(), 'loading rda/me_genes.Rdata'))
     load('rda/me_genes.Rdata', verbose = TRUE)
 }
 sapply(me_genes, length)
 length(unique(unlist(me_genes[c('gene', 'exon', 'jxn')])))
 
 pdf('pdf/venn_eQTL_interaction.pdf', useDingbats = FALSE)
-venn(me_genes) + title('eQTLs grouped by gene id')
-venn(me_genes[c('gene', 'exon', 'jxn')]) + title('eQTLs grouped by gene id')
+make_venn(me_genes, title = 'eQTLs grouped by gene id')
+make_venn(me_genes[c('gene', 'exon', 'jxn')], title = 'eQTLs grouped by gene id')
 dev.off()
 
 
@@ -373,12 +404,13 @@ if(!file.exists('rda/in_risk.Rdata')) {
         names(res) <- eqtl$gene[eqtl$FDR < 0.01]
         return(res)
     })
-        qtls <- lapply(me, function(eqtl) {
+    qtls <- lapply(me, function(eqtl) {
         eqtl$snps[eqtl$FDR < 0.01]
     })
 
     save(in_risk, in_riskFDR, qtls, file = 'rda/in_risk.Rdata')
 } else {
+    message(paste(Sys.time(), 'loading rda/in_risk.Rdata'))
     load('rda/in_risk.Rdata', verbose = TRUE)
 }
 
@@ -390,13 +422,13 @@ sapply(in_risk, mean) * 100
 sapply(in_riskFDR, sum)
 sapply(in_riskFDR, mean) * 100
 
+pdf('pdf/venn_eQTL_interaction_bySNP.pdf', useDingbats = FALSE)
+make_venn(qtls, title = 'eQTLs grouped by SNP id')
+make_venn(qtls[c('gene', 'exon', 'jxn')], title = 'eQTLs grouped by SNP id')
+dev.off()
 
-# venn(qtls)
-# venn(qtls[c('gene', 'exon', 'jxn')])
 qtl_v <- venn(qtls[c('gene', 'exon', 'jxn')], show.plot = FALSE)
 sum(sapply(attr(qtl_v, 'intersections'), length))
-
-
 
 
 sapply(in_riskFDR, sum) / sapply(in_risk, sum) / ( sapply(in_riskFDR, length) /  sapply(in_risk, length))
