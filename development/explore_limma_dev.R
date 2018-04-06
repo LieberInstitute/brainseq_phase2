@@ -650,6 +650,11 @@ pdf('pdf/go_all_me_genes_fdr05.pdf', width = 14, height = 8, useDingbats = FALSE
 plot_go(go_me_genes_fdr05, cat = NULL)
 dev.off()
 
+
+## Volcano plots
+
+
+
 ## Reproducibility information
 print('Reproducibility information:')
 Sys.time()
@@ -661,5 +666,6 @@ session_info()
 ## Re-loading
 f <- dir('rda', full.names = TRUE)
 f <- f[!grepl('limma', f)]
-sapply(f, function(x) { load(x, verbose = TRUE)})
+for(ff in f) load(ff, verbose = TRUE)
+rm(ff, f)
 
