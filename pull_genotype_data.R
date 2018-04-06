@@ -92,3 +92,4 @@ rownames(mds)[ii] = colnames(snp)[ii]= "Br1061"
 ### save
 save(mds, snp, snpMap, compress=TRUE,
 	file = "genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n551.rda")
+save(mds,file= "genotype_data/BrainSeq_Phase2_RiboZero_MDS_n551.rda")

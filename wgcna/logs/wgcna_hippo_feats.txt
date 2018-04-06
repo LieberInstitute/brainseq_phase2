@@ -1,0 +1,3040 @@
+**** Job starts ****
+Thu Mar 15 15:18:57 EDT 2018
+Loading required package: rafalib
+Loading required package: methods
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ, clusterExport, clusterMap, parApply, parCapply, parLapply, parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, cbind, colMeans, colnames, colSums, do.call, duplicated, eval, evalq, Filter, Find, get, grep, grepl, intersect, is.unsorted, lapply, lengths,
+    Map, mapply, match, mget, order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank, rbind, Reduce, rowMeans, rownames, rowSums, sapply, setdiff, sort, table, tapply, union, unique,
+    unsplit, which, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:base’:
+
+    expand.grid
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with 'browseVignettes()'. To cite Bioconductor, see 'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: DelayedArray
+Loading required package: matrixStats
+
+Attaching package: ‘matrixStats’
+
+The following objects are masked from ‘package:Biobase’:
+
+    anyMissing, rowMedians
+
+
+Attaching package: ‘DelayedArray’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+
+The following object is masked from ‘package:base’:
+
+    apply
+
+Loading required package: mgcv
+Loading required package: nlme
+
+Attaching package: ‘nlme’
+
+The following object is masked from ‘package:IRanges’:
+
+    collapse
+
+This is mgcv 1.8-22. For overview type 'help("mgcv-package")'.
+Loading required package: genefilter
+
+Attaching package: ‘genefilter’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    rowSds, rowVars
+
+Loading required package: BiocParallel
+Loading required package: limma
+
+Attaching package: ‘limma’
+
+The following object is masked from ‘package:BiocGenerics’:
+
+    plotMA
+
+Setting options('download.file.method.GEOquery'='auto')
+Setting options('GEOquery.inmemory.gpl'=FALSE)
+Loading required package: dynamicTreeCut
+Loading required package: fastcluster
+
+Attaching package: ‘fastcluster’
+
+The following object is masked from ‘package:stats’:
+
+    hclust
+
+
+==========================================================================
+*
+*  Package WGCNA 1.61 loaded.
+*
+*    Important note: It appears that your system supports multi-threading,
+*    but it is not enabled within WGCNA in R. 
+*    To allow multi-threading within WGCNA with all available cores, use 
+*
+*          allowWGCNAThreads()
+*
+*    within R. Use disableWGCNAThreads() to disable threading if necessary.
+*    Alternatively, set the following environment variable on your system:
+*
+*          ALLOW_WGCNA_THREADS=<number_of_processors>
+*
+*    for example 
+*
+*          ALLOW_WGCNA_THREADS=24
+*
+*    To set the environment variable in linux bash shell, type 
+*
+*           export ALLOW_WGCNA_THREADS=24
+*
+*     before running R. Other operating systems or shells will
+*     have a similar command to achieve the same aim.
+*
+==========================================================================
+
+
+
+Attaching package: ‘WGCNA’
+
+The following object is masked from ‘package:IRanges’:
+
+    cor
+
+The following object is masked from ‘package:S4Vectors’:
+
+    cor
+
+The following object is masked from ‘package:stats’:
+
+    cor
+
+[1] 0.3000005
+[1] 0.4600014
+Loading objects:
+  exonExprsAdj2
+  exonMap2
+Loading objects:
+  jExprsAdj2
+  jMap2
+ [1] 53.100  7.370  6.080  2.580  2.150  1.720  1.500  1.360  1.170  1.050  0.846  0.782  0.693  0.635  0.551  0.485  0.481  0.456
+pickSoftThreshold: will use block size 211.
+ pickSoftThreshold: calculating connectivity for given powers...
+   ..working on genes 1 through 211 of 211455
+   ..working on genes 212 through 422 of 211455
+   ..working on genes 423 through 633 of 211455
+   ..working on genes 634 through 844 of 211455
+   ..working on genes 845 through 1055 of 211455
+   ..working on genes 1056 through 1266 of 211455
+   ..working on genes 1267 through 1477 of 211455
+   ..working on genes 1478 through 1688 of 211455
+   ..working on genes 1689 through 1899 of 211455
+   ..working on genes 1900 through 2110 of 211455
+   ..working on genes 2111 through 2321 of 211455
+   ..working on genes 2322 through 2532 of 211455
+   ..working on genes 2533 through 2743 of 211455
+   ..working on genes 2744 through 2954 of 211455
+   ..working on genes 2955 through 3165 of 211455
+   ..working on genes 3166 through 3376 of 211455
+   ..working on genes 3377 through 3587 of 211455
+   ..working on genes 3588 through 3798 of 211455
+   ..working on genes 3799 through 4009 of 211455
+   ..working on genes 4010 through 4220 of 211455
+   ..working on genes 4221 through 4431 of 211455
+   ..working on genes 4432 through 4642 of 211455
+   ..working on genes 4643 through 4853 of 211455
+   ..working on genes 4854 through 5064 of 211455
+   ..working on genes 5065 through 5275 of 211455
+   ..working on genes 5276 through 5486 of 211455
+   ..working on genes 5487 through 5697 of 211455
+   ..working on genes 5698 through 5908 of 211455
+   ..working on genes 5909 through 6119 of 211455
+   ..working on genes 6120 through 6330 of 211455
+   ..working on genes 6331 through 6541 of 211455
+   ..working on genes 6542 through 6752 of 211455
+   ..working on genes 6753 through 6963 of 211455
+   ..working on genes 6964 through 7174 of 211455
+   ..working on genes 7175 through 7385 of 211455
+   ..working on genes 7386 through 7596 of 211455
+   ..working on genes 7597 through 7807 of 211455
+   ..working on genes 7808 through 8018 of 211455
+   ..working on genes 8019 through 8229 of 211455
+   ..working on genes 8230 through 8440 of 211455
+   ..working on genes 8441 through 8651 of 211455
+   ..working on genes 8652 through 8862 of 211455
+   ..working on genes 8863 through 9073 of 211455
+   ..working on genes 9074 through 9284 of 211455
+   ..working on genes 9285 through 9495 of 211455
+   ..working on genes 9496 through 9706 of 211455
+   ..working on genes 9707 through 9917 of 211455
+   ..working on genes 9918 through 10128 of 211455
+   ..working on genes 10129 through 10339 of 211455
+   ..working on genes 10340 through 10550 of 211455
+   ..working on genes 10551 through 10761 of 211455
+   ..working on genes 10762 through 10972 of 211455
+   ..working on genes 10973 through 11183 of 211455
+   ..working on genes 11184 through 11394 of 211455
+   ..working on genes 11395 through 11605 of 211455
+   ..working on genes 11606 through 11816 of 211455
+   ..working on genes 11817 through 12027 of 211455
+   ..working on genes 12028 through 12238 of 211455
+   ..working on genes 12239 through 12449 of 211455
+   ..working on genes 12450 through 12660 of 211455
+   ..working on genes 12661 through 12871 of 211455
+   ..working on genes 12872 through 13082 of 211455
+   ..working on genes 13083 through 13293 of 211455
+   ..working on genes 13294 through 13504 of 211455
+   ..working on genes 13505 through 13715 of 211455
+   ..working on genes 13716 through 13926 of 211455
+   ..working on genes 13927 through 14137 of 211455
+   ..working on genes 14138 through 14348 of 211455
+   ..working on genes 14349 through 14559 of 211455
+   ..working on genes 14560 through 14770 of 211455
+   ..working on genes 14771 through 14981 of 211455
+   ..working on genes 14982 through 15192 of 211455
+   ..working on genes 15193 through 15403 of 211455
+   ..working on genes 15404 through 15614 of 211455
+   ..working on genes 15615 through 15825 of 211455
+   ..working on genes 15826 through 16036 of 211455
+   ..working on genes 16037 through 16247 of 211455
+   ..working on genes 16248 through 16458 of 211455
+   ..working on genes 16459 through 16669 of 211455
+   ..working on genes 16670 through 16880 of 211455
+   ..working on genes 16881 through 17091 of 211455
+   ..working on genes 17092 through 17302 of 211455
+   ..working on genes 17303 through 17513 of 211455
+   ..working on genes 17514 through 17724 of 211455
+   ..working on genes 17725 through 17935 of 211455
+   ..working on genes 17936 through 18146 of 211455
+   ..working on genes 18147 through 18357 of 211455
+   ..working on genes 18358 through 18568 of 211455
+   ..working on genes 18569 through 18779 of 211455
+   ..working on genes 18780 through 18990 of 211455
+   ..working on genes 18991 through 19201 of 211455
+   ..working on genes 19202 through 19412 of 211455
+   ..working on genes 19413 through 19623 of 211455
+   ..working on genes 19624 through 19834 of 211455
+   ..working on genes 19835 through 20045 of 211455
+   ..working on genes 20046 through 20256 of 211455
+   ..working on genes 20257 through 20467 of 211455
+   ..working on genes 20468 through 20678 of 211455
+   ..working on genes 20679 through 20889 of 211455
+   ..working on genes 20890 through 21100 of 211455
+   ..working on genes 21101 through 21311 of 211455
+   ..working on genes 21312 through 21522 of 211455
+   ..working on genes 21523 through 21733 of 211455
+   ..working on genes 21734 through 21944 of 211455
+   ..working on genes 21945 through 22155 of 211455
+   ..working on genes 22156 through 22366 of 211455
+   ..working on genes 22367 through 22577 of 211455
+   ..working on genes 22578 through 22788 of 211455
+   ..working on genes 22789 through 22999 of 211455
+   ..working on genes 23000 through 23210 of 211455
+   ..working on genes 23211 through 23421 of 211455
+   ..working on genes 23422 through 23632 of 211455
+   ..working on genes 23633 through 23843 of 211455
+   ..working on genes 23844 through 24054 of 211455
+   ..working on genes 24055 through 24265 of 211455
+   ..working on genes 24266 through 24476 of 211455
+   ..working on genes 24477 through 24687 of 211455
+   ..working on genes 24688 through 24898 of 211455
+   ..working on genes 24899 through 25109 of 211455
+   ..working on genes 25110 through 25320 of 211455
+   ..working on genes 25321 through 25531 of 211455
+   ..working on genes 25532 through 25742 of 211455
+   ..working on genes 25743 through 25953 of 211455
+   ..working on genes 25954 through 26164 of 211455
+   ..working on genes 26165 through 26375 of 211455
+   ..working on genes 26376 through 26586 of 211455
+   ..working on genes 26587 through 26797 of 211455
+   ..working on genes 26798 through 27008 of 211455
+   ..working on genes 27009 through 27219 of 211455
+   ..working on genes 27220 through 27430 of 211455
+   ..working on genes 27431 through 27641 of 211455
+   ..working on genes 27642 through 27852 of 211455
+   ..working on genes 27853 through 28063 of 211455
+   ..working on genes 28064 through 28274 of 211455
+   ..working on genes 28275 through 28485 of 211455
+   ..working on genes 28486 through 28696 of 211455
+   ..working on genes 28697 through 28907 of 211455
+   ..working on genes 28908 through 29118 of 211455
+   ..working on genes 29119 through 29329 of 211455
+   ..working on genes 29330 through 29540 of 211455
+   ..working on genes 29541 through 29751 of 211455
+   ..working on genes 29752 through 29962 of 211455
+   ..working on genes 29963 through 30173 of 211455
+   ..working on genes 30174 through 30384 of 211455
+   ..working on genes 30385 through 30595 of 211455
+   ..working on genes 30596 through 30806 of 211455
+   ..working on genes 30807 through 31017 of 211455
+   ..working on genes 31018 through 31228 of 211455
+   ..working on genes 31229 through 31439 of 211455
+   ..working on genes 31440 through 31650 of 211455
+   ..working on genes 31651 through 31861 of 211455
+   ..working on genes 31862 through 32072 of 211455
+   ..working on genes 32073 through 32283 of 211455
+   ..working on genes 32284 through 32494 of 211455
+   ..working on genes 32495 through 32705 of 211455
+   ..working on genes 32706 through 32916 of 211455
+   ..working on genes 32917 through 33127 of 211455
+   ..working on genes 33128 through 33338 of 211455
+   ..working on genes 33339 through 33549 of 211455
+   ..working on genes 33550 through 33760 of 211455
+   ..working on genes 33761 through 33971 of 211455
+   ..working on genes 33972 through 34182 of 211455
+   ..working on genes 34183 through 34393 of 211455
+   ..working on genes 34394 through 34604 of 211455
+   ..working on genes 34605 through 34815 of 211455
+   ..working on genes 34816 through 35026 of 211455
+   ..working on genes 35027 through 35237 of 211455
+   ..working on genes 35238 through 35448 of 211455
+   ..working on genes 35449 through 35659 of 211455
+   ..working on genes 35660 through 35870 of 211455
+   ..working on genes 35871 through 36081 of 211455
+   ..working on genes 36082 through 36292 of 211455
+   ..working on genes 36293 through 36503 of 211455
+   ..working on genes 36504 through 36714 of 211455
+   ..working on genes 36715 through 36925 of 211455
+   ..working on genes 36926 through 37136 of 211455
+   ..working on genes 37137 through 37347 of 211455
+   ..working on genes 37348 through 37558 of 211455
+   ..working on genes 37559 through 37769 of 211455
+   ..working on genes 37770 through 37980 of 211455
+   ..working on genes 37981 through 38191 of 211455
+   ..working on genes 38192 through 38402 of 211455
+   ..working on genes 38403 through 38613 of 211455
+   ..working on genes 38614 through 38824 of 211455
+   ..working on genes 38825 through 39035 of 211455
+   ..working on genes 39036 through 39246 of 211455
+   ..working on genes 39247 through 39457 of 211455
+   ..working on genes 39458 through 39668 of 211455
+   ..working on genes 39669 through 39879 of 211455
+   ..working on genes 39880 through 40090 of 211455
+   ..working on genes 40091 through 40301 of 211455
+   ..working on genes 40302 through 40512 of 211455
+   ..working on genes 40513 through 40723 of 211455
+   ..working on genes 40724 through 40934 of 211455
+   ..working on genes 40935 through 41145 of 211455
+   ..working on genes 41146 through 41356 of 211455
+   ..working on genes 41357 through 41567 of 211455
+   ..working on genes 41568 through 41778 of 211455
+   ..working on genes 41779 through 41989 of 211455
+   ..working on genes 41990 through 42200 of 211455
+   ..working on genes 42201 through 42411 of 211455
+   ..working on genes 42412 through 42622 of 211455
+   ..working on genes 42623 through 42833 of 211455
+   ..working on genes 42834 through 43044 of 211455
+   ..working on genes 43045 through 43255 of 211455
+   ..working on genes 43256 through 43466 of 211455
+   ..working on genes 43467 through 43677 of 211455
+   ..working on genes 43678 through 43888 of 211455
+   ..working on genes 43889 through 44099 of 211455
+   ..working on genes 44100 through 44310 of 211455
+   ..working on genes 44311 through 44521 of 211455
+   ..working on genes 44522 through 44732 of 211455
+   ..working on genes 44733 through 44943 of 211455
+   ..working on genes 44944 through 45154 of 211455
+   ..working on genes 45155 through 45365 of 211455
+   ..working on genes 45366 through 45576 of 211455
+   ..working on genes 45577 through 45787 of 211455
+   ..working on genes 45788 through 45998 of 211455
+   ..working on genes 45999 through 46209 of 211455
+   ..working on genes 46210 through 46420 of 211455
+   ..working on genes 46421 through 46631 of 211455
+   ..working on genes 46632 through 46842 of 211455
+   ..working on genes 46843 through 47053 of 211455
+   ..working on genes 47054 through 47264 of 211455
+   ..working on genes 47265 through 47475 of 211455
+   ..working on genes 47476 through 47686 of 211455
+   ..working on genes 47687 through 47897 of 211455
+   ..working on genes 47898 through 48108 of 211455
+   ..working on genes 48109 through 48319 of 211455
+   ..working on genes 48320 through 48530 of 211455
+   ..working on genes 48531 through 48741 of 211455
+   ..working on genes 48742 through 48952 of 211455
+   ..working on genes 48953 through 49163 of 211455
+   ..working on genes 49164 through 49374 of 211455
+   ..working on genes 49375 through 49585 of 211455
+   ..working on genes 49586 through 49796 of 211455
+   ..working on genes 49797 through 50007 of 211455
+   ..working on genes 50008 through 50218 of 211455
+   ..working on genes 50219 through 50429 of 211455
+   ..working on genes 50430 through 50640 of 211455
+   ..working on genes 50641 through 50851 of 211455
+   ..working on genes 50852 through 51062 of 211455
+   ..working on genes 51063 through 51273 of 211455
+   ..working on genes 51274 through 51484 of 211455
+   ..working on genes 51485 through 51695 of 211455
+   ..working on genes 51696 through 51906 of 211455
+   ..working on genes 51907 through 52117 of 211455
+   ..working on genes 52118 through 52328 of 211455
+   ..working on genes 52329 through 52539 of 211455
+   ..working on genes 52540 through 52750 of 211455
+   ..working on genes 52751 through 52961 of 211455
+   ..working on genes 52962 through 53172 of 211455
+   ..working on genes 53173 through 53383 of 211455
+   ..working on genes 53384 through 53594 of 211455
+   ..working on genes 53595 through 53805 of 211455
+   ..working on genes 53806 through 54016 of 211455
+   ..working on genes 54017 through 54227 of 211455
+   ..working on genes 54228 through 54438 of 211455
+   ..working on genes 54439 through 54649 of 211455
+   ..working on genes 54650 through 54860 of 211455
+   ..working on genes 54861 through 55071 of 211455
+   ..working on genes 55072 through 55282 of 211455
+   ..working on genes 55283 through 55493 of 211455
+   ..working on genes 55494 through 55704 of 211455
+   ..working on genes 55705 through 55915 of 211455
+   ..working on genes 55916 through 56126 of 211455
+   ..working on genes 56127 through 56337 of 211455
+   ..working on genes 56338 through 56548 of 211455
+   ..working on genes 56549 through 56759 of 211455
+   ..working on genes 56760 through 56970 of 211455
+   ..working on genes 56971 through 57181 of 211455
+   ..working on genes 57182 through 57392 of 211455
+   ..working on genes 57393 through 57603 of 211455
+   ..working on genes 57604 through 57814 of 211455
+   ..working on genes 57815 through 58025 of 211455
+   ..working on genes 58026 through 58236 of 211455
+   ..working on genes 58237 through 58447 of 211455
+   ..working on genes 58448 through 58658 of 211455
+   ..working on genes 58659 through 58869 of 211455
+   ..working on genes 58870 through 59080 of 211455
+   ..working on genes 59081 through 59291 of 211455
+   ..working on genes 59292 through 59502 of 211455
+   ..working on genes 59503 through 59713 of 211455
+   ..working on genes 59714 through 59924 of 211455
+   ..working on genes 59925 through 60135 of 211455
+   ..working on genes 60136 through 60346 of 211455
+   ..working on genes 60347 through 60557 of 211455
+   ..working on genes 60558 through 60768 of 211455
+   ..working on genes 60769 through 60979 of 211455
+   ..working on genes 60980 through 61190 of 211455
+   ..working on genes 61191 through 61401 of 211455
+   ..working on genes 61402 through 61612 of 211455
+   ..working on genes 61613 through 61823 of 211455
+   ..working on genes 61824 through 62034 of 211455
+   ..working on genes 62035 through 62245 of 211455
+   ..working on genes 62246 through 62456 of 211455
+   ..working on genes 62457 through 62667 of 211455
+   ..working on genes 62668 through 62878 of 211455
+   ..working on genes 62879 through 63089 of 211455
+   ..working on genes 63090 through 63300 of 211455
+   ..working on genes 63301 through 63511 of 211455
+   ..working on genes 63512 through 63722 of 211455
+   ..working on genes 63723 through 63933 of 211455
+   ..working on genes 63934 through 64144 of 211455
+   ..working on genes 64145 through 64355 of 211455
+   ..working on genes 64356 through 64566 of 211455
+   ..working on genes 64567 through 64777 of 211455
+   ..working on genes 64778 through 64988 of 211455
+   ..working on genes 64989 through 65199 of 211455
+   ..working on genes 65200 through 65410 of 211455
+   ..working on genes 65411 through 65621 of 211455
+   ..working on genes 65622 through 65832 of 211455
+   ..working on genes 65833 through 66043 of 211455
+   ..working on genes 66044 through 66254 of 211455
+   ..working on genes 66255 through 66465 of 211455
+   ..working on genes 66466 through 66676 of 211455
+   ..working on genes 66677 through 66887 of 211455
+   ..working on genes 66888 through 67098 of 211455
+   ..working on genes 67099 through 67309 of 211455
+   ..working on genes 67310 through 67520 of 211455
+   ..working on genes 67521 through 67731 of 211455
+   ..working on genes 67732 through 67942 of 211455
+   ..working on genes 67943 through 68153 of 211455
+   ..working on genes 68154 through 68364 of 211455
+   ..working on genes 68365 through 68575 of 211455
+   ..working on genes 68576 through 68786 of 211455
+   ..working on genes 68787 through 68997 of 211455
+   ..working on genes 68998 through 69208 of 211455
+   ..working on genes 69209 through 69419 of 211455
+   ..working on genes 69420 through 69630 of 211455
+   ..working on genes 69631 through 69841 of 211455
+   ..working on genes 69842 through 70052 of 211455
+   ..working on genes 70053 through 70263 of 211455
+   ..working on genes 70264 through 70474 of 211455
+   ..working on genes 70475 through 70685 of 211455
+   ..working on genes 70686 through 70896 of 211455
+   ..working on genes 70897 through 71107 of 211455
+   ..working on genes 71108 through 71318 of 211455
+   ..working on genes 71319 through 71529 of 211455
+   ..working on genes 71530 through 71740 of 211455
+   ..working on genes 71741 through 71951 of 211455
+   ..working on genes 71952 through 72162 of 211455
+   ..working on genes 72163 through 72373 of 211455
+   ..working on genes 72374 through 72584 of 211455
+   ..working on genes 72585 through 72795 of 211455
+   ..working on genes 72796 through 73006 of 211455
+   ..working on genes 73007 through 73217 of 211455
+   ..working on genes 73218 through 73428 of 211455
+   ..working on genes 73429 through 73639 of 211455
+   ..working on genes 73640 through 73850 of 211455
+   ..working on genes 73851 through 74061 of 211455
+   ..working on genes 74062 through 74272 of 211455
+   ..working on genes 74273 through 74483 of 211455
+   ..working on genes 74484 through 74694 of 211455
+   ..working on genes 74695 through 74905 of 211455
+   ..working on genes 74906 through 75116 of 211455
+   ..working on genes 75117 through 75327 of 211455
+   ..working on genes 75328 through 75538 of 211455
+   ..working on genes 75539 through 75749 of 211455
+   ..working on genes 75750 through 75960 of 211455
+   ..working on genes 75961 through 76171 of 211455
+   ..working on genes 76172 through 76382 of 211455
+   ..working on genes 76383 through 76593 of 211455
+   ..working on genes 76594 through 76804 of 211455
+   ..working on genes 76805 through 77015 of 211455
+   ..working on genes 77016 through 77226 of 211455
+   ..working on genes 77227 through 77437 of 211455
+   ..working on genes 77438 through 77648 of 211455
+   ..working on genes 77649 through 77859 of 211455
+   ..working on genes 77860 through 78070 of 211455
+   ..working on genes 78071 through 78281 of 211455
+   ..working on genes 78282 through 78492 of 211455
+   ..working on genes 78493 through 78703 of 211455
+   ..working on genes 78704 through 78914 of 211455
+   ..working on genes 78915 through 79125 of 211455
+   ..working on genes 79126 through 79336 of 211455
+   ..working on genes 79337 through 79547 of 211455
+   ..working on genes 79548 through 79758 of 211455
+   ..working on genes 79759 through 79969 of 211455
+   ..working on genes 79970 through 80180 of 211455
+   ..working on genes 80181 through 80391 of 211455
+   ..working on genes 80392 through 80602 of 211455
+   ..working on genes 80603 through 80813 of 211455
+   ..working on genes 80814 through 81024 of 211455
+   ..working on genes 81025 through 81235 of 211455
+   ..working on genes 81236 through 81446 of 211455
+   ..working on genes 81447 through 81657 of 211455
+   ..working on genes 81658 through 81868 of 211455
+   ..working on genes 81869 through 82079 of 211455
+   ..working on genes 82080 through 82290 of 211455
+   ..working on genes 82291 through 82501 of 211455
+   ..working on genes 82502 through 82712 of 211455
+   ..working on genes 82713 through 82923 of 211455
+   ..working on genes 82924 through 83134 of 211455
+   ..working on genes 83135 through 83345 of 211455
+   ..working on genes 83346 through 83556 of 211455
+   ..working on genes 83557 through 83767 of 211455
+   ..working on genes 83768 through 83978 of 211455
+   ..working on genes 83979 through 84189 of 211455
+   ..working on genes 84190 through 84400 of 211455
+   ..working on genes 84401 through 84611 of 211455
+   ..working on genes 84612 through 84822 of 211455
+   ..working on genes 84823 through 85033 of 211455
+   ..working on genes 85034 through 85244 of 211455
+   ..working on genes 85245 through 85455 of 211455
+   ..working on genes 85456 through 85666 of 211455
+   ..working on genes 85667 through 85877 of 211455
+   ..working on genes 85878 through 86088 of 211455
+   ..working on genes 86089 through 86299 of 211455
+   ..working on genes 86300 through 86510 of 211455
+   ..working on genes 86511 through 86721 of 211455
+   ..working on genes 86722 through 86932 of 211455
+   ..working on genes 86933 through 87143 of 211455
+   ..working on genes 87144 through 87354 of 211455
+   ..working on genes 87355 through 87565 of 211455
+   ..working on genes 87566 through 87776 of 211455
+   ..working on genes 87777 through 87987 of 211455
+   ..working on genes 87988 through 88198 of 211455
+   ..working on genes 88199 through 88409 of 211455
+   ..working on genes 88410 through 88620 of 211455
+   ..working on genes 88621 through 88831 of 211455
+   ..working on genes 88832 through 89042 of 211455
+   ..working on genes 89043 through 89253 of 211455
+   ..working on genes 89254 through 89464 of 211455
+   ..working on genes 89465 through 89675 of 211455
+   ..working on genes 89676 through 89886 of 211455
+   ..working on genes 89887 through 90097 of 211455
+   ..working on genes 90098 through 90308 of 211455
+   ..working on genes 90309 through 90519 of 211455
+   ..working on genes 90520 through 90730 of 211455
+   ..working on genes 90731 through 90941 of 211455
+   ..working on genes 90942 through 91152 of 211455
+   ..working on genes 91153 through 91363 of 211455
+   ..working on genes 91364 through 91574 of 211455
+   ..working on genes 91575 through 91785 of 211455
+   ..working on genes 91786 through 91996 of 211455
+   ..working on genes 91997 through 92207 of 211455
+   ..working on genes 92208 through 92418 of 211455
+   ..working on genes 92419 through 92629 of 211455
+   ..working on genes 92630 through 92840 of 211455
+   ..working on genes 92841 through 93051 of 211455
+   ..working on genes 93052 through 93262 of 211455
+   ..working on genes 93263 through 93473 of 211455
+   ..working on genes 93474 through 93684 of 211455
+   ..working on genes 93685 through 93895 of 211455
+   ..working on genes 93896 through 94106 of 211455
+   ..working on genes 94107 through 94317 of 211455
+   ..working on genes 94318 through 94528 of 211455
+   ..working on genes 94529 through 94739 of 211455
+   ..working on genes 94740 through 94950 of 211455
+   ..working on genes 94951 through 95161 of 211455
+   ..working on genes 95162 through 95372 of 211455
+   ..working on genes 95373 through 95583 of 211455
+   ..working on genes 95584 through 95794 of 211455
+   ..working on genes 95795 through 96005 of 211455
+   ..working on genes 96006 through 96216 of 211455
+   ..working on genes 96217 through 96427 of 211455
+   ..working on genes 96428 through 96638 of 211455
+   ..working on genes 96639 through 96849 of 211455
+   ..working on genes 96850 through 97060 of 211455
+   ..working on genes 97061 through 97271 of 211455
+   ..working on genes 97272 through 97482 of 211455
+   ..working on genes 97483 through 97693 of 211455
+   ..working on genes 97694 through 97904 of 211455
+   ..working on genes 97905 through 98115 of 211455
+   ..working on genes 98116 through 98326 of 211455
+   ..working on genes 98327 through 98537 of 211455
+   ..working on genes 98538 through 98748 of 211455
+   ..working on genes 98749 through 98959 of 211455
+   ..working on genes 98960 through 99170 of 211455
+   ..working on genes 99171 through 99381 of 211455
+   ..working on genes 99382 through 99592 of 211455
+   ..working on genes 99593 through 99803 of 211455
+   ..working on genes 99804 through 100014 of 211455
+   ..working on genes 100015 through 100225 of 211455
+   ..working on genes 100226 through 100436 of 211455
+   ..working on genes 100437 through 100647 of 211455
+   ..working on genes 100648 through 100858 of 211455
+   ..working on genes 100859 through 101069 of 211455
+   ..working on genes 101070 through 101280 of 211455
+   ..working on genes 101281 through 101491 of 211455
+   ..working on genes 101492 through 101702 of 211455
+   ..working on genes 101703 through 101913 of 211455
+   ..working on genes 101914 through 102124 of 211455
+   ..working on genes 102125 through 102335 of 211455
+   ..working on genes 102336 through 102546 of 211455
+   ..working on genes 102547 through 102757 of 211455
+   ..working on genes 102758 through 102968 of 211455
+   ..working on genes 102969 through 103179 of 211455
+   ..working on genes 103180 through 103390 of 211455
+   ..working on genes 103391 through 103601 of 211455
+   ..working on genes 103602 through 103812 of 211455
+   ..working on genes 103813 through 104023 of 211455
+   ..working on genes 104024 through 104234 of 211455
+   ..working on genes 104235 through 104445 of 211455
+   ..working on genes 104446 through 104656 of 211455
+   ..working on genes 104657 through 104867 of 211455
+   ..working on genes 104868 through 105078 of 211455
+   ..working on genes 105079 through 105289 of 211455
+   ..working on genes 105290 through 105500 of 211455
+   ..working on genes 105501 through 105711 of 211455
+   ..working on genes 105712 through 105922 of 211455
+   ..working on genes 105923 through 106133 of 211455
+   ..working on genes 106134 through 106344 of 211455
+   ..working on genes 106345 through 106555 of 211455
+   ..working on genes 106556 through 106766 of 211455
+   ..working on genes 106767 through 106977 of 211455
+   ..working on genes 106978 through 107188 of 211455
+   ..working on genes 107189 through 107399 of 211455
+   ..working on genes 107400 through 107610 of 211455
+   ..working on genes 107611 through 107821 of 211455
+   ..working on genes 107822 through 108032 of 211455
+   ..working on genes 108033 through 108243 of 211455
+   ..working on genes 108244 through 108454 of 211455
+   ..working on genes 108455 through 108665 of 211455
+   ..working on genes 108666 through 108876 of 211455
+   ..working on genes 108877 through 109087 of 211455
+   ..working on genes 109088 through 109298 of 211455
+   ..working on genes 109299 through 109509 of 211455
+   ..working on genes 109510 through 109720 of 211455
+   ..working on genes 109721 through 109931 of 211455
+   ..working on genes 109932 through 110142 of 211455
+   ..working on genes 110143 through 110353 of 211455
+   ..working on genes 110354 through 110564 of 211455
+   ..working on genes 110565 through 110775 of 211455
+   ..working on genes 110776 through 110986 of 211455
+   ..working on genes 110987 through 111197 of 211455
+   ..working on genes 111198 through 111408 of 211455
+   ..working on genes 111409 through 111619 of 211455
+   ..working on genes 111620 through 111830 of 211455
+   ..working on genes 111831 through 112041 of 211455
+   ..working on genes 112042 through 112252 of 211455
+   ..working on genes 112253 through 112463 of 211455
+   ..working on genes 112464 through 112674 of 211455
+   ..working on genes 112675 through 112885 of 211455
+   ..working on genes 112886 through 113096 of 211455
+   ..working on genes 113097 through 113307 of 211455
+   ..working on genes 113308 through 113518 of 211455
+   ..working on genes 113519 through 113729 of 211455
+   ..working on genes 113730 through 113940 of 211455
+   ..working on genes 113941 through 114151 of 211455
+   ..working on genes 114152 through 114362 of 211455
+   ..working on genes 114363 through 114573 of 211455
+   ..working on genes 114574 through 114784 of 211455
+   ..working on genes 114785 through 114995 of 211455
+   ..working on genes 114996 through 115206 of 211455
+   ..working on genes 115207 through 115417 of 211455
+   ..working on genes 115418 through 115628 of 211455
+   ..working on genes 115629 through 115839 of 211455
+   ..working on genes 115840 through 116050 of 211455
+   ..working on genes 116051 through 116261 of 211455
+   ..working on genes 116262 through 116472 of 211455
+   ..working on genes 116473 through 116683 of 211455
+   ..working on genes 116684 through 116894 of 211455
+   ..working on genes 116895 through 117105 of 211455
+   ..working on genes 117106 through 117316 of 211455
+   ..working on genes 117317 through 117527 of 211455
+   ..working on genes 117528 through 117738 of 211455
+   ..working on genes 117739 through 117949 of 211455
+   ..working on genes 117950 through 118160 of 211455
+   ..working on genes 118161 through 118371 of 211455
+   ..working on genes 118372 through 118582 of 211455
+   ..working on genes 118583 through 118793 of 211455
+   ..working on genes 118794 through 119004 of 211455
+   ..working on genes 119005 through 119215 of 211455
+   ..working on genes 119216 through 119426 of 211455
+   ..working on genes 119427 through 119637 of 211455
+   ..working on genes 119638 through 119848 of 211455
+   ..working on genes 119849 through 120059 of 211455
+   ..working on genes 120060 through 120270 of 211455
+   ..working on genes 120271 through 120481 of 211455
+   ..working on genes 120482 through 120692 of 211455
+   ..working on genes 120693 through 120903 of 211455
+   ..working on genes 120904 through 121114 of 211455
+   ..working on genes 121115 through 121325 of 211455
+   ..working on genes 121326 through 121536 of 211455
+   ..working on genes 121537 through 121747 of 211455
+   ..working on genes 121748 through 121958 of 211455
+   ..working on genes 121959 through 122169 of 211455
+   ..working on genes 122170 through 122380 of 211455
+   ..working on genes 122381 through 122591 of 211455
+   ..working on genes 122592 through 122802 of 211455
+   ..working on genes 122803 through 123013 of 211455
+   ..working on genes 123014 through 123224 of 211455
+   ..working on genes 123225 through 123435 of 211455
+   ..working on genes 123436 through 123646 of 211455
+   ..working on genes 123647 through 123857 of 211455
+   ..working on genes 123858 through 124068 of 211455
+   ..working on genes 124069 through 124279 of 211455
+   ..working on genes 124280 through 124490 of 211455
+   ..working on genes 124491 through 124701 of 211455
+   ..working on genes 124702 through 124912 of 211455
+   ..working on genes 124913 through 125123 of 211455
+   ..working on genes 125124 through 125334 of 211455
+   ..working on genes 125335 through 125545 of 211455
+   ..working on genes 125546 through 125756 of 211455
+   ..working on genes 125757 through 125967 of 211455
+   ..working on genes 125968 through 126178 of 211455
+   ..working on genes 126179 through 126389 of 211455
+   ..working on genes 126390 through 126600 of 211455
+   ..working on genes 126601 through 126811 of 211455
+   ..working on genes 126812 through 127022 of 211455
+   ..working on genes 127023 through 127233 of 211455
+   ..working on genes 127234 through 127444 of 211455
+   ..working on genes 127445 through 127655 of 211455
+   ..working on genes 127656 through 127866 of 211455
+   ..working on genes 127867 through 128077 of 211455
+   ..working on genes 128078 through 128288 of 211455
+   ..working on genes 128289 through 128499 of 211455
+   ..working on genes 128500 through 128710 of 211455
+   ..working on genes 128711 through 128921 of 211455
+   ..working on genes 128922 through 129132 of 211455
+   ..working on genes 129133 through 129343 of 211455
+   ..working on genes 129344 through 129554 of 211455
+   ..working on genes 129555 through 129765 of 211455
+   ..working on genes 129766 through 129976 of 211455
+   ..working on genes 129977 through 130187 of 211455
+   ..working on genes 130188 through 130398 of 211455
+   ..working on genes 130399 through 130609 of 211455
+   ..working on genes 130610 through 130820 of 211455
+   ..working on genes 130821 through 131031 of 211455
+   ..working on genes 131032 through 131242 of 211455
+   ..working on genes 131243 through 131453 of 211455
+   ..working on genes 131454 through 131664 of 211455
+   ..working on genes 131665 through 131875 of 211455
+   ..working on genes 131876 through 132086 of 211455
+   ..working on genes 132087 through 132297 of 211455
+   ..working on genes 132298 through 132508 of 211455
+   ..working on genes 132509 through 132719 of 211455
+   ..working on genes 132720 through 132930 of 211455
+   ..working on genes 132931 through 133141 of 211455
+   ..working on genes 133142 through 133352 of 211455
+   ..working on genes 133353 through 133563 of 211455
+   ..working on genes 133564 through 133774 of 211455
+   ..working on genes 133775 through 133985 of 211455
+   ..working on genes 133986 through 134196 of 211455
+   ..working on genes 134197 through 134407 of 211455
+   ..working on genes 134408 through 134618 of 211455
+   ..working on genes 134619 through 134829 of 211455
+   ..working on genes 134830 through 135040 of 211455
+   ..working on genes 135041 through 135251 of 211455
+   ..working on genes 135252 through 135462 of 211455
+   ..working on genes 135463 through 135673 of 211455
+   ..working on genes 135674 through 135884 of 211455
+   ..working on genes 135885 through 136095 of 211455
+   ..working on genes 136096 through 136306 of 211455
+   ..working on genes 136307 through 136517 of 211455
+   ..working on genes 136518 through 136728 of 211455
+   ..working on genes 136729 through 136939 of 211455
+   ..working on genes 136940 through 137150 of 211455
+   ..working on genes 137151 through 137361 of 211455
+   ..working on genes 137362 through 137572 of 211455
+   ..working on genes 137573 through 137783 of 211455
+   ..working on genes 137784 through 137994 of 211455
+   ..working on genes 137995 through 138205 of 211455
+   ..working on genes 138206 through 138416 of 211455
+   ..working on genes 138417 through 138627 of 211455
+   ..working on genes 138628 through 138838 of 211455
+   ..working on genes 138839 through 139049 of 211455
+   ..working on genes 139050 through 139260 of 211455
+   ..working on genes 139261 through 139471 of 211455
+   ..working on genes 139472 through 139682 of 211455
+   ..working on genes 139683 through 139893 of 211455
+   ..working on genes 139894 through 140104 of 211455
+   ..working on genes 140105 through 140315 of 211455
+   ..working on genes 140316 through 140526 of 211455
+   ..working on genes 140527 through 140737 of 211455
+   ..working on genes 140738 through 140948 of 211455
+   ..working on genes 140949 through 141159 of 211455
+   ..working on genes 141160 through 141370 of 211455
+   ..working on genes 141371 through 141581 of 211455
+   ..working on genes 141582 through 141792 of 211455
+   ..working on genes 141793 through 142003 of 211455
+   ..working on genes 142004 through 142214 of 211455
+   ..working on genes 142215 through 142425 of 211455
+   ..working on genes 142426 through 142636 of 211455
+   ..working on genes 142637 through 142847 of 211455
+   ..working on genes 142848 through 143058 of 211455
+   ..working on genes 143059 through 143269 of 211455
+   ..working on genes 143270 through 143480 of 211455
+   ..working on genes 143481 through 143691 of 211455
+   ..working on genes 143692 through 143902 of 211455
+   ..working on genes 143903 through 144113 of 211455
+   ..working on genes 144114 through 144324 of 211455
+   ..working on genes 144325 through 144535 of 211455
+   ..working on genes 144536 through 144746 of 211455
+   ..working on genes 144747 through 144957 of 211455
+   ..working on genes 144958 through 145168 of 211455
+   ..working on genes 145169 through 145379 of 211455
+   ..working on genes 145380 through 145590 of 211455
+   ..working on genes 145591 through 145801 of 211455
+   ..working on genes 145802 through 146012 of 211455
+   ..working on genes 146013 through 146223 of 211455
+   ..working on genes 146224 through 146434 of 211455
+   ..working on genes 146435 through 146645 of 211455
+   ..working on genes 146646 through 146856 of 211455
+   ..working on genes 146857 through 147067 of 211455
+   ..working on genes 147068 through 147278 of 211455
+   ..working on genes 147279 through 147489 of 211455
+   ..working on genes 147490 through 147700 of 211455
+   ..working on genes 147701 through 147911 of 211455
+   ..working on genes 147912 through 148122 of 211455
+   ..working on genes 148123 through 148333 of 211455
+   ..working on genes 148334 through 148544 of 211455
+   ..working on genes 148545 through 148755 of 211455
+   ..working on genes 148756 through 148966 of 211455
+   ..working on genes 148967 through 149177 of 211455
+   ..working on genes 149178 through 149388 of 211455
+   ..working on genes 149389 through 149599 of 211455
+   ..working on genes 149600 through 149810 of 211455
+   ..working on genes 149811 through 150021 of 211455
+   ..working on genes 150022 through 150232 of 211455
+   ..working on genes 150233 through 150443 of 211455
+   ..working on genes 150444 through 150654 of 211455
+   ..working on genes 150655 through 150865 of 211455
+   ..working on genes 150866 through 151076 of 211455
+   ..working on genes 151077 through 151287 of 211455
+   ..working on genes 151288 through 151498 of 211455
+   ..working on genes 151499 through 151709 of 211455
+   ..working on genes 151710 through 151920 of 211455
+   ..working on genes 151921 through 152131 of 211455
+   ..working on genes 152132 through 152342 of 211455
+   ..working on genes 152343 through 152553 of 211455
+   ..working on genes 152554 through 152764 of 211455
+   ..working on genes 152765 through 152975 of 211455
+   ..working on genes 152976 through 153186 of 211455
+   ..working on genes 153187 through 153397 of 211455
+   ..working on genes 153398 through 153608 of 211455
+   ..working on genes 153609 through 153819 of 211455
+   ..working on genes 153820 through 154030 of 211455
+   ..working on genes 154031 through 154241 of 211455
+   ..working on genes 154242 through 154452 of 211455
+   ..working on genes 154453 through 154663 of 211455
+   ..working on genes 154664 through 154874 of 211455
+   ..working on genes 154875 through 155085 of 211455
+   ..working on genes 155086 through 155296 of 211455
+   ..working on genes 155297 through 155507 of 211455
+   ..working on genes 155508 through 155718 of 211455
+   ..working on genes 155719 through 155929 of 211455
+   ..working on genes 155930 through 156140 of 211455
+   ..working on genes 156141 through 156351 of 211455
+   ..working on genes 156352 through 156562 of 211455
+   ..working on genes 156563 through 156773 of 211455
+   ..working on genes 156774 through 156984 of 211455
+   ..working on genes 156985 through 157195 of 211455
+   ..working on genes 157196 through 157406 of 211455
+   ..working on genes 157407 through 157617 of 211455
+   ..working on genes 157618 through 157828 of 211455
+   ..working on genes 157829 through 158039 of 211455
+   ..working on genes 158040 through 158250 of 211455
+   ..working on genes 158251 through 158461 of 211455
+   ..working on genes 158462 through 158672 of 211455
+   ..working on genes 158673 through 158883 of 211455
+   ..working on genes 158884 through 159094 of 211455
+   ..working on genes 159095 through 159305 of 211455
+   ..working on genes 159306 through 159516 of 211455
+   ..working on genes 159517 through 159727 of 211455
+   ..working on genes 159728 through 159938 of 211455
+   ..working on genes 159939 through 160149 of 211455
+   ..working on genes 160150 through 160360 of 211455
+   ..working on genes 160361 through 160571 of 211455
+   ..working on genes 160572 through 160782 of 211455
+   ..working on genes 160783 through 160993 of 211455
+   ..working on genes 160994 through 161204 of 211455
+   ..working on genes 161205 through 161415 of 211455
+   ..working on genes 161416 through 161626 of 211455
+   ..working on genes 161627 through 161837 of 211455
+   ..working on genes 161838 through 162048 of 211455
+   ..working on genes 162049 through 162259 of 211455
+   ..working on genes 162260 through 162470 of 211455
+   ..working on genes 162471 through 162681 of 211455
+   ..working on genes 162682 through 162892 of 211455
+   ..working on genes 162893 through 163103 of 211455
+   ..working on genes 163104 through 163314 of 211455
+   ..working on genes 163315 through 163525 of 211455
+   ..working on genes 163526 through 163736 of 211455
+   ..working on genes 163737 through 163947 of 211455
+   ..working on genes 163948 through 164158 of 211455
+   ..working on genes 164159 through 164369 of 211455
+   ..working on genes 164370 through 164580 of 211455
+   ..working on genes 164581 through 164791 of 211455
+   ..working on genes 164792 through 165002 of 211455
+   ..working on genes 165003 through 165213 of 211455
+   ..working on genes 165214 through 165424 of 211455
+   ..working on genes 165425 through 165635 of 211455
+   ..working on genes 165636 through 165846 of 211455
+   ..working on genes 165847 through 166057 of 211455
+   ..working on genes 166058 through 166268 of 211455
+   ..working on genes 166269 through 166479 of 211455
+   ..working on genes 166480 through 166690 of 211455
+   ..working on genes 166691 through 166901 of 211455
+   ..working on genes 166902 through 167112 of 211455
+   ..working on genes 167113 through 167323 of 211455
+   ..working on genes 167324 through 167534 of 211455
+   ..working on genes 167535 through 167745 of 211455
+   ..working on genes 167746 through 167956 of 211455
+   ..working on genes 167957 through 168167 of 211455
+   ..working on genes 168168 through 168378 of 211455
+   ..working on genes 168379 through 168589 of 211455
+   ..working on genes 168590 through 168800 of 211455
+   ..working on genes 168801 through 169011 of 211455
+   ..working on genes 169012 through 169222 of 211455
+   ..working on genes 169223 through 169433 of 211455
+   ..working on genes 169434 through 169644 of 211455
+   ..working on genes 169645 through 169855 of 211455
+   ..working on genes 169856 through 170066 of 211455
+   ..working on genes 170067 through 170277 of 211455
+   ..working on genes 170278 through 170488 of 211455
+   ..working on genes 170489 through 170699 of 211455
+   ..working on genes 170700 through 170910 of 211455
+   ..working on genes 170911 through 171121 of 211455
+   ..working on genes 171122 through 171332 of 211455
+   ..working on genes 171333 through 171543 of 211455
+   ..working on genes 171544 through 171754 of 211455
+   ..working on genes 171755 through 171965 of 211455
+   ..working on genes 171966 through 172176 of 211455
+   ..working on genes 172177 through 172387 of 211455
+   ..working on genes 172388 through 172598 of 211455
+   ..working on genes 172599 through 172809 of 211455
+   ..working on genes 172810 through 173020 of 211455
+   ..working on genes 173021 through 173231 of 211455
+   ..working on genes 173232 through 173442 of 211455
+   ..working on genes 173443 through 173653 of 211455
+   ..working on genes 173654 through 173864 of 211455
+   ..working on genes 173865 through 174075 of 211455
+   ..working on genes 174076 through 174286 of 211455
+   ..working on genes 174287 through 174497 of 211455
+   ..working on genes 174498 through 174708 of 211455
+   ..working on genes 174709 through 174919 of 211455
+   ..working on genes 174920 through 175130 of 211455
+   ..working on genes 175131 through 175341 of 211455
+   ..working on genes 175342 through 175552 of 211455
+   ..working on genes 175553 through 175763 of 211455
+   ..working on genes 175764 through 175974 of 211455
+   ..working on genes 175975 through 176185 of 211455
+   ..working on genes 176186 through 176396 of 211455
+   ..working on genes 176397 through 176607 of 211455
+   ..working on genes 176608 through 176818 of 211455
+   ..working on genes 176819 through 177029 of 211455
+   ..working on genes 177030 through 177240 of 211455
+   ..working on genes 177241 through 177451 of 211455
+   ..working on genes 177452 through 177662 of 211455
+   ..working on genes 177663 through 177873 of 211455
+   ..working on genes 177874 through 178084 of 211455
+   ..working on genes 178085 through 178295 of 211455
+   ..working on genes 178296 through 178506 of 211455
+   ..working on genes 178507 through 178717 of 211455
+   ..working on genes 178718 through 178928 of 211455
+   ..working on genes 178929 through 179139 of 211455
+   ..working on genes 179140 through 179350 of 211455
+   ..working on genes 179351 through 179561 of 211455
+   ..working on genes 179562 through 179772 of 211455
+   ..working on genes 179773 through 179983 of 211455
+   ..working on genes 179984 through 180194 of 211455
+   ..working on genes 180195 through 180405 of 211455
+   ..working on genes 180406 through 180616 of 211455
+   ..working on genes 180617 through 180827 of 211455
+   ..working on genes 180828 through 181038 of 211455
+   ..working on genes 181039 through 181249 of 211455
+   ..working on genes 181250 through 181460 of 211455
+   ..working on genes 181461 through 181671 of 211455
+   ..working on genes 181672 through 181882 of 211455
+   ..working on genes 181883 through 182093 of 211455
+   ..working on genes 182094 through 182304 of 211455
+   ..working on genes 182305 through 182515 of 211455
+   ..working on genes 182516 through 182726 of 211455
+   ..working on genes 182727 through 182937 of 211455
+   ..working on genes 182938 through 183148 of 211455
+   ..working on genes 183149 through 183359 of 211455
+   ..working on genes 183360 through 183570 of 211455
+   ..working on genes 183571 through 183781 of 211455
+   ..working on genes 183782 through 183992 of 211455
+   ..working on genes 183993 through 184203 of 211455
+   ..working on genes 184204 through 184414 of 211455
+   ..working on genes 184415 through 184625 of 211455
+   ..working on genes 184626 through 184836 of 211455
+   ..working on genes 184837 through 185047 of 211455
+   ..working on genes 185048 through 185258 of 211455
+   ..working on genes 185259 through 185469 of 211455
+   ..working on genes 185470 through 185680 of 211455
+   ..working on genes 185681 through 185891 of 211455
+   ..working on genes 185892 through 186102 of 211455
+   ..working on genes 186103 through 186313 of 211455
+   ..working on genes 186314 through 186524 of 211455
+   ..working on genes 186525 through 186735 of 211455
+   ..working on genes 186736 through 186946 of 211455
+   ..working on genes 186947 through 187157 of 211455
+   ..working on genes 187158 through 187368 of 211455
+   ..working on genes 187369 through 187579 of 211455
+   ..working on genes 187580 through 187790 of 211455
+   ..working on genes 187791 through 188001 of 211455
+   ..working on genes 188002 through 188212 of 211455
+   ..working on genes 188213 through 188423 of 211455
+   ..working on genes 188424 through 188634 of 211455
+   ..working on genes 188635 through 188845 of 211455
+   ..working on genes 188846 through 189056 of 211455
+   ..working on genes 189057 through 189267 of 211455
+   ..working on genes 189268 through 189478 of 211455
+   ..working on genes 189479 through 189689 of 211455
+   ..working on genes 189690 through 189900 of 211455
+   ..working on genes 189901 through 190111 of 211455
+   ..working on genes 190112 through 190322 of 211455
+   ..working on genes 190323 through 190533 of 211455
+   ..working on genes 190534 through 190744 of 211455
+   ..working on genes 190745 through 190955 of 211455
+   ..working on genes 190956 through 191166 of 211455
+   ..working on genes 191167 through 191377 of 211455
+   ..working on genes 191378 through 191588 of 211455
+   ..working on genes 191589 through 191799 of 211455
+   ..working on genes 191800 through 192010 of 211455
+   ..working on genes 192011 through 192221 of 211455
+   ..working on genes 192222 through 192432 of 211455
+   ..working on genes 192433 through 192643 of 211455
+   ..working on genes 192644 through 192854 of 211455
+   ..working on genes 192855 through 193065 of 211455
+   ..working on genes 193066 through 193276 of 211455
+   ..working on genes 193277 through 193487 of 211455
+   ..working on genes 193488 through 193698 of 211455
+   ..working on genes 193699 through 193909 of 211455
+   ..working on genes 193910 through 194120 of 211455
+   ..working on genes 194121 through 194331 of 211455
+   ..working on genes 194332 through 194542 of 211455
+   ..working on genes 194543 through 194753 of 211455
+   ..working on genes 194754 through 194964 of 211455
+   ..working on genes 194965 through 195175 of 211455
+   ..working on genes 195176 through 195386 of 211455
+   ..working on genes 195387 through 195597 of 211455
+   ..working on genes 195598 through 195808 of 211455
+   ..working on genes 195809 through 196019 of 211455
+   ..working on genes 196020 through 196230 of 211455
+   ..working on genes 196231 through 196441 of 211455
+   ..working on genes 196442 through 196652 of 211455
+   ..working on genes 196653 through 196863 of 211455
+   ..working on genes 196864 through 197074 of 211455
+   ..working on genes 197075 through 197285 of 211455
+   ..working on genes 197286 through 197496 of 211455
+   ..working on genes 197497 through 197707 of 211455
+   ..working on genes 197708 through 197918 of 211455
+   ..working on genes 197919 through 198129 of 211455
+   ..working on genes 198130 through 198340 of 211455
+   ..working on genes 198341 through 198551 of 211455
+   ..working on genes 198552 through 198762 of 211455
+   ..working on genes 198763 through 198973 of 211455
+   ..working on genes 198974 through 199184 of 211455
+   ..working on genes 199185 through 199395 of 211455
+   ..working on genes 199396 through 199606 of 211455
+   ..working on genes 199607 through 199817 of 211455
+   ..working on genes 199818 through 200028 of 211455
+   ..working on genes 200029 through 200239 of 211455
+   ..working on genes 200240 through 200450 of 211455
+   ..working on genes 200451 through 200661 of 211455
+   ..working on genes 200662 through 200872 of 211455
+   ..working on genes 200873 through 201083 of 211455
+   ..working on genes 201084 through 201294 of 211455
+   ..working on genes 201295 through 201505 of 211455
+   ..working on genes 201506 through 201716 of 211455
+   ..working on genes 201717 through 201927 of 211455
+   ..working on genes 201928 through 202138 of 211455
+   ..working on genes 202139 through 202349 of 211455
+   ..working on genes 202350 through 202560 of 211455
+   ..working on genes 202561 through 202771 of 211455
+   ..working on genes 202772 through 202982 of 211455
+   ..working on genes 202983 through 203193 of 211455
+   ..working on genes 203194 through 203404 of 211455
+   ..working on genes 203405 through 203615 of 211455
+   ..working on genes 203616 through 203826 of 211455
+   ..working on genes 203827 through 204037 of 211455
+   ..working on genes 204038 through 204248 of 211455
+   ..working on genes 204249 through 204459 of 211455
+   ..working on genes 204460 through 204670 of 211455
+   ..working on genes 204671 through 204881 of 211455
+   ..working on genes 204882 through 205092 of 211455
+   ..working on genes 205093 through 205303 of 211455
+   ..working on genes 205304 through 205514 of 211455
+   ..working on genes 205515 through 205725 of 211455
+   ..working on genes 205726 through 205936 of 211455
+   ..working on genes 205937 through 206147 of 211455
+   ..working on genes 206148 through 206358 of 211455
+   ..working on genes 206359 through 206569 of 211455
+   ..working on genes 206570 through 206780 of 211455
+   ..working on genes 206781 through 206991 of 211455
+   ..working on genes 206992 through 207202 of 211455
+   ..working on genes 207203 through 207413 of 211455
+   ..working on genes 207414 through 207624 of 211455
+   ..working on genes 207625 through 207835 of 211455
+   ..working on genes 207836 through 208046 of 211455
+   ..working on genes 208047 through 208257 of 211455
+   ..working on genes 208258 through 208468 of 211455
+   ..working on genes 208469 through 208679 of 211455
+   ..working on genes 208680 through 208890 of 211455
+   ..working on genes 208891 through 209101 of 211455
+   ..working on genes 209102 through 209312 of 211455
+   ..working on genes 209313 through 209523 of 211455
+   ..working on genes 209524 through 209734 of 211455
+   ..working on genes 209735 through 209945 of 211455
+   ..working on genes 209946 through 210156 of 211455
+   ..working on genes 210157 through 210367 of 211455
+   ..working on genes 210368 through 210578 of 211455
+   ..working on genes 210579 through 210789 of 211455
+   ..working on genes 210790 through 211000 of 211455
+   ..working on genes 211001 through 211211 of 211455
+   ..working on genes 211212 through 211422 of 211455
+   ..working on genes 211423 through 211455 of 211455
+   Power SFT.R.sq slope truncated.R.sq  mean.k. median.k.   max.k.
+1      1    0.660 -9.66          0.984 1.20e+04  1.18e+04 20000.00
+2      2    0.817 -6.52          0.993 1.11e+03  1.04e+03  3420.00
+3      3    0.927 -4.32          0.998 1.39e+02  1.18e+02   869.00
+4      4    0.947 -3.38          0.999 2.28e+01  1.60e+01   354.00
+5      5    0.937 -2.71          0.998 4.89e+00  2.59e+00   173.00
+6      6    0.933 -2.30          0.996 1.41e+00  5.20e-01    93.70
+7      7    0.932 -2.10          0.997 5.32e-01  1.37e-01    54.60
+8      8    0.918 -2.07          0.992 2.51e-01  4.52e-02    35.40
+9      9    0.917 -2.07          0.996 1.39e-01  1.78e-02    23.50
+10    10    0.924 -2.09          0.994 8.66e-02  7.96e-03    15.90
+11    12    0.912 -2.06          0.972 4.34e-02  1.97e-03     7.73
+12    14    0.865 -2.05          0.969 2.74e-02  5.53e-04     4.94
+13    16    0.844 -1.82          0.950 2.01e-02  1.63e-04     3.32
+14    18    0.799 -1.74          0.891 1.63e-02  4.93e-05     2.99
+15    20    0.815 -1.64          0.921 1.40e-02  1.52e-05     2.99
+Warning message:
+executing %dopar% sequentially: no parallel backend registered 
+[1] 3
+ Calculating module eigengenes block-wise from all genes
+   Flagging genes and samples with too many missing values...
+    ..step 1
+ ....pre-clustering genes to determine blocks..
+   Projective K-means:
+   ..k-means clustering..
+   ..merging smaller clusters...
+Block sizes:
+gBlocks
+    1     2     3     4     5     6     7     8     9 
+29991 29187 28694 23640 23519 23274 19296 18059 15795 
+ ..Working on block 1 .
+    TOM calculation: adjacency..
+    ..will not use multithreading.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 1 into file rdas/Hippo_exon_qSVA-block.1.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking modules for statistical meaningfulness..
+     ..removing 1273 genes from module 1 because their KME is too low.
+     ..removing 654 genes from module 2 because their KME is too low.
+     ..removing 266 genes from module 3 because their KME is too low.
+     ..removing 95 genes from module 4 because their KME is too low.
+     ..removing 202 genes from module 5 because their KME is too low.
+     ..removing 33 genes from module 6 because their KME is too low.
+     ..removing 9 genes from module 7 because their KME is too low.
+     ..removing 2 genes from module 8 because their KME is too low.
+     ..removing 2 genes from module 9 because their KME is too low.
+     ..removing 12 genes from module 11 because their KME is too low.
+     ..removing 6 genes from module 18 because their KME is too low.
+ ..Working on block 2 .
+    TOM calculation: adjacency..
+    ..will not use multithreading.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 2 into file rdas/Hippo_exon_qSVA-block.2.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking modules for statistical meaningfulness..
+     ..removing 565 genes from module 1 because their KME is too low.
+     ..removing 399 genes from module 2 because their KME is too low.
+     ..removing 459 genes from module 3 because their KME is too low.
+     ..removing 110 genes from module 4 because their KME is too low.
+     ..removing 94 genes from module 5 because their KME is too low.
+     ..removing 106 genes from module 6 because their KME is too low.
+     ..removing 105 genes from module 7 because their KME is too low.
+     ..removing 8 genes from module 8 because their KME is too low.
+     ..removing 44 genes from module 9 because their KME is too low.
+     ..removing 64 genes from module 10 because their KME is too low.
+     ..removing 4 genes from module 11 because their KME is too low.
+     ..removing 42 genes from module 12 because their KME is too low.
+     ..removing 60 genes from module 13 because their KME is too low.
+     ..removing 50 genes from module 14 because their KME is too low.
+     ..removing 4 genes from module 15 because their KME is too low.
+     ..removing 1 genes from module 16 because their KME is too low.
+     ..removing 4 genes from module 17 because their KME is too low.
+     ..removing 11 genes from module 18 because their KME is too low.
+     ..removing 44 genes from module 19 because their KME is too low.
+     ..removing 6 genes from module 20 because their KME is too low.
+     ..removing 2 genes from module 21 because their KME is too low.
+     ..removing 1 genes from module 23 because their KME is too low.
+     ..removing 5 genes from module 24 because their KME is too low.
+     ..removing 7 genes from module 31 because their KME is too low.
+     ..removing 1 genes from module 33 because their KME is too low.
+     ..removing 1 genes from module 34 because their KME is too low.
+ ..Working on block 3 .
+    TOM calculation: adjacency..
+    ..will not use multithreading.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 3 into file rdas/Hippo_exon_qSVA-block.3.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking modules for statistical meaningfulness..
+     ..removing 559 genes from module 1 because their KME is too low.
+     ..removing 462 genes from module 2 because their KME is too low.
+     ..removing 314 genes from module 3 because their KME is too low.
+     ..removing 253 genes from module 4 because their KME is too low.
+     ..removing 172 genes from module 5 because their KME is too low.
+     ..removing 187 genes from module 6 because their KME is too low.
+     ..removing 113 genes from module 7 because their KME is too low.
+     ..removing 156 genes from module 8 because their KME is too low.
+     ..removing 83 genes from module 9 because their KME is too low.
+     ..removing 6 genes from module 10 because their KME is too low.
+     ..removing 17 genes from module 11 because their KME is too low.
+     ..removing 4 genes from module 12 because their KME is too low.
+     ..removing 40 genes from module 13 because their KME is too low.
+     ..removing 9 genes from module 14 because their KME is too low.
+     ..removing 16 genes from module 15 because their KME is too low.
+     ..removing 30 genes from module 16 because their KME is too low.
+     ..removing 9 genes from module 17 because their KME is too low.
+     ..removing 4 genes from module 18 because their KME is too low.
+     ..removing 18 genes from module 19 because their KME is too low.
+     ..removing 17 genes from module 20 because their KME is too low.
+     ..removing 1 genes from module 21 because their KME is too low.
+     ..removing 1 genes from module 22 because their KME is too low.
+     ..removing 5 genes from module 23 because their KME is too low.
+     ..removing 5 genes from module 24 because their KME is too low.
+     ..removing 8 genes from module 25 because their KME is too low.
+     ..removing 1 genes from module 26 because their KME is too low.
+     ..removing 2 genes from module 27 because their KME is too low.
+     ..removing 1 genes from module 28 because their KME is too low.
+     ..removing 1 genes from module 31 because their KME is too low.
+     ..removing 1 genes from module 34 because their KME is too low.
+     ..removing 1 genes from module 37 because their KME is too low.
+ ..Working on block 4 .
+    TOM calculation: adjacency..
+    ..will not use multithreading.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 4 into file rdas/Hippo_exon_qSVA-block.4.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking modules for statistical meaningfulness..
+     ..removing 6382 genes from module 1 because their KME is too low.
+     ..removing 782 genes from module 2 because their KME is too low.
+     ..removing 1052 genes from module 3 because their KME is too low.
+     ..removing 519 genes from module 4 because their KME is too low.
+     ..removing 537 genes from module 5 because their KME is too low.
+     ..removing 544 genes from module 6 because their KME is too low.
+     ..removing 311 genes from module 7 because their KME is too low.
+     ..removing 306 genes from module 8 because their KME is too low.
+     ..removing 85 genes from module 9 because their KME is too low.
+     ..removing 122 genes from module 10 because their KME is too low.
+     ..removing 35 genes from module 11 because their KME is too low.
+     ..removing 12 genes from module 12 because their KME is too low.
+     ..removing 42 genes from module 13 because their KME is too low.
+     ..removing 32 genes from module 14 because their KME is too low.
+     ..removing 71 genes from module 15 because their KME is too low.
+     ..removing 69 genes from module 16 because their KME is too low.
+     ..removing 2 genes from module 17 because their KME is too low.
+     ..removing 45 genes from module 19 because their KME is too low.
+     ..removing 9 genes from module 21 because their KME is too low.
+     ..removing 3 genes from module 23 because their KME is too low.
+     ..removing 1 genes from module 24 because their KME is too low.
+     ..removing 3 genes from module 25 because their KME is too low.
+     ..removing 5 genes from module 26 because their KME is too low.
+     ..removing 2 genes from module 33 because their KME is too low.
+ ..Working on block 5 .
+    TOM calculation: adjacency..
+    ..will not use multithreading.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 5 into file rdas/Hippo_exon_qSVA-block.5.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking modules for statistical meaningfulness..
+     ..removing 5969 genes from module 1 because their KME is too low.
+     ..removing 2522 genes from module 2 because their KME is too low.
+     ..removing 1060 genes from module 3 because their KME is too low.
+     ..removing 1064 genes from module 4 because their KME is too low.
+     ..removing 7 genes from module 5 because their KME is too low.
+     ..removing 19 genes from module 6 because their KME is too low.
+     ..removing 3 genes from module 7 because their KME is too low.
+     ..removing 3 genes from module 8 because their KME is too low.
+     ..removing 3 genes from module 10 because their KME is too low.
+     ..removing 15 genes from module 12 because their KME is too low.
+     ..removing 1 genes from module 13 because their KME is too low.
+     ..removing 5 genes from module 14 because their KME is too low.
+     ..removing 2 genes from module 16 because their KME is too low.
+     ..removing 1 genes from module 24 because their KME is too low.
+     ..removing 2 genes from module 27 because their KME is too low.
+ ..Working on block 6 .
+    TOM calculation: adjacency..
+    ..will not use multithreading.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 6 into file rdas/Hippo_exon_qSVA-block.6.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking modules for statistical meaningfulness..
+     ..removing 4571 genes from module 1 because their KME is too low.
+     ..removing 4177 genes from module 2 because their KME is too low.
+     ..removing 1067 genes from module 3 because their KME is too low.
+     ..removing 844 genes from module 4 because their KME is too low.
+     ..removing 446 genes from module 5 because their KME is too low.
+     ..removing 255 genes from module 6 because their KME is too low.
+     ..removing 153 genes from module 7 because their KME is too low.
+     ..removing 101 genes from module 8 because their KME is too low.
+     ..removing 77 genes from module 9 because their KME is too low.
+     ..removing 111 genes from module 10 because their KME is too low.
+     ..removing 4 genes from module 11 because their KME is too low.
+     ..removing 87 genes from module 12 because their KME is too low.
+     ..removing 2 genes from module 13 because their KME is too low.
+     ..removing 40 genes from module 14 because their KME is too low.
+     ..removing 11 genes from module 15 because their KME is too low.
+     ..removing 3 genes from module 17 because their KME is too low.
+     ..removing 1 genes from module 18 because their KME is too low.
+     ..removing 27 genes from module 19 because their KME is too low.
+     ..removing 2 genes from module 21 because their KME is too low.
+     ..removing 4 genes from module 22 because their KME is too low.
+     ..removing 1 genes from module 23 because their KME is too low.
+     ..removing 4 genes from module 24 because their KME is too low.
+     ..removing 3 genes from module 25 because their KME is too low.
+     ..removing 5 genes from module 27 because their KME is too low.
+     ..removing 2 genes from module 28 because their KME is too low.
+     ..removing 19 genes from module 29 because their KME is too low.
+     ..removing 1 genes from module 31 because their KME is too low.
+     ..removing 10 genes from module 32 because their KME is too low.
+     ..removing 6 genes from module 33 because their KME is too low.
+     ..removing 1 genes from module 42 because their KME is too low.
+     ..removing 7 genes from module 45 because their KME is too low.
+     ..removing 1 genes from module 50 because their KME is too low.
+     ..removing 6 genes from module 52 because their KME is too low.
+     ..removing 1 genes from module 55 because their KME is too low.
+     ..removing 1 genes from module 57 because their KME is too low.
+     ..removing 2 genes from module 58 because their KME is too low.
+     ..removing 1 genes from module 60 because their KME is too low.
+     ..removing 4 genes from module 62 because their KME is too low.
+ ..Working on block 7 .
+    TOM calculation: adjacency..
+    ..will not use multithreading.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 7 into file rdas/Hippo_exon_qSVA-block.7.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking modules for statistical meaningfulness..
+     ..removing 1370 genes from module 1 because their KME is too low.
+     ..removing 863 genes from module 2 because their KME is too low.
+     ..removing 701 genes from module 3 because their KME is too low.
+     ..removing 733 genes from module 4 because their KME is too low.
+     ..removing 214 genes from module 5 because their KME is too low.
+     ..removing 264 genes from module 6 because their KME is too low.
+     ..removing 276 genes from module 7 because their KME is too low.
+     ..removing 81 genes from module 8 because their KME is too low.
+     ..removing 36 genes from module 9 because their KME is too low.
+     ..removing 23 genes from module 10 because their KME is too low.
+     ..removing 68 genes from module 11 because their KME is too low.
+     ..removing 35 genes from module 12 because their KME is too low.
+     ..removing 59 genes from module 13 because their KME is too low.
+     ..removing 60 genes from module 14 because their KME is too low.
+     ..removing 99 genes from module 15 because their KME is too low.
+     ..removing 101 genes from module 16 because their KME is too low.
+     ..removing 5 genes from module 17 because their KME is too low.
+     ..removing 1 genes from module 18 because their KME is too low.
+     ..removing 62 genes from module 19 because their KME is too low.
+     ..removing 3 genes from module 20 because their KME is too low.
+     ..removing 1 genes from module 21 because their KME is too low.
+     ..removing 1 genes from module 22 because their KME is too low.
+     ..removing 1 genes from module 24 because their KME is too low.
+     ..removing 6 genes from module 25 because their KME is too low.
+     ..removing 1 genes from module 27 because their KME is too low.
+     ..removing 6 genes from module 34 because their KME is too low.
+ ..Working on block 8 .
+    TOM calculation: adjacency..
+    ..will not use multithreading.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 8 into file rdas/Hippo_exon_qSVA-block.8.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking modules for statistical meaningfulness..
+     ..removing 4283 genes from module 1 because their KME is too low.
+     ..removing 2083 genes from module 2 because their KME is too low.
+     ..removing 275 genes from module 3 because their KME is too low.
+     ..removing 44 genes from module 4 because their KME is too low.
+     ..removing 53 genes from module 5 because their KME is too low.
+     ..removing 4 genes from module 6 because their KME is too low.
+     ..removing 7 genes from module 7 because their KME is too low.
+     ..removing 7 genes from module 8 because their KME is too low.
+     ..removing 15 genes from module 9 because their KME is too low.
+     ..removing 1 genes from module 12 because their KME is too low.
+     ..removing 3 genes from module 14 because their KME is too low.
+     ..removing 13 genes from module 16 because their KME is too low.
+     ..removing 1 genes from module 18 because their KME is too low.
+     ..removing 3 genes from module 23 because their KME is too low.
+ ..Working on block 9 .
+    TOM calculation: adjacency..
+    ..will not use multithreading.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 9 into file rdas/Hippo_exon_qSVA-block.9.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking modules for statistical meaningfulness..
+     ..removing 2560 genes from module 1 because their KME is too low.
+     ..removing 1376 genes from module 2 because their KME is too low.
+     ..removing 911 genes from module 3 because their KME is too low.
+     ..removing 1022 genes from module 4 because their KME is too low.
+     ..removing 249 genes from module 5 because their KME is too low.
+     ..removing 53 genes from module 6 because their KME is too low.
+     ..removing 141 genes from module 7 because their KME is too low.
+     ..removing 59 genes from module 8 because their KME is too low.
+     ..removing 6 genes from module 9 because their KME is too low.
+     ..removing 5 genes from module 10 because their KME is too low.
+     ..removing 3 genes from module 11 because their KME is too low.
+     ..removing 3 genes from module 13 because their KME is too low.
+     ..removing 21 genes from module 14 because their KME is too low.
+     ..removing 1 genes from module 15 because their KME is too low.
+     ..removing 8 genes from module 16 because their KME is too low.
+     ..removing 7 genes from module 17 because their KME is too low.
+     ..removing 5 genes from module 18 because their KME is too low.
+     ..removing 2 genes from module 19 because their KME is too low.
+     ..removing 2 genes from module 20 because their KME is too low.
+     ..removing 1 genes from module 21 because their KME is too low.
+     ..removing 4 genes from module 22 because their KME is too low.
+     ..removing 1 genes from module 24 because their KME is too low.
+     ..removing 12 genes from module 25 because their KME is too low.
+     ..removing 1 genes from module 27 because their KME is too low.
+ ..merging modules that are too close..
+     mergeCloseModules: Merging modules whose distance is less than 0.25
+       Calculating new MEs...
+
+     0      1      2      3      4      5      6      7      8      9     10     11     12     13     14     15     16     17     18     19     20     21     22     23     24     25     26     27     28     29 
+130296   6576   4304   3850   3616   3127   3119   2875   2240   1635   1564   1490   1205   1176   1095   1085   1028   1026   1013   1006    984    924    854    791    776    742    636    626    609    584 
+    30     31     32     33     34     35     36     37     38     39     40     41     42     43     44     45     46     47     48     49     50     51     52     53     54     55     56     57     58     59 
+   578    561    539    536    518    449    441    419    403    381    373    371    360    348    331    322    321    320    296    285    282    282    276    271    267    265    257    252    252    248 
+    60     61     62     63     64     65     66     67     68     69     70     71     72     73     74     75     76     77     78     79     80     81     82     83     84     85     86     87     88     89 
+   243    239    236    234    233    233    227    226    219    216    211    210    210    208    208    207    204    197    196    196    193    192    188    182    181    178    176    168    165    159 
+    90     91     92     93     94     95     96     97     98     99    100    101    102    103    104    105    106    107    108    109    110    111    112    113    114    115    116    117    118    119 
+   158    157    152    148    148    146    144    139    137    135    133    133    133    128    128    128    126    124    123    122    119    119    118    117    113    112    111    110    110    107 
+   120    121    122    123    124    125    126    127    128    129    130    131    132    133    134    135    136    137    138    139    140    141    142    143    144    145    146    147    148    149 
+   105    104    101     99     99     98     95     95     94     94     93     93     93     92     92     91     89     89     88     86     85     84     83     81     80     80     79     78     77     76 
+   150    151    152    153    154    155    156    157    158    159    160    161    162    163    164    165    166    167    168    169    170    171    172    173    174    175    176    177    178    179 
+    76     75     75     74     74     73     73     69     69     69     69     68     67     67     66     65     65     64     62     62     62     62     61     61     60     60     60     59     59     58 
+   180    181    182    183    184    185    186    187    188    189    190    191    192    193    194    195    196    197    198    199    200    201    202    203    204    205    206    207    208    209 
+    58     58     57     57     57     57     56     56     56     56     56     56     55     55     54     54     53     53     52     52     52     52     52     52     51     51     51     51     50     50 
+   210    211    212    213    214    215    216    217    218    219    220    221    222    223    224    225    226    227    228    229    230    231    232    233    234    235    236    237    238    239 
+    48     48     48     48     46     46     46     46     45     45     45     45     45     45     45     45     44     44     44     44     44     43     43     43     43     43     42     42     42     42 
+   240    241    242    243    244    245    246    247    248    249    250    251    252    253    254    255    256    257    258    259    260    261    262    263    264    265    266    267    268    269 
+    41     40     40     40     40     39     39     39     39     38     38     38     38     37     37     37     37     37     37     36     36     36     36     36     36     35     35     35     35     35 
+   270    271    272    273    274    275    276    277    278    279    280    281    282    283    284    285    286    287    288    289    290    291    292    293    294    295    296    297    298    299 
+    35     34     34     34     34     34     34     33     33     33     33     33     33     32     32     32     32     32     32     32     31     31     31     31     31     31     31     30     30     30 
+   300    301 
+    30     30 
+pickSoftThreshold: will use block size 187.
+ pickSoftThreshold: calculating connectivity for given powers...
+   ..working on genes 1 through 187 of 238975
+   ..working on genes 188 through 374 of 238975
+   ..working on genes 375 through 561 of 238975
+   ..working on genes 562 through 748 of 238975
+   ..working on genes 749 through 935 of 238975
+   ..working on genes 936 through 1122 of 238975
+   ..working on genes 1123 through 1309 of 238975
+   ..working on genes 1310 through 1496 of 238975
+   ..working on genes 1497 through 1683 of 238975
+   ..working on genes 1684 through 1870 of 238975
+   ..working on genes 1871 through 2057 of 238975
+   ..working on genes 2058 through 2244 of 238975
+   ..working on genes 2245 through 2431 of 238975
+   ..working on genes 2432 through 2618 of 238975
+   ..working on genes 2619 through 2805 of 238975
+   ..working on genes 2806 through 2992 of 238975
+   ..working on genes 2993 through 3179 of 238975
+   ..working on genes 3180 through 3366 of 238975
+   ..working on genes 3367 through 3553 of 238975
+   ..working on genes 3554 through 3740 of 238975
+   ..working on genes 3741 through 3927 of 238975
+   ..working on genes 3928 through 4114 of 238975
+   ..working on genes 4115 through 4301 of 238975
+   ..working on genes 4302 through 4488 of 238975
+   ..working on genes 4489 through 4675 of 238975
+   ..working on genes 4676 through 4862 of 238975
+   ..working on genes 4863 through 5049 of 238975
+   ..working on genes 5050 through 5236 of 238975
+   ..working on genes 5237 through 5423 of 238975
+   ..working on genes 5424 through 5610 of 238975
+   ..working on genes 5611 through 5797 of 238975
+   ..working on genes 5798 through 5984 of 238975
+   ..working on genes 5985 through 6171 of 238975
+   ..working on genes 6172 through 6358 of 238975
+   ..working on genes 6359 through 6545 of 238975
+   ..working on genes 6546 through 6732 of 238975
+   ..working on genes 6733 through 6919 of 238975
+   ..working on genes 6920 through 7106 of 238975
+   ..working on genes 7107 through 7293 of 238975
+   ..working on genes 7294 through 7480 of 238975
+   ..working on genes 7481 through 7667 of 238975
+   ..working on genes 7668 through 7854 of 238975
+   ..working on genes 7855 through 8041 of 238975
+   ..working on genes 8042 through 8228 of 238975
+   ..working on genes 8229 through 8415 of 238975
+   ..working on genes 8416 through 8602 of 238975
+   ..working on genes 8603 through 8789 of 238975
+   ..working on genes 8790 through 8976 of 238975
+   ..working on genes 8977 through 9163 of 238975
+   ..working on genes 9164 through 9350 of 238975
+   ..working on genes 9351 through 9537 of 238975
+   ..working on genes 9538 through 9724 of 238975
+   ..working on genes 9725 through 9911 of 238975
+   ..working on genes 9912 through 10098 of 238975
+   ..working on genes 10099 through 10285 of 238975
+   ..working on genes 10286 through 10472 of 238975
+   ..working on genes 10473 through 10659 of 238975
+   ..working on genes 10660 through 10846 of 238975
+   ..working on genes 10847 through 11033 of 238975
+   ..working on genes 11034 through 11220 of 238975
+   ..working on genes 11221 through 11407 of 238975
+   ..working on genes 11408 through 11594 of 238975
+   ..working on genes 11595 through 11781 of 238975
+   ..working on genes 11782 through 11968 of 238975
+   ..working on genes 11969 through 12155 of 238975
+   ..working on genes 12156 through 12342 of 238975
+   ..working on genes 12343 through 12529 of 238975
+   ..working on genes 12530 through 12716 of 238975
+   ..working on genes 12717 through 12903 of 238975
+   ..working on genes 12904 through 13090 of 238975
+   ..working on genes 13091 through 13277 of 238975
+   ..working on genes 13278 through 13464 of 238975
+   ..working on genes 13465 through 13651 of 238975
+   ..working on genes 13652 through 13838 of 238975
+   ..working on genes 13839 through 14025 of 238975
+   ..working on genes 14026 through 14212 of 238975
+   ..working on genes 14213 through 14399 of 238975
+   ..working on genes 14400 through 14586 of 238975
+   ..working on genes 14587 through 14773 of 238975
+   ..working on genes 14774 through 14960 of 238975
+   ..working on genes 14961 through 15147 of 238975
+   ..working on genes 15148 through 15334 of 238975
+   ..working on genes 15335 through 15521 of 238975
+   ..working on genes 15522 through 15708 of 238975
+   ..working on genes 15709 through 15895 of 238975
+   ..working on genes 15896 through 16082 of 238975
+   ..working on genes 16083 through 16269 of 238975
+   ..working on genes 16270 through 16456 of 238975
+   ..working on genes 16457 through 16643 of 238975
+   ..working on genes 16644 through 16830 of 238975
+   ..working on genes 16831 through 17017 of 238975
+   ..working on genes 17018 through 17204 of 238975
+   ..working on genes 17205 through 17391 of 238975
+   ..working on genes 17392 through 17578 of 238975
+   ..working on genes 17579 through 17765 of 238975
+   ..working on genes 17766 through 17952 of 238975
+   ..working on genes 17953 through 18139 of 238975
+   ..working on genes 18140 through 18326 of 238975
+   ..working on genes 18327 through 18513 of 238975
+   ..working on genes 18514 through 18700 of 238975
+   ..working on genes 18701 through 18887 of 238975
+   ..working on genes 18888 through 19074 of 238975
+   ..working on genes 19075 through 19261 of 238975
+   ..working on genes 19262 through 19448 of 238975
+   ..working on genes 19449 through 19635 of 238975
+   ..working on genes 19636 through 19822 of 238975
+   ..working on genes 19823 through 20009 of 238975
+   ..working on genes 20010 through 20196 of 238975
+   ..working on genes 20197 through 20383 of 238975
+   ..working on genes 20384 through 20570 of 238975
+   ..working on genes 20571 through 20757 of 238975
+   ..working on genes 20758 through 20944 of 238975
+   ..working on genes 20945 through 21131 of 238975
+   ..working on genes 21132 through 21318 of 238975
+   ..working on genes 21319 through 21505 of 238975
+   ..working on genes 21506 through 21692 of 238975
+   ..working on genes 21693 through 21879 of 238975
+   ..working on genes 21880 through 22066 of 238975
+   ..working on genes 22067 through 22253 of 238975
+   ..working on genes 22254 through 22440 of 238975
+   ..working on genes 22441 through 22627 of 238975
+   ..working on genes 22628 through 22814 of 238975
+   ..working on genes 22815 through 23001 of 238975
+   ..working on genes 23002 through 23188 of 238975
+   ..working on genes 23189 through 23375 of 238975
+   ..working on genes 23376 through 23562 of 238975
+   ..working on genes 23563 through 23749 of 238975
+   ..working on genes 23750 through 23936 of 238975
+   ..working on genes 23937 through 24123 of 238975
+   ..working on genes 24124 through 24310 of 238975
+   ..working on genes 24311 through 24497 of 238975
+   ..working on genes 24498 through 24684 of 238975
+   ..working on genes 24685 through 24871 of 238975
+   ..working on genes 24872 through 25058 of 238975
+   ..working on genes 25059 through 25245 of 238975
+   ..working on genes 25246 through 25432 of 238975
+   ..working on genes 25433 through 25619 of 238975
+   ..working on genes 25620 through 25806 of 238975
+   ..working on genes 25807 through 25993 of 238975
+   ..working on genes 25994 through 26180 of 238975
+   ..working on genes 26181 through 26367 of 238975
+   ..working on genes 26368 through 26554 of 238975
+   ..working on genes 26555 through 26741 of 238975
+   ..working on genes 26742 through 26928 of 238975
+   ..working on genes 26929 through 27115 of 238975
+   ..working on genes 27116 through 27302 of 238975
+   ..working on genes 27303 through 27489 of 238975
+   ..working on genes 27490 through 27676 of 238975
+   ..working on genes 27677 through 27863 of 238975
+   ..working on genes 27864 through 28050 of 238975
+   ..working on genes 28051 through 28237 of 238975
+   ..working on genes 28238 through 28424 of 238975
+   ..working on genes 28425 through 28611 of 238975
+   ..working on genes 28612 through 28798 of 238975
+   ..working on genes 28799 through 28985 of 238975
+   ..working on genes 28986 through 29172 of 238975
+   ..working on genes 29173 through 29359 of 238975
+   ..working on genes 29360 through 29546 of 238975
+   ..working on genes 29547 through 29733 of 238975
+   ..working on genes 29734 through 29920 of 238975
+   ..working on genes 29921 through 30107 of 238975
+   ..working on genes 30108 through 30294 of 238975
+   ..working on genes 30295 through 30481 of 238975
+   ..working on genes 30482 through 30668 of 238975
+   ..working on genes 30669 through 30855 of 238975
+   ..working on genes 30856 through 31042 of 238975
+   ..working on genes 31043 through 31229 of 238975
+   ..working on genes 31230 through 31416 of 238975
+   ..working on genes 31417 through 31603 of 238975
+   ..working on genes 31604 through 31790 of 238975
+   ..working on genes 31791 through 31977 of 238975
+   ..working on genes 31978 through 32164 of 238975
+   ..working on genes 32165 through 32351 of 238975
+   ..working on genes 32352 through 32538 of 238975
+   ..working on genes 32539 through 32725 of 238975
+   ..working on genes 32726 through 32912 of 238975
+   ..working on genes 32913 through 33099 of 238975
+   ..working on genes 33100 through 33286 of 238975
+   ..working on genes 33287 through 33473 of 238975
+   ..working on genes 33474 through 33660 of 238975
+   ..working on genes 33661 through 33847 of 238975
+   ..working on genes 33848 through 34034 of 238975
+   ..working on genes 34035 through 34221 of 238975
+   ..working on genes 34222 through 34408 of 238975
+   ..working on genes 34409 through 34595 of 238975
+   ..working on genes 34596 through 34782 of 238975
+   ..working on genes 34783 through 34969 of 238975
+   ..working on genes 34970 through 35156 of 238975
+   ..working on genes 35157 through 35343 of 238975
+   ..working on genes 35344 through 35530 of 238975
+   ..working on genes 35531 through 35717 of 238975
+   ..working on genes 35718 through 35904 of 238975
+   ..working on genes 35905 through 36091 of 238975
+   ..working on genes 36092 through 36278 of 238975
+   ..working on genes 36279 through 36465 of 238975
+   ..working on genes 36466 through 36652 of 238975
+   ..working on genes 36653 through 36839 of 238975
+   ..working on genes 36840 through 37026 of 238975
+   ..working on genes 37027 through 37213 of 238975
+   ..working on genes 37214 through 37400 of 238975
+   ..working on genes 37401 through 37587 of 238975
+   ..working on genes 37588 through 37774 of 238975
+   ..working on genes 37775 through 37961 of 238975
+   ..working on genes 37962 through 38148 of 238975
+   ..working on genes 38149 through 38335 of 238975
+   ..working on genes 38336 through 38522 of 238975
+   ..working on genes 38523 through 38709 of 238975
+   ..working on genes 38710 through 38896 of 238975
+   ..working on genes 38897 through 39083 of 238975
+   ..working on genes 39084 through 39270 of 238975
+   ..working on genes 39271 through 39457 of 238975
+   ..working on genes 39458 through 39644 of 238975
+   ..working on genes 39645 through 39831 of 238975
+   ..working on genes 39832 through 40018 of 238975
+   ..working on genes 40019 through 40205 of 238975
+   ..working on genes 40206 through 40392 of 238975
+   ..working on genes 40393 through 40579 of 238975
+   ..working on genes 40580 through 40766 of 238975
+   ..working on genes 40767 through 40953 of 238975
+   ..working on genes 40954 through 41140 of 238975
+   ..working on genes 41141 through 41327 of 238975
+   ..working on genes 41328 through 41514 of 238975
+   ..working on genes 41515 through 41701 of 238975
+   ..working on genes 41702 through 41888 of 238975
+   ..working on genes 41889 through 42075 of 238975
+   ..working on genes 42076 through 42262 of 238975
+   ..working on genes 42263 through 42449 of 238975
+   ..working on genes 42450 through 42636 of 238975
+   ..working on genes 42637 through 42823 of 238975
+   ..working on genes 42824 through 43010 of 238975
+   ..working on genes 43011 through 43197 of 238975
+   ..working on genes 43198 through 43384 of 238975
+   ..working on genes 43385 through 43571 of 238975
+   ..working on genes 43572 through 43758 of 238975
+   ..working on genes 43759 through 43945 of 238975
+   ..working on genes 43946 through 44132 of 238975
+   ..working on genes 44133 through 44319 of 238975
+   ..working on genes 44320 through 44506 of 238975
+   ..working on genes 44507 through 44693 of 238975
+   ..working on genes 44694 through 44880 of 238975
+   ..working on genes 44881 through 45067 of 238975
+   ..working on genes 45068 through 45254 of 238975
+   ..working on genes 45255 through 45441 of 238975
+   ..working on genes 45442 through 45628 of 238975
+   ..working on genes 45629 through 45815 of 238975
+   ..working on genes 45816 through 46002 of 238975
+   ..working on genes 46003 through 46189 of 238975
+   ..working on genes 46190 through 46376 of 238975
+   ..working on genes 46377 through 46563 of 238975
+   ..working on genes 46564 through 46750 of 238975
+   ..working on genes 46751 through 46937 of 238975
+   ..working on genes 46938 through 47124 of 238975
+   ..working on genes 47125 through 47311 of 238975
+   ..working on genes 47312 through 47498 of 238975
+   ..working on genes 47499 through 47685 of 238975
+   ..working on genes 47686 through 47872 of 238975
+   ..working on genes 47873 through 48059 of 238975
+   ..working on genes 48060 through 48246 of 238975
+   ..working on genes 48247 through 48433 of 238975
+   ..working on genes 48434 through 48620 of 238975
+   ..working on genes 48621 through 48807 of 238975
+   ..working on genes 48808 through 48994 of 238975
+   ..working on genes 48995 through 49181 of 238975
+   ..working on genes 49182 through 49368 of 238975
+   ..working on genes 49369 through 49555 of 238975
+   ..working on genes 49556 through 49742 of 238975
+   ..working on genes 49743 through 49929 of 238975
+   ..working on genes 49930 through 50116 of 238975
+   ..working on genes 50117 through 50303 of 238975
+   ..working on genes 50304 through 50490 of 238975
+   ..working on genes 50491 through 50677 of 238975
+   ..working on genes 50678 through 50864 of 238975
+   ..working on genes 50865 through 51051 of 238975
+   ..working on genes 51052 through 51238 of 238975
+   ..working on genes 51239 through 51425 of 238975
+   ..working on genes 51426 through 51612 of 238975
+   ..working on genes 51613 through 51799 of 238975
+   ..working on genes 51800 through 51986 of 238975
+   ..working on genes 51987 through 52173 of 238975
+   ..working on genes 52174 through 52360 of 238975
+   ..working on genes 52361 through 52547 of 238975
+   ..working on genes 52548 through 52734 of 238975
+   ..working on genes 52735 through 52921 of 238975
+   ..working on genes 52922 through 53108 of 238975
+   ..working on genes 53109 through 53295 of 238975
+   ..working on genes 53296 through 53482 of 238975
+   ..working on genes 53483 through 53669 of 238975
+   ..working on genes 53670 through 53856 of 238975
+   ..working on genes 53857 through 54043 of 238975
+   ..working on genes 54044 through 54230 of 238975
+   ..working on genes 54231 through 54417 of 238975
+   ..working on genes 54418 through 54604 of 238975
+   ..working on genes 54605 through 54791 of 238975
+   ..working on genes 54792 through 54978 of 238975
+   ..working on genes 54979 through 55165 of 238975
+   ..working on genes 55166 through 55352 of 238975
+   ..working on genes 55353 through 55539 of 238975
+   ..working on genes 55540 through 55726 of 238975
+   ..working on genes 55727 through 55913 of 238975
+   ..working on genes 55914 through 56100 of 238975
+   ..working on genes 56101 through 56287 of 238975
+   ..working on genes 56288 through 56474 of 238975
+   ..working on genes 56475 through 56661 of 238975
+   ..working on genes 56662 through 56848 of 238975
+   ..working on genes 56849 through 57035 of 238975
+   ..working on genes 57036 through 57222 of 238975
+   ..working on genes 57223 through 57409 of 238975
+   ..working on genes 57410 through 57596 of 238975
+   ..working on genes 57597 through 57783 of 238975
+   ..working on genes 57784 through 57970 of 238975
+   ..working on genes 57971 through 58157 of 238975
+   ..working on genes 58158 through 58344 of 238975
+   ..working on genes 58345 through 58531 of 238975
+   ..working on genes 58532 through 58718 of 238975
+   ..working on genes 58719 through 58905 of 238975
+   ..working on genes 58906 through 59092 of 238975
+   ..working on genes 59093 through 59279 of 238975
+   ..working on genes 59280 through 59466 of 238975
+   ..working on genes 59467 through 59653 of 238975
+   ..working on genes 59654 through 59840 of 238975
+   ..working on genes 59841 through 60027 of 238975
+   ..working on genes 60028 through 60214 of 238975
+   ..working on genes 60215 through 60401 of 238975
+   ..working on genes 60402 through 60588 of 238975
+   ..working on genes 60589 through 60775 of 238975
+   ..working on genes 60776 through 60962 of 238975
+   ..working on genes 60963 through 61149 of 238975
+   ..working on genes 61150 through 61336 of 238975
+   ..working on genes 61337 through 61523 of 238975
+   ..working on genes 61524 through 61710 of 238975
+   ..working on genes 61711 through 61897 of 238975
+   ..working on genes 61898 through 62084 of 238975
+   ..working on genes 62085 through 62271 of 238975
+   ..working on genes 62272 through 62458 of 238975
+   ..working on genes 62459 through 62645 of 238975
+   ..working on genes 62646 through 62832 of 238975
+   ..working on genes 62833 through 63019 of 238975
+   ..working on genes 63020 through 63206 of 238975
+   ..working on genes 63207 through 63393 of 238975
+   ..working on genes 63394 through 63580 of 238975
+   ..working on genes 63581 through 63767 of 238975
+   ..working on genes 63768 through 63954 of 238975
+   ..working on genes 63955 through 64141 of 238975
+   ..working on genes 64142 through 64328 of 238975
+   ..working on genes 64329 through 64515 of 238975
+   ..working on genes 64516 through 64702 of 238975
+   ..working on genes 64703 through 64889 of 238975
+   ..working on genes 64890 through 65076 of 238975
+   ..working on genes 65077 through 65263 of 238975
+   ..working on genes 65264 through 65450 of 238975
+   ..working on genes 65451 through 65637 of 238975
+   ..working on genes 65638 through 65824 of 238975
+   ..working on genes 65825 through 66011 of 238975
+   ..working on genes 66012 through 66198 of 238975
+   ..working on genes 66199 through 66385 of 238975
+   ..working on genes 66386 through 66572 of 238975
+   ..working on genes 66573 through 66759 of 238975
+   ..working on genes 66760 through 66946 of 238975
+   ..working on genes 66947 through 67133 of 238975
+   ..working on genes 67134 through 67320 of 238975
+   ..working on genes 67321 through 67507 of 238975
+   ..working on genes 67508 through 67694 of 238975
+   ..working on genes 67695 through 67881 of 238975
+   ..working on genes 67882 through 68068 of 238975
+   ..working on genes 68069 through 68255 of 238975
+   ..working on genes 68256 through 68442 of 238975
+   ..working on genes 68443 through 68629 of 238975
+   ..working on genes 68630 through 68816 of 238975
+   ..working on genes 68817 through 69003 of 238975
+   ..working on genes 69004 through 69190 of 238975
+   ..working on genes 69191 through 69377 of 238975
+   ..working on genes 69378 through 69564 of 238975
+   ..working on genes 69565 through 69751 of 238975
+   ..working on genes 69752 through 69938 of 238975
+   ..working on genes 69939 through 70125 of 238975
+   ..working on genes 70126 through 70312 of 238975
+   ..working on genes 70313 through 70499 of 238975
+   ..working on genes 70500 through 70686 of 238975
+   ..working on genes 70687 through 70873 of 238975
+   ..working on genes 70874 through 71060 of 238975
+   ..working on genes 71061 through 71247 of 238975
+   ..working on genes 71248 through 71434 of 238975
+   ..working on genes 71435 through 71621 of 238975
+   ..working on genes 71622 through 71808 of 238975
+   ..working on genes 71809 through 71995 of 238975
+   ..working on genes 71996 through 72182 of 238975
+   ..working on genes 72183 through 72369 of 238975
+   ..working on genes 72370 through 72556 of 238975
+   ..working on genes 72557 through 72743 of 238975
+   ..working on genes 72744 through 72930 of 238975
+   ..working on genes 72931 through 73117 of 238975
+   ..working on genes 73118 through 73304 of 238975
+   ..working on genes 73305 through 73491 of 238975
+   ..working on genes 73492 through 73678 of 238975
+   ..working on genes 73679 through 73865 of 238975
+   ..working on genes 73866 through 74052 of 238975
+   ..working on genes 74053 through 74239 of 238975
+   ..working on genes 74240 through 74426 of 238975
+   ..working on genes 74427 through 74613 of 238975
+   ..working on genes 74614 through 74800 of 238975
+   ..working on genes 74801 through 74987 of 238975
+   ..working on genes 74988 through 75174 of 238975
+   ..working on genes 75175 through 75361 of 238975
+   ..working on genes 75362 through 75548 of 238975
+   ..working on genes 75549 through 75735 of 238975
+   ..working on genes 75736 through 75922 of 238975
+   ..working on genes 75923 through 76109 of 238975
+   ..working on genes 76110 through 76296 of 238975
+   ..working on genes 76297 through 76483 of 238975
+   ..working on genes 76484 through 76670 of 238975
+   ..working on genes 76671 through 76857 of 238975
+   ..working on genes 76858 through 77044 of 238975
+   ..working on genes 77045 through 77231 of 238975
+   ..working on genes 77232 through 77418 of 238975
+   ..working on genes 77419 through 77605 of 238975
+   ..working on genes 77606 through 77792 of 238975
+   ..working on genes 77793 through 77979 of 238975
+   ..working on genes 77980 through 78166 of 238975
+   ..working on genes 78167 through 78353 of 238975
+   ..working on genes 78354 through 78540 of 238975
+   ..working on genes 78541 through 78727 of 238975
+   ..working on genes 78728 through 78914 of 238975
+   ..working on genes 78915 through 79101 of 238975
+   ..working on genes 79102 through 79288 of 238975
+   ..working on genes 79289 through 79475 of 238975
+   ..working on genes 79476 through 79662 of 238975
+   ..working on genes 79663 through 79849 of 238975
+   ..working on genes 79850 through 80036 of 238975
+   ..working on genes 80037 through 80223 of 238975
+   ..working on genes 80224 through 80410 of 238975
+   ..working on genes 80411 through 80597 of 238975
+   ..working on genes 80598 through 80784 of 238975
+   ..working on genes 80785 through 80971 of 238975
+   ..working on genes 80972 through 81158 of 238975
+   ..working on genes 81159 through 81345 of 238975
+   ..working on genes 81346 through 81532 of 238975
+   ..working on genes 81533 through 81719 of 238975
+   ..working on genes 81720 through 81906 of 238975
+   ..working on genes 81907 through 82093 of 238975
+   ..working on genes 82094 through 82280 of 238975
+   ..working on genes 82281 through 82467 of 238975
+   ..working on genes 82468 through 82654 of 238975
+   ..working on genes 82655 through 82841 of 238975
+   ..working on genes 82842 through 83028 of 238975
+   ..working on genes 83029 through 83215 of 238975
+   ..working on genes 83216 through 83402 of 238975
+   ..working on genes 83403 through 83589 of 238975
+   ..working on genes 83590 through 83776 of 238975
+   ..working on genes 83777 through 83963 of 238975
+   ..working on genes 83964 through 84150 of 238975
+   ..working on genes 84151 through 84337 of 238975
+   ..working on genes 84338 through 84524 of 238975
+   ..working on genes 84525 through 84711 of 238975
+   ..working on genes 84712 through 84898 of 238975
+   ..working on genes 84899 through 85085 of 238975
+   ..working on genes 85086 through 85272 of 238975
+   ..working on genes 85273 through 85459 of 238975
+   ..working on genes 85460 through 85646 of 238975
+   ..working on genes 85647 through 85833 of 238975
+   ..working on genes 85834 through 86020 of 238975
+   ..working on genes 86021 through 86207 of 238975
+   ..working on genes 86208 through 86394 of 238975
+   ..working on genes 86395 through 86581 of 238975
+   ..working on genes 86582 through 86768 of 238975
+   ..working on genes 86769 through 86955 of 238975
+   ..working on genes 86956 through 87142 of 238975
+   ..working on genes 87143 through 87329 of 238975
+   ..working on genes 87330 through 87516 of 238975
+   ..working on genes 87517 through 87703 of 238975
+   ..working on genes 87704 through 87890 of 238975
+   ..working on genes 87891 through 88077 of 238975
+   ..working on genes 88078 through 88264 of 238975
+   ..working on genes 88265 through 88451 of 238975
+   ..working on genes 88452 through 88638 of 238975
+   ..working on genes 88639 through 88825 of 238975
+   ..working on genes 88826 through 89012 of 238975
+   ..working on genes 89013 through 89199 of 238975
+   ..working on genes 89200 through 89386 of 238975
+   ..working on genes 89387 through 89573 of 238975
+   ..working on genes 89574 through 89760 of 238975
+   ..working on genes 89761 through 89947 of 238975
+   ..working on genes 89948 through 90134 of 238975
+   ..working on genes 90135 through 90321 of 238975
+   ..working on genes 90322 through 90508 of 238975
+   ..working on genes 90509 through 90695 of 238975
+   ..working on genes 90696 through 90882 of 238975
+   ..working on genes 90883 through 91069 of 238975
+   ..working on genes 91070 through 91256 of 238975
+   ..working on genes 91257 through 91443 of 238975
+   ..working on genes 91444 through 91630 of 238975
+   ..working on genes 91631 through 91817 of 238975
+   ..working on genes 91818 through 92004 of 238975
+   ..working on genes 92005 through 92191 of 238975
+   ..working on genes 92192 through 92378 of 238975
+   ..working on genes 92379 through 92565 of 238975
+   ..working on genes 92566 through 92752 of 238975
+   ..working on genes 92753 through 92939 of 238975
+   ..working on genes 92940 through 93126 of 238975
+   ..working on genes 93127 through 93313 of 238975
+   ..working on genes 93314 through 93500 of 238975
+   ..working on genes 93501 through 93687 of 238975
+   ..working on genes 93688 through 93874 of 238975
+   ..working on genes 93875 through 94061 of 238975
+   ..working on genes 94062 through 94248 of 238975
+   ..working on genes 94249 through 94435 of 238975
+   ..working on genes 94436 through 94622 of 238975
+   ..working on genes 94623 through 94809 of 238975
+   ..working on genes 94810 through 94996 of 238975
+   ..working on genes 94997 through 95183 of 238975
+   ..working on genes 95184 through 95370 of 238975
+   ..working on genes 95371 through 95557 of 238975
+   ..working on genes 95558 through 95744 of 238975
+   ..working on genes 95745 through 95931 of 238975
+   ..working on genes 95932 through 96118 of 238975
+   ..working on genes 96119 through 96305 of 238975
+   ..working on genes 96306 through 96492 of 238975
+   ..working on genes 96493 through 96679 of 238975
+   ..working on genes 96680 through 96866 of 238975
+   ..working on genes 96867 through 97053 of 238975
+   ..working on genes 97054 through 97240 of 238975
+   ..working on genes 97241 through 97427 of 238975
+   ..working on genes 97428 through 97614 of 238975
+   ..working on genes 97615 through 97801 of 238975
+   ..working on genes 97802 through 97988 of 238975
+   ..working on genes 97989 through 98175 of 238975
+   ..working on genes 98176 through 98362 of 238975
+   ..working on genes 98363 through 98549 of 238975
+   ..working on genes 98550 through 98736 of 238975
+   ..working on genes 98737 through 98923 of 238975
+   ..working on genes 98924 through 99110 of 238975
+   ..working on genes 99111 through 99297 of 238975
+   ..working on genes 99298 through 99484 of 238975
+   ..working on genes 99485 through 99671 of 238975
+   ..working on genes 99672 through 99858 of 238975
+   ..working on genes 99859 through 100045 of 238975
+   ..working on genes 100046 through 100232 of 238975
+   ..working on genes 100233 through 100419 of 238975
+   ..working on genes 100420 through 100606 of 238975
+   ..working on genes 100607 through 100793 of 238975
+   ..working on genes 100794 through 100980 of 238975
+   ..working on genes 100981 through 101167 of 238975
+   ..working on genes 101168 through 101354 of 238975
+   ..working on genes 101355 through 101541 of 238975
+   ..working on genes 101542 through 101728 of 238975
+   ..working on genes 101729 through 101915 of 238975
+   ..working on genes 101916 through 102102 of 238975
+   ..working on genes 102103 through 102289 of 238975
+   ..working on genes 102290 through 102476 of 238975
+   ..working on genes 102477 through 102663 of 238975
+   ..working on genes 102664 through 102850 of 238975
+   ..working on genes 102851 through 103037 of 238975
+   ..working on genes 103038 through 103224 of 238975
+   ..working on genes 103225 through 103411 of 238975
+   ..working on genes 103412 through 103598 of 238975
+   ..working on genes 103599 through 103785 of 238975
+   ..working on genes 103786 through 103972 of 238975
+   ..working on genes 103973 through 104159 of 238975
+   ..working on genes 104160 through 104346 of 238975
+   ..working on genes 104347 through 104533 of 238975
+   ..working on genes 104534 through 104720 of 238975
+   ..working on genes 104721 through 104907 of 238975
+   ..working on genes 104908 through 105094 of 238975
+   ..working on genes 105095 through 105281 of 238975
+   ..working on genes 105282 through 105468 of 238975
+   ..working on genes 105469 through 105655 of 238975
+   ..working on genes 105656 through 105842 of 238975
+   ..working on genes 105843 through 106029 of 238975
+   ..working on genes 106030 through 106216 of 238975
+   ..working on genes 106217 through 106403 of 238975
+   ..working on genes 106404 through 106590 of 238975
+   ..working on genes 106591 through 106777 of 238975
+   ..working on genes 106778 through 106964 of 238975
+   ..working on genes 106965 through 107151 of 238975
+   ..working on genes 107152 through 107338 of 238975
+   ..working on genes 107339 through 107525 of 238975
+   ..working on genes 107526 through 107712 of 238975
+   ..working on genes 107713 through 107899 of 238975
+   ..working on genes 107900 through 108086 of 238975
+   ..working on genes 108087 through 108273 of 238975
+   ..working on genes 108274 through 108460 of 238975
+   ..working on genes 108461 through 108647 of 238975
+   ..working on genes 108648 through 108834 of 238975
+   ..working on genes 108835 through 109021 of 238975
+   ..working on genes 109022 through 109208 of 238975
+   ..working on genes 109209 through 109395 of 238975
+   ..working on genes 109396 through 109582 of 238975
+   ..working on genes 109583 through 109769 of 238975
+   ..working on genes 109770 through 109956 of 238975
+   ..working on genes 109957 through 110143 of 238975
+   ..working on genes 110144 through 110330 of 238975
+   ..working on genes 110331 through 110517 of 238975
+   ..working on genes 110518 through 110704 of 238975
+   ..working on genes 110705 through 110891 of 238975
+   ..working on genes 110892 through 111078 of 238975
+   ..working on genes 111079 through 111265 of 238975
+   ..working on genes 111266 through 111452 of 238975
+   ..working on genes 111453 through 111639 of 238975
+   ..working on genes 111640 through 111826 of 238975
+   ..working on genes 111827 through 112013 of 238975
+   ..working on genes 112014 through 112200 of 238975
+   ..working on genes 112201 through 112387 of 238975
+   ..working on genes 112388 through 112574 of 238975
+   ..working on genes 112575 through 112761 of 238975
+   ..working on genes 112762 through 112948 of 238975
+   ..working on genes 112949 through 113135 of 238975
+   ..working on genes 113136 through 113322 of 238975
+   ..working on genes 113323 through 113509 of 238975
+   ..working on genes 113510 through 113696 of 238975
+   ..working on genes 113697 through 113883 of 238975
+   ..working on genes 113884 through 114070 of 238975
+   ..working on genes 114071 through 114257 of 238975
+   ..working on genes 114258 through 114444 of 238975
+   ..working on genes 114445 through 114631 of 238975
+   ..working on genes 114632 through 114818 of 238975
+   ..working on genes 114819 through 115005 of 238975
+   ..working on genes 115006 through 115192 of 238975
+   ..working on genes 115193 through 115379 of 238975
+   ..working on genes 115380 through 115566 of 238975
+   ..working on genes 115567 through 115753 of 238975
+   ..working on genes 115754 through 115940 of 238975
+   ..working on genes 115941 through 116127 of 238975
+   ..working on genes 116128 through 116314 of 238975
+   ..working on genes 116315 through 116501 of 238975
+   ..working on genes 116502 through 116688 of 238975
+   ..working on genes 116689 through 116875 of 238975
+   ..working on genes 116876 through 117062 of 238975
+   ..working on genes 117063 through 117249 of 238975
+   ..working on genes 117250 through 117436 of 238975
+   ..working on genes 117437 through 117623 of 238975
+   ..working on genes 117624 through 117810 of 238975
+   ..working on genes 117811 through 117997 of 238975
+   ..working on genes 117998 through 118184 of 238975
+   ..working on genes 118185 through 118371 of 238975
+   ..working on genes 118372 through 118558 of 238975
+   ..working on genes 118559 through 118745 of 238975
+   ..working on genes 118746 through 118932 of 238975
+   ..working on genes 118933 through 119119 of 238975
+   ..working on genes 119120 through 119306 of 238975
+   ..working on genes 119307 through 119493 of 238975
+   ..working on genes 119494 through 119680 of 238975
+   ..working on genes 119681 through 119867 of 238975
+   ..working on genes 119868 through 120054 of 238975
+   ..working on genes 120055 through 120241 of 238975
+   ..working on genes 120242 through 120428 of 238975
+   ..working on genes 120429 through 120615 of 238975
+   ..working on genes 120616 through 120802 of 238975
+   ..working on genes 120803 through 120989 of 238975
+   ..working on genes 120990 through 121176 of 238975
+   ..working on genes 121177 through 121363 of 238975
+   ..working on genes 121364 through 121550 of 238975
+   ..working on genes 121551 through 121737 of 238975
+   ..working on genes 121738 through 121924 of 238975
+   ..working on genes 121925 through 122111 of 238975
+   ..working on genes 122112 through 122298 of 238975
+   ..working on genes 122299 through 122485 of 238975
+   ..working on genes 122486 through 122672 of 238975
+   ..working on genes 122673 through 122859 of 238975
+   ..working on genes 122860 through 123046 of 238975
+   ..working on genes 123047 through 123233 of 238975
+   ..working on genes 123234 through 123420 of 238975
+   ..working on genes 123421 through 123607 of 238975
+   ..working on genes 123608 through 123794 of 238975
+   ..working on genes 123795 through 123981 of 238975
+   ..working on genes 123982 through 124168 of 238975
+   ..working on genes 124169 through 124355 of 238975
+   ..working on genes 124356 through 124542 of 238975
+   ..working on genes 124543 through 124729 of 238975
+   ..working on genes 124730 through 124916 of 238975
+   ..working on genes 124917 through 125103 of 238975
+   ..working on genes 125104 through 125290 of 238975
+   ..working on genes 125291 through 125477 of 238975
+   ..working on genes 125478 through 125664 of 238975
+   ..working on genes 125665 through 125851 of 238975
+   ..working on genes 125852 through 126038 of 238975
+   ..working on genes 126039 through 126225 of 238975
+   ..working on genes 126226 through 126412 of 238975
+   ..working on genes 126413 through 126599 of 238975
+   ..working on genes 126600 through 126786 of 238975
+   ..working on genes 126787 through 126973 of 238975
+   ..working on genes 126974 through 127160 of 238975
+   ..working on genes 127161 through 127347 of 238975
+   ..working on genes 127348 through 127534 of 238975
+   ..working on genes 127535 through 127721 of 238975
+   ..working on genes 127722 through 127908 of 238975
+   ..working on genes 127909 through 128095 of 238975
+   ..working on genes 128096 through 128282 of 238975
+   ..working on genes 128283 through 128469 of 238975
+   ..working on genes 128470 through 128656 of 238975
+   ..working on genes 128657 through 128843 of 238975
+   ..working on genes 128844 through 129030 of 238975
+   ..working on genes 129031 through 129217 of 238975
+   ..working on genes 129218 through 129404 of 238975
+   ..working on genes 129405 through 129591 of 238975
+   ..working on genes 129592 through 129778 of 238975
+   ..working on genes 129779 through 129965 of 238975
+   ..working on genes 129966 through 130152 of 238975
+   ..working on genes 130153 through 130339 of 238975
+   ..working on genes 130340 through 130526 of 238975
+   ..working on genes 130527 through 130713 of 238975
+   ..working on genes 130714 through 130900 of 238975
+   ..working on genes 130901 through 131087 of 238975
+   ..working on genes 131088 through 131274 of 238975
+   ..working on genes 131275 through 131461 of 238975
+   ..working on genes 131462 through 131648 of 238975
+   ..working on genes 131649 through 131835 of 238975
+   ..working on genes 131836 through 132022 of 238975
+   ..working on genes 132023 through 132209 of 238975
+   ..working on genes 132210 through 132396 of 238975
+   ..working on genes 132397 through 132583 of 238975
+   ..working on genes 132584 through 132770 of 238975
+   ..working on genes 132771 through 132957 of 238975
+   ..working on genes 132958 through 133144 of 238975
+   ..working on genes 133145 through 133331 of 238975
+   ..working on genes 133332 through 133518 of 238975
+   ..working on genes 133519 through 133705 of 238975
+   ..working on genes 133706 through 133892 of 238975
+   ..working on genes 133893 through 134079 of 238975
+   ..working on genes 134080 through 134266 of 238975
+   ..working on genes 134267 through 134453 of 238975
+   ..working on genes 134454 through 134640 of 238975
+   ..working on genes 134641 through 134827 of 238975
+   ..working on genes 134828 through 135014 of 238975
+   ..working on genes 135015 through 135201 of 238975
+   ..working on genes 135202 through 135388 of 238975
+   ..working on genes 135389 through 135575 of 238975
+   ..working on genes 135576 through 135762 of 238975
+   ..working on genes 135763 through 135949 of 238975
+   ..working on genes 135950 through 136136 of 238975
+   ..working on genes 136137 through 136323 of 238975
+   ..working on genes 136324 through 136510 of 238975
+   ..working on genes 136511 through 136697 of 238975
+   ..working on genes 136698 through 136884 of 238975
+   ..working on genes 136885 through 137071 of 238975
+   ..working on genes 137072 through 137258 of 238975
+   ..working on genes 137259 through 137445 of 238975
+   ..working on genes 137446 through 137632 of 238975
+   ..working on genes 137633 through 137819 of 238975
+   ..working on genes 137820 through 138006 of 238975
+   ..working on genes 138007 through 138193 of 238975
+   ..working on genes 138194 through 138380 of 238975
+   ..working on genes 138381 through 138567 of 238975
+   ..working on genes 138568 through 138754 of 238975
+   ..working on genes 138755 through 138941 of 238975
+   ..working on genes 138942 through 139128 of 238975
+   ..working on genes 139129 through 139315 of 238975
+   ..working on genes 139316 through 139502 of 238975
+   ..working on genes 139503 through 139689 of 238975
+   ..working on genes 139690 through 139876 of 238975
+   ..working on genes 139877 through 140063 of 238975
+   ..working on genes 140064 through 140250 of 238975
+   ..working on genes 140251 through 140437 of 238975
+   ..working on genes 140438 through 140624 of 238975
+   ..working on genes 140625 through 140811 of 238975
+   ..working on genes 140812 through 140998 of 238975
+   ..working on genes 140999 through 141185 of 238975
+   ..working on genes 141186 through 141372 of 238975
+   ..working on genes 141373 through 141559 of 238975
+   ..working on genes 141560 through 141746 of 238975
+   ..working on genes 141747 through 141933 of 238975
+   ..working on genes 141934 through 142120 of 238975
+   ..working on genes 142121 through 142307 of 238975
+   ..working on genes 142308 through 142494 of 238975
+   ..working on genes 142495 through 142681 of 238975
+   ..working on genes 142682 through 142868 of 238975
+   ..working on genes 142869 through 143055 of 238975
+   ..working on genes 143056 through 143242 of 238975
+   ..working on genes 143243 through 143429 of 238975
+   ..working on genes 143430 through 143616 of 238975
+   ..working on genes 143617 through 143803 of 238975
+   ..working on genes 143804 through 143990 of 238975
+   ..working on genes 143991 through 144177 of 238975
+   ..working on genes 144178 through 144364 of 238975
+   ..working on genes 144365 through 144551 of 238975
+   ..working on genes 144552 through 144738 of 238975
+   ..working on genes 144739 through 144925 of 238975
+   ..working on genes 144926 through 145112 of 238975
+   ..working on genes 145113 through 145299 of 238975
+   ..working on genes 145300 through 145486 of 238975
+   ..working on genes 145487 through 145673 of 238975
+   ..working on genes 145674 through 145860 of 238975
+   ..working on genes 145861 through 146047 of 238975
+   ..working on genes 146048 through 146234 of 238975
+   ..working on genes 146235 through 146421 of 238975
+   ..working on genes 146422 through 146608 of 238975
+   ..working on genes 146609 through 146795 of 238975
+   ..working on genes 146796 through 146982 of 238975
+   ..working on genes 146983 through 147169 of 238975
+   ..working on genes 147170 through 147356 of 238975
+   ..working on genes 147357 through 147543 of 238975
+   ..working on genes 147544 through 147730 of 238975
+   ..working on genes 147731 through 147917 of 238975
+   ..working on genes 147918 through 148104 of 238975
+   ..working on genes 148105 through 148291 of 238975
+   ..working on genes 148292 through 148478 of 238975
+   ..working on genes 148479 through 148665 of 238975
+   ..working on genes 148666 through 148852 of 238975
+   ..working on genes 148853 through 149039 of 238975
+   ..working on genes 149040 through 149226 of 238975
+   ..working on genes 149227 through 149413 of 238975
+   ..working on genes 149414 through 149600 of 238975
+   ..working on genes 149601 through 149787 of 238975
+   ..working on genes 149788 through 149974 of 238975
+   ..working on genes 149975 through 150161 of 238975
+   ..working on genes 150162 through 150348 of 238975
+   ..working on genes 150349 through 150535 of 238975
+   ..working on genes 150536 through 150722 of 238975
+   ..working on genes 150723 through 150909 of 238975
+   ..working on genes 150910 through 151096 of 238975
+   ..working on genes 151097 through 151283 of 238975
+   ..working on genes 151284 through 151470 of 238975
+   ..working on genes 151471 through 151657 of 238975
+   ..working on genes 151658 through 151844 of 238975
+   ..working on genes 151845 through 152031 of 238975
+   ..working on genes 152032 through 152218 of 238975
+   ..working on genes 152219 through 152405 of 238975
+   ..working on genes 152406 through 152592 of 238975
+   ..working on genes 152593 through 152779 of 238975
+   ..working on genes 152780 through 152966 of 238975
+   ..working on genes 152967 through 153153 of 238975
+   ..working on genes 153154 through 153340 of 238975
+   ..working on genes 153341 through 153527 of 238975
+   ..working on genes 153528 through 153714 of 238975
+   ..working on genes 153715 through 153901 of 238975
+   ..working on genes 153902 through 154088 of 238975
+   ..working on genes 154089 through 154275 of 238975
+   ..working on genes 154276 through 154462 of 238975
+   ..working on genes 154463 through 154649 of 238975
+   ..working on genes 154650 through 154836 of 238975
+   ..working on genes 154837 through 155023 of 238975
+   ..working on genes 155024 through 155210 of 238975
+   ..working on genes 155211 through 155397 of 238975
+   ..working on genes 155398 through 155584 of 238975
+   ..working on genes 155585 through 155771 of 238975
+   ..working on genes 155772 through 155958 of 238975
+   ..working on genes 155959 through 156145 of 238975
+   ..working on genes 156146 through 156332 of 238975
+   ..working on genes 156333 through 156519 of 238975
+   ..working on genes 156520 through 156706 of 238975
+   ..working on genes 156707 through 156893 of 238975
+   ..working on genes 156894 through 157080 of 238975
+   ..working on genes 157081 through 157267 of 238975
+   ..working on genes 157268 through 157454 of 238975
+   ..working on genes 157455 through 157641 of 238975
+   ..working on genes 157642 through 157828 of 238975
+   ..working on genes 157829 through 158015 of 238975
+   ..working on genes 158016 through 158202 of 238975
+   ..working on genes 158203 through 158389 of 238975
+   ..working on genes 158390 through 158576 of 238975
+   ..working on genes 158577 through 158763 of 238975
+   ..working on genes 158764 through 158950 of 238975
+   ..working on genes 158951 through 159137 of 238975
+   ..working on genes 159138 through 159324 of 238975
+   ..working on genes 159325 through 159511 of 238975
+   ..working on genes 159512 through 159698 of 238975
+   ..working on genes 159699 through 159885 of 238975
+   ..working on genes 159886 through 160072 of 238975
+   ..working on genes 160073 through 160259 of 238975
+   ..working on genes 160260 through 160446 of 238975
+   ..working on genes 160447 through 160633 of 238975
+   ..working on genes 160634 through 160820 of 238975
+   ..working on genes 160821 through 161007 of 238975
+   ..working on genes 161008 through 161194 of 238975
+   ..working on genes 161195 through 161381 of 238975
+   ..working on genes 161382 through 161568 of 238975
+   ..working on genes 161569 through 161755 of 238975
+   ..working on genes 161756 through 161942 of 238975
+   ..working on genes 161943 through 162129 of 238975
+   ..working on genes 162130 through 162316 of 238975
+   ..working on genes 162317 through 162503 of 238975
+   ..working on genes 162504 through 162690 of 238975
+   ..working on genes 162691 through 162877 of 238975
+   ..working on genes 162878 through 163064 of 238975
+   ..working on genes 163065 through 163251 of 238975
+   ..working on genes 163252 through 163438 of 238975
+   ..working on genes 163439 through 163625 of 238975
+   ..working on genes 163626 through 163812 of 238975
+   ..working on genes 163813 through 163999 of 238975
+   ..working on genes 164000 through 164186 of 238975
+   ..working on genes 164187 through 164373 of 238975
+   ..working on genes 164374 through 164560 of 238975
+   ..working on genes 164561 through 164747 of 238975
+   ..working on genes 164748 through 164934 of 238975
+   ..working on genes 164935 through 165121 of 238975
+   ..working on genes 165122 through 165308 of 238975
+   ..working on genes 165309 through 165495 of 238975
+   ..working on genes 165496 through 165682 of 238975
+   ..working on genes 165683 through 165869 of 238975
+   ..working on genes 165870 through 166056 of 238975
+   ..working on genes 166057 through 166243 of 238975
+   ..working on genes 166244 through 166430 of 238975
+   ..working on genes 166431 through 166617 of 238975
+   ..working on genes 166618 through 166804 of 238975
+   ..working on genes 166805 through 166991 of 238975
+   ..working on genes 166992 through 167178 of 238975
+   ..working on genes 167179 through 167365 of 238975
+   ..working on genes 167366 through 167552 of 238975
+   ..working on genes 167553 through 167739 of 238975
+   ..working on genes 167740 through 167926 of 238975
+   ..working on genes 167927 through 168113 of 238975
+   ..working on genes 168114 through 168300 of 238975
+   ..working on genes 168301 through 168487 of 238975
+   ..working on genes 168488 through 168674 of 238975
+   ..working on genes 168675 through 168861 of 238975
+   ..working on genes 168862 through 169048 of 238975
+   ..working on genes 169049 through 169235 of 238975
+   ..working on genes 169236 through 169422 of 238975
+   ..working on genes 169423 through 169609 of 238975
+   ..working on genes 169610 through 169796 of 238975
+   ..working on genes 169797 through 169983 of 238975
+   ..working on genes 169984 through 170170 of 238975
+   ..working on genes 170171 through 170357 of 238975
+   ..working on genes 170358 through 170544 of 238975
+   ..working on genes 170545 through 170731 of 238975
+   ..working on genes 170732 through 170918 of 238975
+   ..working on genes 170919 through 171105 of 238975
+   ..working on genes 171106 through 171292 of 238975
+   ..working on genes 171293 through 171479 of 238975
+   ..working on genes 171480 through 171666 of 238975
+   ..working on genes 171667 through 171853 of 238975
+   ..working on genes 171854 through 172040 of 238975
+   ..working on genes 172041 through 172227 of 238975
+   ..working on genes 172228 through 172414 of 238975
+   ..working on genes 172415 through 172601 of 238975
+   ..working on genes 172602 through 172788 of 238975
+   ..working on genes 172789 through 172975 of 238975
+   ..working on genes 172976 through 173162 of 238975
+   ..working on genes 173163 through 173349 of 238975
+   ..working on genes 173350 through 173536 of 238975
+   ..working on genes 173537 through 173723 of 238975
+   ..working on genes 173724 through 173910 of 238975
+   ..working on genes 173911 through 174097 of 238975
+   ..working on genes 174098 through 174284 of 238975
+   ..working on genes 174285 through 174471 of 238975
+   ..working on genes 174472 through 174658 of 238975
+   ..working on genes 174659 through 174845 of 238975
+   ..working on genes 174846 through 175032 of 238975
+   ..working on genes 175033 through 175219 of 238975
+   ..working on genes 175220 through 175406 of 238975
+   ..working on genes 175407 through 175593 of 238975
+   ..working on genes 175594 through 175780 of 238975
+   ..working on genes 175781 through 175967 of 238975
+   ..working on genes 175968 through 176154 of 238975
+   ..working on genes 176155 through 176341 of 238975
+   ..working on genes 176342 through 176528 of 238975
+   ..working on genes 176529 through 176715 of 238975
+   ..working on genes 176716 through 176902 of 238975
+   ..working on genes 176903 through 177089 of 238975
+   ..working on genes 177090 through 177276 of 238975
+   ..working on genes 177277 through 177463 of 238975
+   ..working on genes 177464 through 177650 of 238975
+   ..working on genes 177651 through 177837 of 238975
+   ..working on genes 177838 through 178024 of 238975
+   ..working on genes 178025 through 178211 of 238975
+   ..working on genes 178212 through 178398 of 238975
+   ..working on genes 178399 through 178585 of 238975
+   ..working on genes 178586 through 178772 of 238975
+   ..working on genes 178773 through 178959 of 238975
+   ..working on genes 178960 through 179146 of 238975
+   ..working on genes 179147 through 179333 of 238975
+   ..working on genes 179334 through 179520 of 238975
+   ..working on genes 179521 through 179707 of 238975
+   ..working on genes 179708 through 179894 of 238975
+   ..working on genes 179895 through 180081 of 238975
+   ..working on genes 180082 through 180268 of 238975
+   ..working on genes 180269 through 180455 of 238975
+   ..working on genes 180456 through 180642 of 238975
+   ..working on genes 180643 through 180829 of 238975
+   ..working on genes 180830 through 181016 of 238975
+   ..working on genes 181017 through 181203 of 238975
+   ..working on genes 181204 through 181390 of 238975
+   ..working on genes 181391 through 181577 of 238975
+   ..working on genes 181578 through 181764 of 238975
+   ..working on genes 181765 through 181951 of 238975
+   ..working on genes 181952 through 182138 of 238975
+   ..working on genes 182139 through 182325 of 238975
+   ..working on genes 182326 through 182512 of 238975
+   ..working on genes 182513 through 182699 of 238975
+   ..working on genes 182700 through 182886 of 238975
+   ..working on genes 182887 through 183073 of 238975
+   ..working on genes 183074 through 183260 of 238975
+   ..working on genes 183261 through 183447 of 238975
+   ..working on genes 183448 through 183634 of 238975
+   ..working on genes 183635 through 183821 of 238975
+   ..working on genes 183822 through 184008 of 238975
+   ..working on genes 184009 through 184195 of 238975
+   ..working on genes 184196 through 184382 of 238975
+   ..working on genes 184383 through 184569 of 238975
+   ..working on genes 184570 through 184756 of 238975
+   ..working on genes 184757 through 184943 of 238975
+   ..working on genes 184944 through 185130 of 238975
+   ..working on genes 185131 through 185317 of 238975
+   ..working on genes 185318 through 185504 of 238975
+   ..working on genes 185505 through 185691 of 238975
+   ..working on genes 185692 through 185878 of 238975
+   ..working on genes 185879 through 186065 of 238975
+   ..working on genes 186066 through 186252 of 238975
+   ..working on genes 186253 through 186439 of 238975
+   ..working on genes 186440 through 186626 of 238975
+   ..working on genes 186627 through 186813 of 238975
+   ..working on genes 186814 through 187000 of 238975
+   ..working on genes 187001 through 187187 of 238975
+   ..working on genes 187188 through 187374 of 238975
+   ..working on genes 187375 through 187561 of 238975
+   ..working on genes 187562 through 187748 of 238975
+   ..working on genes 187749 through 187935 of 238975
+   ..working on genes 187936 through 188122 of 238975
+   ..working on genes 188123 through 188309 of 238975
+   ..working on genes 188310 through 188496 of 238975
+   ..working on genes 188497 through 188683 of 238975
+   ..working on genes 188684 through 188870 of 238975
+   ..working on genes 188871 through 189057 of 238975
+   ..working on genes 189058 through 189244 of 238975
+   ..working on genes 189245 through 189431 of 238975
+   ..working on genes 189432 through 189618 of 238975
+   ..working on genes 189619 through 189805 of 238975
+   ..working on genes 189806 through 189992 of 238975
+   ..working on genes 189993 through 190179 of 238975
+   ..working on genes 190180 through 190366 of 238975
+   ..working on genes 190367 through 190553 of 238975
+   ..working on genes 190554 through 190740 of 238975
+   ..working on genes 190741 through 190927 of 238975
+   ..working on genes 190928 through 191114 of 238975
+   ..working on genes 191115 through 191301 of 238975
+   ..working on genes 191302 through 191488 of 238975
+   ..working on genes 191489 through 191675 of 238975
+   ..working on genes 191676 through 191862 of 238975
+   ..working on genes 191863 through 192049 of 238975
+   ..working on genes 192050 through 192236 of 238975
+   ..working on genes 192237 through 192423 of 238975
+   ..working on genes 192424 through 192610 of 238975
+   ..working on genes 192611 through 192797 of 238975
+   ..working on genes 192798 through 192984 of 238975
+   ..working on genes 192985 through 193171 of 238975
+   ..working on genes 193172 through 193358 of 238975
+   ..working on genes 193359 through 193545 of 238975
+   ..working on genes 193546 through 193732 of 238975
+   ..working on genes 193733 through 193919 of 238975
+   ..working on genes 193920 through 194106 of 238975
+   ..working on genes 194107 through 194293 of 238975
+   ..working on genes 194294 through 194480 of 238975
+   ..working on genes 194481 through 194667 of 238975
+   ..working on genes 194668 through 194854 of 238975
+   ..working on genes 194855 through 195041 of 238975
+   ..working on genes 195042 through 195228 of 238975
+   ..working on genes 195229 through 195415 of 238975
+   ..working on genes 195416 through 195602 of 238975
+   ..working on genes 195603 through 195789 of 238975
+   ..working on genes 195790 through 195976 of 238975
+   ..working on genes 195977 through 196163 of 238975
+   ..working on genes 196164 through 196350 of 238975
+   ..working on genes 196351 through 196537 of 238975
+   ..working on genes 196538 through 196724 of 238975
+   ..working on genes 196725 through 196911 of 238975
+   ..working on genes 196912 through 197098 of 238975
+   ..working on genes 197099 through 197285 of 238975
+   ..working on genes 197286 through 197472 of 238975
+   ..working on genes 197473 through 197659 of 238975
+   ..working on genes 197660 through 197846 of 238975
+   ..working on genes 197847 through 198033 of 238975
+   ..working on genes 198034 through 198220 of 238975
+   ..working on genes 198221 through 198407 of 238975
+   ..working on genes 198408 through 198594 of 238975
+   ..working on genes 198595 through 198781 of 238975
+   ..working on genes 198782 through 198968 of 238975
+   ..working on genes 198969 through 199155 of 238975
+   ..working on genes 199156 through 199342 of 238975
+   ..working on genes 199343 through 199529 of 238975
+   ..working on genes 199530 through 199716 of 238975
+   ..working on genes 199717 through 199903 of 238975
+   ..working on genes 199904 through 200090 of 238975
+   ..working on genes 200091 through 200277 of 238975
+   ..working on genes 200278 through 200464 of 238975
+   ..working on genes 200465 through 200651 of 238975
+   ..working on genes 200652 through 200838 of 238975
+   ..working on genes 200839 through 201025 of 238975
+   ..working on genes 201026 through 201212 of 238975
+   ..working on genes 201213 through 201399 of 238975
+   ..working on genes 201400 through 201586 of 238975
+   ..working on genes 201587 through 201773 of 238975
+   ..working on genes 201774 through 201960 of 238975
+   ..working on genes 201961 through 202147 of 238975
+   ..working on genes 202148 through 202334 of 238975
+   ..working on genes 202335 through 202521 of 238975
+   ..working on genes 202522 through 202708 of 238975
+   ..working on genes 202709 through 202895 of 238975
+   ..working on genes 202896 through 203082 of 238975
+   ..working on genes 203083 through 203269 of 238975
+   ..working on genes 203270 through 203456 of 238975
+   ..working on genes 203457 through 203643 of 238975
+   ..working on genes 203644 through 203830 of 238975
+   ..working on genes 203831 through 204017 of 238975
+   ..working on genes 204018 through 204204 of 238975
+   ..working on genes 204205 through 204391 of 238975
+   ..working on genes 204392 through 204578 of 238975
+   ..working on genes 204579 through 204765 of 238975
+   ..working on genes 204766 through 204952 of 238975
+   ..working on genes 204953 through 205139 of 238975
+   ..working on genes 205140 through 205326 of 238975
+   ..working on genes 205327 through 205513 of 238975
+   ..working on genes 205514 through 205700 of 238975
+   ..working on genes 205701 through 205887 of 238975
+   ..working on genes 205888 through 206074 of 238975
+   ..working on genes 206075 through 206261 of 238975
+   ..working on genes 206262 through 206448 of 238975
+   ..working on genes 206449 through 206635 of 238975
+   ..working on genes 206636 through 206822 of 238975
+   ..working on genes 206823 through 207009 of 238975
+   ..working on genes 207010 through 207196 of 238975
+   ..working on genes 207197 through 207383 of 238975
+   ..working on genes 207384 through 207570 of 238975
+   ..working on genes 207571 through 207757 of 238975
+   ..working on genes 207758 through 207944 of 238975
+   ..working on genes 207945 through 208131 of 238975
+   ..working on genes 208132 through 208318 of 238975
+   ..working on genes 208319 through 208505 of 238975
+   ..working on genes 208506 through 208692 of 238975
+   ..working on genes 208693 through 208879 of 238975
+   ..working on genes 208880 through 209066 of 238975
+   ..working on genes 209067 through 209253 of 238975
+   ..working on genes 209254 through 209440 of 238975
+   ..working on genes 209441 through 209627 of 238975
+   ..working on genes 209628 through 209814 of 238975
+   ..working on genes 209815 through 210001 of 238975
+   ..working on genes 210002 through 210188 of 238975
+   ..working on genes 210189 through 210375 of 238975
+   ..working on genes 210376 through 210562 of 238975
+   ..working on genes 210563 through 210749 of 238975
+   ..working on genes 210750 through 210936 of 238975
+   ..working on genes 210937 through 211123 of 238975
+   ..working on genes 211124 through 211310 of 238975
+   ..working on genes 211311 through 211497 of 238975
+   ..working on genes 211498 through 211684 of 238975
+   ..working on genes 211685 through 211871 of 238975
+   ..working on genes 211872 through 212058 of 238975
+   ..working on genes 212059 through 212245 of 238975
+   ..working on genes 212246 through 212432 of 238975
+   ..working on genes 212433 through 212619 of 238975
+   ..working on genes 212620 through 212806 of 238975
+   ..working on genes 212807 through 212993 of 238975
+   ..working on genes 212994 through 213180 of 238975
+   ..working on genes 213181 through 213367 of 238975
+   ..working on genes 213368 through 213554 of 238975
+   ..working on genes 213555 through 213741 of 238975
+   ..working on genes 213742 through 213928 of 238975
+   ..working on genes 213929 through 214115 of 238975
+   ..working on genes 214116 through 214302 of 238975
+   ..working on genes 214303 through 214489 of 238975
+   ..working on genes 214490 through 214676 of 238975
+   ..working on genes 214677 through 214863 of 238975
+   ..working on genes 214864 through 215050 of 238975
+   ..working on genes 215051 through 215237 of 238975
+   ..working on genes 215238 through 215424 of 238975
+   ..working on genes 215425 through 215611 of 238975
+   ..working on genes 215612 through 215798 of 238975
+   ..working on genes 215799 through 215985 of 238975
+   ..working on genes 215986 through 216172 of 238975
+   ..working on genes 216173 through 216359 of 238975
+   ..working on genes 216360 through 216546 of 238975
+   ..working on genes 216547 through 216733 of 238975
+   ..working on genes 216734 through 216920 of 238975
+   ..working on genes 216921 through 217107 of 238975
+   ..working on genes 217108 through 217294 of 238975
+   ..working on genes 217295 through 217481 of 238975
+   ..working on genes 217482 through 217668 of 238975
+   ..working on genes 217669 through 217855 of 238975
+   ..working on genes 217856 through 218042 of 238975
+   ..working on genes 218043 through 218229 of 238975
+   ..working on genes 218230 through 218416 of 238975
+   ..working on genes 218417 through 218603 of 238975
+   ..working on genes 218604 through 218790 of 238975
+   ..working on genes 218791 through 218977 of 238975
+   ..working on genes 218978 through 219164 of 238975
+   ..working on genes 219165 through 219351 of 238975
+   ..working on genes 219352 through 219538 of 238975
+   ..working on genes 219539 through 219725 of 238975
+   ..working on genes 219726 through 219912 of 238975
+   ..working on genes 219913 through 220099 of 238975
+   ..working on genes 220100 through 220286 of 238975
+   ..working on genes 220287 through 220473 of 238975
+   ..working on genes 220474 through 220660 of 238975
+   ..working on genes 220661 through 220847 of 238975
+   ..working on genes 220848 through 221034 of 238975
+   ..working on genes 221035 through 221221 of 238975
+   ..working on genes 221222 through 221408 of 238975
+   ..working on genes 221409 through 221595 of 238975
+   ..working on genes 221596 through 221782 of 238975
+   ..working on genes 221783 through 221969 of 238975
+   ..working on genes 221970 through 222156 of 238975
+   ..working on genes 222157 through 222343 of 238975
+   ..working on genes 222344 through 222530 of 238975
+   ..working on genes 222531 through 222717 of 238975
+   ..working on genes 222718 through 222904 of 238975
+   ..working on genes 222905 through 223091 of 238975
+   ..working on genes 223092 through 223278 of 238975
+   ..working on genes 223279 through 223465 of 238975
+   ..working on genes 223466 through 223652 of 238975
+   ..working on genes 223653 through 223839 of 238975
+   ..working on genes 223840 through 224026 of 238975
+   ..working on genes 224027 through 224213 of 238975
+   ..working on genes 224214 through 224400 of 238975
+   ..working on genes 224401 through 224587 of 238975
+   ..working on genes 224588 through 224774 of 238975
+   ..working on genes 224775 through 224961 of 238975
+   ..working on genes 224962 through 225148 of 238975
+   ..working on genes 225149 through 225335 of 238975
+   ..working on genes 225336 through 225522 of 238975
+   ..working on genes 225523 through 225709 of 238975
+   ..working on genes 225710 through 225896 of 238975
+   ..working on genes 225897 through 226083 of 238975
+   ..working on genes 226084 through 226270 of 238975
+   ..working on genes 226271 through 226457 of 238975
+   ..working on genes 226458 through 226644 of 238975
+   ..working on genes 226645 through 226831 of 238975
+   ..working on genes 226832 through 227018 of 238975
+   ..working on genes 227019 through 227205 of 238975
+   ..working on genes 227206 through 227392 of 238975
+   ..working on genes 227393 through 227579 of 238975
+   ..working on genes 227580 through 227766 of 238975
+   ..working on genes 227767 through 227953 of 238975
+   ..working on genes 227954 through 228140 of 238975
+   ..working on genes 228141 through 228327 of 238975
+   ..working on genes 228328 through 228514 of 238975
+   ..working on genes 228515 through 228701 of 238975
+   ..working on genes 228702 through 228888 of 238975
+   ..working on genes 228889 through 229075 of 238975
+   ..working on genes 229076 through 229262 of 238975
+   ..working on genes 229263 through 229449 of 238975
+   ..working on genes 229450 through 229636 of 238975
+   ..working on genes 229637 through 229823 of 238975
+   ..working on genes 229824 through 230010 of 238975
+   ..working on genes 230011 through 230197 of 238975
+   ..working on genes 230198 through 230384 of 238975
+   ..working on genes 230385 through 230571 of 238975
+   ..working on genes 230572 through 230758 of 238975
+   ..working on genes 230759 through 230945 of 238975
+   ..working on genes 230946 through 231132 of 238975
+   ..working on genes 231133 through 231319 of 238975
+   ..working on genes 231320 through 231506 of 238975
+   ..working on genes 231507 through 231693 of 238975
+   ..working on genes 231694 through 231880 of 238975
+   ..working on genes 231881 through 232067 of 238975
+   ..working on genes 232068 through 232254 of 238975
+   ..working on genes 232255 through 232441 of 238975
+   ..working on genes 232442 through 232628 of 238975
+   ..working on genes 232629 through 232815 of 238975
+   ..working on genes 232816 through 233002 of 238975
+   ..working on genes 233003 through 233189 of 238975
+   ..working on genes 233190 through 233376 of 238975
+   ..working on genes 233377 through 233563 of 238975
+   ..working on genes 233564 through 233750 of 238975
+   ..working on genes 233751 through 233937 of 238975
+   ..working on genes 233938 through 234124 of 238975
+   ..working on genes 234125 through 234311 of 238975
+   ..working on genes 234312 through 234498 of 238975
+   ..working on genes 234499 through 234685 of 238975
+   ..working on genes 234686 through 234872 of 238975
+   ..working on genes 234873 through 235059 of 238975
+   ..working on genes 235060 through 235246 of 238975
+   ..working on genes 235247 through 235433 of 238975
+   ..working on genes 235434 through 235620 of 238975
+   ..working on genes 235621 through 235807 of 238975
+   ..working on genes 235808 through 235994 of 238975
+   ..working on genes 235995 through 236181 of 238975
+   ..working on genes 236182 through 236368 of 238975
+   ..working on genes 236369 through 236555 of 238975
+   ..working on genes 236556 through 236742 of 238975
+   ..working on genes 236743 through 236929 of 238975
+   ..working on genes 236930 through 237116 of 238975
+   ..working on genes 237117 through 237303 of 238975
+   ..working on genes 237304 through 237490 of 238975
+   ..working on genes 237491 through 237677 of 238975
+   ..working on genes 237678 through 237864 of 238975
+   ..working on genes 237865 through 238051 of 238975
+   ..working on genes 238052 through 238238 of 238975
+   ..working on genes 238239 through 238425 of 238975
+   ..working on genes 238426 through 238612 of 238975
+   ..working on genes 238613 through 238799 of 238975
+   ..working on genes 238800 through 238975 of 238975
+   Power SFT.R.sq  slope truncated.R.sq  mean.k. median.k.   max.k.
+1      1  0.72700 11.300          0.661 1.22e+04  1.19e+04 1.91e+04
+2      2  0.00167 -0.295          0.957 9.98e+02  9.33e+02 2.76e+03
+3      3  0.15100 -1.550          0.949 1.08e+02  9.34e+01 5.64e+02
+4      4  0.90700 -4.020          0.996 1.46e+01  1.11e+01 1.59e+02
+5      5  0.91500 -3.290          0.995 2.47e+00  1.50e+00 7.69e+01
+6      6  0.91500 -2.620          0.996 5.34e-01  2.30e-01 4.12e+01
+7      7  0.91500 -2.190          0.990 1.52e-01  3.92e-02 2.33e+01
+8      8  0.90500 -1.960          0.987 5.62e-02  7.28e-03 1.44e+01
+9      9  0.90400 -1.730          0.988 2.55e-02  1.46e-03 1.02e+01
+10    10  0.94000 -1.840          0.994 1.33e-02  3.14e-04 7.52e+00
+11    12  0.93000 -1.600          0.987 4.72e-03  1.72e-05 4.35e+00
+12    14  0.94300 -1.590          0.993 2.02e-03  1.13e-06 2.69e+00
+13    16  0.95400 -1.500          0.996 9.40e-04  8.49e-08 1.74e+00
+14    18  0.96600 -1.400          0.988 4.46e-04  7.01e-09 1.17e+00
+15    20  0.98000 -1.340          0.989 1.95e-04  6.19e-10 8.71e-01
+There were 50 or more warnings (use warnings() to see the first 50)
+[1] 4
+ Calculating module eigengenes block-wise from all genes
+   Flagging genes and samples with too many missing values...
+    ..step 1
+  ..Excluding 43 genes from the calculation due to too many missing samples or zero variance.
+    ..step 2
+ ....pre-clustering genes to determine blocks..
+   Projective K-means:
+   ..k-means clustering..
+   ..merging smaller clusters...
+Block sizes:
+gBlocks
+    1     2     3     4     5     6     7     8     9 
+29996 29966 29893 29766 29715 28442 26573 19918 14663 
+ ..Working on block 1 .
+    TOM calculation: adjacency..
+    ..will not use multithreading.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 1 into file rdas/Hippo_jxn_qSVA-block.1.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking modules for statistical meaningfulness..
+     ..removing 18 genes from module 1 because their KME is too low.
+     ..removing 1 genes from module 5 because their KME is too low.
+ ..Working on block 2 .
+    TOM calculation: adjacency..
+    ..will not use multithreading.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 2 into file rdas/Hippo_jxn_qSVA-block.2.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking modules for statistical meaningfulness..
+     ..removing 135 genes from module 1 because their KME is too low.
+     ..removing 22 genes from module 2 because their KME is too low.
+     ..removing 4 genes from module 3 because their KME is too low.
+     ..removing 17 genes from module 4 because their KME is too low.
+     ..removing 9 genes from module 5 because their KME is too low.
+     ..removing 1 genes from module 6 because their KME is too low.
+     ..removing 2 genes from module 9 because their KME is too low.
+     ..removing 1 genes from module 13 because their KME is too low.
+ ..Working on block 3 .
+    TOM calculation: adjacency..
+    ..will not use multithreading.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 3 into file rdas/Hippo_jxn_qSVA-block.3.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking modules for statistical meaningfulness..
+     ..removing 55 genes from module 1 because their KME is too low.
+ ..Working on block 4 .
+    TOM calculation: adjacency..
+    ..will not use multithreading.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 4 into file rdas/Hippo_jxn_qSVA-block.4.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking modules for statistical meaningfulness..
+     ..removing 1097 genes from module 1 because their KME is too low.
+     ..removing 409 genes from module 2 because their KME is too low.
+     ..removing 38 genes from module 3 because their KME is too low.
+     ..removing 213 genes from module 4 because their KME is too low.
+     ..removing 1 genes from module 5 because their KME is too low.
+     ..removing 21 genes from module 6 because their KME is too low.
+     ..removing 1 genes from module 9 because their KME is too low.
+     ..removing 2 genes from module 13 because their KME is too low.
+     ..removing 1 genes from module 19 because their KME is too low.
+     ..removing 1 genes from module 21 because their KME is too low.
+     ..removing 1 genes from module 23 because their KME is too low.
+     ..removing 1 genes from module 40 because their KME is too low.
+ ..Working on block 5 .
+    TOM calculation: adjacency..
+    ..will not use multithreading.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 5 into file rdas/Hippo_jxn_qSVA-block.5.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking modules for statistical meaningfulness..
+     ..removing 321 genes from module 1 because their KME is too low.
+     ..removing 1 genes from module 2 because their KME is too low.
+     ..removing 1 genes from module 6 because their KME is too low.
+     ..removing 2 genes from module 7 because their KME is too low.
+     ..removing 12 genes from module 8 because their KME is too low.
+     ..removing 1 genes from module 18 because their KME is too low.
+     ..removing 2 genes from module 20 because their KME is too low.
+     ..removing 2 genes from module 30 because their KME is too low.
+ ..Working on block 6 .
+    TOM calculation: adjacency..
+    ..will not use multithreading.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 6 into file rdas/Hippo_jxn_qSVA-block.6.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking modules for statistical meaningfulness..
+     ..removing 990 genes from module 1 because their KME is too low.
+     ..removing 500 genes from module 2 because their KME is too low.
+     ..removing 4 genes from module 3 because their KME is too low.
+     ..removing 56 genes from module 4 because their KME is too low.
+     ..removing 1 genes from module 12 because their KME is too low.
+ ..Working on block 7 .
+    TOM calculation: adjacency..
+    ..will not use multithreading.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 7 into file rdas/Hippo_jxn_qSVA-block.7.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking modules for statistical meaningfulness..
+     ..removing 2469 genes from module 1 because their KME is too low.
+     ..removing 878 genes from module 2 because their KME is too low.
+     ..removing 573 genes from module 3 because their KME is too low.
+     ..removing 19 genes from module 5 because their KME is too low.
+     ..removing 29 genes from module 6 because their KME is too low.
+ ..Working on block 8 .
+    TOM calculation: adjacency..
+    ..will not use multithreading.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 8 into file rdas/Hippo_jxn_qSVA-block.8.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking modules for statistical meaningfulness..
+     ..removing 2 genes from module 2 because their KME is too low.
+ ..Working on block 9 .
+    TOM calculation: adjacency..
+    ..will not use multithreading.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 9 into file rdas/Hippo_jxn_qSVA-block.9.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking modules for statistical meaningfulness..
+     ..removing 324 genes from module 1 because their KME is too low.
+     ..removing 176 genes from module 2 because their KME is too low.
+     ..removing 26 genes from module 3 because their KME is too low.
+     ..removing 18 genes from module 4 because their KME is too low.
+     ..removing 44 genes from module 5 because their KME is too low.
+     ..removing 14 genes from module 6 because their KME is too low.
+     ..removing 15 genes from module 10 because their KME is too low.
+     ..removing 10 genes from module 12 because their KME is too low.
+     ..removing 2 genes from module 13 because their KME is too low.
+     ..removing 7 genes from module 15 because their KME is too low.
+     ..removing 6 genes from module 21 because their KME is too low.
+     ..removing 5 genes from module 22 because their KME is too low.
+     ..removing 1 genes from module 25 because their KME is too low.
+ ..merging modules that are too close..
+     mergeCloseModules: Merging modules whose distance is less than 0.25
+       Calculating new MEs...
+
+     0      1      2      3      4      5      6      7      8      9     10     11     12     13     14     15     16     17     18     19     20     21     22     23     24     25     26     27     28     29 
+200490   3419   2952   2700   2614   2317   1934   1409   1265   1239   1232   1173   1103    779    609    577    490    432    404    390    371    338    291    265    264    248    241    232    202    194 
+    30     31     32     33     34     35     36     37     38     39     40     41     42     43     44     45     46     47     48     49     50     51     52     53     54     55     56     57     58     59 
+   183    176    174    170    165    161    157    155    150    150    146    140    132    126    125    121    120    117    117    105    103    102     97     96     93     92     89     89     87     87 
+    60     61     62     63     64     65     66     67     68     69     70     71     72     73     74     75     76     77     78     79     80     81     82     83     84     85     86     87     88     89 
+    86     85     85     83     82     82     81     79     79     77     75     72     71     70     70     69     68     68     67     64     63     63     63     62     62     61     61     60     59     59 
+    90     91     92     93     94     95     96     97     98     99    100    101    102    103    104    105    106    107    108    109    110    111    112    113    114    115    116    117    118    119 
+    58     57     57     57     56     55     55     54     54     52     52     52     52     51     51     50     50     49     47     47     47     46     46     45     44     44     44     44     44     43 
+   120    121    122    123    124    125    126    127    128    129    130    131    132    133    134    135    136    137    138    139    140    141    142    143    144    145    146    147    148    149 
+    43     42     42     42     41     41     41     41     40     40     40     39     39     39     39     38     37     37     37     36     35     35     34     33     33     33     33     32     32     32 
+   150    151    152    153    154    155    156 
+    32     32     32     32     32     31     30 
+**** Job ends ****
+Sun Mar 25 01:11:22 EDT 2018
