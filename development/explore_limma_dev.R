@@ -10,6 +10,7 @@ library('ggplot2')
 library('gplots')
 library('VennDiagram')
 library('RColorBrewer')
+library('clusterProfiler')
 
 source('load_funs.R')
 dir.create('rda', showWarnings = FALSE)
@@ -211,7 +212,6 @@ pdf('pdf/replication_exploration_subset.pdf', width = 14, height =  10, useDingb
 
 ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated / number_de)) + facet_grid(type ~ term_clean) + ylab('Replication rate') + xlab('p-threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylim(c(0, 1))
 
-
 dev.off()
 
 
@@ -330,19 +330,42 @@ if(!file.exists('rda/case_genes.Rdata')) {
         return(unique(res))
     })
     names(case_genes) <- names(pinfo)
-    save(case_genes, file = 'rda/case_genes.Rdata')
+
+    case_genes_fdr1 <- lapply(names(pinfo), function(feat) {
+        m <- match(rownames(outInfo[[feat]][outInfo[[feat]]$adj.P.Val < 0.1, ]), names(rses[[feat]]))
+        print(table(!is.na(m)))
+        m <- m[!is.na(m)]
+        if(feat %in% c('gene', 'exon')) {
+            res <- rowRanges(rses[[feat]])$gencodeID[m]
+        } else if(feat == 'jxn') {
+            res <- rowRanges(rses[[feat]])$gencodeGeneID[m]
+            res <- res[!is.na(res)]
+        } else {
+            res <- rowRanges(rses[[feat]])$gene_id[m]
+        }
+        return(unique(res))
+    })
+    names(case_genes_fdr1) <- names(pinfo)
+
+    save(case_genes, case_genes_fdr1, file = 'rda/case_genes.Rdata')
 } else {
     message(paste(Sys.time(), 'loading rda/case_genes.Rdata'))
     load('rda/case_genes.Rdata', verbose = TRUE)
 }
 sapply(case_genes, length)
-
+sapply(case_genes_fdr1, length)
 
 
 pdf('pdf/venn_de_features_caseControl.pdf', useDingbats = FALSE)
 make_venn(case_genes)
 make_venn(case_genes[c('gene', 'exon', 'jxn')])
 dev.off()
+
+pdf('pdf/venn_de_features_caseControl_fdr1.pdf', useDingbats = FALSE)
+make_venn(case_genes_fdr1)
+make_venn(case_genes_fdr1[c('gene', 'exon', 'jxn')])
+dev.off()
+
 
 
 
@@ -364,17 +387,39 @@ if(!file.exists('rda/me_genes.Rdata')) {
         return(unique(res))
     })
     names(me_genes) <- names(pinfo)
-    save(me_genes, file = 'rda/me_genes.Rdata')
+
+    me_genes_fdr05 <- lapply(names(pinfo), function(feat) {
+        m <- match(me[[feat]]$gene[me[[feat]]$FDR < 0.05], names(rses[[feat]]))
+        m <- m[!is.na(m)]
+        if(feat %in% c('gene', 'exon')) {
+            res <- rowRanges(rses[[feat]])$gencodeID[m]
+        } else if(feat == 'jxn') {
+            res <- rowRanges(rses[[feat]])$gencodeGeneID[m]
+            res <- res[!is.na(res)]
+        } else {
+            res <- rowRanges(rses[[feat]])$gene_id[m]
+        }
+        return(unique(res))
+    })
+    names(me_genes_fdr05) <- names(pinfo)
+
+    save(me_genes, me_genes_fdr05, file = 'rda/me_genes.Rdata')
 } else {
     message(paste(Sys.time(), 'loading rda/me_genes.Rdata'))
     load('rda/me_genes.Rdata', verbose = TRUE)
 }
 sapply(me_genes, length)
+sapply(me_genes_fdr05, length)
 length(unique(unlist(me_genes[c('gene', 'exon', 'jxn')])))
 
 pdf('pdf/venn_eQTL_interaction.pdf', useDingbats = FALSE)
 make_venn(me_genes, title = 'eQTLs grouped by gene id')
 make_venn(me_genes[c('gene', 'exon', 'jxn')], title = 'eQTLs grouped by gene id')
+dev.off()
+
+pdf('pdf/venn_eQTL_interaction_fdr05.pdf', useDingbats = FALSE)
+make_venn(me_genes_fdr05, title = 'eQTLs grouped by gene id')
+make_venn(me_genes_fdr05[c('gene', 'exon', 'jxn')], title = 'eQTLs grouped by gene id')
 dev.off()
 
 
@@ -440,6 +485,171 @@ risk3 <- lapply(list(all = in_risk$gene, FDR = in_riskFDR$gene), function(rk) {
 } )
 sapply(risk3, sum)
 
+
+## Go analysis
+gene_ens <- lapply(names(rses), function(feat) {
+    if(feat %in% c('gene', 'exon', 'jxn')) {
+        res <- rowRanges(rses[[feat]])$ensemblID
+    } else {
+        res <- gsub('\\..*', '', rowRanges(rses[[feat]])$gene_id)
+    }
+    res <- unique(res[!is.na(res)])
+    return(res)
+})
+names(gene_ens) <- names(rses)
+
+sapply(gene_ens, length)
+
+pdf('pdf/venn_expressed_genes_ensembl_ids.pdf', useDingbats = FALSE)
+make_venn(gene_ens)
+make_venn(gene_ens[c('gene', 'exon', 'jxn')])
+dev.off()
+
+## Use genes expressed in all 3 features (aka, exclude tx)
+uni <- unique(unlist(gene_ens[c('gene', 'exon', 'jxn')]))
+length(uni)
+
+
+run_go <- function(genes, ont = c('BP', 'MF', 'CC')) {
+    ## Change to ENSEMBL ids
+    genes_ens <- sapply(genes, function(x) { gsub('\\..*', '', x) })
+
+    ## Group by jxn, exon, gene
+    genes_venn <- venn(genes_ens, show.plot = FALSE)
+
+    ## Run GO analysis
+    go_cluster <- lapply(ont, function(bp) {
+        message(paste(Sys.time(), 'running GO analysis for', bp))
+        tryCatch(compareCluster(attr(genes_venn, 'intersections'), fun = "enrichGO",
+            universe = uni, OrgDb = 'org.Hs.eg.db',
+            ont = bp, pAdjustMethod = "BH",
+            pvalueCutoff  = 0.1, qvalueCutoff  = 0.05,
+            readable = TRUE, keyType = 'ENSEMBL'),
+            error = function(e) { return(NULL) })
+    })
+    names(go_cluster) <- ont
+    return(go_cluster)
+}
+
+
+## Development DE genes
+if(!file.exists('rda/go_de_genes.Rdata')) {
+    system.time( go_de_genes <- run_go(de_genes[c('gene', 'exon', 'jxn')]) )
+    message(paste(Sys.time(), 'saving rda/go_de_genes.Rdata'))
+    save(go_de_genes, file = 'rda/go_de_genes.Rdata')
+} else {
+    message(paste(Sys.time(), 'loading rda/go_de_genes.Rdata'))
+    load('rda/go_de_genes.Rdata', verbose = TRUE)
+}
+sapply(go_de_genes, class)
+
+## Case-control DE genes
+if(!file.exists('rda/go_case_genes.Rdata')) {
+    system.time( go_case_genes <- run_go(case_genes[c('gene', 'exon', 'jxn')]) )
+    message(paste(Sys.time(), 'saving rda/go_case_genes.Rdata'))
+    save(go_case_genes, file = 'rda/go_case_genes.Rdata')
+} else {
+    message(paste(Sys.time(), 'loading rda/go_case_genes.Rdata'))
+    load('rda/go_case_genes.Rdata', verbose = TRUE)
+}
+sapply(go_case_genes, class)
+
+if(!file.exists('rda/go_case_genes_fdr1.Rdata')) {
+    system.time( go_case_genes_fdr1 <- run_go(case_genes_fdr1[c('gene', 'exon', 'jxn')]) )
+    message(paste(Sys.time(), 'saving rda/go_case_genes_fdr1.Rdata'))
+    save(go_case_genes_fdr1, file = 'rda/go_case_genes_fdr1.Rdata')
+} else {
+    message(paste(Sys.time(), 'loading rda/go_case_genes_fdr1.Rdata'))
+    load('rda/go_case_genes_fdr1.Rdata', verbose = TRUE)
+}
+sapply(go_case_genes_fdr1, class)
+
+## eQTL interaction genes
+if(!file.exists('rda/go_me_genes.Rdata')) {
+    system.time( go_me_genes <- run_go(me_genes[c('gene', 'exon', 'jxn')]) )
+    message(paste(Sys.time(), 'saving rda/go_me_genes.Rdata'))
+    save(go_me_genes, file = 'rda/go_me_genes.Rdata')
+} else {
+    message(paste(Sys.time(), 'loading rda/go_me_genes.Rdata'))
+    load('rda/go_me_genes.Rdata', verbose = TRUE)
+}
+sapply(go_me_genes, class)
+
+if(!file.exists('rda/go_me_genes_fdr05.Rdata')) {
+    system.time( go_me_genes_fdr05 <- run_go(me_genes_fdr05[c('gene', 'exon', 'jxn')]) )
+    message(paste(Sys.time(), 'saving rda/go_me_genes_fdr05.Rdata'))
+    save(go_me_genes_fdr05, file = 'rda/go_me_genes_fdr05.Rdata')
+} else {
+    message(paste(Sys.time(), 'loading rda/go_me_genes_fdr05.Rdata'))
+    load('rda/go_me_genes_fdr05.Rdata', verbose = TRUE)
+}
+sapply(go_me_genes_fdr05, class)
+
+
+simplify_go <- function(x) {
+    gsub('jxn', 'J', gsub('exon', 'E', gsub('gene', 'G', x)))
+}
+
+plot_go <- function(go_cluster, cat = 10) {
+    lapply(names(go_cluster), function(bp) {
+        go <- go_cluster[[bp]]
+        if(is.null(go)) {
+            message(paste(Sys.time(), 'found no results for', bp))
+            return(NULL)
+        }
+
+        ## Simplify names
+        go@compareClusterResult$Cluster <- simplify_go(go@compareClusterResult$Cluster)
+        names(go@geneClusters) <- simplify_go(names(go@geneClusters))
+
+        print(plot(go, title = paste('ontology:', bp), font.size = 18, showCategory = cat, includeAll = TRUE))
+        return(NULL)
+    })
+}
+
+
+pdf('pdf/go_de_genes.pdf', width = 14, height = 9, useDingbats = FALSE)
+plot_go(go_de_genes)
+dev.off()
+
+pdf('pdf/go_case_genes.pdf', width = 14, height = 8, useDingbats = FALSE)
+plot_go(go_case_genes)
+dev.off()
+
+pdf('pdf/go_case_genes_fdr1.pdf', width = 14, height = 8, useDingbats = FALSE)
+plot_go(go_case_genes_fdr1)
+dev.off()
+
+pdf('pdf/go_me_genes.pdf', width = 14, height = 8, useDingbats = FALSE)
+plot_go(go_me_genes)
+dev.off()
+
+pdf('pdf/go_me_genes_fdr05.pdf', width = 14, height = 8, useDingbats = FALSE)
+plot_go(go_me_genes_fdr05)
+dev.off()
+
+
+## all
+pdf('pdf/go_all_de_genes.pdf', width = 14, height = 50, useDingbats = FALSE)
+plot_go(go_de_genes, cat = NULL)
+dev.off()
+
+# pdf('pdf/go_all_case_genes.pdf', width = 14, height = 8, useDingbats = FALSE)
+# plot_go(go_case_genes, cat = NULL)
+# dev.off()
+
+pdf('pdf/go_all_case_genes_fdr1.pdf', width = 18, height = 35, useDingbats = FALSE)
+plot_go(go_case_genes_fdr1, cat = NULL)
+dev.off()
+
+pdf('pdf/go_all_me_genes.pdf', width = 14, height = 8, useDingbats = FALSE)
+plot_go(go_me_genes, cat = NULL)
+dev.off()
+
+pdf('pdf/go_all_me_genes_fdr05.pdf', width = 14, height = 8, useDingbats = FALSE)
+plot_go(go_me_genes_fdr05, cat = NULL)
+dev.off()
+
 ## Reproducibility information
 print('Reproducibility information:')
 Sys.time()
@@ -447,4 +657,9 @@ proc.time()
 options(width = 120)
 session_info()
 
+
+## Re-loading
+f <- dir('rda', full.names = TRUE)
+f <- f[!grepl('limma', f)]
+sapply(f, function(x) { load(x, verbose = TRUE)})
 
