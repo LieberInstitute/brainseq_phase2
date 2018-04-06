@@ -16,16 +16,16 @@ stopifnot(all(file.exists(p2)))
 
 ## Write manifest files for the RNA-seq pipeline
 manifest <- data.frame(
-    hip$run,
     p1,
     0,
     p2,
     0,
+    hip$run,
     stringsAsFactors = FALSE
 )
 
 write.table(manifest, file = 'samples.manifest', sep = '\t',
-            row.names = FALSE,quote = FALSE, col.names = FALSE)
+            row.names = FALSE, quote = FALSE, col.names = FALSE)
 
 ## Reproducibility information
 print('Reproducibility information:')
