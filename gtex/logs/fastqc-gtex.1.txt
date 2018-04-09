@@ -1,10 +1,10 @@
 **** Job starts ****
-Fri Apr  6 13:34:59 EDT 2018
+Mon Apr  9 11:50:24 EDT 2018
 **** JHPCE info ****
 User: lcollado
-Job id: 4800816
+Job id: 4812635
 Job name: step1-fastqc-gtex.hippo
-Hostname: compute-060
+Hostname: compute-055
 Task id: 1
 ****
 Sample id: SRR1348339
@@ -52,4 +52,4 @@ Approx 90% complete for SRR1348339_2.fastq.gz
 Approx 95% complete for SRR1348339_2.fastq.gz
 Analysis complete for SRR1348339_2.fastq.gz
 **** Job ends ****
-Fri Apr  6 13:52:47 EDT 2018
+Mon Apr  9 12:05:23 EDT 2018

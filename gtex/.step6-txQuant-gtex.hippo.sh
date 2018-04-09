@@ -33,9 +33,9 @@ ID=$(cat /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/samples.manifest | awk '{
 mkdir -p /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/Salmon_tx/${ID}
 
 if [ TRUE == "TRUE" ] ; then 
-	/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Software/Salmon-0.8.2_linux_x86_64/bin/salmon quant 	-i /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh38_hg38/transcripts/salmon_0.8.2_index_gencode.v25.transcripts -p 1 -l ISR 	-1 ${FILE1} -2 ${FILE2} 	-o /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/Salmon_tx/${ID}
+	/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Software/Salmon-0.8.2_linux_x86_64/bin/salmon quant 	-i /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh38_hg38/transcripts/salmon_0.8.2_index_gencode.v25.transcripts -p 1 -l IU 	-1 ${FILE1} -2 ${FILE2} 	-o /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/Salmon_tx/${ID}
 else
-	/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Software/Salmon-0.8.2_linux_x86_64/bin/salmon quant 	-i /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh38_hg38/transcripts/salmon_0.8.2_index_gencode.v25.transcripts -p 1 -l ISR 	-r ${FILE1} 	-o /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/Salmon_tx/${ID}
+	/dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Software/Salmon-0.8.2_linux_x86_64/bin/salmon quant 	-i /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annotation/GENCODE/GRCh38_hg38/transcripts/salmon_0.8.2_index_gencode.v25.transcripts -p 1 -l IU 	-r ${FILE1} 	-o /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/Salmon_tx/${ID}
 fi
 
 

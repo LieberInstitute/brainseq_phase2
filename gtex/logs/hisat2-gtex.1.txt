@@ -1,0 +1,19 @@
+**** Job starts ****
+Mon Apr  9 12:44:09 EDT 2018
+**** JHPCE info ****
+User: lcollado
+Job id: 4812637
+Job name: step3-hisat2-gtex.hippo
+Hostname: compute-094
+Task id: 1
+****
+Sample id: SRR1348339
+****
+HISAT2 alignment run on original untrimmed paired-end reads
+**** Filtering unmapped segments ****
+Mon Apr  9 12:58:42 EDT 2018
+[bam_sort_core] merging from 40 files...
+**** Inferring strandedness with infer_experiment.py ****
+Mon Apr  9 14:05:49 EDT 2018
+**** Job ends ****
+Mon Apr  9 14:05:52 EDT 2018

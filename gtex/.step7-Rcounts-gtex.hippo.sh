@@ -21,7 +21,7 @@ echo "****"
 module unload conda_R
 module load R/3.3.x
 
-Rscript /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/.step7-create_count_objects-human.R -o hg38 -m /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex -e gtex -p hippo -l TRUE -c FALSE -t 5 -s reverse
+Rscript /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/.step7-create_count_objects-human.R -o hg38 -m /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex -e gtex -p hippo -l TRUE -c FALSE -t 5 -s FALSE
 
 echo "**** Job ends ****"
 date

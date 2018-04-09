@@ -1,28 +1,28 @@
 **** checking that R packages are present ****
-Fri Apr  6 13:33:07 EDT 2018
+Mon Apr  9 11:48:55 EDT 2018
 Using the following user library: ~/R/x86_64-pc-linux-gnu-library/3.4.x
 Loading required package: colorout
 Loading required package: rmote
-Serving the directory /users/lcollado/rmote/rmote_server_2018-04-06 at http://127.0.0.1:43210
+Serving the directory /users/lcollado/rmote/rmote_server_2018-04-09 at http://127.0.0.1:43210
 
 
 
 **** checking that RSeQC is installed ****
-Fri Apr  6 13:33:37 EDT 2018
+Mon Apr  9 11:49:19 EDT 2018
 **** checking that checksumdir is installed ****
-Fri Apr  6 13:33:41 EDT 2018
+Mon Apr  9 11:49:19 EDT 2018
 **** Saving the reproducibility information in logs/pipeline_information.txt ****
-Fri Apr  6 13:33:42 EDT 2018
+Mon Apr  9 11:49:21 EDT 2018
 **** Finding the sample information ****
-Fri Apr  6 13:34:31 EDT 2018
+Mon Apr  9 11:50:06 EDT 2018
 Using the following user library: ~/R/x86_64-pc-linux-gnu-library/3.4.x
 Loading required package: colorout
 Loading required package: rmote
-Serving the directory /users/lcollado/rmote/rmote_server_2018-04-06 at http://127.0.0.1:43210
+Serving the directory /users/lcollado/rmote/rmote_server_2018-04-09 at http://127.0.0.1:43210
 [1] "Reproducibility information:"
-[1] "2018-04-06 13:34:33 EDT"
+[1] "2018-04-09 11:50:08 EDT"
    user  system elapsed 
-  1.662   0.163   2.381 
+  1.236   0.134   1.656 
 Session info ----------------------------------------------------------------------------------------------------------
  setting  value                                      
  version  R version 3.4.3 Patched (2018-01-20 r74142)
@@ -31,7 +31,7 @@ Session info -------------------------------------------------------------------
  language (EN)                                       
  collate  en_US.UTF-8                                
  tz       US/Eastern                                 
- date     2018-04-06                                 
+ date     2018-04-09                                 
 
 Packages --------------------------------------------------------------------------------------------------------------
  package     * version date       source                            
@@ -72,39 +72,39 @@ Packages -----------------------------------------------------------------------
 **** Creating bash scripts for every step ****
 Creating script step1-fastqc-gtex.hippo
 qsub .step1-fastqc-gtex.hippo.sh
-Your job-array 4800816.1-94:1 ("step1-fastqc-gtex.hippo") has been submitted
+Your job-array 4812635.1-94:1 ("step1-fastqc-gtex.hippo") has been submitted
 Creating script step2-trim-gtex.hippo
 qsub .step2-trim-gtex.hippo.sh
-Your job-array 4800817.1-94:1 ("step2-trim-gtex.hippo") has been submitted
+Your job-array 4812636.1-94:1 ("step2-trim-gtex.hippo") has been submitted
 Creating script step3-hisat2-gtex.hippo
 qsub .step3-hisat2-gtex.hippo.sh
-Your job-array 4800818.1-94:1 ("step3-hisat2-gtex.hippo") has been submitted
+Your job-array 4812637.1-94:1 ("step3-hisat2-gtex.hippo") has been submitted
 Creating script step3b-infer-strandness-gtex.hippo
 qsub .step3b-infer-strandness-gtex.hippo.sh
-Your job 4800819 ("step3b-infer-strandness-gtex.hippo") has been submitted
+Your job 4812638 ("step3b-infer-strandness-gtex.hippo") has been submitted
 Creating script step4-featCounts-gtex.hippo
 qsub .step4-featCounts-gtex.hippo.sh
-Your job-array 4800820.1-94:1 ("step4-featCounts-gtex.hippo") has been submitted
+Your job-array 4812639.1-94:1 ("step4-featCounts-gtex.hippo") has been submitted
 qsub .step4-featCounts-gtex.hippo_clean.sh
-Your job 4800821 ("step4-featCounts-gtex.hippo_clean") has been submitted
+Your job 4812640 ("step4-featCounts-gtex.hippo_clean") has been submitted
 Creating script step5-coverage-gtex.hippo
 qsub .step5-coverage-gtex.hippo.sh
-Your job-array 4800822.1-94:1 ("step5-coverage-gtex.hippo") has been submitted
+Your job-array 4812641.1-94:1 ("step5-coverage-gtex.hippo") has been submitted
 Creating script step5b-meanCoverage-gtex.hippo
 qsub .step5b-meanCoverage-gtex.hippo.sh
-Your job 4800823 ("step5b-meanCoverage-gtex.hippo") has been submitted
+Your job 4812642 ("step5b-meanCoverage-gtex.hippo") has been submitted
 Ignoring --cores 8 and will use 2 cores
 Creating script step6-txQuant-gtex.hippo
 qsub .step6-txQuant-gtex.hippo.sh
-Your job-array 4800824.1-94:1 ("step6-txQuant-gtex.hippo") has been submitted
+Your job-array 4812643.1-94:1 ("step6-txQuant-gtex.hippo") has been submitted
 Creating script step7-Rcounts-gtex.hippo
 qsub .step7-Rcounts-gtex.hippo.sh
-Your job 4800825 ("step7-Rcounts-gtex.hippo") has been submitted
+Your job 4812644 ("step7-Rcounts-gtex.hippo") has been submitted
 Creating script step8-callVariants-gtex.hippo
 qsub .step8-callVariants-gtex.hippo.sh
-Your job-array 4800826.1-94:1 ("step8-callVariants-gtex.hippo") has been submitted
+Your job-array 4812645.1-94:1 ("step8-callVariants-gtex.hippo") has been submitted
 Creating script step8b-mergeVariantCalls-gtex.hippo
 qsub .step8b-mergeVariantCalls-gtex.hippo.sh
-Your job 4800827 ("step8b-mergeVariantCalls-gtex.hippo") has been submitted
+Your job 4812646 ("step8b-mergeVariantCalls-gtex.hippo") has been submitted
 qsub .step9-findERs-gtex.hippo.sh
-Your job 4800828 ("step9-findERs-gtex.hippo") has been submitted
+Your job 4812647 ("step9-findERs-gtex.hippo") has been submitted

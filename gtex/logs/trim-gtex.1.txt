@@ -1,0 +1,14 @@
+**** Job starts ****
+Mon Apr  9 12:35:14 EDT 2018
+**** JHPCE info ****
+User: lcollado
+Job id: 4812636
+Job name: step2-trim-gtex.hippo
+Hostname: compute-065
+Task id: 1
+****
+Sample id: SRR1348339
+****
+No trimming required!
+**** Job ends ****
+Mon Apr  9 12:35:15 EDT 2018
