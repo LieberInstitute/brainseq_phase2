@@ -209,10 +209,15 @@ dev.off()
 
 
 pdf('pdf/replication_exploration_subset.pdf', width = 14, height =  10, useDingbats = FALSE)
-
-ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated / number_de)) + facet_grid(type ~ term_clean) + ylab('Replication rate') + xlab('p-threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylim(c(0, 1))
-
+ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated / number_de)) + facet_grid(type ~ toupper(term_clean)) + ylab('Replication rate') + xlab('p-value threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylim(c(0, 1))
 dev.off()
+
+pdf('pdf/replication_exploration_subset_F.pdf', width = 8, height =  10, useDingbats = FALSE)
+ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx' & term_clean == 'f'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated / number_de)) + facet_grid(type ~ toupper(term_clean)) + ylab('Replication rate') + xlab('p-value threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylim(c(0, 1)) + geom_line(aes(y = replicated / number_de, x = rep(1:6, 3)))
+
+ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx' & term_clean == 'f'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated / number_de)) + facet_grid(type ~ toupper(term_clean)) + ylab('Replication rate') + xlab('p-value threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + geom_line(aes(y = replicated / number_de, x = rep(1:6, 3)))
+dev.off()
+
 
 
 
@@ -652,24 +657,24 @@ dev.off()
 
 
 ## Volcano plots
+rep_brain <- function(x) {
+    ifelse(x, 'BrainSpan rep.', 'BrainSpan not rep.')
+}
 
 pdf('pdf/volcano_plots_F.pdf', width = 14, height = 8, useDingbats = FALSE)
-ggplot(subset(pcheck_both, type != 'tx'), aes(x = Age.RegionHIPPO, y = -log10(P.Value), color = P.Bonf < 0.01 & span_P.Value < 0.05)) + geom_point() + facet_grid(. ~ type) + theme_bw(base_size = 18) + scale_colour_manual(values = c('grey80', 'red'), name = 'F Bonf. <1%\nRep. in\nBrainSpan') + ylab('-log10 p value')
 
-ggplot(subset(pcheck_both, type != 'tx'), aes(x = F, y = -log10(P.Value), color = P.Bonf < 0.01 & span_P.Value < 0.05)) + geom_point() + facet_grid(. ~ type) + theme_bw(base_size = 18) + scale_colour_manual(values = c('grey80', 'red'), name = 'F Bonf. <1%\nRep. in\nBrainSpan') + ylab('-log10 p value') + scale_x_log10()
+ggplot(subset(pcheck_both, type != 'tx'), aes(x = F, y = -log10(P.Value), color = P.Bonf < 0.01)) + geom_point() + facet_grid(rep_brain(span_P.Value < 0.05) ~ type, scale = 'free') + theme_bw(base_size = 18) + scale_colour_manual(values = c('grey20', 'red'), name = 'F Bonf. <1%') + ylab('-log10 p value') + scale_x_log10()
 
-ggplot(subset(pcheck_both, type != 'tx'), aes(x = abs(Age.RegionHIPPO) + abs(RegionHIPPO.fetal) + abs(RegionHIPPO.birth) + abs(RegionHIPPO.infant) + abs(RegionHIPPO.child) + abs(RegionHIPPO.teen) + abs(RegionHIPPO.adult), y = -log10(P.Value), color = P.Bonf < 0.01 & span_P.Value < 0.05)) + geom_point() + facet_grid(. ~ type) + theme_bw(base_size = 18) + scale_colour_manual(values = c('grey80', 'red'), name = 'F Bonf. <1%\nRep. in\nBrainSpan') + ylab('-log10 p value') + xlab('Sum of absolute terms')
+## Subset to smaller F values
+ggplot(subset(pcheck_both, type != 'tx' & F < 1100), aes(x = F, y = -log10(P.Value), color = P.Bonf < 0.01)) + geom_point() + facet_grid(rep_brain(span_P.Value < 0.05) ~ type, scale = 'free') + theme_bw(base_size = 18) + scale_colour_manual(values = c('grey20', 'red'), name = 'F Bonf. <1%') + ylab('-log10 p value') + scale_x_log10()
 
-ggplot(subset(pcheck_both, type != 'tx'), aes(x = abs(Age.RegionHIPPO) + abs(RegionHIPPO.fetal) + abs(RegionHIPPO.birth) + abs(RegionHIPPO.infant) + abs(RegionHIPPO.child) + abs(RegionHIPPO.teen) + abs(RegionHIPPO.adult), y = -log10(P.Value), color = P.Bonf < 0.01)) + geom_point() + facet_grid(span_P.Value < 0.05 ~ type, scale = 'free') + theme_bw(base_size = 18) + scale_colour_manual(values = c('grey80', 'red'), name = 'F Bonf. <1%\nRep. in\nBrainSpan') + ylab('-log10 p value') + xlab('Sum of absolute terms')
-
-ggplot(subset(pcheck_both, type != 'tx' & F < 1100), aes(x = F, y = -log10(P.Value), color = P.Bonf < 0.01)) + geom_point() + facet_grid(span_P.Value < 0.05 ~ type, scale = 'free') + theme_bw(base_size = 18) + scale_colour_manual(values = c('grey80', 'red'), name = 'F Bonf. <1%') + ylab('-log10 p value') + scale_x_log10()
+## from limma::topTableF() the rowSums of the abs coefs is the lfc for the F
+## although it doesn't look like the F-volcano in Figure 5 (page 16) of
+## https://www.bioconductor.org/packages/release/bioc/vignettes/maanova/inst/doc/maanova.pdf
+ggplot(subset(pcheck_both, type != 'tx'), aes(x = abs(Age.RegionHIPPO) + abs(RegionHIPPO.fetal) + abs(RegionHIPPO.birth) + abs(RegionHIPPO.infant) + abs(RegionHIPPO.child) + abs(RegionHIPPO.teen) + abs(RegionHIPPO.adult), y = -log10(P.Value), color = P.Bonf < 0.01)) + geom_point() + facet_grid(rep_brain(span_P.Value < 0.05) ~ type, scale = 'free') + theme_bw(base_size = 18) + scale_colour_manual(values = c('grey20', 'red'), name = 'F Bonf. <1%') + ylab('-log10 p value') + xlab('LFC: sum of absolute log2 FC for interaction terms')
 
 dev.off()
 
-
-make_volcano <- function(df) {
-    ggplot(df, aes(x = logfc, y = -log10(pval), color = sig)) + geom_point() + facet_grid(. ~ type, scales = 'free') + theme_bw(base_size = 18) + scale_colour_manual(values = c('grey80', 'red'), name = 'F Bonf. <1%\nRep. in\nBrainSpan') + ylab('-log10 p value') + xlab(paste('log2 FC', var))
-}
 
 ## This one separates the BrainSeq and the BrainSpan effects
 make_volcano2 <- function(df) {
@@ -677,7 +682,6 @@ make_volcano2 <- function(df) {
 }
 
 volcano_custom <- function(var, foo = make_volcano) {
-
     df <- do.call(rbind, lapply(names(fit)[-4], function(f) {
         data.frame(
             pval = fit[[f]]$p.value[, var],
@@ -690,7 +694,7 @@ volcano_custom <- function(var, foo = make_volcano) {
     m <- match(paste0(df$type, '.', df$name), rownames(pcheck_both))
     df$sig <- with(pcheck_both[m, ], P.Bonf < 0.01 & span_P.Value < 0.05)
     df$sigBrainSeq <- with(pcheck_both[m, ], P.Bonf < 0.01)
-    df$sigBrainSpan <- ifelse(with(pcheck_both[m, ], span_P.Value < 0.05), 'BrainSpan rep.', 'Not rep.')
+    df$sigBrainSpan <- rep_brain(with(pcheck_both[m, ], span_P.Value < 0.05))
 
     g <- foo(df)
     print(g)
@@ -700,12 +704,6 @@ volcano_custom <- function(var, foo = make_volcano) {
 pdf('pdf/volcano_plots.pdf', width = 14, height = 8, useDingbats = FALSE)
 volcano_info <- lapply(colnames(fit$gene$coef)[grep(':', colnames(fit$gene$coef))], volcano_custom, foo = make_volcano2)
 dev.off()
-
-
-
-
-xx <- volcano_custom(colnames(fit$gene$coef)[grep(':', colnames(fit$gene$coef))][1], make_volcano2)
-
 
 
 ## Reproducibility information
