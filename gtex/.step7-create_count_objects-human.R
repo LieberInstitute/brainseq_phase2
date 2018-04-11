@@ -45,6 +45,15 @@ if(FALSE){
         'ercc' = TRUE,
 		'cores' = 1
     )
+    opt <- list('organism' = 'hg38',
+        'maindir' = '/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex',
+        'experiment' = 'gtex',
+        'prefix' = 'hippo',
+        'paired' = TRUE,
+		'stranded' = 'FALSE',
+        'ercc' = FALSE,
+		'cores' = 1
+    )
 }
 
 stopifnot(opt$stranded %in% c('FALSE', 'forward', 'reverse'))
