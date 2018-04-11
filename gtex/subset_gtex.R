@@ -32,7 +32,6 @@ meta_subj$age <- mapply(function(x, y) { mean(c(x, y)) },
 
 ## Simplify gender using info from GTEx_Data_V6_Annotations_SubjectPhenotypes_DD.xlsx
 stopifnot(all(meta_subj$gender %in% 1:2))
-stopifnot(all(meta_subj$dthhrdy %in% 0:4))
 meta_subj$gender <- relevel(factor(ifelse(meta_subj$gender == 1, 'M', 'F')), ref = 'F')
 
 ## Add to recount2 GTEx metadata
