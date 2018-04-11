@@ -1,0 +1,14 @@
+**** Job starts ****
+Mon Apr  9 22:27:47 EDT 2018
+**** JHPCE info ****
+User: lcollado
+Job id: 4812645
+Job name: step8-callVariants-gtex.hippo
+Hostname: compute-108
+Task id: 1
+****
+Sample id: SRR1348339
+****
+[mpileup] 1 samples in 1 input files
+**** Job ends ****
+Mon Apr  9 22:32:00 EDT 2018

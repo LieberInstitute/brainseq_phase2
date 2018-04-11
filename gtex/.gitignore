@@ -2,3 +2,10 @@ FastQC
 ERs
 logs
 Coverage
+Counts
+Genotypes
+HISAT2_out/
+Salmon_tx
+*.rda
+*.Rdata
+*.csv

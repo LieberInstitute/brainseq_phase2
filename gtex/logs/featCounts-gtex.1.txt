@@ -1,0 +1,132 @@
+**** Job starts ****
+Mon Apr  9 22:27:48 EDT 2018
+**** JHPCE info ****
+User: lcollado
+Job id: 4812639
+Job name: step4-featCounts-gtex.hippo
+Hostname: compute-068
+Task id: 1
+****
+Sample id: SRR1348339
+****
+Unloading conda_R/3.4.x
+
+        ==========     _____ _    _ ____  _____  ______          _____  
+        =====         / ____| |  | |  _ \|  __ \|  ____|   /\   |  __ \ 
+          =====      | (___ | |  | | |_) | |__) | |__     /  \  | |  | |
+            ====      \___ \| |  | |  _ <|  _  /|  __|   / /\ \ | |  | |
+              ====    ____) | |__| | |_) | | \ \| |____ / ____ \| |__| |
+        ==========   |_____/ \____/|____/|_|  \_\______/_/    \_\_____/
+	v1.5.0-p3
+
+//========================== featureCounts setting ===========================\\
+||                                                                            ||
+||             Input files : 1 BAM file                                       ||
+||                           P /dcl01/lieber/ajaffe/lab/brainseq_phase2/g ... ||
+||                                                                            ||
+||             Output file : /dcl01/lieber/ajaffe/lab/brainseq_phase2/gte ... ||
+||                 Summary : /dcl01/lieber/ajaffe/lab/brainseq_phase2/gte ... ||
+||              Annotation : /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/A ... ||
+||                                                                            ||
+||                 Threads : 8                                                ||
+||                   Level : meta-feature level                               ||
+||              Paired-end : yes                                              ||
+||         Strand specific : no                                               ||
+||      Multimapping reads : not counted                                      ||
+|| Multi-overlapping reads : not counted                                      ||
+||                                                                            ||
+||          Chimeric reads : counted                                          ||
+||        Both ends mapped : not required                                     ||
+||                                                                            ||
+\\===================== http://subread.sourceforge.net/ ======================//
+
+//================================= Running ==================================\\
+||                                                                            ||
+|| Load annotation file /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annota ... ||
+||    Features : 1182765                                                      ||
+||    Meta-features : 58037                                                   ||
+||    Chromosomes/contigs : 25                                                ||
+||                                                                            ||
+|| Process BAM file /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/HISAT2_ ... ||
+||    Paired-end reads are included.                                          ||
+||    Assign fragments (read pairs) to features...                            ||
+||                                                                            ||
+||    WARNING: reads from the same pair were found not adjacent to each       ||
+||             other in the input (due to read sorting by location or         ||
+||             reporting of multi-mapping read pairs).                        ||
+||                                                                            ||
+||    Read re-ordering is performed.                                          ||
+||                                                                            ||
+||    Total fragments : 48630407                                              ||
+||    Successfully assigned fragments : 39897634 (82.0%)                      ||
+||    Running time : 3.04 minutes                                             ||
+||                                                                            ||
+||                         Read assignment finished.                          ||
+||                                                                            ||
+\\===================== http://subread.sourceforge.net/ ======================//
+
+
+        ==========     _____ _    _ ____  _____  ______          _____  
+        =====         / ____| |  | |  _ \|  __ \|  ____|   /\   |  __ \ 
+          =====      | (___ | |  | | |_) | |__) | |__     /  \  | |  | |
+            ====      \___ \| |  | |  _ <|  _  /|  __|   / /\ \ | |  | |
+              ====    ____) | |__| | |_) | | \ \| |____ / ____ \| |__| |
+        ==========   |_____/ \____/|____/|_|  \_\______/_/    \_\_____/
+	v1.5.0-p3
+
+//========================== featureCounts setting ===========================\\
+||                                                                            ||
+||             Input files : 1 BAM file                                       ||
+||                           P /dcl01/lieber/ajaffe/lab/brainseq_phase2/g ... ||
+||                                                                            ||
+||             Output file : /dcl01/lieber/ajaffe/lab/brainseq_phase2/gte ... ||
+||                 Summary : /dcl01/lieber/ajaffe/lab/brainseq_phase2/gte ... ||
+||              Annotation : /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/A ... ||
+||                                                                            ||
+||                 Threads : 8                                                ||
+||                   Level : feature level                                    ||
+||              Paired-end : yes                                              ||
+||         Strand specific : no                                               ||
+||      Multimapping reads : not counted                                      ||
+|| Multi-overlapping reads : counted                                          ||
+||                                                                            ||
+||          Chimeric reads : counted                                          ||
+||        Both ends mapped : not required                                     ||
+||                                                                            ||
+\\===================== http://subread.sourceforge.net/ ======================//
+
+//================================= Running ==================================\\
+||                                                                            ||
+|| Load annotation file /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/Annota ... ||
+||    Features : 1182765                                                      ||
+||    Meta-features : 58037                                                   ||
+||    Chromosomes/contigs : 25                                                ||
+||                                                                            ||
+|| Process BAM file /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/HISAT2_ ... ||
+||    Paired-end reads are included.                                          ||
+||    Assign fragments (read pairs) to features...                            ||
+||                                                                            ||
+||    WARNING: reads from the same pair were found not adjacent to each       ||
+||             other in the input (due to read sorting by location or         ||
+||             reporting of multi-mapping read pairs).                        ||
+||                                                                            ||
+||    Read re-ordering is performed.                                          ||
+||                                                                            ||
+||    Total fragments : 48630407                                              ||
+||    Successfully assigned fragments : 42633936 (87.7%)                      ||
+||    Running time : 1.87 minutes                                             ||
+||                                                                            ||
+||                         Read assignment finished.                          ||
+||                                                                            ||
+\\===================== http://subread.sourceforge.net/ ======================//
+
+
+Program:	regtools
+Version:	0.2.0
+Minimum junction anchor length: 8
+Minimum intron length: 9
+Maximum intron length: 500000
+Alignment: /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/Counts/junction/tmpdir/SRR1348339.bam
+Output file: /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/Counts/junction/SRR1348339_junctions_primaryOnly_regtools.bed
+**** Job ends ****
+Mon Apr  9 22:43:26 EDT 2018

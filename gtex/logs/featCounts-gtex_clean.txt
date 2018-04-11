@@ -1,0 +1,10 @@
+**** Job starts ****
+Tue Apr 10 17:23:34 EDT 2018
+**** JHPCE info ****
+User: lcollado
+Job id: 4818076
+Job name: step4-featCounts-gtex.hippo_clean
+Hostname: compute-065
+****
+**** Job ends ****
+Tue Apr 10 17:23:34 EDT 2018

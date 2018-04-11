@@ -1,0 +1,15 @@
+**** Job starts ****
+Tue Apr 10 13:09:38 EDT 2018
+**** JHPCE info ****
+User: lcollado
+Job id: 4817450
+Job name: step5b-meanCoverage-gtex.hippo
+Hostname: compute-073
+****
+Unloading conda_R/3.4.x
+*****************************
+Tue Apr 10 13:09:39 EDT 2018
+Processing unstranded data
+*****************************
+**** Job ends ****
+Tue Apr 10 15:30:22 EDT 2018
