@@ -30,7 +30,7 @@ load_foo <- function(type) {
         paste0('rse_span_', type, '.Rdata'))
     stopifnot(file.exists(load_file))
     load(load_file)
-    
+
     ## Get the appropriate object
     if(type == 'gene') {
         rse <- rse_span_gene
@@ -41,10 +41,10 @@ load_foo <- function(type) {
     } else if (type == 'tx') {
         rse <- rse_span_tx
     }
-    
+
     print('Dimensions of the data used')
     print(dim(rse))
-    
+
     ## Add age linear splines
     fetal <- ifelse(colData(rse)$Age < 0, 1,0)
     birth <- colData(rse)$Age
@@ -63,10 +63,10 @@ load_foo <- function(type) {
     colData(rse)$infant <- infant
     colData(rse)$child <- child
     colData(rse)$teen <- teen
-    
+
     ## None are adult in the BrainSpan data set
     colData(rse)$adult <- adult
-    
+
     return(rse)
 }
 
@@ -80,10 +80,10 @@ pd <- pd[, match(c('Age', 'fetal', 'birth', 'infant', 'child', 'teen', 'adult', 
 fm_mod <-  ~Age + fetal + birth + infant + child + teen + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN #+ adult
 fm_mod0 <- ~ Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN
 fm_mod_all <- ~Age *Region + fetal * Region + birth *Region + infant *Region + child * Region + teen * Region + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN # + adult * Region
-fm_mod0_all <- ~ Age + fetal + birth + infant + child + teen + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN # + adult 
+fm_mod0_all <- ~ Age + fetal + birth + infant + child + teen + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN # + adult
 
 
-get_mods <- function(pd, int = FALSE) {    
+get_mods <- function(pd, int = FALSE) {
     ### adjust for race, sex
     if(int) {
         mod = model.matrix(fm_mod_all, data=pd)
@@ -117,28 +117,28 @@ if(opt$type != 'tx') {
     } else {
         dge <- DGEList(counts = assays(rse)$counts)
     }
-    
+
     dge <- calcNormFactors(dge)
     pdf(paste0('pdf/span_limma_dev_interaction_', opt$type, '.pdf'))
     v <- voom(dge, design, plot = TRUE)
     dev.off()
-    
+
     system.time( corfit <- duplicateCorrelation(v$E, design[, c('(Intercept)',
         'RegionHIPPO')], block=brnum) )
-    
+
     ## Main fit steps
     system.time( fit <- lmFit(v, design, block=brnum,
         correlation = corfit$consensus.correlation) )
-        
+
     exprsNorm <- v$E
 } else {
     system.time( corfit <- duplicateCorrelation(assays(rse)$tpm, design[,
         c('(Intercept)', 'RegionHIPPO')], block=brnum) )
 
     ## Main fit steps
-    system.time( fit <- lmFit(assays(rse)$tpm, design, block=brnum,
+    system.time( fit <- lmFit(log2(assays(rse)$tpm + 0.5), design, block=brnum,
         correlation = corfit$consensus.correlation) )
-    exprsNorm <- assays(rse)$tpm
+    exprsNorm <- log2(assays(rse)$tpm + 0.5)
 }
 system.time( fit <- eBayes(fit) )
 

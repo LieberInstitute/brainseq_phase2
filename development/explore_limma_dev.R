@@ -708,13 +708,13 @@ source('pca_funs.R')
 if(!file.exists('rda/pcas.Rdata')) {
     pcas <- lapply(names(exprsNorm), function(type) {
         message(paste(Sys.time(), 'processing', type))
-        if(type == 'tx') pc_function(log2(exprsNorm[[type]] + 0.5)) else pc_function(exprsNorm[[type]])
+        pc_function(exprsNorm[[type]])
     })
     names(pcas) <- names(exprsNorm)
 
     pcas_span <- lapply(names(exprsNorm_span), function(type) {
         message(paste(Sys.time(), 'processing', type))
-        if(type == 'tx') pc_function(log2(exprsNorm_span[[type]] + 0.5)) else pc_function(exprsNorm_span[[type]])
+        pc_function(exprsNorm_span[[type]])
     })
     names(pcas_span) <- names(exprsNorm_span)
 
