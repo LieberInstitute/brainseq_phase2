@@ -148,7 +148,7 @@ dev.off()
 png('pdf/compare_with_span_logFC_noTx.png', type = 'cairo')
 ggplot(subset(pcheck_both, type != 'tx'), aes(x = logFC, y = span_logFC,
                                               alpha = 1/20)) +
-    facet_grid(age ~ type) + ylab('BrainSpan log FC') +
+    facet_grid(. ~ type) + ylab('BrainSpan log FC') +
     xlab('BrainSeq log FC') + geom_point() + xlim(-7.5, 7.5) + ylim(-7.5, 7.5) +
     geom_smooth(method=lm, se=FALSE)
 dev.off()
@@ -156,14 +156,14 @@ dev.off()
 
 pdf('pdf/compare_with_span_logFC_density.pdf', useDingbats = FALSE)
 ggplot(pcheck_both, aes(x = logFC, y = span_logFC)) +
-    facet_grid(age ~ type) + ylab('BrainSpan log FC') +
+    facet_grid(. ~ type) + ylab('BrainSpan log FC') +
     xlab('BrainSeq log FC') + stat_density2d() + xlim(-16, 16) + ylim(-16, 16) +
     geom_smooth(method=lm, se=FALSE)
 dev.off()
 
 pdf('pdf/compare_with_span_logFC_density_noTx.pdf', useDingbats = FALSE)
 ggplot(subset(pcheck_both, type != 'tx'), aes(x = logFC, y = span_logFC)) +
-    facet_grid(age ~ type) + ylab('BrainSpan log FC') +
+    facet_grid(. ~ type) + ylab('BrainSpan log FC') +
     xlab('BrainSeq log FC') + stat_density2d() + xlim(-7.5, 7.5) +
     ylim(-7.5, 7.5) +
     geom_smooth(method=lm, se=FALSE)
