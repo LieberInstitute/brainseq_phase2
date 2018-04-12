@@ -141,12 +141,12 @@ table(pcheck_both$type[which(abs(pcheck_both$Age.RegionHIPPO) > 16 | abs(pcheck_
 png('pdf/compare_with_span_logFC.png', type = 'cairo')
 ggplot(pcheck_both, aes(x = F, y = span_F, alpha = 1/20)) +
     facet_grid(. ~ type) + ylab('BrainSpan F-stat') +
-    xlab('BrainSeq F-stat') + geom_point()
+    xlab('BrainSeq F-stat') + geom_point() +
     geom_smooth(method=lm, se=FALSE)
 dev.off()
 
 png('pdf/compare_with_span_logFC_noTx.png', type = 'cairo')
-ggplot(subset(pcheck_both, type != 'tx'), aes(x = logFC, y = span_logFC,
+ggplot(subset(pcheck_both, type != 'tx'), aes(x = F, y = span_F,
                                               alpha = 1/20)) +
     facet_grid(. ~ type) + ylab('BrainSpan log FC') +
     xlab('BrainSeq log FC') + geom_point() + xlim(-7.5, 7.5) + ylim(-7.5, 7.5) +
@@ -155,14 +155,14 @@ dev.off()
 
 
 pdf('pdf/compare_with_span_logFC_density.pdf', useDingbats = FALSE)
-ggplot(pcheck_both, aes(x = logFC, y = span_logFC)) +
+ggplot(pcheck_both, aes(x = F, y = span_F)) +
     facet_grid(. ~ type) + ylab('BrainSpan log FC') +
     xlab('BrainSeq log FC') + stat_density2d() + xlim(-16, 16) + ylim(-16, 16) +
     geom_smooth(method=lm, se=FALSE)
 dev.off()
 
 pdf('pdf/compare_with_span_logFC_density_noTx.pdf', useDingbats = FALSE)
-ggplot(subset(pcheck_both, type != 'tx'), aes(x = logFC, y = span_logFC)) +
+ggplot(subset(pcheck_both, type != 'tx'), aes(x = F, y = span_F)) +
     facet_grid(. ~ type) + ylab('BrainSpan log FC') +
     xlab('BrainSeq log FC') + stat_density2d() + xlim(-7.5, 7.5) +
     ylim(-7.5, 7.5) +
