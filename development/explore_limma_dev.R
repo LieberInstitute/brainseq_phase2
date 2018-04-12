@@ -1,7 +1,3 @@
-# qrsh -l bluejay,mem_free=150G,h_vmem=150G,h_fsize=100G
-# mkdir -p logs
-# Rscript explore_limma_dev.R > logs/explore_limma_dev.txt 2>&1
-
 library('limma')
 library('SummarizedExperiment')
 library('jaffelab')
@@ -706,6 +702,88 @@ volcano_info <- lapply(colnames(fit$gene$coef)[grep(':', colnames(fit$gene$coef)
 dev.off()
 
 
+## Some basic exploration (prior to DE)
+source('pca_funs.R')
+
+if(!file.exists('rda/pcas.Rdata')) {
+    pcas <- lapply(names(exprsNorm), function(type) {
+        message(paste(Sys.time(), 'processing', type))
+        if(type == 'tx') pc_function(log2(exprsNorm[[type]] + 0.5)) else pc_function(exprsNorm[[type]])
+    })
+    names(pcas) <- names(exprsNorm)
+
+    pcas_span <- lapply(names(exprsNorm_span), function(type) {
+        message(paste(Sys.time(), 'processing', type))
+        if(type == 'tx') pc_function(log2(exprsNorm_span[[type]] + 0.5)) else pc_function(exprsNorm_span[[type]])
+    })
+    names(pcas_span) <- names(exprsNorm_span)
+
+    save(pcas, pcas_span, file = 'rda/pcas.Rdata')
+} else {
+    load('rda/pcas.Rdata', verbose = TRUE)
+}
+
+
+main_lab <- function(type) {
+    res <- paste0('PC (', type, '): ')
+    if(type != 'tx') {
+        res <- paste0(res, 'log2(CPM + 0.5)')
+    } else {
+        res <- paste0(res, 'log2(TPM + 0.5)')
+    }
+    return(res)
+}
+
+rses_span <- lapply(unique(pcheck_both$type), load_span)
+names(rses_span) <- unique(pcheck_both$type)
+
+
+pal <- brewer.pal('Paired', n = 8)
+plot_pca <- function(type, pc, loc = 'bottomleft', pan = 1, rs = rses, nc = 2) {
+    leg <- with(colData(rs[[type]]), paste0(Region, '-', ifelse(Age < 0, 'pre', 'post')))
+    leg2 <- with(colData(rs[[type]]), paste0(Region, '-', Sex))
+    race <- as.character(colData(rs[[type]])$Race)
+    race[race == 'African'] <- 'AA'
+    race[!race %in% c('CAUC', 'AA')] <- 'Other'
+    #leg4 <- with(colData(rs$gene), paste0(Region, '-', Dx))
+
+    palette(pal[1:4])
+    pc_plot(pca = pc[[type]], legend = leg, color = leg,
+            main = main_lab(type),
+            position = loc, type='variable', ptsize = 0.75,
+            ncol = nc, legend.pan = pan, lwd = 3, cex = 0.75)
+    palette(pal[5:8])
+    pc_plot(pca = pc[[type]], legend = leg2, color = leg2,
+            main = main_lab(type),
+            position = loc, type='variable', ptsize = 0.75,
+            ncol = nc, legend.pan = pan, lwd = 3, cex = 0.75)
+    palette(brewer.pal('Set1', n = 5)[3:5])
+    pc_plot(pca = pc[[type]], legend = race,
+            color = race,
+            main = main_lab(type),
+            position = loc, type='variable', ptsize = 0.75,
+            ncol = nc, legend.pan = pan, lwd = 3, cex = 0.75)
+    var_plot(pca = pc[[type]])
+    return(NULL)
+}
+
+## plot by dataset
+pdf('pdf/pcas.pdf')
+plot_pca('gene', pcas)
+plot_pca('exon', pcas, 'bottomright')
+plot_pca('jxn', pcas, 'topright')
+plot_pca('tx', pcas, 'topleft', pan = 4, nc = 1)
+dev.off()
+
+
+pdf('pdf/pcas_span.pdf')
+plot_pca('gene', pcas_span, 'topright', rs = rses_span)
+plot_pca('exon', pcas_span, 'topright', rs = rses_span)
+plot_pca('jxn', pcas_span, pan = 4, rs = rses_span)
+plot_pca('tx', pcas_span, 'bottomright', pan = 4, nc = 1, rs = rses_span)
+dev.off()
+
+
 ## Reproducibility information
 print('Reproducibility information:')
 Sys.time()
@@ -714,9 +792,10 @@ options(width = 120)
 session_info()
 
 
-## Re-loading
-f <- dir('rda', full.names = TRUE)
-f <- f[!grepl('limma', f)]
-for(ff in f) load(ff, verbose = TRUE)
-rm(ff, f)
-
+## Re-loading if necessary
+if(FALSE) {
+    f <- dir('rda', full.names = TRUE)
+    f <- f[!grepl('limma', f)]
+    for(ff in f) load(ff, verbose = TRUE)
+    rm(ff, f)
+}
