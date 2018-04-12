@@ -11,7 +11,7 @@ pc_function <- function(exp){
 
 ## Plot PCA
 pc_plot <- function(pca,legend=NULL, color=NULL, main=NULL,
-                    type=NULL,
+                    type=class(color),
                     ptsize=1.5,position="bottomright",
                     legend.pan = 4, ...){
   var <-  (pca$d^2/sum(pca$d^2))*100
