@@ -20,22 +20,6 @@ load_foo <- function(type) {
     ## Keep controls only
     rse <- rse[, colData(rse)$Dx == 'Control']
 
-    ## Add mds info
-    load(file.path('/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data',
-                   'mds_extracted_from_BrainSeq_Phase2_RiboZero_Genotypes_n551.Rdata'))
-    m <- match(colData(rse)$BrNum, rownames(mds))
-    print('Number of missing brains in the MDS data')
-    print(table(is.na(m)))
-
-    ## Drop those that don't match
-    if(any(is.na(m))) {
-        print(colData(rse)$BrNum[which(is.na(m))])
-    }
-
-
-    rse <- rse[, !is.na(m)]
-    colData(rse) <- cbind(colData(rse), mds[m[!is.na(m)], ])
-
     ## Set as factor
     colData(rse)$Region <- relevel(factor(colData(rse)$Region), 'DLPFC')
     colData(rse)$Race <- relevel(factor(colData(rse)$Race), ref = 'CAUC')

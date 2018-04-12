@@ -96,16 +96,15 @@ exprs <- list(
 )
 
 ## Fix sample metadata
-
+load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/mds_extracted_from_BrainSeq_Phase2_RiboZero_Genotypes_n551.Rdata', verbose = TRUE)
 
 fix_meta <- function(rse) {
     colData(rse)$Age[which(colData(rse)$BrNum == 'Br1797')] <- 0.01
 
-    ## Ignored because I added it later
-    # load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/mds_extracted_from_BrainSeq_Phase2_RiboZero_Genotypes_n551.Rdata', verbose = TRUE)
-    # m <- match(colData(rse)$BrNum, rownames(mds))
-    # table(is.na(m))
-    # colData(rse) <- cbind(colData(rse), mds[m, ])
+    ## Fix mds here (remove this code from other scripts)
+    m <- match(colData(rse)$BrNum, rownames(mds))
+    table(is.na(m))
+    colData(rse) <- cbind(colData(rse), mds[m, ])
     return(rse)
 }
 
@@ -163,27 +162,28 @@ means <- lapply(exprs, rowMeans)
 
 ## Add the mean expressions, whether it passes the expression cutoff
 ## and save the data
+dir.create('unfiltered', showWarnings = FALSE)
 rowRanges(rse_gene)$meanExprs <- means[['Gene']]
 rowRanges(rse_gene)$passExprsCut <- means[['Gene']] > cutoffs['Gene']
-save(rse_gene, file = 'rse_gene_unfiltered.Rdata')
+save(rse_gene, file = 'unfiltered/rse_gene_unfiltered.Rdata')
 rse_gene <- rse_gene[rowRanges(rse_gene)$passExprsCut]
 save(rse_gene, file = 'rse_gene.Rdata')
 
 rowRanges(rse_exon)$meanExprs <- means[['Exon']]
 rowRanges(rse_exon)$passExprsCut <- means[['Exon']] > cutoffs['Exon']
-save(rse_exon, file = 'rse_exon_unfiltered.Rdata')
+save(rse_exon, file = 'unfiltered/rse_exon_unfiltered.Rdata')
 rse_exon <- rse_exon[rowRanges(rse_exon)$passExprsCut]
 save(rse_exon, file = 'rse_exon.Rdata')
 
 rowRanges(rse_jxn)$meanExprs <- means[['Jxn']]
 rowRanges(rse_jxn)$passExprsCut <- means[['Jxn']] > cutoffs['Jxn']
-save(rse_jxn, file = 'rse_jxn_unfiltered.Rdata')
+save(rse_jxn, file = 'unfiltered/rse_jxn_unfiltered.Rdata')
 rse_jxn <- rse_jxn[rowRanges(rse_jxn)$passExprsCut]
 save(rse_jxn, file = 'rse_jxn.Rdata')
 
 rowRanges(rse_tx)$meanExprs <- means[['Tx']]
 rowRanges(rse_tx)$passExprsCut <- means[['Tx']] > cutoffs['Tx']
-save(rse_tx, file = 'rse_tx_unfiltered.Rdata')
+save(rse_tx, file = 'unfiltered/rse_tx_unfiltered.Rdata')
 rse_tx <- rse_tx[rowRanges(rse_tx)$passExprsCut]
 save(rse_tx, file = 'rse_tx.Rdata')
 

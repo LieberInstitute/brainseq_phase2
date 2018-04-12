@@ -33,7 +33,7 @@ load_foo <- function(type, age) {
         paste0('rse_', type, '.Rdata'))
     stopifnot(file.exists(load_file))
     load(load_file)
-    
+
     ## Get the appropriate object
     if(type == 'gene') {
         rse <- rse_gene
@@ -47,43 +47,29 @@ load_foo <- function(type, age) {
     }
     ## Keep controls only
     rse <- rse[, colData(rse)$Dx == 'Control']
-    
+
     ## Keep the corresponding age group
     if(age == 'adult') {
         rse <- rse[, colData(rse)$Age >= 18]
     } else if (age == 'fetal') {
         rse <- rse[, colData(rse)$Age <= 0]
     }
-    
-    ## Add mds info
-     load(file.path('/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data', 
-         'mds_extracted_from_BrainSeq_Phase2_RiboZero_Genotypes_n551.Rdata'))
-    m <- match(colData(rse)$BrNum, rownames(mds))
-    print('Number of missing brains in the MDS data')
-    print(table(is.na(m)))
 
-    ## Drop those that don't match
-    if(any(is.na(m))) {
-        print(colData(rse)$BrNum[which(is.na(m))])
-    }
-    rse <- rse[, !is.na(m)]
-    colData(rse) <- cbind(colData(rse), mds[m[!is.na(m)], ])
-    
     ## Set as factor
     colData(rse)$Region <- relevel(factor(colData(rse)$Region), 'DLPFC')
     colData(rse)$Race <- relevel(factor(colData(rse)$Race), ref = 'CAUC')
     colData(rse)$Sex <- relevel(factor(colData(rse)$Sex), ref = 'F')
-    
+
     ## Add means
     colData(rse)$mean_mitoRate <- mean(colData(rse)$mitoRate)
     colData(rse)$mean_totalAssignedGene <- mean(colData(rse)$totalAssignedGene)
     ## Makes the design matrix not full rank in one of the models
 #    colData(rse)$mean_rRNA_rate <- mean(colData(rse)$rRNA_rate)
     colData(rse)$mean_RIN <- mean(colData(rse)$RIN)
-    
+
     print('Dimensions of the data used')
     print(dim(rse))
-    
+
     return(rse)
 }
 
@@ -98,10 +84,10 @@ fm_mod <- ~Region + Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mea
 fm_mod0 <- ~Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN
 
 
-get_mods <- function(pd) {    
+get_mods <- function(pd) {
     mod = model.matrix(fm_mod, data=pd)
     mod0 = model.matrix(fm_mod0, data=pd)
-    
+
     return(list(mod = mod, mod0 = mod0))
 }
 
@@ -120,14 +106,14 @@ if(opt$type != 'tx') {
     pdf(paste0('pdf/limma_region_specific_', opt$age, '_', opt$type, '.pdf'))
     v <- voom(dge, design, plot = TRUE)
     dev.off()
-        
+
     system.time( corfit <- duplicateCorrelation(v$E, design[, c('(Intercept)',
         'RegionHIPPO')], block=brnum) )
-    
+
     ## Main fit steps
     system.time( fit <- lmFit(v, design, block=brnum,
         correlation = corfit$consensus.correlation) )
-        
+
     exprsNorm <- v$E
 } else {
     system.time( corfit <- duplicateCorrelation(assays(rse)$tpm, design[,

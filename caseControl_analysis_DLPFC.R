@@ -21,8 +21,8 @@ colData(rse_gene)$ERCCsumLogErr = sapply(colData(rse_gene)$ERCCsumLogErr,mean)
 colData(rse_gene)$Kit = ifelse(colData(rse_gene)$mitoRate < 0.05, "Gold", "HMR")
 
 ## filter for age and race
-keepIndex = which(rse_gene$Age > 17 & 
-	rse_gene$Kit == "Gold" & rse_gene$Race %in% c("AA", "CAUC") & 
+keepIndex = which(rse_gene$Age > 17 &
+	rse_gene$Kit == "Gold" & rse_gene$Race %in% c("AA", "CAUC") &
 	rse_gene$Region == "DLPFC")
 rse_gene = rse_gene[,keepIndex]
 rse_exon = rse_exon[,keepIndex]
@@ -35,19 +35,12 @@ rse_tx = rse_tx[,keepIndex]
 load("count_data/degradation_rse_phase2_dlpfc.rda")
 cov_rse_dlpfc = cov_rse_dlpfc[,sapply(rse_gene$SAMPLE_ID, "[", 1)]
 
-## add mds data
-mds = read.table("/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n546_maf05_geno10_hwe1e6.mds",
-	header=TRUE,as.is=TRUE, row.names=1)
-mds = mds[colData(rse_gene)$BrNum,3:7]
-colnames(mds) = paste0("snpPC", 1:5)
-colData(rse_gene) = cbind(colData(rse_gene), mds)
-
 ## model
-mod = model.matrix(~Dx + Age + Sex + mitoRate + 
-	rRNA_rate + totalAssignedGene + RIN + 
+mod = model.matrix(~Dx + Age + Sex + mitoRate +
+	rRNA_rate + totalAssignedGene + RIN +
 	snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5,
 	data = colData(rse_gene))
-	
+
 ## qSVA
 pcaDeg = prcomp(t(log2(assays(cov_rse_dlpfc)$count + 1)))
 k = num.sv(log2(assays(cov_rse_dlpfc)$count + 1), mod)
@@ -59,7 +52,7 @@ modQsva = cbind(mod, qSVs)
 ## modeling #######
 
 ##### GENE ######
-dge = DGEList(counts = assays(rse_gene)$counts, 
+dge = DGEList(counts = assays(rse_gene)$counts,
 	genes = rowData(rse_gene))
 dge = calcNormFactors(dge)
 vGene = voom(dge,modQsva, plot=TRUE)
@@ -80,7 +73,7 @@ outGene0 = sigGene0[rownames(rse_gene),]
 save(outGene, outGene0, file = "caseControl/dxStats_DLPFC_filtered_qSVA_geneLevel.rda")
 
 ##### Exon ######
-dee = DGEList(counts = assays(rse_exon)$counts, 
+dee = DGEList(counts = assays(rse_exon)$counts,
 	genes = rowData(rse_exon))
 dee = calcNormFactors(dee)
 vExon = voom(dee,modQsva, plot=TRUE)
@@ -92,7 +85,7 @@ sigExon = topTable(eBExon,coef=2,
 outExon = sigExon[rownames(rse_exon),]
 
 ##### Junction ######
-dje = DGEList(counts = assays(rse_jxn)$counts, 
+dje = DGEList(counts = assays(rse_jxn)$counts,
 	genes = rowData(rse_jxn))
 dje = calcNormFactors(dje)
 vJxn = voom(dje,modQsva, plot=TRUE)
