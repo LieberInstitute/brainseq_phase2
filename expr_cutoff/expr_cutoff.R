@@ -1,7 +1,3 @@
-# qrsh -l bluejay,mem_free=150G,h_vmem=150G,h_fsize=100G
-# mkdir -p logs
-# Rscript expr_cutoff.R &> logs/expr_cutoff.txt
-
 library('SummarizedExperiment')
 library('recount')
 library('jaffelab')
@@ -113,10 +109,11 @@ seed <- 20171026
 seeds <- seed + 0:3
 names(seeds) <- names(exprs)
 
+dir.create('pdf', showWarnings = FALSE)
 cutoffs <- sapply(names(exprs), function(type) {
 
     message(type)
-    pdf(paste0('suggested_expr_cutoffs_', tolower(type), '.pdf'), width = 12)
+    pdf(paste0('pdf/suggested_expr_cutoffs_', tolower(type), '.pdf'), width = 12)
     cuts <- expression_cutoff(exprs[[type]], seed = seeds[type])
     message(paste(cuts, collapse = ' '))
     cut <- max(cuts)
