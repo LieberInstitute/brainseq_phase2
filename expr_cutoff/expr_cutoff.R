@@ -1,3 +1,7 @@
+# qrsh -l bluejay,mem_free=150G,h_vmem=150G,h_fsize=100G
+# mkdir -p logs
+# Rscript expr_cutoff.R &> logs/expr_cutoff.txt
+
 library('SummarizedExperiment')
 library('recount')
 library('jaffelab')
@@ -91,6 +95,19 @@ exprs <- list(
     'Tx' = assay(rse_tx)
 )
 
+## Fix sample metadata
+
+
+fix_meta <- function(rse) {
+    colData(rse)$Age[which(colData(rse)$BrNum == 'Br1797')] <- 0.01
+
+    ## Ignored because I added it later
+    # load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/mds_extracted_from_BrainSeq_Phase2_RiboZero_Genotypes_n551.Rdata', verbose = TRUE)
+    # m <- match(colData(rse)$BrNum, rownames(mds))
+    # table(is.na(m))
+    # colData(rse) <- cbind(colData(rse), mds[m, ])
+    return(rse)
+}
 
 ## Identify potential cutoffs
 seed <- 20171026
@@ -98,14 +115,14 @@ seeds <- seed + 0:3
 names(seeds) <- names(exprs)
 
 cutoffs <- sapply(names(exprs), function(type) {
-    
+
     message(type)
     pdf(paste0('suggested_expr_cutoffs_', tolower(type), '.pdf'), width = 12)
     cuts <- expression_cutoff(exprs[[type]], seed = seeds[type])
     message(paste(cuts, collapse = ' '))
     cut <- max(cuts)
     dev.off()
-    
+
     return(cut)
 
 })
