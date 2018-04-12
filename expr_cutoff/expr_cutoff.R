@@ -115,7 +115,7 @@ dir.create('pdf', showWarnings = FALSE)
 cutoffs <- sapply(names(exprs), function(type) {
 
     message(type)
-    pdf(paste0('pdf/suggested_expr_cutoffs_', tolower(type), '.pdf'), width = 12)
+    pdf(paste0('pdf/suggested_expr_cutoffs_', tolower(type), '.pdf'), width = 12, useDingbats = FALSE)
     cuts <- expression_cutoff(exprs[[type]], seed = seeds[type])
     message(paste(cuts, collapse = ' '))
     cut <- max(cuts)
