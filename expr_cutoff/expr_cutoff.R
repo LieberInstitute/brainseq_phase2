@@ -9,6 +9,19 @@ names(files) <- dir('../count_data', pattern = 'hg38_rse')
 types <- gsub('_.*', '', gsub('.*_hg38_rse', '', files))
 regions <- toupper(gsub('_.*', '', names(files)))
 
+## Fix sample metadata
+load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/mds_extracted_from_BrainSeq_Phase2_RiboZero_Genotypes_n551.Rdata', verbose = TRUE)
+fix_meta <- function(rse) {
+    colData(rse)$Age[which(colData(rse)$BrNum == 'Br1797')] <- 0.01
+
+    ## Fix mds here (remove this code from other scripts)
+    m <- match(colData(rse)$BrNum, rownames(mds))
+    print(table(is.na(m)))
+    colData(rse) <- cbind(colData(rse), mds[m, ])
+    return(rse)
+}
+
+
 ## Load the raw data and calculate RPKMs & RP10M when necessary
 all <- mapply(function(f, type, region) {
     load(f)
@@ -40,11 +53,12 @@ all <- mapply(function(f, type, region) {
 rse_merge <- function(rses) {
     cols <- sapply(rses, function(x) colnames(colData(x)))
     common <- intersect(cols[[1]], cols[[2]])
-    do.call(cbind, lapply(rses, function(r) {
+    result <- do.call(cbind, lapply(rses, function(r) {
         m <- match(common, colnames(colData(r)))
         colData(r) <- colData(r)[, m[!is.na(m)]]
         return(r)
     }))
+    fix_meta(result)
 }
 
 ## Combine across regions
@@ -82,6 +96,7 @@ rse_jxn <- SummarizedExperiment(assays = list(counts = jxn), rowRanges = jxn_gr,
 rownames(rse_jxn) <- paste0(seqnames(rse_jxn), ":", start(rse_jxn), "-",
     end(rse_jxn), "(", strand(rse_jxn), ")")
 assays(rse_jxn)$rp10m <- recount::getRPKM(rse_jxn, 'Length')
+rse_jxn <- fix_meta(rse_jxn)
 
 
 exprs <- list(
@@ -90,19 +105,6 @@ exprs <- list(
     'Jxn' = assays(rse_jxn)$rp10m,
     'Tx' = assay(rse_tx)
 )
-
-## Fix sample metadata
-load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/mds_extracted_from_BrainSeq_Phase2_RiboZero_Genotypes_n551.Rdata', verbose = TRUE)
-
-fix_meta <- function(rse) {
-    colData(rse)$Age[which(colData(rse)$BrNum == 'Br1797')] <- 0.01
-
-    ## Fix mds here (remove this code from other scripts)
-    m <- match(colData(rse)$BrNum, rownames(mds))
-    table(is.na(m))
-    colData(rse) <- cbind(colData(rse), mds[m, ])
-    return(rse)
-}
 
 ## Identify potential cutoffs
 seed <- 20171026
