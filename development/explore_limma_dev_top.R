@@ -93,7 +93,7 @@ plot_age_mod <-
         'teen',
         'adult'
     )]
-p_cols <- ifelse(colData(rse)$Region == 'HIPPO', 'blue', 'orange')
+p_cols <- ifelse(colData(rse)$Region == 'HIPPO', 'skyblue3', 'dark orange')
 l_cols <- c('lightgoldenrod', 'light blue')
 age_brks <- c(-1, 0, 1, 10, 20, 50, 100)
 
