@@ -10,7 +10,8 @@ load_foo <- function(type, age) {
     if(type == 'gene') {
         rse <- rse_gene
     } else if (type == 'exon') {
-        rse <- rse_exon
+        ## Drop those 4 exons not present in BrainSpan
+        rse <- rse_exon[-c(175584, 175585, 175586, 175604), ]
     } else if (type == 'jxn') {
         rse <- rse_jxn
     } else if (type == 'tx') {
