@@ -146,13 +146,13 @@ if(opt$type != 'tx') {
         
     exprsNorm <- v$E
 } else {
-    system.time( corfit <- duplicateCorrelation(assays(rse)$tpm, design[,
-        c('(Intercept)', 'RegionHIPPO')], block=brnum) )
+    system.time( corfit <- duplicateCorrelation(log2(assays(rse)$tpm + 0.5),
+        design[, c('(Intercept)', 'RegionHIPPO')], block=brnum) )
 
     ## Main fit steps
-    system.time( fit <- lmFit(assays(rse)$tpm, design, block=brnum,
+    system.time( fit <- lmFit(log2(assays(rse)$tpm + 0.5), design, block=brnum,
         correlation = corfit$consensus.correlation) )
-    exprsNorm <- assays(rse)$tpm
+    exprsNorm <- log2(assays(rse)$tpm + 0.5)
 }
 system.time( fit <- eBayes(fit) )
 

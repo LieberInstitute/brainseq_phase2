@@ -77,7 +77,7 @@ if(opt$type != 'tx') {
 
     exprsNorm <- v$E
 } else {
-    system.time( corfit <- duplicateCorrelation(assays(rse)$tpm,
+    system.time( corfit <- duplicateCorrelation(log2(assays(rse)$tpm + 0.5),
         design[, c('(Intercept)', 'RegionHIPPO')], block=brnum) )
 
     ## Main fit steps
