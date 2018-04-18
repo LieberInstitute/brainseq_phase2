@@ -42,14 +42,15 @@ rse_gene = rse_gene[,keepIndex]
 # rse_exon = rse_exon[,keepIndex]
 # rse_jxn = rse_jxn[,keepIndex]
 # rse_tx = rse_tx[,keepIndex]
+mod <- mod[keepIndex, ]
+modQsva <- modQsva[keepIndex, ]
 
-dim(rse_gene)
+dim(rse_gene) # 24652   755
 
 ##################
 
 
-mod <- mod[keepIndex, ]
-modQsva <- modQsva[keepIndex, ]
+
 
 
 ###############################################################
@@ -63,13 +64,13 @@ geneExprsQsva = cleaningY(geneExprs, modQsva, P=3)  ## keep intercept, Dx, Age
 ################
 ## thresholding
 
-if(!file.exits('rda/wgcna_soft_threshold_DLPFC_gene.rda')) {
+if(!file.exits('rda/wgcna_soft_threshold_gene.rda')) {
     powers = c(c(1:10), seq(from = 12, to=20, by=2))
     sftQsva = pickSoftThreshold(t(geneExprsQsva),
     powerVector = powers, verbose = 5)
-    save(sftQsva, file="rda/wgcna_soft_threshold_DLPFC_gene.rda")
+    save(sftQsva, file="rda/wgcna_soft_threshold_gene.rda")
 } else {
-    load("rda/wgcna_soft_threshold_DLPFC_gene.rda", verbose = TRUE)
+    load("rda/wgcna_soft_threshold_gene.rda", verbose = TRUE)
 }
 
 ## threshold
@@ -77,16 +78,16 @@ sftQsva$powerEstimate
 ## = 4
 
 ## clustering LIBD
-if(!file.exists('rda/DLPFC_gene_wgcnaModules.rda')) {
+if(!file.exists('rda/gene_wgcnaModules.rda')) {
     netQsva = blockwiseModules(t(geneExprsQsva), power = sftQsva$powerEstimate,
         TOMType = "unsigned", minModuleSize = 30,
         reassignThreshold = 0, mergeCutHeight = 0.25,
         numericLabels = TRUE, pamRespectsDendro = FALSE,
         saveTOMs = TRUE, 	verbose = 3, maxBlockSize = 30000,
-        saveTOMFileBase = "rda/DLPFC_gene_SVA")
-    save(netQsva, geneMap, file = "rda/DLPFC_gene_wgcnaModules.rda")
+        saveTOMFileBase = "rda/gene_SVA")
+    save(netQsva, geneMap, file = "rda/gene_wgcnaModules.rda")
 } else {
-    load("rda/DLPFC_gene_wgcnaModules.rda", verbose=TRUE)
+    load("rda/gene_wgcnaModules.rda", verbose=TRUE)
 }
 
 ####
@@ -100,19 +101,19 @@ table(netQsva$colors)  ## 28 clusters. top 10:
 # plot pattern #
 ################
 
-pd = colData(rse_gene)[,c(1,27:50)]
+pd = colData(rse_gene)
 pd$roundAge = round(pd$Age)
 
 datME = moduleEigengenes(t(geneExprsQsva), netQsva$colors)$eigengenes
 datME = datME[,-1] ## remove unassigned
 
-pdf("pdf/wgcna_eigenegenes_dlpfc_gene.pdf",h=12,w=12)
+pdf("pdf/wgcna_eigengenes_gene.pdf",h=12,w=12)
 par(mfrow=c(2,1), mar=c(5,5,5,2),cex.axis=1.3,cex.lab=1.8,cex.main=2)
 palette(brewer.pal(3,"Set1"))
 for (i in seq_len(ncol(datME))) {
  plot(pd$Age, datME[,i], cex=1.5, ylim=c(-.37,.67), xaxt="n",
 		  pch=16, col=as.factor(pd$Dx),
-          ylab="Eigengene", xlab="Age", main=paste0("Cluster ",i,"  (", table(netQsva$colors)[i+1],")") )
+          ylab="Eigen gene", xlab="Age", main=paste0("Cluster ",i,"  (", table(netQsva$colors)[i+1],")") )
  if (i==1) { legend("topleft", levels(as.factor(pd$Dx)), pch=15, cex=1.5, col=1:2) }
  axis(1, at=unique(pd$roundAge), labels = unique(pd$roundAge))
  # abline(v=c(4.5,5.5,6.5), col="grey", lty=2)
@@ -147,7 +148,7 @@ sigOrderMat$Symbol = geneMap[sigOrderMat$gene,"Symbol"]
 maxi = min(100, table(netQsva$colors)[k+1] )
 
 ## Clusters
-pdf(paste0("top200/dlpfc_gene_cluster",k,"_topRotation.pdf"),h=6,w=12)
+pdf(paste0("top200/gene_cluster",k,"_topRotation.pdf"),h=6,w=12)
 par(mar=c(5,6,5,2),cex.axis=1.5,cex.lab=2,cex.main=2)
 palette(brewer.pal(3,"Set1"))
 for (i in 1:maxi) {
@@ -190,7 +191,7 @@ geneUniverse = geneUniverse[!is.na(geneUniverse)]
 ##############################
 
 ## and adjusted
-if(!file.exists('rda/wgcna_compareCluster_signed.rda')) {
+if(!file.exists('rda/wgcna_compareCluster_signed_gene.rda')) {
     goBP_Adj <- compareCluster(moduleGeneList_adj[1:8], fun = "enrichGO",
         universe = geneUniverse, OrgDb = org.Hs.eg.db,
         ont = "BP", pAdjustMethod = "BH",
@@ -209,12 +210,12 @@ if(!file.exists('rda/wgcna_compareCluster_signed.rda')) {
     kegg_Adj <- compareCluster(moduleGeneList_adj[1:8], fun = "enrichKEGG",
         universe = geneUniverse,  pAdjustMethod = "BH",
         pvalueCutoff  = .1, qvalueCutoff  = .1)
-    save(goBP_Adj, goMF_Adj, goCC_Adj, kegg_Adj, file="rda/wgcna_compareCluster_signed.rda")
+    save(goBP_Adj, goMF_Adj, goCC_Adj, kegg_Adj, file="rda/wgcna_compareCluster_signed_gene.rda")
 } else {
-    load('rda/wgcna_compareCluster_signed.rda', verbose = TRUE)
+    load('rda/wgcna_compareCluster_signed_gene.rda', verbose = TRUE)
 }
 
-pdf("pdf/wgcna_enrichments_dlpfc_gene.pdf",h=6,w=10)
+pdf("pdf/wgcna_enrichments_gene.pdf",h=6,w=10)
 dotplot(goBP_Adj, includeAll="TRUE")
 dotplot(goMF_Adj, includeAll="TRUE")
 dotplot(goCC_Adj, includeAll="TRUE")

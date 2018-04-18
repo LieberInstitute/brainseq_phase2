@@ -1,13 +1,21 @@
-###
+## Based on the following script by Emily Burke:
+# https://github.com/LieberInstitute/brainseq_phase2/blob/master/wgcna/get_ind_exons_jxns.R
 
-library(jaffelab)
-library(SummarizedExperiment)
-library(sva)
-library(edgeR)
-library(limma)
-library(recount)
-library(WGCNA)
-library(RColorBrewer)
+library('jaffelab')
+library('SummarizedExperiment')
+library('sva')
+library('edgeR')
+library('limma')
+library('recount')
+library('RColorBrewer')
+library('WGCNA')
+library('clusterProfiler')
+library('org.Hs.eg.db')
+library('devtools')
+
+dir.create('rda', showWarnings = FALSE)
+dir.create('pdf', showWarnings = FALSE)
+dir.create('top200', showWarnings = FALSE)
 
 ## load expression data
 load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_gene.Rdata")
@@ -15,64 +23,32 @@ load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_exon.Rdata")
 load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_jxn.Rdata")
 # load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_tx.Rdata")
 
-colData(rse_gene)$RIN = sapply(colData(rse_gene)$RIN,"[",1)
-colData(rse_gene)$totalAssignedGene = sapply(colData(rse_gene)$totalAssignedGene, mean)
-colData(rse_gene)$mitoRate = sapply(colData(rse_gene)$mitoRate,mean)
-colData(rse_gene)$overallMapRate = sapply(colData(rse_gene)$overallMapRate, mean)
-colData(rse_gene)$rRNA_rate = sapply(colData(rse_gene)$rRNA_rate,mean)
-colData(rse_gene)$ERCCsumLogErr = sapply(colData(rse_gene)$ERCCsumLogErr,mean)
-colData(rse_gene)$Kit = ifelse(colData(rse_gene)$mitoRate < 0.05, "Gold", "HMR")
-stopifnot(identical(colnames(rse_gene), colnames(rse_exon)))
-stopifnot(identical(colnames(rse_gene), colnames(rse_jxn)))
+## load qSVs
+load("/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/brainseq_phase2_qsvs.Rdata", verbose = TRUE)
 
 ###############################################################
 ############# filter features
 ############# (same for both regions)
 
-min(rowMeans(assays(rse_exon)$rpkm)) 	 			## already cutoff to 0.30	
-min(rowMeans(assays(rse_jxn)$rp10m))  				## already cutoff to 0.46		
+min(rowMeans(assays(rse_exon)$rpkm)) 	 			## already cutoff to 0.30
+min(rowMeans(assays(rse_jxn)$rp10m))  				## already cutoff to 0.46
 
 ### Filter to independent features
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/wgcna/independent_exons.rda",verbose=TRUE)
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/wgcna/independent_jxns.rda",verbose=TRUE)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/wgcna_combined/rda/independent_exons.rda",verbose=TRUE)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/wgcna_combined/rda/independent_jxns.rda",verbose=TRUE)
 eInd = which(rownames(rse_exon) %in% names(exonMap2))
 jInd = which(rownames(rse_jxn) %in% names(jMap2))
 
 ##################
 ## filter for age and to hippocampus
-keepIndex = which(rse_gene$Age > 17 & rse_gene$Race %in% c("AA", "CAUC") & 
-	rse_gene$Kit == "Gold" & rse_gene$Region == "DLPFC")						# 357 
+keepIndex = which(rse_gene$Age > 17)						# 755
 rse_gene = rse_gene[,keepIndex]
-rse_exon = rse_exon[eInd,keepIndex]			# dim: 211455 357
-rse_jxn = rse_jxn[jInd,keepIndex]			# dim: 238975 357
+rse_exon = rse_exon[eInd,keepIndex]			# dim: 211455 755
+rse_jxn = rse_jxn[jInd,keepIndex]			# dim: 238975 755
+mod <- mod[keepIndex, ]
+modQsva <- modQsva[keepIndex, ]
 
-
-##################
-## load qSVs
-load("../count_data/degradation_rse_phase2_dlpfc.rda")
-cov_rse_dlpfc = cov_rse_dlpfc[,sapply(rse_gene$SAMPLE_ID, "[", 1)]
-
-## add mds data
-mds = read.table("/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n551_maf05_geno10_hwe1e6.mds",
-	header=TRUE,as.is=TRUE, row.names=1)
-mds = mds[colData(rse_gene)$BrNum,3:7]
-colnames(mds) = paste0("snpPC", 1:5)
-colData(rse_gene) = cbind(colData(rse_gene), mds)
-
-## model
-mod = model.matrix(~Dx + Age + Sex + mitoRate + 
-	rRNA_rate + totalAssignedGene + RIN + 
-	snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5,
-	data = colData(rse_gene))
-	
-## qSVA
-pcaDeg = prcomp(t(log2(assays(cov_rse_dlpfc)$count + 1)))
-k = num.sv(log2(assays(cov_rse_dlpfc)$count + 1), mod) 		# k = 16
-qSVs = pcaDeg$x[,1:k]
-getPcaVars(pcaDeg)[1:k]
-modQsva = cbind(mod, qSVs)
-
-
+dim(modQsva)
 
 ###############################################################
 ############# run WGCNA -- exon ##################
@@ -85,28 +61,31 @@ exonExprsQsva = cleaningY(exonExprs, modQsva, P=3)  ## keep intercept, Dx, Age
 
 ################
 ## thresholding
-powers = c(c(1:10), seq(from = 12, to=20, by=2))
-esftQsva = pickSoftThreshold(t(exonExprsQsva), 
-	powerVector = powers, verbose = 5)
-save(esftQsva, file="rdas/wgcna_soft_threshold_DLPFC_exon.rda")
-# load("rdas/wgcna_soft_threshold_DLPFC_exon.rda")
+if(!file.exists('rda/wgcna_soft_threshold_exon.rda')) {
+    powers = c(c(1:10), seq(from = 12, to=20, by=2))
+    esftQsva = pickSoftThreshold(t(exonExprsQsva),
+    	powerVector = powers, verbose = 5)
+    save(esftQsva, file="rda/wgcna_soft_threshold_exon.rda")
+} else {
+    load("rda/wgcna_soft_threshold_exon.rda", verbose = TRUE)
+}
 
 ## threshold
 esftQsva$powerEstimate
-## = 
+## =
 
 ## clustering LIBD
-enetQsva = blockwiseModules(t(exonExprsQsva), power = esftQsva$powerEstimate,
+if(!file.exists('rda/exon_wgcnaModules.rda')) {
+    enetQsva = blockwiseModules(t(exonExprsQsva), power = esftQsva$powerEstimate,
 	TOMType = "unsigned", minModuleSize = 30,
 	reassignThreshold = 0, mergeCutHeight = 0.25,
 	numericLabels = TRUE, pamRespectsDendro = FALSE,
 	saveTOMs = TRUE, 	verbose = 3, maxBlockSize = 30000,
-	saveTOMFileBase = "rdas/DLPFC_exon_qSVA")
-save(enetQsva, exonMap, file = "rdas/DLPFC_exon_wgcnaModules.rda")
-
-####
-
-# load("rdas/DLPFC_exon_wgcnaModules.rda", verbose=TRUE)
+	saveTOMFileBase = "rda/exon_qSVA")
+save(enetQsva, exonMap, file = "rda/exon_wgcnaModules.rda")
+} else {
+    load("rda/exon_wgcnaModules.rda", verbose = TRUE)
+}
 
 table(enetQsva$colors)  ## 39 clusters. top 10:
 #    0     1     2     3     4     5     6     7     8     9    10
@@ -126,27 +105,30 @@ jExprsQsva = cleaningY(jExprs, modQsva, P=3)  ## keep intercept, Dx, Age
 ################
 ## thresholding
 powers = c(c(1:10), seq(from = 12, to=20, by=2))
-jsftQsva = pickSoftThreshold(t(jExprsQsva), 
-	powerVector = powers, verbose = 5)
-save(jsftQsva, file="rdas/wgcna_soft_threshold_DLPFC_jxn.rda")
-# load("rdas/wgcna_soft_threshold_DLPFC_jxn.rda")
+if(!file.exists('rda/wgcna_soft_threshold_jxn.rda')) {
+    jsftQsva = pickSoftThreshold(t(jExprsQsva),
+    	powerVector = powers, verbose = 5)
+    save(jsftQsva, file="rda/wgcna_soft_threshold_jxn.rda")
+} else {
+    load("rda/wgcna_soft_threshold_jxn.rda", verbose = TRUE)
+}
 
 ## threshold
 jsftQsva$powerEstimate
-## = 
+## =
 
 ## clustering LIBD
-jnetQsva = blockwiseModules(t(jExprsQsva), power = jsftQsva$powerEstimate,
-	TOMType = "unsigned", minModuleSize = 30,
-	reassignThreshold = 0, mergeCutHeight = 0.25,
-	numericLabels = TRUE, pamRespectsDendro = FALSE,
-	saveTOMs = TRUE, 	verbose = 3, maxBlockSize = 30000,
-	saveTOMFileBase = "rdas/DLPFC_jxn_qSVA")
-save(jnetQsva, jMap, file = "rdas/DLPFC_jxn_wgcnaModules.rda")
-
-####
-
-# load("rdas/DLPFC_jxn_wgcnaModules.rda", verbose=TRUE)
+if(!file.exists('rda/jxn_wgcnaModules.rda')) {
+    jnetQsva = blockwiseModules(t(jExprsQsva), power = jsftQsva$powerEstimate,
+    	TOMType = "unsigned", minModuleSize = 30,
+    	reassignThreshold = 0, mergeCutHeight = 0.25,
+    	numericLabels = TRUE, pamRespectsDendro = FALSE,
+    	saveTOMs = TRUE, 	verbose = 3, maxBlockSize = 30000,
+    	saveTOMFileBase = "rda/jxn_qSVA")
+    save(jnetQsva, jMap, file = "rda/jxn_wgcnaModules.rda")
+} else {
+    load("rda/jxn_wgcnaModules.rda", verbose = TRUE)
+}
 
 table(jnetQsva$colors)  ## 39 clusters. top 10:
 #    0     1     2     3     4     5     6     7     8     9    10
@@ -156,150 +138,235 @@ table(jnetQsva$colors)  ## 39 clusters. top 10:
 
 
 
+################
+# plot pattern #
+################
+
+pd = colData(rse_gene)
+pd$roundAge = round(pd$Age)
+
+datME = moduleEigengenes(t(exonExprsQsva), enetQsva$colors)$eigengenes
+datME = datME[,-1] ## remove unassigned
+
+pdf("pdf/wgcna_eigengenes_exon.pdf",h=12,w=12)
+par(mfrow=c(2,1), mar=c(5,5,5,2),cex.axis=1.3,cex.lab=1.8,cex.main=2)
+palette(brewer.pal(3,"Set1"))
+for (i in seq_len(ncol(datME))) {
+ plot(pd$Age, datME[,i], cex=1.5, ylim=c(-.37,.67), xaxt="n",
+		  pch=16, col=as.factor(pd$Dx),
+          ylab="Eigen exon", xlab="Age", main=paste0("Cluster ",i,"  (", table(enetQsva$colors)[i+1],")") )
+ if (i==1) { legend("topleft", levels(as.factor(pd$Dx)), pch=15, cex=1.5, col=1:2) }
+ axis(1, at=unique(pd$roundAge), labels = unique(pd$roundAge))
+ # abline(v=c(4.5,5.5,6.5), col="grey", lty=2)
+}
+dev.off()
+
+
+datME = moduleEigengenes(t(jExprsQsva), jnetQsva$colors)$eigengenes
+datME = datME[,-1] ## remove unassigned
+
+pdf("pdf/wgcna_eigengenes_jxn.pdf",h=12,w=12)
+par(mfrow=c(2,1), mar=c(5,5,5,2),cex.axis=1.3,cex.lab=1.8,cex.main=2)
+palette(brewer.pal(3,"Set1"))
+for (i in seq_len(ncol(datME))) {
+ plot(pd$Age, datME[,i], cex=1.5, ylim=c(-.37,.67), xaxt="n",
+		  pch=16, col=as.factor(pd$Dx),
+          ylab="Eigen jxn", xlab="Age", main=paste0("Cluster ",i,"  (", table(jnetQsva$colors)[i+1],")") )
+ if (i==1) { legend("topleft", levels(as.factor(pd$Dx)), pch=15, cex=1.5, col=1:2) }
+ axis(1, at=unique(pd$roundAge), labels = unique(pd$roundAge))
+ # abline(v=c(4.5,5.5,6.5), col="grey", lty=2)
+}
+dev.off()
 
 
 
 
+################
+####   pca  ####
+################
+
+exonMap = as.data.frame(exonMap)
+rownames(exonMap) = exonMap$gencodeID
+
+moduleInds = split(seq_len(nrow(exonExprsQsva)), enetQsva$colors)
+names(moduleInds) = paste0("Cluster_", names(moduleInds))
+moduleInds$"Cluster_0" = NULL
+
+exonExprsQsvaModules = lapply(moduleInds, function(x) exonExprsQsva[x,])
+pcaModules = lapply(exonExprsQsvaModules, function(x) prcomp(t(x)) )
+
+#
+# Plot 200 with largest rotation for each cluster
+for (k in 1:5) {
+
+pca_k = abs(pcaModules[[k]]$rotation[,1:2])
+sigOrderMat = data.frame(PC1 = order(pca_k[,1],decreasing=TRUE)[1:200])
+sigOrderMat$gene = rownames(pca_k)[sigOrderMat$PC1]
+sigOrderMat$Symbol = exonMap[sigOrderMat$gene,"Symbol"]
+
+maxi = min(100, table(enetQsva$colors)[k+1] )
+
+## Clusters
+pdf(paste0("top200/exon_cluster",k,"_topRotation.pdf"),h=6,w=12)
+par(mar=c(5,6,5,2),cex.axis=1.5,cex.lab=2,cex.main=2)
+palette(brewer.pal(3,"Set1"))
+for (i in 1:maxi) {
+gene = sigOrderMat$gene[i]
+symbol = sigOrderMat$Symbol[i]
+plot(exonExprsQsva[gene,] ~ jitter(pd$Age,.5), xaxt="n",
+		pch = 21, bg=as.factor(pd$Dx),
+        cex=2,xlab="Age",
+        ylab="Residualized log2(Exprs+1)",
+		main=paste0(symbol,"\n",gene) )
+  axis(1, at=unique(pd$roundAge), labels = unique(pd$roundAge))
+  abline(v=c(4.5,5.5,6.5), col="grey", lty=2)
+}
+dev.off()
+
+}
+
+
+jMap = as.data.frame(jMap)
+#rownames(jMap) = jMap$gencodeID
+
+moduleInds = split(seq_len(nrow(jExprsQsva)), jnetQsva$colors)
+names(moduleInds) = paste0("Cluster_", names(moduleInds))
+moduleInds$"Cluster_0" = NULL
+
+jxnExprsQsvaModules = lapply(moduleInds, function(x) exonExprsQsva[x,])
+pcaModules = lapply(jxnExprsQsvaModules, function(x) prcomp(t(x)) )
+
+#
+# Plot 200 with largest rotation for each cluster
+for (k in 1:5) {
+
+pca_k = abs(pcaModules[[k]]$rotation[,1:2])
+sigOrderMat = data.frame(PC1 = order(pca_k[,1],decreasing=TRUE)[1:200])
+sigOrderMat$gene = rownames(pca_k)[sigOrderMat$PC1]
+sigOrderMat$Symbol = jMap[sigOrderMat$gene,"newGeneSymbol"]
+
+maxi = min(100, table(jnetQsva$colors)[k+1] )
+
+## Clusters
+pdf(paste0("top200/jxn_cluster",k,"_topRotation.pdf"),h=6,w=12)
+par(mar=c(5,6,5,2),cex.axis=1.5,cex.lab=2,cex.main=2)
+palette(brewer.pal(3,"Set1"))
+for (i in 1:maxi) {
+gene = sigOrderMat$gene[i]
+symbol = sigOrderMat$Symbol[i]
+plot(jExprsQsva[gene,] ~ jitter(pd$Age,.5), xaxt="n",
+		pch = 21, bg=as.factor(pd$Dx),
+        cex=2,xlab="Age",
+        ylab="Residualized log2(Exprs+1)",
+		main=paste0(symbol,"\n",gene) )
+  axis(1, at=unique(pd$roundAge), labels = unique(pd$roundAge))
+  abline(v=c(4.5,5.5,6.5), col="grey", lty=2)
+}
+dev.off()
+
+}
 
 
 
 
+################
+# associations #
+################
 
-# ################
-# # plot pattern #
-# ################
-
-# pd = colData(rse_gene)[,c(1,27:50)]
-# pd$roundAge = round(pd$Age)
-
-# datME = moduleEigengenes(t(geneExprsQsva), netQsva$colors)$eigengenes
-# datME = datME[,-1] ## remove unassigned
-
-# pdf("wgcna_eigenegenes_hippo_gene.pdf",h=12,w=12)
-# par(mfrow=c(2,1), mar=c(5,5,5,2),cex.axis=1.3,cex.lab=1.8,cex.main=2)
-# palette(brewer.pal(3,"Set1"))
-# for (i in 1:max(netQsva$colors)) {
- # plot(pd$Age, datME[,i], cex=1.5, ylim=c(-.28,.72), xaxt="n",
-		  # pch=16, col=as.factor(pd$Dx),
-          # ylab="Eigengene", xlab="Age", main=paste0("Cluster ",i,"  (", table(netQsva$colors)[i+1],")") )
- # if (i==1) { legend("topleft", levels(as.factor(pd$Dx)), pch=15, cex=1.5, col=1:2) }
- # axis(1, at=unique(pd$roundAge), labels = unique(pd$roundAge))
- # # abline(v=c(4.5,5.5,6.5), col="grey", lty=2)
-# }
-# dev.off()
+# exon set associations
 
 
-# ################
-# ####   pca  ####
-# ################
+# split exons into modules, dropping grey
+moduleExonList_adj = split(exonMap$EntrezID, enetQsva$colors)
+moduleExonList_adj = lapply(moduleExonList_adj, function(x) x[!is.na(x)])
+moduleExonList_adj = moduleExonList_adj[-1]
 
-# geneMap = as.data.frame(geneMap)
-# rownames(geneMap) = geneMap$gencodeID
+## set universe of expressed exons
+exonUniverse = as.character(exonMap$EntrezID)
+exonUniverse = exonUniverse[!is.na(exonUniverse)]
 
-# moduleInds = split(1:nrow(geneExprsQsva), netQsva$colors)
-# names(moduleInds) = paste0("Cluster_", names(moduleInds))
-# moduleInds$"Cluster_0" = NULL
+##############################
+## run enrichment analysis ###
+##############################
 
-# geneExprsQsvaModules = lapply(moduleInds, function(x) geneExprsQsva[x,])
-# pcaModules = lapply(geneExprsQsvaModules, function(x) prcomp(t(x)) )
+## and adjusted
+if(!file.exists('rda/wgcna_compareCluster_signed_exon.rda')) {
+    goBP_Adj <- compareCluster(moduleExonList_adj[1:8], fun = "enrichGO",
+        universe = exonUniverse, OrgDb = org.Hs.eg.db,
+        ont = "BP", pAdjustMethod = "BH",
+        pvalueCutoff  = .1, qvalueCutoff  = .1,
+		readable= TRUE)
+    goMF_Adj <- compareCluster(moduleExonList_adj[1:8], fun = "enrichGO",
+        universe = exonUniverse, OrgDb = org.Hs.eg.db,
+        ont = "MF", pAdjustMethod = "BH",
+        pvalueCutoff  = .1, qvalueCutoff  = .1,
+		readable= TRUE)
+    goCC_Adj <- compareCluster(moduleExonList_adj[1:8], fun = "enrichGO",
+        universe = exonUniverse, OrgDb = org.Hs.eg.db,
+        ont = "CC", pAdjustMethod = "BH",
+        pvalueCutoff  = .1, qvalueCutoff  = .1,
+		readable= TRUE)
+    kegg_Adj <- compareCluster(moduleExonList_adj[1:8], fun = "enrichKEGG",
+        universe = exonUniverse,  pAdjustMethod = "BH",
+        pvalueCutoff  = .1, qvalueCutoff  = .1)
+    save(goBP_Adj, goMF_Adj, goCC_Adj, kegg_Adj, file="rda/wgcna_compareCluster_signed_exon.rda")
+} else {
+    load('rda/wgcna_compareCluster_signed_exon.rda', verbose = TRUE)
+}
 
-# #
-# # Plot 200 with largest rotation for each cluster
-# for (k in 1:5) {
-
-# pca_k = abs(pcaModules[[k]]$rotation[,1:2])
-# sigOrderMat = data.frame(PC1 = order(pca_k[,1],decreasing=TRUE)[1:200])
-# sigOrderMat$gene = rownames(pca_k)[sigOrderMat$PC1]
-# sigOrderMat$Symbol = geneMap[sigOrderMat$gene,"Symbol"]
-
-# maxi = min(100, table(netQsva$colors)[k+1] )
-
-# ## Clusters
-# pdf(paste0("top200/hippo_gene_cluster",k,"_topRotation.pdf"),h=6,w=12)
-# par(mar=c(5,6,5,2),cex.axis=1.5,cex.lab=2,cex.main=2)
-# palette(brewer.pal(3,"Set1"))
-# for (i in 1:maxi) {
-# gene = sigOrderMat$gene[i]
-# symbol = sigOrderMat$Symbol[i]
-# plot(geneExprsQsva[gene,] ~ jitter(pd$Age,.5), xaxt="n",
-		# pch = 21, bg=as.factor(pd$Dx),
-        # cex=2,xlab="Day",
-        # ylab="Residualized log2(Exprs+1)",
-		# main=paste0(symbol,"\n",gene) )
-  # axis(1, at=unique(pd$roundAge), labels = unique(pd$roundAge))
-  # abline(v=c(4.5,5.5,6.5), col="grey", lty=2)
-# }
-# dev.off()
-
-# }
-
-
-
+pdf("pdf/wgcna_enrichments_exon.pdf",h=6,w=10)
+dotplot(goBP_Adj, includeAll="TRUE")
+dotplot(goMF_Adj, includeAll="TRUE")
+dotplot(goCC_Adj, includeAll="TRUE")
+dotplot(kegg_Adj, includeAll="TRUE")
+dev.off()
 
 
-# ################
-# # associations #
-# ################
+# split jxns into modules, dropping grey
+moduleJxnList_adj = split(gsub('\\..*', '', jMap$newGeneID), jnetQsva$colors)
+moduleJxnList_adj = lapply(moduleJxnList_adj, function(x) x[!is.na(x)])
+moduleJxnList_adj = moduleJxnList_adj[-1]
 
-# # gene set associations
-# library(clusterProfiler)
-# library(org.Hs.eg.db)
+## set universe of expressed genes
+jxnUniverse = gsub('\\..*', '', as.character(jMap$newGeneID))
+jxnUniverse = jxnUniverse[!is.na(jxnUniverse)]
 
-# # split genes into modules, dropping grey
-# moduleGeneList_adj = split(geneMap$EntrezID, netQsva$colors)
-# moduleGeneList_adj = lapply(moduleGeneList_adj, function(x) x[!is.na(x)])
-# moduleGeneList_adj = moduleGeneList_adj[-1]
+if(!file.exists('rda/wgcna_compareCluster_signed_jxn.rda')) {
+    goBP_Adj <- compareCluster(moduleJxnList_adj[1:8], fun = "enrichGO",
+        universe = jxnUniverse, OrgDb = org.Hs.eg.db,
+        ont = "BP", pAdjustMethod = "BH",
+        pvalueCutoff  = .1, qvalueCutoff  = .1,
+		readable= TRUE, keyType = 'ENSEMBL')
+    goMF_Adj <- compareCluster(moduleJxnList_adj[1:8], fun = "enrichGO",
+        universe = jxnUniverse, OrgDb = org.Hs.eg.db,
+        ont = "MF", pAdjustMethod = "BH",
+        pvalueCutoff  = .1, qvalueCutoff  = .1,
+		readable= TRUE, keyType = 'ENSEMBL')
+    goCC_Adj <- compareCluster(moduleJxnList_adj[1:8], fun = "enrichGO",
+        universe = jxnUniverse, OrgDb = org.Hs.eg.db,
+        ont = "CC", pAdjustMethod = "BH",
+        pvalueCutoff  = .1, qvalueCutoff  = .1,
+		readable= TRUE, keyType = 'ENSEMBL')
+    kegg_Adj <- compareCluster(moduleJxnList_adj[1:8], fun = "enrichKEGG",
+        universe = jxnUniverse,  pAdjustMethod = "BH",
+        pvalueCutoff  = .1, qvalueCutoff  = .1, keyType = 'ENSEMBL')
+    save(goBP_Adj, goMF_Adj, goCC_Adj, kegg_Adj, file="rda/wgcna_compareCluster_signed_jxn.rda")
+} else {
+    load('rda/wgcna_compareCluster_signed_jxn.rda', verbose = TRUE)
+}
 
-# ## set universe of expressed genes
-# geneUniverse = as.character(geneMap$EntrezID)
-# geneUniverse = geneUniverse[!is.na(geneUniverse)]
-
-# ############################## 
-# ## run enrichment analysis ###
-# ##############################
-
-# ## and adjusted
-# goBP_Adj <- compareCluster(moduleGeneList_adj[1:8], fun = "enrichGO",
-                # universe = geneUniverse, OrgDb = org.Hs.eg.db,
-                # ont = "BP", pAdjustMethod = "BH",
-                # pvalueCutoff  = .1, qvalueCutoff  = .1,
-				# readable= TRUE)
-# goMF_Adj <- compareCluster(moduleGeneList_adj[1:8], fun = "enrichGO",
-                # universe = geneUniverse, OrgDb = org.Hs.eg.db,
-                # ont = "MF", pAdjustMethod = "BH",
-                # pvalueCutoff  = .1, qvalueCutoff  = .1,
-				# readable= TRUE)
-# goCC_Adj <- compareCluster(moduleGeneList_adj[1:8], fun = "enrichGO",
-                # universe = geneUniverse, OrgDb = org.Hs.eg.db,
-                # ont = "CC", pAdjustMethod = "BH",
-                # pvalueCutoff  = .1, qvalueCutoff  = .1,
-				# readable= TRUE)
-# kegg_Adj <- compareCluster(moduleGeneList_adj[1:8], fun = "enrichKEGG",
-                # universe = geneUniverse,  pAdjustMethod = "BH",
-                # pvalueCutoff  = .1, qvalueCutoff  = .1)
-# # save(goBP_Adj, goMF_Adj, goCC_Adj, kegg_Adj, file="wgcna_compareCluster_signed.rda")
-				
-# pdf("wgcna_enrichments_hippo_gene.pdf",h=6,w=10)
-# dotplot(goBP_Adj, includeAll="TRUE")
-# dotplot(goMF_Adj, includeAll="TRUE")
-# dotplot(goCC_Adj, includeAll="TRUE")
-# dotplot(kegg_Adj, includeAll="TRUE")
-# dev.off()				
-		
+pdf("pdf/wgcna_enrichments_jxn.pdf",h=6,w=10)
+dotplot(goBP_Adj, includeAll="TRUE")
+dotplot(goMF_Adj, includeAll="TRUE")
+dotplot(goCC_Adj, includeAll="TRUE")
+dotplot(kegg_Adj, includeAll="TRUE")
+dev.off()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+## Reproducibility information
+print('Reproducibility information:')
+Sys.time()
+proc.time()
+options(width = 120)
+session_info()
