@@ -64,6 +64,7 @@ get_pcheck <- function(top_table) {
     pcheck$global_bonf <- p.adjust(pcheck$P.Value, 'bonferroni')
     return(pcheck)
 }
+
 if(!file.exists('rda/pcheck_both.Rdata')) {
     pcheck <- get_pcheck(top)
     pcheck_span <- get_pcheck(top_span)
@@ -125,47 +126,37 @@ p_sum_span
 
 summary(pcheck_both$Age.RegionHIPPO)
 summary(pcheck_both$span_Age.RegionHIPPO)
-table('brainseq' = abs(pcheck_both$Age.RegionHIPPO) > 10, 'span' = abs(pcheck_both$span_Age.RegionHIPPO) > 10)
-table('brainseq' = abs(pcheck_both$Age.RegionHIPPO) > 20, 'span' = abs(pcheck_both$span_Age.RegionHIPPO) > 20)
-table('brainseq' = abs(pcheck_both$Age.RegionHIPPO) > 100, 'span' = abs(pcheck_both$span_Age.RegionHIPPO) > 100)
-table('brainseq' = abs(pcheck_both$Age.RegionHIPPO) > 1000, 'span' = abs(pcheck_both$span_Age.RegionHIPPO) > 1000)
 
-weird <- which(abs(pcheck_both$Age.RegionHIPPO) > 10 | abs(pcheck_both$span_Age.RegionHIPPO) > 10)
-table(pcheck_both$type[weird])
-
-summary(c(pcheck_both$Age.RegionHIPPO[pcheck_both$type == 'jxn'], pcheck_both$span_Age.RegionHIPPO[pcheck_both$type == 'jxn']))
-max(abs(c(pcheck_both$Age.RegionHIPPO[pcheck_both$type == 'jxn'], pcheck_both$span_Age.RegionHIPPO[pcheck_both$type == 'jxn'])))
-
-table(pcheck_both$type[which(abs(pcheck_both$Age.RegionHIPPO) > 16 | abs(pcheck_both$span_Age.RegionHIPPO) > 16)])
-
-png('pdf/compare_with_span_logFC.png', type = 'cairo')
+# pdf('pdf/compare_with_span_F.pdf', useDingbats = FALSE)
+png('pdf/compare_with_span_F.png', type = 'cairo')
 ggplot(pcheck_both, aes(x = F, y = span_F, alpha = 1/20)) +
     facet_grid(. ~ type, scales = 'free') + ylab('BrainSpan F-stat') +
     xlab('BrainSeq F-stat') + geom_point() +
-    geom_smooth(method=lm, se=FALSE)
+    geom_smooth(method=lm, se=FALSE) + scale_x_log10() + scale_y_log10()
 dev.off()
 
-png('pdf/compare_with_span_logFC_noTx.png', type = 'cairo')
+# pdf('pdf/compare_with_span_F_noTx.pdf', useDingbats = FALSE)
+png('pdf/compare_with_span_F_noTx.png', type = 'cairo')
 ggplot(subset(pcheck_both, type != 'tx'), aes(x = F, y = span_F,
                                               alpha = 1/20)) +
-    facet_grid(. ~ type, scales = 'free') + ylab('BrainSpan log FC') +
-    xlab('BrainSeq log FC') + geom_point() +
-    geom_smooth(method=lm, se=FALSE)
+    facet_grid(. ~ type, scales = 'free') + ylab('BrainSpan F-stat') +
+    xlab('BrainSeq F-stat') + geom_point() +
+    geom_smooth(method=lm, se=FALSE) + scale_x_log10() + scale_y_log10()
 dev.off()
 
 
-pdf('pdf/compare_with_span_logFC_density.pdf', useDingbats = FALSE)
+pdf('pdf/compare_with_span_F_density.pdf', useDingbats = FALSE)
 ggplot(pcheck_both, aes(x = F, y = span_F)) +
-    facet_grid(. ~ type, scales = 'free') + ylab('BrainSpan log FC') +
-    xlab('BrainSeq log FC') + stat_density2d() +
-    geom_smooth(method=lm, se=FALSE)
+    facet_grid(. ~ type, scales = 'free') + ylab('BrainSpan F-stat') +
+    xlab('BrainSeq F-stat') + stat_density2d() +
+    geom_smooth(method=lm, se=FALSE) + scale_x_log10() + scale_y_log10()
 dev.off()
 
-pdf('pdf/compare_with_span_logFC_density_noTx.pdf', useDingbats = FALSE)
+pdf('pdf/compare_with_span_F_density_noTx.pdf', useDingbats = FALSE)
 ggplot(subset(pcheck_both, type != 'tx'), aes(x = F, y = span_F)) +
-    facet_grid(. ~ type, scales = 'free') + ylab('BrainSpan log FC') +
-    xlab('BrainSeq log FC') + stat_density2d() +
-    geom_smooth(method=lm, se=FALSE)
+    facet_grid(. ~ type, scales = 'free') + ylab('BrainSpan F-stat') +
+    xlab('BrainSeq F-stat') + stat_density2d() +
+    geom_smooth(method=lm, se=FALSE) + scale_x_log10() + scale_y_log10()
 dev.off()
 
 
