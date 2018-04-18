@@ -4,9 +4,17 @@
 #$ -N wgcna_DLPFC_genes
 #$ -o logs/wgcna_DLPFC_genes.txt
 #$ -e logs/wgcna_DLPFC_genes.txt
-#$ -m a
+#$ -m e
+
 echo "**** Job starts ****"
 date
+
+echo "**** JHPCE info ****"
+echo "User: ${USER}"
+echo "Job id: ${JOB_ID}"
+echo "Job name: ${JOB_NAME}"
+echo "Hostname: ${HOSTNAME}"
+echo "Task id: ${TASK_ID}"
 
 Rscript wgcna_caseControl.R
 
