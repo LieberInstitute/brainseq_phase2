@@ -69,7 +69,7 @@ if(!file.exists('rda/pcheck_both.Rdata')) {
     colnames(pcheck_span_tmp) <- paste0('span_', colnames(pcheck_span_tmp))
     pcheck_both <- cbind(pcheck, pcheck_span_tmp)
     rm(pcheck_span_tmp)
-    save(pcheck_both, file = 'rda/pcheck_both.Rdata')
+    save(pcheck, pcheck_span, pcheck_both, file = 'rda/pcheck_both.Rdata')
 } else {
     message(paste(Sys.time(), 'loading rda/pcheck_both.Rdata'))
     load('rda/pcheck_both.Rdata', verbose = TRUE)
@@ -125,65 +125,36 @@ p_sum_span
 
 summary(pcheck_both$logFC)
 summary(pcheck_both$span_logFC)
-table('brainseq' = abs(pcheck_both$logFC) > 10, 'span' = abs(pcheck_both$span_logFC) > 10)
-table('brainseq' = abs(pcheck_both$logFC) > 20, 'span' = abs(pcheck_both$span_logFC) > 20)
-table('brainseq' = abs(pcheck_both$logFC) > 100, 'span' = abs(pcheck_both$span_logFC) > 100)
-table('brainseq' = abs(pcheck_both$logFC) > 1000, 'span' = abs(pcheck_both$span_logFC) > 1000)
 
-weird <- which(abs(pcheck_both$logFC) > 10 | abs(pcheck_both$span_logFC) > 10)
-table(pcheck_both$type[weird])
-
-summary(c(pcheck_both$logFC[pcheck_both$type == 'jxn'], pcheck_both$span_logFC[pcheck_both$type == 'jxn']))
-max(abs(c(pcheck_both$logFC[pcheck_both$type == 'jxn'], pcheck_both$span_logFC[pcheck_both$type == 'jxn'])))
-
-table(pcheck_both$type[which(abs(pcheck_both$logFC) > 16 | abs(pcheck_both$span_logFC) > 16)])
-
-
-
-# pdf('pdf/compare_with_span_logFC.pdf')
-# ggplot(pcheck_both, aes(x = logFC, y = span_logFC, alpha = 1/10)) +
-#     facet_grid(age ~ type) + ylab('BrainSpan log FC') +
-#     xlab('BrainSeq log FC') + geom_point() + xlim(-16, 16) + ylim(-16, 16) +
-#     geom_smooth(method=lm, se=FALSE)
-# dev.off()
-
-png('pdf/compare_with_span_logFC.png', type = 'cairo'
-)
+# pdf('pdf/compare_with_span_logFC.pdf', useDingbats = FALSE)
+png('pdf/compare_with_span_logFC.png', type = 'cairo')
 ggplot(pcheck_both, aes(x = logFC, y = span_logFC, alpha = 1/20)) +
-    facet_grid(age ~ type) + ylab('BrainSpan log FC') +
-    xlab('BrainSeq log FC') + geom_point() + xlim(-16, 16) + ylim(-16, 16) +
-    geom_smooth(method=lm, se=FALSE)
-dev.off()
-
-png('pdf/compare_with_span_logFC_noTx.png', type = 'cairo')
-ggplot(subset(pcheck_both, type != 'tx'), aes(x = logFC, y = span_logFC,
-    alpha = 1/20)) +
-    facet_grid(age ~ type) + ylab('BrainSpan log FC') +
-    xlab('BrainSeq log FC') + geom_point() + xlim(-7.5, 7.5) + ylim(-7.5, 7.5) +
+    facet_grid(age ~ type, scales = 'free') + ylab('BrainSpan log FC') +
+    xlab('BrainSeq log FC') + geom_point() +
     geom_smooth(method=lm, se=FALSE)
 dev.off()
 
 # pdf('pdf/compare_with_span_logFC_noTx.pdf', useDingbats = FALSE)
-# ggplot(subset(pcheck_both, type != 'tx'), aes(x = logFC, y = span_logFC,
-#     alpha = 1/10)) +
-#     facet_grid(age ~ type) + ylab('BrainSpan log FC') +
-#     xlab('BrainSeq log FC') + geom_point() + xlim(-7.5, 7.5) + ylim(-7.5, 7.5) +
-#     geom_smooth(method=lm, se=FALSE)
-# dev.off()
+png('pdf/compare_with_span_logFC_noTx.png', type = 'cairo')
+ggplot(subset(pcheck_both, type != 'tx'), aes(x = logFC, y = span_logFC,
+    alpha = 1/20)) +
+    facet_grid(age ~ type, scales = 'free') + ylab('BrainSpan log FC') +
+    xlab('BrainSeq log FC') + geom_point() +
+    geom_smooth(method=lm, se=FALSE)
+dev.off()
 
 
 pdf('pdf/compare_with_span_logFC_density.pdf', useDingbats = FALSE)
 ggplot(pcheck_both, aes(x = logFC, y = span_logFC)) +
-    facet_grid(age ~ type) + ylab('BrainSpan log FC') +
-    xlab('BrainSeq log FC') + stat_density2d() + xlim(-16, 16) + ylim(-16, 16) +
+    facet_grid(age ~ type, scales = 'free') + ylab('BrainSpan log FC') +
+    xlab('BrainSeq log FC') + stat_density2d() +
     geom_smooth(method=lm, se=FALSE)
 dev.off()
 
 pdf('pdf/compare_with_span_logFC_density_noTx.pdf', useDingbats = FALSE)
 ggplot(subset(pcheck_both, type != 'tx'), aes(x = logFC, y = span_logFC)) +
-    facet_grid(age ~ type) + ylab('BrainSpan log FC') +
-    xlab('BrainSeq log FC') + stat_density2d() + xlim(-7.5, 7.5) +
-    ylim(-7.5, 7.5) +
+    facet_grid(age ~ type, scales = 'free') + ylab('BrainSpan log FC') +
+    xlab('BrainSeq log FC') + stat_density2d() +
     geom_smooth(method=lm, se=FALSE)
 dev.off()
 
@@ -208,24 +179,24 @@ if(!file.exists('rda/rep_span.Rdata')) {
 pdf('pdf/replication_exploration.pdf', width = 14, useDingbats = FALSE)
 ggplot(rep_span, aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated / number_de, color = pvar)) + facet_grid(age ~ type) + ylab('Replication rate') + xlab('p-threshold') + geom_point() + theme_grey(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(color='P-value method') + ylim(c(0, 1))
 
+ggplot(rep_span, aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated_sign / number_de, color = pvar)) + facet_grid(age ~ type) + ylab('Replication rate (sign only)') + xlab('p-threshold') + geom_point() + theme_grey(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(color='P-value method') + ylim(c(0, 1))
+
 ggplot(rep_span, aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = number_de, color = pvar)) + facet_grid(age ~ type) + ylab('Number of DE features') + xlab('p-threshold') + geom_point() + theme_grey(base_size = 18) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + scale_y_log10() + labs(color='P-value method')
 
 ggplot(rep_span, aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = number_de / total * 100, color = pvar)) + facet_grid(age ~ type) + ylab('Percent of DE features') + xlab('p-threshold') + geom_point() + theme_grey(base_size = 18) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(color='P-value method') + ylim(c(0, 100))
 
-ggplot(rep_span, aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated_sign / number_de, color = pvar)) + facet_grid(age ~ type) + ylab('Replication rate (sign only)') + xlab('p-threshold') + geom_point() + theme_grey(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(color='P-value method') + ylim(c(0, 1))
 dev.off()
 
-## TODO: edit this
-pdf('pdf/replication_exploration_subset.pdf', width = 14, height =  10, useDingbats = FALSE)
-ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated / number_de)) + facet_grid(type ~ toupper(term_clean)) + ylab('Replication rate') + xlab('p-value threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylim(c(0, 1))
+pdf('pdf/replication_exploration_subset.pdf', width = 8, height =  10, useDingbats = FALSE)
+ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated / number_de)) + facet_grid(type ~ age) + ylab('Replication rate') + xlab('p-value threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylim(c(0, 1)) + geom_line(aes(y = replicated / number_de, x = rep(1:6, 6)))
+
+ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated_sign / number_de)) + facet_grid(type ~ age) + ylab('Replication rate (sign only)') + xlab('p-value threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylim(c(0, 1)) + geom_line(aes(y = replicated_sign / number_de, x = rep(1:6, 6)))
+
+ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = number_de)) + facet_grid(type ~ age) + ylab('Number of DE features') + xlab('p-value threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) +  geom_line(aes(y = number_de, x = rep(1:6, 6)))
+
+ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = number_de / total * 100)) + facet_grid(type ~ age) + ylab('Percent of DE features') + xlab('p-value threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + geom_line(aes(y = number_de / total * 100, x = rep(1:6, 6))) + ylim(c(0, 100))
+
 dev.off()
-
-pdf('pdf/replication_exploration_subset_F.pdf', width = 8, height =  10, useDingbats = FALSE)
-ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx' & term_clean == 'f'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated / number_de)) + facet_grid(type ~ toupper(term_clean)) + ylab('Replication rate') + xlab('p-value threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylim(c(0, 1)) + geom_line(aes(y = replicated / number_de, x = rep(1:6, 3)))
-
-ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx' & term_clean == 'f'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated / number_de)) + facet_grid(type ~ toupper(term_clean)) + ylab('Replication rate') + xlab('p-value threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + geom_line(aes(y = replicated / number_de, x = rep(1:6, 3)))
-dev.off()
-
 
 
 
@@ -280,8 +251,8 @@ pinfo <- lapply(unique(pcheck_both$type), function(feat)  {
 names(pinfo) <- unique(pcheck_both$type)
 sapply(pinfo, function(x) sapply(x, nrow))
 #       gene  exon  jxn   tx
-# adult 1612 15442 5561 1750
-# fetal   29    65   16    0
+# adult 1612 15442 5561 1739
+# fetal   32    71   18    3
 
 rses <- lapply(unique(pcheck_both$type), function(type) {
     load_foo(type, 'fetal')
@@ -324,15 +295,14 @@ if(!file.exists('rda/de_genes.Rdata')) {
 
 sapply(de_genes, function(x) sapply(x, length))
 #      adult fetal
-# gene  1612    29
+# gene  1612    32
 # exon  2686    11
-# jxn   1897     7
-# tx    1438     0
-
+# jxn   1897     6
+# tx    1414     1
 
 ## Pretty venn code
 venn_cols <- brewer.pal('Set1', n = 4)
-names(venn_cols) <- names(de_genes)
+names(venn_cols) <- names(de_genes[[1]])
 make_venn <- function(genes, title = 'DE features grouped by gene id') {
     v <- venn.diagram(genes, filename = NULL,
         main = title,
@@ -345,18 +315,243 @@ make_venn <- function(genes, title = 'DE features grouped by gene id') {
 }
 
 pdf('pdf/venn_de_features.pdf', useDingbats = FALSE)
-venn(de_genes$adult) + title('DE features grouped by gene id (adult)')
-venn(de_genes$adult[c('gene', 'exon', 'jxn')]) + title('DE features grouped by gene id (adult)')
-venn(de_genes$fetal) + title('DE features grouped by gene id (fetal)')
-venn(de_genes$fetal[c('gene', 'exon', 'jxn')]) + title('DE features grouped by gene id (fetal)')
-dev.off()
-
-
-pdf('pdf/venn_de_features.pdf', useDingbats = FALSE)
 make_venn(de_genes$adult, title = 'DE features grouped by gene id (adult)')
 make_venn(de_genes$adult[c('gene', 'exon', 'jxn')], title = 'DE features grouped by gene id (adult)')
 make_venn(de_genes$fetal, title = 'DE features grouped by gene id (prenatal)')
 make_venn(de_genes$fetal[c('gene', 'exon', 'jxn')], title = 'DE features grouped by gene id (prenatal)')
+dev.off()
+
+
+## Go analysis
+gene_ens <- lapply(names(rses), function(feat) {
+    if(feat %in% c('gene', 'exon', 'jxn')) {
+        res <- rowRanges(rses[[feat]])$ensemblID
+    } else {
+        res <- gsub('\\..*', '', rowRanges(rses[[feat]])$gene_id)
+    }
+    res <- unique(res[!is.na(res)])
+    return(res)
+})
+names(gene_ens) <- names(rses)
+
+sapply(gene_ens, length)
+#  gene  exon   jxn    tx
+# 24652 23943 18329 31688
+
+pdf('pdf/venn_expressed_genes_ensembl_ids.pdf', useDingbats = FALSE)
+make_venn(gene_ens)
+make_venn(gene_ens[c('gene', 'exon', 'jxn')])
+dev.off()
+
+## Use genes expressed in all 3 features (aka, exclude tx)
+uni <- unique(unlist(gene_ens[c('gene', 'exon', 'jxn')]))
+length(uni)
+# [1] 27514
+
+run_go <- function(genes, ont = c('BP', 'MF', 'CC')) {
+    ## Change to ENSEMBL ids
+    genes_ens <- sapply(genes, function(x) { gsub('\\..*', '', x) })
+
+    ## Group by jxn, exon, gene
+    genes_venn <- venn(genes_ens, show.plot = FALSE)
+
+    ## Run GO analysis
+    go_cluster <- lapply(ont, function(bp) {
+        message(paste(Sys.time(), 'running GO analysis for', bp))
+        tryCatch(compareCluster(attr(genes_venn, 'intersections'), fun = "enrichGO",
+            universe = uni, OrgDb = 'org.Hs.eg.db',
+            ont = bp, pAdjustMethod = "BH",
+            pvalueCutoff  = 0.1, qvalueCutoff  = 0.05,
+            readable = TRUE, keyType = 'ENSEMBL'),
+            error = function(e) { return(NULL) })
+    })
+    names(go_cluster) <- ont
+    return(go_cluster)
+}
+
+## Reg specific genes
+if(!file.exists('rda/go_de_genes.Rdata')) {
+    system.time( go_de_genes_adult <- run_go(de_genes$adult[c('gene', 'exon', 'jxn')]) )
+    system.time( go_de_genes_fetal <- run_go(de_genes$fetal[c('gene', 'exon', 'jxn')]) )
+    message(paste(Sys.time(), 'saving rda/go_de_genes.Rdata'))
+    save(go_de_genes_adult, go_de_genes_fetal, file = 'rda/go_de_genes.Rdata')
+} else {
+    message(paste(Sys.time(), 'loading rda/go_de_genes.Rdata'))
+    load('rda/go_de_genes.Rdata', verbose = TRUE)
+}
+sapply(go_de_genes_adult, class)
+sapply(go_de_genes_fetal, class)
+
+simplify_go <- function(x) {
+    gsub('jxn', 'J', gsub('exon', 'E', gsub('gene', 'G', x)))
+}
+
+plot_go <- function(go_cluster, cat = 10) {
+    lapply(names(go_cluster), function(bp) {
+        go <- go_cluster[[bp]]
+        if(is.null(go)) {
+            message(paste(Sys.time(), 'found no results for', bp))
+            return(NULL)
+        }
+
+        ## Simplify names
+        go@compareClusterResult$Cluster <- simplify_go(go@compareClusterResult$Cluster)
+        names(go@geneClusters) <- simplify_go(names(go@geneClusters))
+
+        print(plot(go, title = paste('ontology:', bp), font.size = 18, showCategory = cat, includeAll = TRUE))
+        return(NULL)
+    })
+}
+
+
+pdf('pdf/go_de_genes_adult.pdf', width = 14, height = 9, useDingbats = FALSE)
+plot_go(go_de_genes_adult)
+dev.off()
+
+pdf('pdf/go_de_genes_fetal.pdf', width = 30, height = 9, useDingbats = FALSE)
+plot_go(go_de_genes_fetal)
+dev.off()
+
+## Volcano plots
+rep_brain <- function(x) {
+    ifelse(x, 'BrainSpan rep.', 'BrainSpan not rep.')
+}
+
+## This one separates the BrainSeq and the BrainSpan effects
+make_volcano2 <- function(df, v) {
+    ggplot(df, aes(x = logfc, y = -log10(pval), color = sigBrainSeq)) + geom_point() + facet_grid(sigBrainSpan ~ type + age, scales = 'free') + theme_bw(base_size = 18) + scale_colour_manual(values = c('grey20', 'red'), name = 'Bonf. <1%') + ylab('-log10 p value') + xlab(paste('log2 FC', v))
+}
+
+volcano_custom <- function(var, foo = make_volcano) {
+    df <- do.call(rbind, lapply(names(fit)[-grep('_tx', names(fit))], function(f) {
+        data.frame(
+            pval = fit[[f]]$p.value[, var],
+            logfc = fit[[f]]$coefficients[, var],
+            type = ss(f, '_', 2),
+            age = ss(f, '_'),
+            stringsAsFactors = FALSE
+        )
+    }))
+    df$name <- rownames(df)
+    df$name[df$age == 'fetal'] <- gsub('.$', '', df$name[df$age == 'fetal'])
+    m <- match(paste0(df$age, '_', df$type, '.', df$name), rownames(pcheck_both))
+
+    df$sig <- with(pcheck_both[m, ], P.Bonf < 0.01 & span_P.Value < 0.05)
+    df$sigBrainSeq <- with(pcheck_both[m, ], P.Bonf < 0.01)
+    df$sigBrainSpan <- rep_brain(with(pcheck_both[m, ], span_P.Value < 0.05 & sign(t) == sign(span_t)))
+
+    df <- df[complete.cases(df), ]
+    df$age[df$age == 'fetal'] <- 'prenatal'
+
+    g <- foo(df, v = var)
+    print(g)
+    return(df)
+}
+
+pdf('pdf/volcano_plots.pdf', width = 16, height = 8, useDingbats = FALSE)
+volcano_info <- volcano_custom('RegionHIPPO', foo = make_volcano2)
+dev.off()
+
+
+## Some basic exploration (prior to DE)
+source('../development/pca_funs.R')
+
+if(!file.exists('rda/pcas.Rdata')) {
+    pcas <- lapply(names(exprsNorm), function(type) {
+        message(paste(Sys.time(), 'processing', type))
+        pc_function(exprsNorm[[type]])
+    })
+    names(pcas) <- names(exprsNorm)
+
+    pcas_span <- lapply(names(exprsNorm_span), function(type) {
+        message(paste(Sys.time(), 'processing', type))
+        pc_function(exprsNorm_span[[type]])
+    })
+    names(pcas_span) <- names(exprsNorm_span)
+
+    save(pcas, pcas_span, file = 'rda/pcas.Rdata')
+} else {
+    load('rda/pcas.Rdata', verbose = TRUE)
+}
+
+
+main_lab <- function(type) {
+    res <- paste0('PC (', gsub('fetal', 'prenatal', type), '): ')
+    if(!grepl('tx', type)) {
+        res <- paste0(res, 'log2(CPM + 0.5)')
+    } else {
+        res <- paste0(res, 'log2(TPM + 0.5)')
+    }
+    return(res)
+}
+
+rses_span <- lapply(unique(pcheck_both$type), function(type) {
+    load_span(type, 'fetal')
+})
+names(rses_span) <- unique(pcheck_both$type)
+
+
+pal <- brewer.pal('Paired', n = 8)
+plot_pca <- function(type, pc, loc = 'bottomleft', pan = 1, rs = rses, nc = 2) {
+    leg <- with(colData(rs[[type]]), Region)
+    leg2 <- with(colData(rs[[type]]), paste0(Region, '-', Sex))
+    race <- as.character(colData(rs[[type]])$Race)
+    race[race == 'African'] <- 'AA'
+    race[!race %in% c('CAUC', 'AA')] <- 'Other'
+    #leg4 <- with(colData(rs$gene), paste0(Region, '-', Dx))
+
+    palette(c('dark orange', 'skyblue3', 'black'))
+    pc_plot(pca = pc[[paste0('adult_', type)]], legend = leg, color = leg,
+            main = main_lab(paste(type, 'adult')),
+            position = loc, type='variable', ptsize = 0.75,
+            ncol = nc, legend.pan = pan, lwd = 3, cex = 0.75)
+    palette(pal[5:8])
+    pc_plot(pca = pc[[paste0('adult_', type)]], legend = leg2, color = leg2,
+            main = main_lab(paste(type, 'adult')),
+            position = loc, type='variable', ptsize = 0.75,
+            ncol = nc, legend.pan = pan, lwd = 3, cex = 0.75)
+    palette(brewer.pal('Set1', n = 5)[3:5])
+    pc_plot(pca = pc[[paste0('adult_', type)]], legend = race,
+            color = race,
+            main = main_lab(paste(type, 'adult')),
+            position = loc, type='variable', ptsize = 0.75,
+            ncol = nc, legend.pan = pan, lwd = 3, cex = 0.75)
+    var_plot(pca = pc[[paste0('adult_', type)]])
+
+    palette(c('dark orange', 'skyblue3', 'black'))
+    pc_plot(pca = pc[[paste0('fetal_', type)]], legend = leg, color = leg,
+            main = main_lab(paste(type, 'prenatal')),
+            position = loc, type='variable', ptsize = 0.75,
+            ncol = nc, legend.pan = pan, lwd = 3, cex = 0.75)
+    palette(pal[5:8])
+    pc_plot(pca = pc[[paste0('fetal_', type)]], legend = leg2, color = leg2,
+            main = main_lab(paste(type, 'prenatal')),
+            position = loc, type='variable', ptsize = 0.75,
+            ncol = nc, legend.pan = pan, lwd = 3, cex = 0.75)
+    palette(brewer.pal('Set1', n = 5)[3:5])
+    pc_plot(pca = pc[[paste0('fetal_', type)]], legend = race,
+            color = race,
+            main = main_lab(paste(type, 'prenatal')),
+            position = loc, type='variable', ptsize = 0.75,
+            ncol = nc, legend.pan = pan, lwd = 3, cex = 0.75)
+    var_plot(pca = pc[[paste0('fetal_', type)]])
+    return(NULL)
+}
+
+## plot by dataset
+pdf('pdf/pcas.pdf')
+plot_pca('gene', pcas)
+plot_pca('exon', pcas, 'bottomleft', pan = 4)
+plot_pca('jxn', pcas, 'bottomright', pan = 4)
+plot_pca('tx', pcas, 'bottomright', pan = 4, nc = 1)
+dev.off()
+
+
+pdf('pdf/pcas_span.pdf')
+plot_pca('gene', pcas_span, 'bottomright', pan = 2, rs = rses_span)
+plot_pca('exon', pcas_span, 'bottomright', pan = 2, rs = rses_span)
+plot_pca('jxn', pcas_span, 'right', pan = 1, rs = rses_span)
+plot_pca('tx', pcas_span, 'bottomright', pan = 4, nc = 1, rs = rses_span)
 dev.off()
 
 

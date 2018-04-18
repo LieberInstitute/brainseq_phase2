@@ -71,7 +71,7 @@ if(!file.exists('rda/pcheck_both.Rdata')) {
     colnames(pcheck_span_tmp) <- paste0('span_', colnames(pcheck_span_tmp))
     pcheck_both <- cbind(pcheck, pcheck_span_tmp)
     rm(pcheck_span_tmp)
-    save(pcheck_both, file = 'rda/pcheck_both.Rdata')
+    save(pcheck, pcheck_span, pcheck_both, file = 'rda/pcheck_both.Rdata')
 } else {
     message(paste(Sys.time(), 'loading rda/pcheck_both.Rdata'))
     load('rda/pcheck_both.Rdata', verbose = TRUE)
@@ -140,7 +140,7 @@ table(pcheck_both$type[which(abs(pcheck_both$Age.RegionHIPPO) > 16 | abs(pcheck_
 
 png('pdf/compare_with_span_logFC.png', type = 'cairo')
 ggplot(pcheck_both, aes(x = F, y = span_F, alpha = 1/20)) +
-    facet_grid(. ~ type) + ylab('BrainSpan F-stat') +
+    facet_grid(. ~ type, scales = 'free') + ylab('BrainSpan F-stat') +
     xlab('BrainSeq F-stat') + geom_point() +
     geom_smooth(method=lm, se=FALSE)
 dev.off()
@@ -148,24 +148,23 @@ dev.off()
 png('pdf/compare_with_span_logFC_noTx.png', type = 'cairo')
 ggplot(subset(pcheck_both, type != 'tx'), aes(x = F, y = span_F,
                                               alpha = 1/20)) +
-    facet_grid(. ~ type) + ylab('BrainSpan log FC') +
-    xlab('BrainSeq log FC') + geom_point() + xlim(-7.5, 7.5) + ylim(-7.5, 7.5) +
+    facet_grid(. ~ type, scales = 'free') + ylab('BrainSpan log FC') +
+    xlab('BrainSeq log FC') + geom_point() +
     geom_smooth(method=lm, se=FALSE)
 dev.off()
 
 
 pdf('pdf/compare_with_span_logFC_density.pdf', useDingbats = FALSE)
 ggplot(pcheck_both, aes(x = F, y = span_F)) +
-    facet_grid(. ~ type) + ylab('BrainSpan log FC') +
-    xlab('BrainSeq log FC') + stat_density2d() + xlim(-16, 16) + ylim(-16, 16) +
+    facet_grid(. ~ type, scales = 'free') + ylab('BrainSpan log FC') +
+    xlab('BrainSeq log FC') + stat_density2d() +
     geom_smooth(method=lm, se=FALSE)
 dev.off()
 
 pdf('pdf/compare_with_span_logFC_density_noTx.pdf', useDingbats = FALSE)
 ggplot(subset(pcheck_both, type != 'tx'), aes(x = F, y = span_F)) +
-    facet_grid(. ~ type) + ylab('BrainSpan log FC') +
-    xlab('BrainSeq log FC') + stat_density2d() + xlim(-7.5, 7.5) +
-    ylim(-7.5, 7.5) +
+    facet_grid(. ~ type, scales = 'free') + ylab('BrainSpan log FC') +
+    xlab('BrainSeq log FC') + stat_density2d() +
     geom_smooth(method=lm, se=FALSE)
 dev.off()
 
@@ -673,8 +672,8 @@ dev.off()
 
 
 ## This one separates the BrainSeq and the BrainSpan effects
-make_volcano2 <- function(df) {
-    ggplot(df, aes(x = logfc, y = -log10(pval), color = sigBrainSeq)) + geom_point() + facet_grid(sigBrainSpan ~ type, scales = 'free') + theme_bw(base_size = 18) + scale_colour_manual(values = c('grey20', 'red'), name = 'F Bonf. <1%') + ylab('-log10 p value') + xlab(paste('log2 FC', var))
+make_volcano2 <- function(df, v) {
+    ggplot(df, aes(x = logfc, y = -log10(pval), color = sigBrainSeq)) + geom_point() + facet_grid(sigBrainSpan ~ type, scales = 'free') + theme_bw(base_size = 18) + scale_colour_manual(values = c('grey20', 'red'), name = 'F Bonf. <1%') + ylab('-log10 p value') + xlab(paste('log2 FC', v))
 }
 
 volcano_custom <- function(var, foo = make_volcano) {
@@ -692,7 +691,7 @@ volcano_custom <- function(var, foo = make_volcano) {
     df$sigBrainSeq <- with(pcheck_both[m, ], P.Bonf < 0.01)
     df$sigBrainSpan <- rep_brain(with(pcheck_both[m, ], span_P.Value < 0.05))
 
-    g <- foo(df)
+    g <- foo(df, v = var)
     print(g)
     return(df)
 }
