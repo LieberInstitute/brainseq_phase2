@@ -1,0 +1,839 @@
+**** Job starts ****
+Wed Apr 18 11:30:23 EDT 2018
+**** JHPCE info ****
+User: lcollado
+Job id: 4878629
+Job name: explore_reg_specific
+Hostname: compute-099
+Task id: 
+Using the following user library: ~/R/x86_64-pc-linux-gnu-library/3.4.x
+Loading required package: methods
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following object is masked from ‘package:limma’:
+
+    plotMA
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, cbind, colMeans, colnames,
+    colSums, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+    grepl, intersect, is.unsorted, lapply, lengths, Map, mapply, match,
+    mget, order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rowMeans, rownames, rowSums, sapply, setdiff, sort,
+    table, tapply, union, unique, unsplit, which, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:base’:
+
+    expand.grid
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: DelayedArray
+Loading required package: matrixStats
+
+Attaching package: ‘matrixStats’
+
+The following objects are masked from ‘package:Biobase’:
+
+    anyMissing, rowMedians
+
+
+Attaching package: ‘DelayedArray’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+
+The following object is masked from ‘package:base’:
+
+    apply
+
+Loading required package: rafalib
+
+Attaching package: ‘devtools’
+
+The following object is masked from ‘package:rafalib’:
+
+    install_bioc
+
+
+Attaching package: ‘gplots’
+
+The following object is masked from ‘package:IRanges’:
+
+    space
+
+The following object is masked from ‘package:S4Vectors’:
+
+    space
+
+The following object is masked from ‘package:stats’:
+
+    lowess
+
+Loading required package: grid
+Loading required package: futile.logger
+Loading required package: DOSE
+
+DOSE v3.4.0  For help: https://guangchuangyu.github.io/DOSE
+
+If you use DOSE in published research, please cite:
+Guangchuang Yu, Li-Gen Wang, Guang-Rong Yan, Qing-Yu He. DOSE: an R/Bioconductor package for Disease Ontology Semantic and Enrichment analysis. Bioinformatics 2015, 31(4):608-609
+
+clusterProfiler v3.6.0  For help: https://guangchuangyu.github.io/clusterProfiler
+
+If you use clusterProfiler in published research, please cite:
+Guangchuang Yu., Li-Gen Wang, Yanyan Han, Qing-Yu He. clusterProfiler: an R package for comparing biological themes among gene clusters. OMICS: A Journal of Integrative Biology. 2012, 16(5):284-287.
+2018-04-18 11:33:03 saving rda/raw.Rdata
+2018-04-18 11:44:14 saving rda/raw_span.Rdata
+   adult_exon adult_gene adult_jxn adult_tx fetal_exon fetal_gene fetal_jxn fetal_tx DEstatus      method cutoff    unit
+1   158072.00    8476.00 171422.00 42313.00  382174.00   22402.00 293672.00 92074.00    FALSE         FDR   0.05  number
+2   238507.00   16176.00 125759.00 50419.00   14405.00    2250.00   3509.00   658.00     TRUE         FDR   0.05  number
+3       39.86      34.38     57.68    45.63      96.37      90.87     98.82    99.29    FALSE         FDR   0.05 percent
+4       60.14      65.62     42.32    54.37       3.63       9.13      1.18     0.71     TRUE         FDR   0.05 percent
+5   196833.00   10635.00 198992.00 52639.00  392584.00   23795.00 296122.00 92664.00    FALSE         FDR   0.01  number
+6   199746.00   14017.00  98189.00 40093.00    3995.00     857.00   1059.00    68.00     TRUE         FDR   0.01  number
+7       49.63      43.14     66.96    56.76      98.99      96.52     99.64    99.93    FALSE         FDR   0.01 percent
+8       50.37      56.86     33.04    43.24       1.01       3.48      0.36     0.07     TRUE         FDR   0.01 percent
+9   305717.00   16091.00 256959.00 76629.00  396298.00   24525.00 296964.00 92714.00    FALSE        bonf   0.05  number
+10   90862.00    8561.00  40222.00 16103.00     281.00     127.00    217.00    18.00     TRUE        bonf   0.05  number
+11      77.09      65.27     86.47    82.63      99.93      99.48     99.93    99.98    FALSE        bonf   0.05 percent
+12      22.91      34.73     13.53    17.37       0.07       0.52      0.07     0.02     TRUE        bonf   0.05 percent
+13  314243.00   16757.00 261317.00 78692.00  396416.00   24582.00 297034.00 92726.00    FALSE        bonf   0.01  number
+14   82336.00    7895.00  35864.00 14040.00     163.00      70.00    147.00     6.00     TRUE        bonf   0.01  number
+15      79.24      67.97     87.93    84.86      99.96      99.72     99.95    99.99    FALSE        bonf   0.01 percent
+16      20.76      32.03     12.07    15.14       0.04       0.28      0.05     0.01     TRUE        bonf   0.01 percent
+17  313189.00   17709.00 261531.00 80056.00  396403.00   24613.00 297036.00 92728.00    FALSE global_bonf   0.05  number
+18   83390.00    6943.00  35650.00 12676.00     176.00      39.00    145.00     4.00     TRUE global_bonf   0.05  number
+19      78.97      71.84     88.00    86.33      99.96      99.84     99.95   100.00    FALSE global_bonf   0.05 percent
+20      21.03      28.16     12.00    13.67       0.04       0.16      0.05     0.00     TRUE global_bonf   0.05 percent
+21  320996.00   18226.00 265133.00 81614.00  396486.00   24635.00 297076.00 92730.00    FALSE global_bonf   0.01  number
+22   75583.00    6426.00  32048.00 11118.00      93.00      17.00    105.00     2.00     TRUE global_bonf   0.01  number
+23      80.94      73.93     89.22    88.01      99.98      99.93     99.96   100.00    FALSE global_bonf   0.01 percent
+24      19.06      26.07     10.78    11.99       0.02       0.07      0.04     0.00     TRUE global_bonf   0.01 percent
+   adult_exon adult_gene adult_jxn adult_tx fetal_exon fetal_gene fetal_jxn fetal_tx DEstatus      method cutoff    unit
+1   396380.00   24622.00    297181    92732  313928.00   18346.00 273649.00 86937.00    FALSE         FDR   0.05  number
+2      199.00      30.00         0        0   82651.00    6306.00  23532.00  5795.00     TRUE         FDR   0.05  number
+3       99.95      99.88       100      100      79.16      74.42     92.08    93.75    FALSE         FDR   0.05 percent
+4        0.05       0.12         0        0      20.84      25.58      7.92     6.25     TRUE         FDR   0.05 percent
+5   396570.00   24650.00    297181    92732  349752.00   20757.00 285252.00 90009.00    FALSE         FDR   0.01  number
+6        9.00       2.00         0        0   46827.00    3895.00  11929.00  2723.00     TRUE         FDR   0.01  number
+7      100.00      99.99       100      100      88.19      84.20     95.99    97.06    FALSE         FDR   0.01 percent
+8        0.00       0.01         0        0      11.81      15.80      4.01     2.94     TRUE         FDR   0.01 percent
+9   396573.00   24649.00    297181    92732  392178.00   23784.00 295925.00 92390.00    FALSE        bonf   0.05  number
+10       6.00       3.00         0        0    4401.00     868.00   1256.00   342.00     TRUE        bonf   0.05  number
+11     100.00      99.99       100      100      98.89      96.48     99.58    99.63    FALSE        bonf   0.05 percent
+12       0.00       0.01         0        0       1.11       3.52      0.42     0.37     TRUE        bonf   0.05 percent
+13  396578.00   24651.00    297181    92732  393935.00   24042.00 296425.00 92529.00    FALSE        bonf   0.01  number
+14       1.00       1.00         0        0    2644.00     610.00    756.00   203.00     TRUE        bonf   0.01  number
+15     100.00     100.00       100      100      99.33      97.53     99.75    99.78    FALSE        bonf   0.01 percent
+16       0.00       0.00         0        0       0.67       2.47      0.25     0.22     TRUE        bonf   0.01 percent
+17  396578.00   24652.00    297181    92732  393736.00   24354.00 296443.00 92587.00    FALSE global_bonf   0.05  number
+18       1.00       0.00         0        0    2843.00     298.00    738.00   145.00     TRUE global_bonf   0.05  number
+19     100.00     100.00       100      100      99.28      98.79     99.75    99.84    FALSE global_bonf   0.05 percent
+20       0.00       0.00         0        0       0.72       1.21      0.25     0.16     TRUE global_bonf   0.05 percent
+21  396579.00   24652.00    297181    92732  394883.00   24448.00 296756.00 92658.00    FALSE global_bonf   0.01  number
+22       0.00       0.00         0        0    1696.00     204.00    425.00    74.00     TRUE global_bonf   0.01  number
+23     100.00     100.00       100      100      99.57      99.17     99.86    99.92    FALSE global_bonf   0.01 percent
+24       0.00       0.00         0        0       0.43       0.83      0.14     0.08     TRUE global_bonf   0.01 percent
+     Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+-14.31984  -0.22043   0.02806   0.01878   0.26561  13.89737 
+     Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+-8.071250 -0.241320  0.008524  0.061288  0.312975  9.004831 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+Warning message:
+Removed 6 rows containing missing values (geom_point). 
+Warning message:
+Removed 6 rows containing missing values (geom_point). 
+Warning message:
+Transformation introduced infinite values in continuous y-axis 
+null device 
+          1 
+null device 
+          1 
+      (Intercept) RegionHIPPO        Age SexM     snpPC1       snpPC2     snpPC3       snpPC4       snpPC5 mean_mitoRate
+R3377           1           0 -0.4219178    1 -0.0542138 -0.003355410 0.00575297  0.097539700 -0.000988609   0.022791551
+R3391           1           0 -0.4602740    1 -0.0557713  0.000821096 0.00517122 -0.000888642  0.002708640   0.005903379
+R3401           1           0 -0.4410959    1 -0.0432043 -0.003160890 0.00557740  0.002471760  0.003430480   0.007333419
+R3402           1           0 -0.4027397    1 -0.0535261 -0.001040290 0.00382796 -0.001343780 -0.001241730   0.002740346
+R3404           1           0 -0.4219180    1  0.0519951 -0.006229360 0.00466106 -0.000897263  0.003103350   0.003708482
+R3413           1           0 -0.4027397    0 -0.0451429 -0.000955740 0.00305970 -0.000489625  0.000505765   0.006461497
+      mean_totalAssignedGene mean_RIN
+R3377              0.2155531      9.3
+R3391              0.4602347     10.0
+R3401              0.3517778      9.5
+R3402              0.3649528      7.0
+R3404              0.4265456      8.4
+R3413              0.3954575     10.0
+           (Intercept) RegionHIPPO        Age SexM     snpPC1     snpPC2      snpPC3      snpPC4       snpPC5 mean_mitoRate
+HSB112.DFC           1           0 -0.6153846    1 -0.0567361  0.0156058 -0.01142590 -0.00372620  0.001476910   0.008202008
+HSB112.HIP           1           1 -0.6153846    1 -0.0567361  0.0156058 -0.01142590 -0.00372620  0.001476910   0.009382144
+HSB148.DFC           1           0 -0.5961538    1 -0.0591290  0.0132107 -0.00934815 -0.00333218 -0.000331367   0.015830561
+HSB148.HIP           1           1 -0.5961538    1 -0.0591290  0.0132107 -0.00934815 -0.00333218 -0.000331367   0.019327809
+HSB153.DFC           1           0 -0.5384615    0 -0.0177935 -0.1256150  0.01889490 -0.03211900  0.032461900   0.025211486
+HSB153.HIP           1           1 -0.5384615    0 -0.0177935 -0.1256150  0.01889490 -0.03211900  0.032461900   0.019977284
+           mean_totalAssignedGene mean_RIN
+HSB112.DFC              0.7442538      9.6
+HSB112.HIP              0.7554599      9.9
+HSB148.DFC              0.7586915     10.0
+HSB148.HIP              0.7783646      9.5
+HSB153.DFC              0.7874213     10.0
+HSB153.HIP              0.7540223      9.0
+[1] 56
+[1] 36
+  (Intercept)  RegionHIPPO       Age               SexM            snpPC1             snpPC2              snpPC3         
+ Min.   :1    Min.   :0.0   Min.   :-0.4986   Min.   :0.0000   Min.   :-0.06070   Min.   :-0.007187   Min.   :0.0008588  
+ 1st Qu.:1    1st Qu.:0.0   1st Qu.:-0.4411   1st Qu.:0.0000   1st Qu.:-0.05409   1st Qu.:-0.003355   1st Qu.:0.0030975  
+ Median :1    Median :0.5   Median :-0.4219   Median :0.0000   Median :-0.05124   Median :-0.002201   Median :0.0038392  
+ Mean   :1    Mean   :0.5   Mean   :-0.4274   Mean   :0.4643   Mean   :-0.03840   Mean   :-0.002242   Mean   :0.0038695  
+ 3rd Qu.:1    3rd Qu.:1.0   3rd Qu.:-0.4027   3rd Qu.:1.0000   3rd Qu.:-0.04308   3rd Qu.:-0.001066   3rd Qu.:0.0046890  
+ Max.   :1    Max.   :1.0   Max.   :-0.3452   Max.   :1.0000   Max.   : 0.05515   Max.   : 0.013271   Max.   :0.0088992  
+     snpPC4               snpPC5           mean_mitoRate      mean_totalAssignedGene    mean_RIN     
+ Min.   :-0.0036540   Min.   :-0.0057872   Min.   :0.001808   Min.   :0.2156         Min.   : 5.700  
+ 1st Qu.:-0.0009629   1st Qu.:-0.0008028   1st Qu.:0.004352   1st Qu.:0.3580         1st Qu.: 9.100  
+ Median :-0.0001789   Median : 0.0003800   Median :0.050715   Median :0.3840         Median : 9.500  
+ Mean   : 0.0050120   Mean   : 0.0004750   Mean   :0.041555   Mean   :0.3930         Mean   : 9.157  
+ 3rd Qu.: 0.0011087   3rd Qu.: 0.0022732   3rd Qu.:0.064922   3rd Qu.:0.4250         3rd Qu.: 9.800  
+ Max.   : 0.0975397   Max.   : 0.0074115   Max.   :0.173460   Max.   :0.6563         Max.   :10.000  
+  (Intercept)  RegionHIPPO       Age                SexM            snpPC1             snpPC2              snpPC3         
+ Min.   :1    Min.   :0.0   Min.   :-0.61538   Min.   :0.0000   Min.   :-0.07967   Min.   :-0.125615   Min.   :-0.017864  
+ 1st Qu.:1    1st Qu.:0.0   1st Qu.:-0.53846   1st Qu.:0.0000   1st Qu.:-0.05713   1st Qu.:-0.008469   1st Qu.:-0.013794  
+ Median :1    Median :0.5   Median :-0.46154   Median :1.0000   Median :-0.05310   Median : 0.010985   Median :-0.009026  
+ Mean   :1    Mean   :0.5   Mean   :-0.43590   Mean   :0.5556   Mean   :-0.02620   Mean   :-0.010505   Mean   : 0.006169  
+ 3rd Qu.:1    3rd Qu.:1.0   3rd Qu.:-0.36538   3rd Qu.:1.0000   3rd Qu.:-0.01779   3rd Qu.: 0.013813   3rd Qu.: 0.005835  
+ Max.   :1    Max.   :1.0   Max.   :-0.05769   Max.   :1.0000   Max.   : 0.10121   Max.   : 0.043211   Max.   : 0.192806  
+     snpPC4              snpPC5           mean_mitoRate      mean_totalAssignedGene    mean_RIN     
+ Min.   :-0.137451   Min.   :-0.1312270   Min.   :0.008202   Min.   :0.6719         Min.   : 7.200  
+ 1st Qu.:-0.006023   1st Qu.:-0.0076436   1st Qu.:0.012839   1st Qu.:0.7433         1st Qu.: 8.900  
+ Median : 0.001450   Median :-0.0002157   Median :0.023056   Median :0.7658         Median : 9.600  
+ Mean   :-0.009908   Mean   :-0.0031417   Mean   :0.045996   Mean   :0.7605         Mean   : 9.281  
+ 3rd Qu.: 0.006900   3rd Qu.: 0.0041948   3rd Qu.:0.036859   3rd Qu.:0.7882         3rd Qu.: 9.900  
+ Max.   : 0.018238   Max.   : 0.0606781   Max.   :0.407064   Max.   :0.8056         Max.   :10.000  
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  5.700   9.100   9.500   9.157   9.800  10.000 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  7.200   8.900   9.600   9.281   9.900  10.000 
+R3485 R3462 R3449 R3464 R3402 R3715 R4900 R3860 R3404 R3475 R4707 R3451 R3880 R3878 R3879 R3450 R3377 R3427 R4951 R4966 R3461 R3875 R4911 
+  5.7   6.4   6.9   6.9   7.0   7.3   7.4   8.3   8.4   8.4   8.6   8.8   8.9   9.1   9.1   9.2   9.3   9.3   9.3   9.3   9.4   9.4   9.4 
+R4950 R3401 R3709 R3877 R5810 R5815 R4896 R4949 R4953 R4898 R4952 R4962 R4969 R4897 R4902 R4915 R4963 R4964 R4269 R4914 R4919 R4920 R5557 
+  9.4   9.5   9.5   9.5   9.5   9.5   9.5   9.5   9.5   9.6   9.6   9.6   9.6   9.7   9.7   9.7   9.7   9.7   9.8   9.8   9.8   9.8   9.8 
+R4913 R4965 R5570 R3391 R3413 R3440 R5785 R4903 R4916 R5591 
+  9.9   9.9   9.9  10.0  10.0  10.0  10.0  10.0  10.0  10.0 
+HSB155.HIP HSB155.DFC HSB194.HIP  HSB96.HIP  HSB98.HIP  HSB97.HIP  HSB96.DFC  HSB98.DFC HSB114.HIP  HSB97.DFC HSB107.HIP HSB194.DFC 
+       7.2        7.3        7.5        8.4        8.5        8.7        8.8        8.8        8.9        8.9        8.9        8.9 
+HSB153.HIP  HSB92.DFC HSB150.HIP HSB148.HIP HSB112.DFC HSB150.DFC HSB113.DFC HSB113.HIP HSB114.DFC HSB107.DFC HSB149.DFC  HSB92.HIP 
+       9.0        9.2        9.3        9.5        9.6        9.6        9.6        9.6        9.6        9.6        9.7        9.7 
+HSB103.DFC HSB149.HIP HSB112.HIP HSB178.HIP HSB159.HIP HSB148.DFC HSB153.DFC HSB103.HIP HSB178.DFC HSB154.DFC HSB154.HIP HSB159.DFC 
+       9.8        9.8        9.9        9.9        9.9       10.0       10.0       10.0       10.0       10.0       10.0       10.0 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+-0.4986 -0.4411 -0.4219 -0.4274 -0.4027 -0.3452 
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+-0.61538 -0.53846 -0.46154 -0.43590 -0.36538 -0.05769 
+
+	Welch Two Sample t-test
+
+data:  fit$fetal_gene$design[, "Age"] and fit_span$fetal_gene$design[, "Age"]
+t = 0.33609, df = 37.519, p-value = 0.7387
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.04276129  0.05977790
+sample estimates:
+ mean of x  mean of y 
+-0.4273891 -0.4358974 
+
+
+	Welch Two Sample t-test
+
+data:  fit$fetal_gene$design[, "mean_mitoRate"] and fit_span$fetal_gene$design[, "mean_mitoRate"]
+t = -0.32127, df = 45.879, p-value = 0.7495
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.03227107  0.02338814
+sample estimates:
+ mean of x  mean of y 
+0.04155465 0.04599611 
+
+
+	Welch Two Sample t-test
+
+data:  fit$fetal_gene$design[, "mean_totalAssignedGene"] and fit_span$fetal_gene$design[, "mean_totalAssignedGene"]
+t = -31.733, df = 81.981, p-value < 2.2e-16
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.3904825 -0.3444130
+sample estimates:
+mean of x mean of y 
+0.3930447 0.7604925 
+
+
+	Welch Two Sample t-test
+
+data:  fit$fetal_gene$design[, "mean_RIN"] and fit_span$fetal_gene$design[, "mean_RIN"]
+t = -0.66561, df = 87.247, p-value = 0.5074
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.4919259  0.2451005
+sample estimates:
+mean of x mean of y 
+ 9.157143  9.280556 
+
+
+	Welch Two Sample t-test
+
+data:  fit$fetal_gene$design[fit$fetal_gene$design[, "RegionHIPPO"] ==  and fit_span$fetal_gene$design[fit_span$fetal_gene$design[, "RegionHIPPO"] ==     1, "mean_totalAssignedGene"] and     1, "mean_totalAssignedGene"]
+t = -28.1, df = 43.901, p-value < 2.2e-16
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.3745738 -0.3244358
+sample estimates:
+mean of x mean of y 
+0.4068786 0.7563834 
+
+
+	Welch Two Sample t-test
+
+data:  fit$fetal_gene$design[fit$fetal_gene$design[, "RegionHIPPO"] ==  and fit_span$fetal_gene$design[fit_span$fetal_gene$design[, "RegionHIPPO"] ==     0, "mean_totalAssignedGene"] and     0, "mean_totalAssignedGene"]
+t = -19.855, df = 36.914, p-value < 2.2e-16
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.4247225 -0.3460589
+sample estimates:
+mean of x mean of y 
+0.3792109 0.7646016 
+
+
+	Welch Two Sample t-test
+
+data:  fit$fetal_gene$design[, "mean_totalAssignedGene"] by fit$fetal_gene$design[, "RegionHIPPO"]
+t = -1.3784, df = 41.58, p-value = 0.1755
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.06818863  0.01285314
+sample estimates:
+mean in group 0 mean in group 1 
+      0.3792109       0.4068786 
+
+
+	Welch Two Sample t-test
+
+data:  fit_span$fetal_gene$design[, "mean_totalAssignedGene"] by fit_span$fetal_gene$design[, "RegionHIPPO"]
+t = 0.72486, df = 33.993, p-value = 0.4735
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.01482266  0.03125898
+sample estimates:
+mean in group 0 mean in group 1 
+      0.7646016       0.7563834 
+
+, , Age group = adult, Feature type = exon
+
+          FDR
+Global FDR  FALSE   TRUE
+     FALSE 158072  17252
+     TRUE       0 221255
+
+, , Age group = fetal, Feature type = exon
+
+          FDR
+Global FDR  FALSE   TRUE
+     FALSE 357453      0
+     TRUE   24721  14405
+
+, , Age group = adult, Feature type = gene
+
+          FDR
+Global FDR  FALSE   TRUE
+     FALSE   8476   1068
+     TRUE       0  15108
+
+, , Age group = fetal, Feature type = gene
+
+          FDR
+Global FDR  FALSE   TRUE
+     FALSE  21041      0
+     TRUE    1361   2250
+
+, , Age group = adult, Feature type = jxn
+
+          FDR
+Global FDR  FALSE   TRUE
+     FALSE 171422   6773
+     TRUE       0 118986
+
+, , Age group = fetal, Feature type = jxn
+
+          FDR
+Global FDR  FALSE   TRUE
+     FALSE 279252      0
+     TRUE   14420   3509
+
+, , Age group = adult, Feature type = tx
+
+          FDR
+Global FDR  FALSE   TRUE
+     FALSE  42313   3911
+     TRUE       0  46508
+
+, , Age group = fetal, Feature type = tx
+
+          FDR
+Global FDR  FALSE   TRUE
+     FALSE  86126      0
+     TRUE    5948    658
+
+, , Age group = adult, Feature type = exon
+
+          FDR
+Global FDR  FALSE   TRUE
+     FALSE 196833  14426
+     TRUE       0 185320
+
+, , Age group = fetal, Feature type = exon
+
+          FDR
+Global FDR  FALSE   TRUE
+     FALSE 380845      0
+     TRUE   11739   3995
+
+, , Age group = adult, Feature type = gene
+
+          FDR
+Global FDR  FALSE   TRUE
+     FALSE  10635    931
+     TRUE       0  13086
+
+, , Age group = fetal, Feature type = gene
+
+          FDR
+Global FDR  FALSE   TRUE
+     FALSE  22955      0
+     TRUE     840    857
+
+, , Age group = adult, Feature type = jxn
+
+          FDR
+Global FDR  FALSE   TRUE
+     FALSE 198992   4732
+     TRUE       0  93457
+
+, , Age group = fetal, Feature type = jxn
+
+          FDR
+Global FDR  FALSE   TRUE
+     FALSE 290559      0
+     TRUE    5563   1059
+
+, , Age group = adult, Feature type = tx
+
+          FDR
+Global FDR  FALSE   TRUE
+     FALSE  52639   3046
+     TRUE       0  37047
+
+, , Age group = fetal, Feature type = tx
+
+          FDR
+Global FDR  FALSE   TRUE
+     FALSE  90820      0
+     TRUE    1844     68
+
+, , Age group = adult, Feature type = exon
+
+           Bonf
+Global Bonf  FALSE   TRUE
+      FALSE 305717   7472
+      TRUE       0  83390
+
+, , Age group = fetal, Feature type = exon
+
+           Bonf
+Global Bonf  FALSE   TRUE
+      FALSE 396298    105
+      TRUE       0    176
+
+, , Age group = adult, Feature type = gene
+
+           Bonf
+Global Bonf  FALSE   TRUE
+      FALSE  16091   1618
+      TRUE       0   6943
+
+, , Age group = fetal, Feature type = gene
+
+           Bonf
+Global Bonf  FALSE   TRUE
+      FALSE  24525     88
+      TRUE       0     39
+
+, , Age group = adult, Feature type = jxn
+
+           Bonf
+Global Bonf  FALSE   TRUE
+      FALSE 256959   4572
+      TRUE       0  35650
+
+, , Age group = fetal, Feature type = jxn
+
+           Bonf
+Global Bonf  FALSE   TRUE
+      FALSE 296964     72
+      TRUE       0    145
+
+, , Age group = adult, Feature type = tx
+
+           Bonf
+Global Bonf  FALSE   TRUE
+      FALSE  76629   3427
+      TRUE       0  12676
+
+, , Age group = fetal, Feature type = tx
+
+           Bonf
+Global Bonf  FALSE   TRUE
+      FALSE  92714     14
+      TRUE       0      4
+
+, , Age group = adult, Feature type = exon
+
+           Bonf
+Global Bonf  FALSE   TRUE
+      FALSE 314243   6753
+      TRUE       0  75583
+
+, , Age group = fetal, Feature type = exon
+
+           Bonf
+Global Bonf  FALSE   TRUE
+      FALSE 396416     70
+      TRUE       0     93
+
+, , Age group = adult, Feature type = gene
+
+           Bonf
+Global Bonf  FALSE   TRUE
+      FALSE  16757   1469
+      TRUE       0   6426
+
+, , Age group = fetal, Feature type = gene
+
+           Bonf
+Global Bonf  FALSE   TRUE
+      FALSE  24582     53
+      TRUE       0     17
+
+, , Age group = adult, Feature type = jxn
+
+           Bonf
+Global Bonf  FALSE   TRUE
+      FALSE 261317   3816
+      TRUE       0  32048
+
+, , Age group = fetal, Feature type = jxn
+
+           Bonf
+Global Bonf  FALSE   TRUE
+      FALSE 297034     42
+      TRUE       0    105
+
+, , Age group = adult, Feature type = tx
+
+           Bonf
+Global Bonf  FALSE   TRUE
+      FALSE  78692   2922
+      TRUE       0  11118
+
+, , Age group = fetal, Feature type = tx
+
+           Bonf
+Global Bonf  FALSE   TRUE
+      FALSE  92726      4
+      TRUE       0      2
+
+      gene  exon  jxn   tx
+adult 1612 15442 5561 1739
+fetal   32    71   18    3
+[1] "Dimensions of the data used"
+[1] 24652    56
+[1] "Dimensions of the data used"
+[1] 396579     56
+[1] "Dimensions of the data used"
+[1] 297181     56
+[1] "Dimensions of the data used"
+[1] 92732    56
+
+TRUE 
+1612 
+
+ TRUE 
+15442 
+
+TRUE 
+5561 
+
+TRUE 
+1739 
+
+TRUE 
+  32 
+
+TRUE 
+  71 
+
+TRUE 
+  18 
+
+TRUE 
+   3 
+     adult fetal
+gene  1612    32
+exon  2686    11
+jxn   1897     6
+tx    1414     1
+null device 
+          1 
+ gene  exon   jxn    tx 
+24652 23943 18329 31688 
+null device 
+          1 
+[1] 27514
+2018-04-18 12:01:34 running GO analysis for BP
+2018-04-18 12:07:40 running GO analysis for MF
+2018-04-18 12:12:22 running GO analysis for CC
+2018-04-18 12:16:57 running GO analysis for BP
+2018-04-18 12:20:28 running GO analysis for MF
+2018-04-18 12:23:18 running GO analysis for CC
+2018-04-18 12:26:07 saving rda/go_de_genes.Rdata
+                    BP                     MF                     CC 
+"compareClusterResult" "compareClusterResult" "compareClusterResult" 
+                    BP                     MF                     CC 
+"compareClusterResult" "compareClusterResult" "compareClusterResult" 
+[[1]]
+NULL
+
+[[2]]
+NULL
+
+[[3]]
+NULL
+
+Warning messages:
+1: In order(as.numeric(unique(result$Cluster))) :
+  NAs introduced by coercion
+2: In order(as.numeric(unique(result$Cluster))) :
+  NAs introduced by coercion
+3: In order(as.numeric(unique(result$Cluster))) :
+  NAs introduced by coercion
+null device 
+          1 
+[[1]]
+NULL
+
+[[2]]
+NULL
+
+[[3]]
+NULL
+
+Warning messages:
+1: In order(as.numeric(unique(result$Cluster))) :
+  NAs introduced by coercion
+2: In order(as.numeric(unique(result$Cluster))) :
+  NAs introduced by coercion
+3: In order(as.numeric(unique(result$Cluster))) :
+  NAs introduced by coercion
+null device 
+          1 
+null device 
+          1 
+2018-04-18 12:28:38 processing adult_gene
+2018-04-18 12:29:03 processing adult_exon
+2018-04-18 12:36:20 processing adult_jxn
+2018-04-18 12:41:52 processing adult_tx
+2018-04-18 12:43:24 processing fetal_gene
+2018-04-18 12:43:24 processing fetal_exon
+2018-04-18 12:43:31 processing fetal_jxn
+2018-04-18 12:43:36 processing fetal_tx
+2018-04-18 12:43:38 processing adult_gene
+2018-04-18 12:43:38 processing adult_exon
+2018-04-18 12:43:38 processing adult_jxn
+2018-04-18 12:43:39 processing adult_tx
+2018-04-18 12:43:39 processing fetal_gene
+2018-04-18 12:43:39 processing fetal_exon
+2018-04-18 12:43:42 processing fetal_jxn
+2018-04-18 12:43:45 processing fetal_tx
+[1] "Dimensions of the data used"
+[1] 24652    36
+[1] "Dimensions of the data used"
+[1] 396579     36
+[1] "Dimensions of the data used"
+[1] 297181     36
+[1] "Dimensions of the data used"
+[1] 92732    36
+ [1] 20.88  6.41  4.86  3.72  3.04  2.61  1.69  1.39  1.23  1.13
+ [1] 14.21 13.05  8.42  5.52  5.03  3.40  3.18  2.47  2.13  1.86
+NULL
+ [1] 16.91  6.20  4.77  3.71  3.42  2.11  1.86  1.59  1.26  1.04
+ [1] 12.19 10.69  6.79  6.07  4.73  3.83  3.04  2.57  2.29  2.08
+NULL
+ [1] 8.39 2.70 2.29 2.05 1.62 1.21 1.01 0.89 0.82 0.76
+ [1] 6.75 6.22 4.70 3.92 3.79 2.87 2.39 2.31 2.11 1.97
+NULL
+ [1] 20.78  8.23  4.52  4.17  2.60  1.73  1.48  1.24  0.97  0.90
+ [1] 27.64  7.26  5.64  5.02  3.92  3.38  2.60  2.42  1.90  1.67
+NULL
+null device 
+          1 
+ [1] 21.52 17.82 11.13  9.99  7.07  4.69  4.29  3.87  3.47  3.26
+ [1] 25.89 14.53 10.47  6.59  4.62  4.47  3.38  2.73  2.55  1.89
+NULL
+ [1] 30.36 15.93  9.82  8.00  5.33  4.94  4.02  3.55  3.21  2.94
+ [1] 25.31 13.78  8.02  7.49  5.45  4.60  3.56  3.19  2.76  1.95
+NULL
+ [1] 25.04 12.40  8.37  6.86  6.26  5.47  4.80  4.48  4.33  4.08
+ [1] 27.02 10.20  8.68  5.50  4.13  3.67  3.15  2.46  2.40  2.03
+NULL
+ [1] 36.34 12.82  8.57  7.56  4.83  4.40  4.12  3.82  3.35  2.81
+ [1] 20.77 15.46  8.68  6.87  6.28  4.03  3.27  2.71  2.21  2.07
+NULL
+null device 
+          1 
+[1] "Reproducibility information:"
+[1] "2018-04-18 12:53:45 EDT"
+    user   system  elapsed 
+4772.144  152.649 5002.213 
+Session info ----------------------------------------------------------------------------------------------------------
+ setting  value                                      
+ version  R version 3.4.3 Patched (2018-01-20 r74142)
+ system   x86_64, linux-gnu                          
+ ui       X11                                        
+ language (EN)                                       
+ collate  en_US.UTF-8                                
+ tz       US/Eastern                                 
+ date     2018-04-18                                 
+
+Packages --------------------------------------------------------------------------------------------------------------
+ package              * version   date       source                                   
+ AnnotationDbi        * 1.40.0    2017-11-29 Bioconductor                             
+ base                 * 3.4.3     2018-01-20 local                                    
+ Biobase              * 2.38.0    2017-11-07 Bioconductor                             
+ BiocGenerics         * 0.24.0    2017-11-29 Bioconductor                             
+ BiocParallel           1.12.0    2017-11-29 Bioconductor                             
+ bit                    1.1-12    2014-04-09 CRAN (R 3.4.1)                           
+ bit64                  0.9-7     2017-05-08 CRAN (R 3.4.1)                           
+ bitops                 1.0-6     2013-08-17 CRAN (R 3.4.1)                           
+ blob                   1.1.0     2017-06-17 CRAN (R 3.4.1)                           
+ caTools                1.17.1    2014-09-10 CRAN (R 3.4.1)                           
+ clusterProfiler      * 3.6.0     2017-11-29 Bioconductor                             
+ colorspace             1.3-2     2016-12-14 CRAN (R 3.4.1)                           
+ compiler               3.4.3     2018-01-20 local                                    
+ data.table             1.10.4-3  2017-10-27 CRAN (R 3.4.2)                           
+ datasets             * 3.4.3     2018-01-20 local                                    
+ DBI                    0.8       2018-03-02 CRAN (R 3.4.3)                           
+ DelayedArray         * 0.4.1     2017-11-07 Bioconductor                             
+ devtools             * 1.13.4    2017-11-09 CRAN (R 3.4.2)                           
+ digest                 0.6.15    2018-01-28 cran (@0.6.15)                           
+ DO.db                  2.9       2017-08-10 Bioconductor                             
+ DOSE                 * 3.4.0     2017-11-29 Bioconductor                             
+ fastmatch              1.1-0     2017-01-28 CRAN (R 3.4.1)                           
+ fgsea                  1.4.1     2018-02-17 Bioconductor                             
+ futile.logger        * 1.4.3     2016-07-10 CRAN (R 3.4.1)                           
+ futile.options         1.0.0     2010-04-06 CRAN (R 3.4.1)                           
+ gdata                  2.18.0    2017-06-06 CRAN (R 3.4.1)                           
+ GenomeInfoDb         * 1.14.0    2017-11-29 Bioconductor                             
+ GenomeInfoDbData       1.0.0     2018-01-09 Bioconductor                             
+ GenomicRanges        * 1.30.2    2018-02-17 Bioconductor                             
+ ggplot2              * 2.2.1     2016-12-30 CRAN (R 3.4.1)                           
+ glue                   1.2.0     2017-10-29 CRAN (R 3.4.2)                           
+ GO.db                  3.5.0     2017-11-29 Bioconductor                             
+ GOSemSim               2.4.1     2018-02-17 Bioconductor                             
+ gplots               * 3.0.1     2016-03-30 CRAN (R 3.4.1)                           
+ graphics             * 3.4.3     2018-01-20 local                                    
+ grDevices            * 3.4.3     2018-01-20 local                                    
+ grid                 * 3.4.3     2018-01-20 local                                    
+ gridExtra              2.3       2017-09-09 CRAN (R 3.4.1)                           
+ gtable                 0.2.0     2016-02-26 CRAN (R 3.4.1)                           
+ gtools                 3.5.0     2015-05-29 CRAN (R 3.4.1)                           
+ igraph                 1.1.2     2017-07-21 CRAN (R 3.4.1)                           
+ IRanges              * 2.12.0    2017-11-29 Bioconductor                             
+ jaffelab             * 0.99.18   2018-02-22 Github (LieberInstitute/jaffelab@a8e6430)
+ KernSmooth             2.23-15   2015-06-29 CRAN (R 3.4.3)                           
+ labeling               0.3       2014-08-23 CRAN (R 3.4.1)                           
+ lambda.r               1.2       2017-09-16 CRAN (R 3.4.1)                           
+ lattice                0.20-35   2017-03-25 CRAN (R 3.4.3)                           
+ lazyeval               0.2.1     2017-10-29 CRAN (R 3.4.2)                           
+ limma                * 3.34.8    2018-02-17 Bioconductor                             
+ magrittr               1.5       2014-11-22 CRAN (R 3.4.1)                           
+ MASS                   7.3-48    2017-12-25 CRAN (R 3.4.3)                           
+ Matrix                 1.2-12    2017-11-30 CRAN (R 3.4.3)                           
+ matrixStats          * 0.53.1    2018-02-11 CRAN (R 3.4.3)                           
+ memoise                1.1.0     2017-04-21 CRAN (R 3.4.1)                           
+ methods              * 3.4.3     2018-01-20 local                                    
+ munsell                0.4.3     2016-02-13 CRAN (R 3.4.1)                           
+ org.Hs.eg.db         * 3.5.0     2017-11-29 Bioconductor                             
+ parallel             * 3.4.3     2018-01-20 local                                    
+ pillar                 1.1.0     2018-01-14 CRAN (R 3.4.2)                           
+ pkgconfig              2.0.1     2017-03-21 CRAN (R 3.4.1)                           
+ plyr                   1.8.4     2016-06-08 CRAN (R 3.4.1)                           
+ purrr                  0.2.4     2017-10-18 CRAN (R 3.4.2)                           
+ qvalue                 2.10.0    2017-11-29 Bioconductor                             
+ rafalib              * 1.0.0     2015-08-09 CRAN (R 3.4.1)                           
+ RColorBrewer         * 1.1-2     2014-12-07 CRAN (R 3.4.1)                           
+ Rcpp                   0.12.14   2017-11-23 CRAN (R 3.4.2)                           
+ RCurl                  1.95-4.10 2018-01-04 CRAN (R 3.4.2)                           
+ reshape2               1.4.3     2017-12-11 CRAN (R 3.4.2)                           
+ rlang                  0.1.6     2017-12-21 CRAN (R 3.4.2)                           
+ RSQLite                2.0       2017-06-19 CRAN (R 3.4.1)                           
+ rvcheck                0.0.9     2017-07-10 CRAN (R 3.4.2)                           
+ S4Vectors            * 0.16.0    2017-11-29 Bioconductor                             
+ scales                 0.5.0     2017-08-24 CRAN (R 3.4.1)                           
+ segmented              0.5-3.0   2017-11-30 CRAN (R 3.4.2)                           
+ splines                3.4.3     2018-01-20 local                                    
+ stats                * 3.4.3     2018-01-20 local                                    
+ stats4               * 3.4.3     2018-01-20 local                                    
+ stringi                1.1.6     2017-11-17 CRAN (R 3.4.2)                           
+ stringr                1.2.0     2017-02-18 CRAN (R 3.4.1)                           
+ SummarizedExperiment * 1.8.1     2018-01-09 Bioconductor                             
+ tibble                 1.4.1     2017-12-25 CRAN (R 3.4.2)                           
+ tidyr                  0.8.0     2018-01-29 CRAN (R 3.4.3)                           
+ tools                  3.4.3     2018-01-20 local                                    
+ utils                * 3.4.3     2018-01-20 local                                    
+ VennDiagram          * 1.6.18    2017-11-21 CRAN (R 3.4.2)                           
+ withr                  2.1.1     2017-12-19 CRAN (R 3.4.2)                           
+ XVector                0.18.0    2017-11-29 Bioconductor                             
+ zlibbioc               1.24.0    2017-11-07 Bioconductor                             
+**** Job ends ****
+Wed Apr 18 12:53:46 EDT 2018
