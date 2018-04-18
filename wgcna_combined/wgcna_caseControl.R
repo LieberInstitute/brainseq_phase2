@@ -44,6 +44,7 @@ rse_gene = rse_gene[,keepIndex]
 # rse_tx = rse_tx[,keepIndex]
 mod <- mod[keepIndex, ]
 modQsva <- modQsva[keepIndex, ]
+geneRpkm <- geneRpkm[, keepIndex]
 
 dim(rse_gene) # 24652   755
 
