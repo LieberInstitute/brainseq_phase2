@@ -8,7 +8,7 @@
 echo "**** Job starts ****"
 date
 
-Rscript /dcl01/lieber/ajaffe/lab/brainseq_phase2/wgcna/wgcna_caseControl_DLPFC.R
+Rscript wgcna_caseControl.R
 
 echo "**** Job ends ****"
 date
