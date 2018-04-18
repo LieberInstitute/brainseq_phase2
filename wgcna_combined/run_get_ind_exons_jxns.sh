@@ -1,6 +1,6 @@
 #!/bin/bash
 #$ -cwd
-#$ -l bluejay,mem_free=15G,h_vmem=15G,h_fsize=100G -pe local 8
+#$ -l bluejay,mem_free=50G,h_vmem=50G,h_fsize=100G -pe local 4
 #$ -N get_ind_exons_jxns
 #$ -o ./logs/get_ind_exons_jxns.txt
 #$ -e ./logs/get_ind_exons_jxns.txt

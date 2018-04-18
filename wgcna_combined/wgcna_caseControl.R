@@ -65,7 +65,7 @@ geneExprsQsva = cleaningY(geneExprs, modQsva, P=3)  ## keep intercept, Dx, Age
 ################
 ## thresholding
 
-if(!file.exits('rda/wgcna_soft_threshold_gene.rda')) {
+if(!file.exists('rda/wgcna_soft_threshold_gene.rda')) {
     powers = c(c(1:10), seq(from = 12, to=20, by=2))
     sftQsva = pickSoftThreshold(t(geneExprsQsva),
     powerVector = powers, verbose = 5)

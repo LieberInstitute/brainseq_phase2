@@ -1,9 +1,6 @@
 ## Based on the following script by Emily Burke:
 # https://github.com/LieberInstitute/brainseq_phase2/blob/master/wgcna/get_ind_exons_jxns.R
 
-###
-# qrsh -l bluejay,mem_free=15G,h_vmem=15G,h_fsize=100G -pe local 8
-
 library('jaffelab')
 library('SummarizedExperiment')
 library('sva')
@@ -15,7 +12,7 @@ library('parallel')
 library('devtools')
 allowWGCNAThreads()
 
-cores <- 8
+cores <- 4
 dir.create('rda', showWarnings = FALSE)
 
 ## load expression data
