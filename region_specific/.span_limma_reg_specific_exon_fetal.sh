@@ -13,7 +13,7 @@ echo "**** JHPCE info ****"
 echo "User: lcollado"
 echo "Job id: "
 echo "Job name: "
-echo "Hostname: compute-066"
+echo "Hostname: compute-097"
 echo "Task id: "
 
 module load conda_R/3.4.x
