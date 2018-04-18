@@ -1,9 +1,9 @@
 #!/bin/bash
 #$ -cwd
 #$ -l bluejay,mem_free=150G,h_vmem=150G,h_fsize=200G
-#$ -N wgcna_DLPFC_genes
-#$ -o logs/wgcna_DLPFC_genes.txt
-#$ -e logs/wgcna_DLPFC_genes.txt
+#$ -N wgcna_genes
+#$ -o logs/wgcna_genes.txt
+#$ -e logs/wgcna_genes.txt
 #$ -m e
 
 echo "**** Job starts ****"
