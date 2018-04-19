@@ -1,6 +1,6 @@
 #!/bin/bash
 #$ -cwd
-#$ -l bluejay,mem_free=150G,h_vmem=150G,h_fsize=200G
+#$ -l bluejay,mem_free=20G,h_vmem=20G,h_fsize=200G
 #$ -N wgcna_genes
 #$ -o logs/wgcna_genes.txt
 #$ -e logs/wgcna_genes.txt
