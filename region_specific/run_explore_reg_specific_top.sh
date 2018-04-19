@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## Usage:
-# sh span_run_limma_reg_specific.sh
+# sh run_explore_reg_specific_top.sh
 
 mkdir -p logs
 mkdir -p rda
@@ -12,7 +12,7 @@ do
     for agegroup in adult fetal
     do
 
-SHORT="span_limma_reg_specific_${featuretype}_${agegroup}"
+SHORT="explore_reg_specific_${featuretype}_${agegroup}_top"
 
 # Construct shell file
 echo "Creating script for feature type ${featuretype} and age group ${agegroup}"
@@ -20,7 +20,7 @@ echo "Creating script for feature type ${featuretype} and age group ${agegroup}"
 cat > .${SHORT}.sh <<EOF
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=5G,h_vmem=6G,h_fsize=100G
+#$ -l bluejay,mem_free=50G,h_vmem=50G,h_fsize=100G
 #$ -N ${SHORT}
 #$ -o ./logs/${SHORT}.txt
 #$ -e ./logs/${SHORT}.txt
@@ -36,8 +36,7 @@ echo "Job name: \${JOB_NAME}"
 echo "Hostname: \${HOSTNAME}"
 echo "Task id: \${TASK_ID}"
 
-module load conda_R/3.4.x
-Rscript span_limma_reg_specific.R -t ${featuretype} -a ${agegroup}
+Rscript explore_reg_specific_top.R -t ${featuretype} -a ${agegroup}
 
 echo "**** Job ends ****"
 date
