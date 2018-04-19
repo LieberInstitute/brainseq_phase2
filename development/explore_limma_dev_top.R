@@ -72,12 +72,12 @@ get_main <- function(i) {
 
 get_ylab <- function(type, cleaned = FALSE) {
     if(type %in% c('gene', 'exon', 'jxn')) {
-        res <- 'Voom-normalized expression'
+        res <- 'log2(CPM + 0.5)'
     } else {
-        res <- 'TPM'
+        res <- 'log2(TPM + 0.5)'
     }
 
-    if(cleaned) res <- paste(res, 'with covariate effects removed')
+    if(cleaned) res <- paste(res, '- covariate effects removed')
     return(res)
 }
 
@@ -97,11 +97,12 @@ p_cols <- ifelse(colData(rse)$Region == 'HIPPO', 'skyblue3', 'dark orange')
 l_cols <- c('lightgoldenrod', 'light blue')
 age_brks <- c(-1, 0, 1, 10, 20, 50, 100)
 
-pdf('pdf/top_gene_replicated_exprNorm.pdf', width = 14, useDingbats = FALSE)
-for(i in 1:100) {
+pdf(paste0('pdf/tophits_', opt$type, '_norm.pdf'), width = 14, useDingbats = FALSE)
+for(i in seq_len(length(tocheck))) {
+    set.seed(20180419)
     agePlotter(
-        exprsNorm$gene[tocheck[i],],
-        colData(rse)$Age,
+        y = exprsNorm[[opt$type]][tocheck[i],],
+        age = colData(rse)$Age,
         pointColor = p_cols,
         ageBreaks = age_brks,
         mainText = get_main(i),
@@ -113,8 +114,9 @@ for(i in 1:100) {
 }
 dev.off()
 
-pdf('pdf/top_gene_replicated_cleanedVoom.pdf', width = 14, useDingbats = FALSE)
-for(i in 1:100) {
+pdf(paste0('pdf/tophits_', opt$type, '_cleaned.pdf'), width = 14, useDingbats = FALSE)
+for(i in seq_len(length(tocheck))) {
+    set.seed(20180419)
     agePlotter(
         cleanedVoom[tocheck[i],],
         colData(rse)$Age,
