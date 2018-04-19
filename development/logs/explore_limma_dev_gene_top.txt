@@ -1,11 +1,13 @@
 **** Job starts ****
-Thu Apr 19 17:46:05 EDT 2018
+Thu Apr 19 17:46:49 EDT 2018
 **** JHPCE info ****
 User: lcollado
-Job id: 4887039
-Job name: explore_reg_specific_gene_fetal_top
-Hostname: compute-099
+Job id: 4887046
+Job name: explore_limma_dev_gene_top
+Hostname: compute-094
 Task id: 
+Unloading conda_R/3.4.x
+Loading conda_R/3.4.x
 Using the following user library: ~/R/x86_64-pc-linux-gnu-library/3.4.x
 Loading required package: methods
 Loading required package: GenomicRanges
@@ -89,19 +91,20 @@ Loading objects:
   pcheck_both
 Loading objects:
   raw
-[1] "Dimensions of the data used"
-[1] 24652    56
- [1] 23322 20320 24501 11680  9648 22724  2577 22688 12073 15310 14339 20742
-[13]  7464 23518 11678 20017  1990   341  7397 22620  3990 20263 12935 15184
-[25] 20194 12255  7793 20806 22775 22684  9078 23646
+  [1]   3  11  14  49  69  71  80  83  84 100 103 106 109 115 122 123 128 141
+ [19] 166 174 178 182 186 203 205 206 210 215 221 241 244 252 272 273 279 280
+ [37] 287 289 299 311 312 313 320 338 339 340 341 363 372 390 405 412 421 430
+ [55] 440 441 445 451 452 477 503 506 521 535 539 548 566 578 587 607 620 632
+ [73] 633 645 674 708 716 717 725 734 743 763 767 774 783 789 815 816 820 830
+ [91] 833 836 854 881 886 888 891 894 907 919
 null device 
           1 
 null device 
           1 
 [1] "Reproducibility information:"
-[1] "2018-04-19 17:48:38 EDT"
+[1] "2018-04-19 17:49:32 EDT"
    user  system elapsed 
-149.453   2.619 152.346 
+155.588   3.563 160.410 
 Session info ----------------------------------------------------------------------------------------------------------
  setting  value                                      
  version  R version 3.4.3 Patched (2018-01-20 r74142)
@@ -164,4 +167,4 @@ Packages -----------------------------------------------------------------------
  XVector                0.18.0    2017-11-29 Bioconductor                             
  zlibbioc               1.24.0    2017-11-07 Bioconductor                             
 **** Job ends ****
-Thu Apr 19 17:48:38 EDT 2018
+Thu Apr 19 17:49:33 EDT 2018

@@ -1,11 +1,13 @@
 **** Job starts ****
-Thu Apr 19 17:46:05 EDT 2018
+Thu Apr 19 17:48:47 EDT 2018
 **** JHPCE info ****
 User: lcollado
-Job id: 4887039
-Job name: explore_reg_specific_gene_fetal_top
+Job id: 4887049
+Job name: explore_limma_dev_tx_top
 Hostname: compute-099
 Task id: 
+Unloading conda_R/3.4.x
+Loading conda_R/3.4.x
 Using the following user library: ~/R/x86_64-pc-linux-gnu-library/3.4.x
 Loading required package: methods
 Loading required package: GenomicRanges
@@ -89,19 +91,23 @@ Loading objects:
   pcheck_both
 Loading objects:
   raw
-[1] "Dimensions of the data used"
-[1] 24652    56
- [1] 23322 20320 24501 11680  9648 22724  2577 22688 12073 15310 14339 20742
-[13]  7464 23518 11678 20017  1990   341  7397 22620  3990 20263 12935 15184
-[25] 20194 12255  7793 20806 22775 22684  9078 23646
+  [1] 89944 28135 37610 86373 89943 61344 56441 23370 56101 42212 41314 32859
+ [13] 23371 31966 63161 63582 78613 63307 52575 39883 34039 52633 21313 23933
+ [25] 32429 26591 13179 32861 32855 92280 25984 53366 34041 29836  3692 39880
+ [37] 56098 81269 78046  5765 58955   953 56099 58962 15471 64772 78080 32430
+ [49] 60140 14361 57489 74488 92153 26589 11983 24146 26588 85620 54012 21781
+ [61] 32289 52890 74839 60664 36364 19690 32857 23837 45870 26595 31650 57486
+ [73] 21108 43674 62391 26594 25848  3541  1006 39768 56105   657  2145 57086
+ [85] 14218 11891 21983  7508 24750 26581 75915 46268 78047 46269 46465 90395
+ [97] 18328 60209 88905 13050
 null device 
           1 
 null device 
           1 
 [1] "Reproducibility information:"
-[1] "2018-04-19 17:48:38 EDT"
+[1] "2018-04-19 17:51:42 EDT"
    user  system elapsed 
-149.453   2.619 152.346 
+167.505   3.282 171.429 
 Session info ----------------------------------------------------------------------------------------------------------
  setting  value                                      
  version  R version 3.4.3 Patched (2018-01-20 r74142)
@@ -164,4 +170,4 @@ Packages -----------------------------------------------------------------------
  XVector                0.18.0    2017-11-29 Bioconductor                             
  zlibbioc               1.24.0    2017-11-07 Bioconductor                             
 **** Job ends ****
-Thu Apr 19 17:48:38 EDT 2018
+Thu Apr 19 17:51:42 EDT 2018

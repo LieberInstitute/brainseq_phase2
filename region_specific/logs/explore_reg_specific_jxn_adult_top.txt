@@ -1,10 +1,10 @@
 **** Job starts ****
-Thu Apr 19 16:27:02 EDT 2018
+Thu Apr 19 17:46:08 EDT 2018
 **** JHPCE info ****
 User: lcollado
-Job id: 4886921
+Job id: 4887042
 Job name: explore_reg_specific_jxn_adult_top
-Hostname: compute-099
+Hostname: compute-093
 Task id: 
 Using the following user library: ~/R/x86_64-pc-linux-gnu-library/3.4.x
 Loading required package: methods
@@ -84,17 +84,31 @@ The following object is masked from ‘package:rafalib’:
     install_bioc
 
 Loading objects:
+  pcheck
+  pcheck_span
+  pcheck_both
+Loading objects:
   raw
 [1] "Dimensions of the data used"
 [1] 297181    460
+  [1]  32267  13001  32290  32282 244647 237531  32270  58383 234009 127287
+ [11] 244643 244638  66697  58382 279974 244639 264576  58384 244754  91765
+ [21] 264577 127291 240142  32277 169519 203950 244641  66696  17684 264581
+ [31]  32309  32314  17689 161974 207364  32319  17683 123147 107244 164986
+ [41] 202688 244637 244644 205561 244628 207354 202532 279980 205554 244631
+ [51]  64388  64383  17681 237891 109927  64380  64382 244632 279979  17685
+ [61]  66702 164983 207365  64379   5838 164973 279973 244627   5836 279978
+ [71] 279975  57070 232042 224809  32348 169518 212282  64375 163367  32362
+ [81] 109932  57069  19748 109929 234005 244640 169517 244618 161972 230905
+ [91] 163580  33490 163371 177211  64378 150033 244633 109931 177214 237886
 null device 
           1 
 null device 
           1 
 [1] "Reproducibility information:"
-[1] "2018-04-19 16:30:36 EDT"
+[1] "2018-04-19 17:50:08 EDT"
    user  system elapsed 
-208.552   5.347 214.884 
+234.373   5.598 240.543 
 Session info ----------------------------------------------------------------------------------------------------------
  setting  value                                      
  version  R version 3.4.3 Patched (2018-01-20 r74142)
@@ -127,7 +141,7 @@ Packages -----------------------------------------------------------------------
  grid                   3.4.3     2018-01-20 local                                    
  gtable                 0.2.0     2016-02-26 CRAN (R 3.4.1)                           
  IRanges              * 2.12.0    2017-11-29 Bioconductor                             
- jaffelab             * 0.99.18   2018-02-22 Github (LieberInstitute/jaffelab@a8e6430)
+ jaffelab             * 0.99.20   2018-04-19 Github (LieberInstitute/jaffelab@04c470a)
  lattice                0.20-35   2017-03-25 CRAN (R 3.4.3)                           
  lazyeval               0.2.1     2017-10-29 CRAN (R 3.4.2)                           
  limma                * 3.34.9    2018-04-18 Bioconductor                             
@@ -157,4 +171,4 @@ Packages -----------------------------------------------------------------------
  XVector                0.18.0    2017-11-29 Bioconductor                             
  zlibbioc               1.24.0    2017-11-07 Bioconductor                             
 **** Job ends ****
-Thu Apr 19 16:30:37 EDT 2018
+Thu Apr 19 17:50:09 EDT 2018

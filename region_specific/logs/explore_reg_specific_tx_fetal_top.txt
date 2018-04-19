@@ -1,10 +1,10 @@
 **** Job starts ****
-Thu Apr 19 16:27:02 EDT 2018
+Thu Apr 19 17:46:02 EDT 2018
 **** JHPCE info ****
 User: lcollado
-Job id: 4886924
+Job id: 4887045
 Job name: explore_reg_specific_tx_fetal_top
-Hostname: compute-093
+Hostname: compute-097
 Task id: 
 Using the following user library: ~/R/x86_64-pc-linux-gnu-library/3.4.x
 Loading required package: methods
@@ -84,17 +84,22 @@ The following object is masked from ‘package:rafalib’:
     install_bioc
 
 Loading objects:
+  pcheck
+  pcheck_span
+  pcheck_both
+Loading objects:
   raw
 [1] "Dimensions of the data used"
 [1] 92732    56
+[1] 79235 79215 79223
 null device 
           1 
 null device 
           1 
 [1] "Reproducibility information:"
-[1] "2018-04-19 16:29:19 EDT"
+[1] "2018-04-19 17:48:45 EDT"
    user  system elapsed 
-133.720   2.525 137.036 
+158.626   3.517 162.509 
 Session info ----------------------------------------------------------------------------------------------------------
  setting  value                                      
  version  R version 3.4.3 Patched (2018-01-20 r74142)
@@ -127,7 +132,7 @@ Packages -----------------------------------------------------------------------
  grid                   3.4.3     2018-01-20 local                                    
  gtable                 0.2.0     2016-02-26 CRAN (R 3.4.1)                           
  IRanges              * 2.12.0    2017-11-29 Bioconductor                             
- jaffelab             * 0.99.18   2018-02-22 Github (LieberInstitute/jaffelab@a8e6430)
+ jaffelab             * 0.99.20   2018-04-19 Github (LieberInstitute/jaffelab@04c470a)
  lattice                0.20-35   2017-03-25 CRAN (R 3.4.3)                           
  lazyeval               0.2.1     2017-10-29 CRAN (R 3.4.2)                           
  limma                * 3.34.9    2018-04-18 Bioconductor                             
@@ -157,4 +162,4 @@ Packages -----------------------------------------------------------------------
  XVector                0.18.0    2017-11-29 Bioconductor                             
  zlibbioc               1.24.0    2017-11-07 Bioconductor                             
 **** Job ends ****
-Thu Apr 19 16:29:20 EDT 2018
+Thu Apr 19 17:48:45 EDT 2018

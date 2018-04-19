@@ -1,11 +1,13 @@
 **** Job starts ****
-Thu Apr 19 17:46:05 EDT 2018
+Thu Apr 19 17:46:47 EDT 2018
 **** JHPCE info ****
 User: lcollado
-Job id: 4887039
-Job name: explore_reg_specific_gene_fetal_top
+Job id: 4887047
+Job name: explore_limma_dev_exon_top
 Hostname: compute-099
 Task id: 
+Unloading conda_R/3.4.x
+Loading conda_R/3.4.x
 Using the following user library: ~/R/x86_64-pc-linux-gnu-library/3.4.x
 Loading required package: methods
 Loading required package: GenomicRanges
@@ -89,19 +91,21 @@ Loading objects:
   pcheck_both
 Loading objects:
   raw
-[1] "Dimensions of the data used"
-[1] 24652    56
- [1] 23322 20320 24501 11680  9648 22724  2577 22688 12073 15310 14339 20742
-[13]  7464 23518 11678 20017  1990   341  7397 22620  3990 20263 12935 15184
-[25] 20194 12255  7793 20806 22775 22684  9078 23646
+  [1]    2    4   12   62   76   78  181  193  208  215  216  251  439  697  719
+ [16]  722  770  772  777  912  932  972  980 1051 1116 1127 1128 1129 1130 1131
+ [31] 1132 1136 1138 1140 1144 1148 1151 1152 1154 1155 1156 1157 1158 1159 1160
+ [46] 1161 1162 1214 1216 1220 1222 1223 1322 1323 1325 1326 1327 1328 1329 1330
+ [61] 1331 1332 1333 1334 1335 1336 1337 1338 1339 1340 1341 1342 1343 1344 1345
+ [76] 1346 1347 1348 1349 1350 1351 1352 1353 1354 1355 1356 1357 1386 1408 1409
+ [91] 1410 1413 1414 1415 1417 1418 1419 1420 1422 1423
 null device 
           1 
 null device 
           1 
 [1] "Reproducibility information:"
-[1] "2018-04-19 17:48:38 EDT"
+[1] "2018-04-19 17:52:05 EDT"
    user  system elapsed 
-149.453   2.619 152.346 
+303.445  10.312 314.494 
 Session info ----------------------------------------------------------------------------------------------------------
  setting  value                                      
  version  R version 3.4.3 Patched (2018-01-20 r74142)
@@ -164,4 +168,4 @@ Packages -----------------------------------------------------------------------
  XVector                0.18.0    2017-11-29 Bioconductor                             
  zlibbioc               1.24.0    2017-11-07 Bioconductor                             
 **** Job ends ****
-Thu Apr 19 17:48:38 EDT 2018
+Thu Apr 19 17:52:05 EDT 2018
