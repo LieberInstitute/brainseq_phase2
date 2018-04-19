@@ -92,7 +92,7 @@ dev.off()
 pdf(paste0('pdf/top100_hits_', opt$age, '_', opt$type, '_norm.pdf'), useDingbats = FALSE)
 for(j in seq_len(100)) {
     i <- seq_len(nrow(top[[paste0(opt$age, '_', opt$type)]]))[order(top[[paste0(opt$age, '_', opt$type)]]$adj.P.Val)][j]
-    make_plot(exprsNorm[[paste0(opt$age, '_', opt$type)]], i)
+    make_plot(exprsNorm[[paste0(opt$age, '_', opt$type)]], i, 'Norm. Expr')
 }
 dev.off()
 
