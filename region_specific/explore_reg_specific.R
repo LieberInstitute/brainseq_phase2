@@ -412,6 +412,15 @@ pdf('pdf/go_de_genes_fetal.pdf', width = 30, height = 9, useDingbats = FALSE)
 plot_go(go_de_genes_fetal)
 dev.off()
 
+## all
+pdf('pdf/go_all_de_genes_adult.pdf', width = 14, height = 50, useDingbats = FALSE)
+plot_go(go_de_genes_adult, cat = NULL)
+dev.off()
+
+pdf('pdf/go_all_de_genes_fetal.pdf', width = 30, height = 50, useDingbats = FALSE)
+plot_go(go_de_genes_fetal, cat = NULL)
+dev.off()
+
 ## Volcano plots
 rep_brain <- function(x) {
     ifelse(x, 'BrainSpan rep.', 'BrainSpan not rep.')
@@ -561,3 +570,12 @@ Sys.time()
 proc.time()
 options(width = 120)
 session_info()
+
+## Re-loading if necessary
+if(FALSE) {
+    f <- dir('rda', full.names = TRUE)
+    f <- f[!grepl('limma', f)]
+    for(ff in f) load(ff, verbose = TRUE)
+    rm(ff, f)
+}
+
