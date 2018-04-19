@@ -16,6 +16,9 @@ opt <- getopt(spec)
 ## For testing
 if(FALSE){
     opt <- list('type' = 'gene', 'age' = 'fetal')
+    opt <- list('type' = 'exon', 'age' = 'fetal')
+    opt <- list('type' = 'jxn', 'age' = 'fetal')
+    opt <- list('type' = 'tx', 'age' = 'fetal')
 }
 
 ## if help was asked for print a friendly message
@@ -57,8 +60,10 @@ get_main <- function(i) {
 
     topnow <- top[[paste0(opt$age, '_', opt$type)]]
 
-    paste(rownames(topnow)[i],
-          mcols(rowRanges(rse))[, vars][mcols(rowRanges(rse))[, var] == rownames(topnow)[i]],
+    k <- which(names(rowRanges(rse)) == rownames(topnow)[i])
+
+    paste(if(opt$type != 'jxn') mcols(rowRanges(rse))[, var][k] else rownames(topnow)[i],
+          if(is.na(mcols(rowRanges(rse))[, vars][k])) '' else mcols(rowRanges(rse))[, vars][k],
           'FDR',
           signif(topnow$adj.P.Val[i], 3))
 }
