@@ -1,9 +1,10 @@
 #!/bin/bash
 #$ -cwd
-#$ -l bluejay,mem_free=200G,h_vmem=200G,h_fsize=200G
+#$ -l bluejay,mem_free=60G,h_vmem=60G,h_fsize=200G
 #$ -N wgcna_feats
 #$ -o logs/wgcna_feats.txt
 #$ -e logs/wgcna_feats.txt
+#$ -pe local 4
 #$ -m e
 #$ -hold_jid get_ind_exons_jxns
 

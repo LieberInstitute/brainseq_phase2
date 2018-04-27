@@ -13,6 +13,10 @@ library('clusterProfiler')
 library('org.Hs.eg.db')
 library('devtools')
 
+allowWGCNAThreads()
+cores <- 4
+enableWGCNAThreads(nThreads = cores)
+
 dir.create('rda', showWarnings = FALSE)
 dir.create('pdf', showWarnings = FALSE)
 dir.create('top200', showWarnings = FALSE)
