@@ -25,7 +25,13 @@ load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_gene.Rdata", verb
 # load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_tx.Rdata", verbose = TRUE)
 
 ## load qSVs
-load("/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/brainseq_phase2_qsvs.Rdata", verbose = TRUE)
+load('/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/brainseq_phase2_qsvs_age17_noHGold.Rdata', verbose = TRUE)
+
+## Drop samples absent in mod and modQsVA
+rse_gene <- rse_gene[, keepIndex]
+# rse_jxn <- rse_jxn[, keepIndex]
+# rse_exon <- rse_exon[, keepIndex]
+# rse_tx <- rse_tx[, keepIndex]
 
 ###############################################################
 ############# filter features
@@ -46,7 +52,7 @@ mod <- mod[keepIndex, ]
 modQsva <- modQsva[keepIndex, ]
 geneRpkm <- geneRpkm[, keepIndex]
 
-dim(rse_gene) # 24652   755
+dim(rse_gene) # 24652   712
 
 ##################
 

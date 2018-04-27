@@ -22,7 +22,14 @@ load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_jxn.Rdata", verbo
 
 ###############################################################
 ################## get qSVA model terms
-load("/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/brainseq_phase2_qsvs.Rdata", verbose = TRUE)
+## load qSVs
+load('/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/brainseq_phase2_qsvs_age17_noHGold.Rdata', verbose = TRUE)
+
+## Drop samples absent in mod and modQsVA
+rse_gene <- rse_gene[, keepIndex]
+rse_jxn <- rse_jxn[, keepIndex]
+rse_exon <- rse_exon[, keepIndex]
+#rse_tx <- rse_tx[, keepIndex]
 
 min(rowMeans(assays(rse_gene)$rpkm)) 					## already cutoff to 0.25
 min(rowMeans(assays(rse_exon)$rpkm)) 					## already cutoff to 0.30

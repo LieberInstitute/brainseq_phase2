@@ -24,7 +24,13 @@ load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_jxn.Rdata")
 # load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_tx.Rdata")
 
 ## load qSVs
-load("/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/brainseq_phase2_qsvs.Rdata", verbose = TRUE)
+load('/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/brainseq_phase2_qsvs_age17_noHGold.Rdata', verbose = TRUE)
+
+## Drop samples absent in mod and modQsVA
+rse_gene <- rse_gene[, keepIndex]
+rse_jxn <- rse_jxn[, keepIndex]
+rse_exon <- rse_exon[, keepIndex]
+#rse_tx <- rse_tx[, keepIndex]
 
 ###############################################################
 ############# filter features
@@ -41,10 +47,10 @@ jInd = which(rownames(rse_jxn) %in% names(jMap2))
 
 ##################
 ## filter for age and to hippocampus
-keepIndex = which(rse_gene$Age > 17)						# 755
+keepIndex = which(rse_gene$Age > 17)						# 712
 rse_gene = rse_gene[,keepIndex]
-rse_exon = rse_exon[eInd,keepIndex]			# dim: 211455 755
-rse_jxn = rse_jxn[jInd,keepIndex]			# dim: 238975 755
+rse_exon = rse_exon[eInd,keepIndex]			# dim: 211455 712
+rse_jxn = rse_jxn[jInd,keepIndex]			# dim: 238975 712
 mod <- mod[keepIndex, ]
 modQsva <- modQsva[keepIndex, ]
 
