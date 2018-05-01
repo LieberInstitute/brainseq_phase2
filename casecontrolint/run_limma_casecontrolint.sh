@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## Usage:
-# sh run_limma_dev.sh
+# sh run_limma_casecontrolint.sh
 
 mkdir -p logs
 mkdir -p rda
