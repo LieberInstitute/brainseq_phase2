@@ -82,7 +82,7 @@ if(opt$type != 'tx') {
     dev.off()
 
     system.time( corfit <- duplicateCorrelation(v$E, design[, c('(Intercept)',
-        'RegionHIPPO')], block=brnum) )
+        'DxSchizo', 'RegionHIPPO', 'DxSchizo:RegionHIPPO')], block=brnum) )
 
     ## Main fit steps
     system.time( fit <- lmFit(v, design, block=brnum,
@@ -91,7 +91,7 @@ if(opt$type != 'tx') {
     exprsNorm <- v$E
 } else {
     system.time( corfit <- duplicateCorrelation(log2(assays(rse)$tpm + 0.5),
-        design[, c('(Intercept)', 'RegionHIPPO')], block=brnum) )
+        design[, c('(Intercept)', 'DxSchizo', 'RegionHIPPO', 'DxSchizo:RegionHIPPO')], block=brnum) )
 
     ## Main fit steps
     system.time( fit <- lmFit(log2(assays(rse)$tpm + 0.5), design, block=brnum,
