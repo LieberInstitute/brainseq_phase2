@@ -1,16 +1,43 @@
 ####
 
+
+
+
+
+corner = function(
+
+corner = function(mat, n=6){
+	if class(mat) == "list" {
+		r = min(nrow(mat[[1]]), n)
+		c = min(ncol(mat[[1]]), n)
+		l = min(length(mat), n)
+		lapply(mat[1:l], function(x) x[1:r,1:c] )
+	}
+	else {
+		r = min(nrow(mat), n)
+		c = min(ncol(mat), n)
+		x[1:r,1:c]
+	
+	}
+}
+
+
+
 ### libraries
 library(SummarizedExperiment)
 library(jaffelab)
 library(MatrixEQTL)
 library(sva)
 
-## load
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_tx.Rdata")
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_jxn.Rdata")
+######################
+### load data ####
+######################
+
 load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_gene.Rdata")
 load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_exon.Rdata")
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_jxn.Rdata")
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_tx.Rdata")
+
 pd = colData(rse_gene)
 
 ## load SNP data
