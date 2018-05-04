@@ -361,7 +361,7 @@ dev.off()
 
 
 if(!file.exists('rda/me_genes.Rdata')) {
-    load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/eqtl_tables/matrixEqtl_output_interaction_4features.rda', verbose = TRUE)
+    load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full/eqtl_tables/matrixEqtl_output_interaction_4features.rda', verbose = TRUE)
     me <- list('gene'= meGene$cis$eqtls, 'exon' = meExon$cis$eqtls, 'jxn' = meJxn$cis$eqtls, 'tx' = meTx$cis$eqtls)
     me_genes <- lapply(names(pinfo), function(feat) {
         m <- match(me[[feat]]$gene[me[[feat]]$FDR < 0.01], names(rses[[feat]]))
@@ -412,6 +412,145 @@ pdf('pdf/venn_eQTL_interaction_fdr05.pdf', useDingbats = FALSE)
 make_venn(me_genes_fdr05, title = 'eQTLs grouped by gene id')
 make_venn(me_genes_fdr05[c('gene', 'exon', 'jxn')], title = 'eQTLs grouped by gene id')
 dev.off()
+
+
+## HIPPO only
+if(!file.exists('rda/me_genes_HIPPO.Rdata')) {
+    load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full/eqtl_tables/mergedEqtl_output_hippo_4features.rda', verbose = TRUE)
+    me_HIPPO <- split(allEqtl, allEqtl$Type)
+    names(me_HIPPO) <- tolower(names(me_HIPPO))
+    me_genes_HIPPO <- lapply(names(pinfo), function(feat) {
+        m <- match(me_HIPPO[[feat]]$gene[me_HIPPO[[feat]]$FDR < 0.01], names(rses[[feat]]))
+        print(table(!is.na(m)))
+        m <- m[!is.na(m)]
+        if(feat %in% c('gene', 'exon')) {
+            res <- rowRanges(rses[[feat]])$gencodeID[m]
+        } else if(feat == 'jxn') {
+            res <- rowRanges(rses[[feat]])$gencodeGeneID[m]
+            res <- res[!is.na(res)]
+        } else {
+            res <- rowRanges(rses[[feat]])$gene_id[m]
+        }
+        return(unique(res))
+    })
+    names(me_genes_HIPPO) <- names(pinfo)
+
+    me_genes_fdr05_HIPPO <- lapply(names(pinfo), function(feat) {
+        m <- match(me_HIPPO[[feat]]$gene[me_HIPPO[[feat]]$FDR < 0.05], names(rses[[feat]]))
+        m <- m[!is.na(m)]
+        if(feat %in% c('gene', 'exon')) {
+            res <- rowRanges(rses[[feat]])$gencodeID[m]
+        } else if(feat == 'jxn') {
+            res <- rowRanges(rses[[feat]])$gencodeGeneID[m]
+            res <- res[!is.na(res)]
+        } else {
+            res <- rowRanges(rses[[feat]])$gene_id[m]
+        }
+        return(unique(res))
+    })
+    names(me_genes_fdr05_HIPPO) <- names(pinfo)
+    
+    with(allEqtl, addmargins(table('FDR 1%' = FDR < 0.01, 'FDR 5%' = FDR < 0.05)))
+    
+#        FDR 5%
+# FDR 1%     FALSE     TRUE      Sum
+#   FALSE  3417626  6245573  9663199
+#   TRUE         0 12939932 12939932
+#   Sum    3417626 19185505 22603131
+
+    save(me_genes_HIPPO, me_genes_fdr05_HIPPO, file = 'rda/me_genes_HIPPO.Rdata')
+} else {
+    message(paste(Sys.time(), 'loading rda/me_genes_HIPPO.Rdata'))
+    load('rda/me_genes_HIPPO.Rdata', verbose = TRUE)
+}
+sapply(me_genes_HIPPO, length)
+#  gene  exon   jxn    tx
+# 11463 14206 10312 12294
+sapply(me_genes_fdr05_HIPPO, length)
+#  gene  exon   jxn    tx
+# 17044 19090 15030 19810
+length(unique(unlist(me_genes_HIPPO[c('gene', 'exon', 'jxn')])))
+# [1] 17719
+
+pdf('pdf/venn_eQTL_HIPPO.pdf', useDingbats = FALSE)
+make_venn(me_genes_HIPPO, title = 'eQTLs grouped by gene id')
+make_venn(me_genes_HIPPO[c('gene', 'exon', 'jxn')], title = 'eQTLs grouped by gene id')
+dev.off()
+
+pdf('pdf/venn_eQTL_HIPPO_fdr05.pdf', useDingbats = FALSE)
+make_venn(me_genes_fdr05_HIPPO, title = 'eQTLs grouped by gene id')
+make_venn(me_genes_fdr05_HIPPO[c('gene', 'exon', 'jxn')], title = 'eQTLs grouped by gene id')
+dev.off()
+
+
+
+## DLPFC only
+if(!file.exists('rda/me_genes_DLPFC.Rdata')) {
+    load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full/eqtl_tables/mergedEqtl_output_dlpfc_4features.rda', verbose = TRUE)
+    me_DLPFC <- split(allEqtl, allEqtl$Type)
+    names(me_DLPFC) <- tolower(names(me_DLPFC))
+    me_genes_DLPFC <- lapply(names(pinfo), function(feat) {
+        m <- match(me_DLPFC[[feat]]$gene[me_DLPFC[[feat]]$FDR < 0.01], names(rses[[feat]]))
+        print(table(!is.na(m)))
+        m <- m[!is.na(m)]
+        if(feat %in% c('gene', 'exon')) {
+            res <- rowRanges(rses[[feat]])$gencodeID[m]
+        } else if(feat == 'jxn') {
+            res <- rowRanges(rses[[feat]])$gencodeGeneID[m]
+            res <- res[!is.na(res)]
+        } else {
+            res <- rowRanges(rses[[feat]])$gene_id[m]
+        }
+        return(unique(res))
+    })
+    names(me_genes_DLPFC) <- names(pinfo)
+
+    me_genes_fdr05_DLPFC <- lapply(names(pinfo), function(feat) {
+        m <- match(me_DLPFC[[feat]]$gene[me_DLPFC[[feat]]$FDR < 0.05], names(rses[[feat]]))
+        m <- m[!is.na(m)]
+        if(feat %in% c('gene', 'exon')) {
+            res <- rowRanges(rses[[feat]])$gencodeID[m]
+        } else if(feat == 'jxn') {
+            res <- rowRanges(rses[[feat]])$gencodeGeneID[m]
+            res <- res[!is.na(res)]
+        } else {
+            res <- rowRanges(rses[[feat]])$gene_id[m]
+        }
+        return(unique(res))
+    })
+    names(me_genes_fdr05_DLPFC) <- names(pinfo)
+    
+    with(allEqtl, addmargins(table('FDR 1%' = FDR < 0.01, 'FDR 5%' = FDR < 0.05)))
+    #
+    # FDR 1%     FALSE     TRUE      Sum
+    #   FALSE  2215761  8610116 10825877
+    #   TRUE         0 18037662 18037662
+    #   Sum    2215761 26647778 28863539
+
+    save(me_genes_DLPFC, me_genes_fdr05_DLPFC, file = 'rda/me_genes_DLPFC.Rdata')
+} else {
+    message(paste(Sys.time(), 'loading rda/me_genes_DLPFC.Rdata'))
+    load('rda/me_genes_DLPFC.Rdata', verbose = TRUE)
+}
+sapply(me_genes_DLPFC, length)
+#  gene  exon   jxn    tx
+# 14261 16047 11732 14379
+sapply(me_genes_fdr05_DLPFC, length)
+#  gene  exon   jxn    tx
+# 18281 20171 15769 21578
+length(unique(unlist(me_genes_DLPFC[c('gene', 'exon', 'jxn')])))
+# [1] 19482
+
+pdf('pdf/venn_eQTL_DLPFC.pdf', useDingbats = FALSE)
+make_venn(me_genes_DLPFC, title = 'eQTLs grouped by gene id')
+make_venn(me_genes_DLPFC[c('gene', 'exon', 'jxn')], title = 'eQTLs grouped by gene id')
+dev.off()
+
+pdf('pdf/venn_eQTL_DLPFC_fdr05.pdf', useDingbats = FALSE)
+make_venn(me_genes_fdr05_DLPFC, title = 'eQTLs grouped by gene id')
+make_venn(me_genes_fdr05_DLPFC[c('gene', 'exon', 'jxn')], title = 'eQTLs grouped by gene id')
+dev.off()
+
 
 
 if(!file.exists('rda/in_risk.Rdata')) {
