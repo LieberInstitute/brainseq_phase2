@@ -458,6 +458,48 @@ if(!file.exists('rda/me_genes_HIPPO.Rdata')) {
 #   TRUE         0 12939932 12939932
 #   Sum    3417626 19185505 22603131
 
+    with(subset(allEqtl, Type != 'Tx'), addmargins(table('FDR 1%' = FDR < 0.01, 'FDR 5%' = FDR < 0.05)))
+    
+#        FDR 5%
+# FDR 1%     FALSE     TRUE      Sum
+#   FALSE  3044949  5445766  8490715
+#   TRUE         0 11237357 11237357
+#   Sum    3044949 16683123 19728072
+
+    lapply(me_HIPPO, function(x) {
+        with(x, addmargins(table('FDR 1%' = FDR < 0.01, 'FDR 5%' = FDR < 0.05)))
+    })
+    
+    # $Exon
+  #          FDR 5%
+  #   FDR 1%     FALSE     TRUE      Sum
+  #     FALSE  1743337  3220128  4963465
+  #     TRUE         0  6206375  6206375
+  #     Sum    1743337  9426503 11169840
+  #
+  #   $Gene
+  #          FDR 5%
+  #   FDR 1%     TRUE     Sum
+  #     FALSE  404706  404706
+  #     TRUE  1075733 1075733
+  #     Sum   1480439 1480439
+  #
+  #   $Jxn
+  #          FDR 5%
+  #   FDR 1%    FALSE    TRUE     Sum
+  #     FALSE 1301612 1820932 3122544
+  #     TRUE        0 3955249 3955249
+  #     Sum   1301612 5776181 7077793
+  #
+  #   $Tx
+  #          FDR 5%
+  #   FDR 1%    FALSE    TRUE     Sum
+  #     FALSE  372677  799807 1172484
+  #     TRUE        0 1702575 1702575
+  #     Sum    372677 2502382 2875059
+
+    with(subset(allEqtl, Type != 'Tx'), addmargins(table('FDR 1%' = FDR < 0.01, 'FDR 5%' = FDR < 0.05)))
+
     save(me_genes_HIPPO, me_genes_fdr05_HIPPO, file = 'rda/me_genes_HIPPO.Rdata')
 } else {
     message(paste(Sys.time(), 'loading rda/me_genes_HIPPO.Rdata'))
@@ -526,6 +568,46 @@ if(!file.exists('rda/me_genes_DLPFC.Rdata')) {
     #   FALSE  2215761  8610116 10825877
     #   TRUE         0 18037662 18037662
     #   Sum    2215761 26647778 28863539
+    
+    with(subset(allEqtl, Type != 'Tx'), addmargins(table('FDR 1%' = FDR < 0.01, 'FDR 5%' = FDR < 0.05)))
+    
+#        FDR 5%
+# FDR 1%     FALSE     TRUE      Sum
+#   FALSE  1996632  7547106  9543738
+#   TRUE         0 15766398 15766398
+#   Sum    1996632 23313504 25310136
+    
+    lapply(me_DLPFC, function(x) {
+        with(x, addmargins(table('FDR 1%' = FDR < 0.01, 'FDR 5%' = FDR < 0.05)))
+    })
+    
+    # $Exon
+   #         FDR 5%
+   #  FDR 1%     FALSE     TRUE      Sum
+   #    FALSE   963327  4645078  5608405
+   #    TRUE         0  8928309  8928309
+   #    Sum     963327 13573387 14536714
+   #
+   #  $Gene
+   #         FDR 5%
+   #  FDR 1%     TRUE     Sum
+   #    FALSE  418559  418559
+   #    TRUE  1577963 1577963
+   #    Sum   1996522 1996522
+   #
+   #  $Jxn
+   #         FDR 5%
+   #  FDR 1%    FALSE    TRUE     Sum
+   #    FALSE 1033305 2483469 3516774
+   #    TRUE        0 5260126 5260126
+   #    Sum   1033305 7743595 8776900
+   #
+   #  $Tx
+   #         FDR 5%
+   #  FDR 1%    FALSE    TRUE     Sum
+   #    FALSE  219129 1063010 1282139
+   #    TRUE        0 2271264 2271264
+   #    Sum    219129 3334274 3553403
 
     save(me_genes_DLPFC, me_genes_fdr05_DLPFC, file = 'rda/me_genes_DLPFC.Rdata')
 } else {
