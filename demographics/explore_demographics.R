@@ -102,30 +102,37 @@ comppd <- function(pd1, pd2) {
     
 }
 
-
+## Compute the summaries
 summ <- do.call(rbind, lapply(pds, summpd))
 
+## Make the comparisions
 pds1 <- pds[grep('sczd.*case|ctrl.*hippo', names(pds))]
 pds2 <- pds[grep('sczd.*ctrl|ctrl.*dlpfc', names(pds))]
 comps <- mapply(comppd, pds1, pds2)
-
 colnames(comps) <- paste0(names(pds1), '_vs_', names(pds2))
 comps <- t(comps)
 
-
+## Combine all into one
 supptab <- rbind(summ, comps)
 
-options(width = 300)
-supptab
-t(supptab)
-
+## Re-organize the table and print it all
 supptab2 <- supptab[c(1:4, 17, 5:7, 18, 8:10, 19, 11:13, 20, 14:16, 21), ]
+options(width = 300)
+print('----- Full table ----')
+supptab2
 
+print('----- Full table transposed ----')
+t(supptab2)
+
+## Save for later
 save(pds, summ, comps, supptab, supptab2, file = 'supptab.Rdata')
 
-write.csv(supptab2, file = 'supptab.csv')
+## For some reason they are all list columns... casting to matrix solves this
+# sapply(supptab2, class)
+write.csv(as.matrix(supptab2), file = 'supptab.csv')
 
-pdf('supptab_plots.pdf', useDingbats = FALSE)
+## Visualize PMI by Dx
+pdf('sczd_PMI_byDx.pdf', useDingbats = FALSE)
 with(pds$sczd_hippo, boxplot(pmi ~ Dx, ylab = 'PMI (in hours)', xlab = 'SCZD status', main = 'HIPPO'))
 with(pds$sczd_dlpfc, boxplot(pmi ~ Dx, ylab = 'PMI (in hours)', xlab = 'SCZD status', main = 'DLPFC'))
 dev.off()
