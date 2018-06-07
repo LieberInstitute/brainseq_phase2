@@ -1,3 +1,6 @@
+# Usage:
+# Rscript explore_demographics.R  >explore_demographics_log.txt 2>&1
+
 library('SummarizedExperiment')
 library('ggplot2')
 library('LIBDpheno')
@@ -118,7 +121,7 @@ t(supptab)
 
 supptab2 <- supptab[c(1:4, 17, 5:7, 18, 8:10, 19, 11:13, 20, 14:16, 21), ]
 
-save(summ, comps, supptab, supptab2, file = 'supptab.Rdata')
+save(pds, summ, comps, supptab, supptab2, file = 'supptab.Rdata')
 
 write.csv(supptab2, file = 'supptab.csv')
 
