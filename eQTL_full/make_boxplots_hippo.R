@@ -119,13 +119,14 @@ pgc = read.csv("../eQTL_GWAS_riskSNPs/41588_2018_59_MOESM3_ESM.csv", stringsAsFa
 
 index = pgc$"Index.SNP..dbSNP.b141."
 hippo2 = allEqtl[which(allEqtl$snps %in% index),]
+hippo2 = hippo2[order(hippo2$FDR, decreasing=FALSE),]
 
 
-pdf("hippo_top_eqtl_gene_PGC_indexSNPs.pdf", h=6, w=6)
+pdf("hippo_top_eqtl_PGC_indexSNPs.pdf", h=6, w=6, useDingbats=FALSE)
 par(mar=c(5,5,5,2), cex.main=1.8, cex.lab=1.5, cex.axis=1.5)
 palette(brewer.pal(8,"Spectral"))			
 ## plot
-for (i in 1:20) {
+for (i in 1:30) {
 	symi = hippo2[i,"Symbol"]
 	symi[is.na(symi)]=""
 	snpi = hippo2[i,"snps"]

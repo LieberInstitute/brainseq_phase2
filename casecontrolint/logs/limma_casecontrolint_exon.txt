@@ -84,3 +84,69 @@ Loading objects:
   mod
   modQsva
   keepIndex
+   user  system elapsed 
+ 19.191   0.281  19.475 
+[1] "Consensus correlation and summary (also after tanh transform)"
+[1] 0.1743972
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+-0.35980  0.08782  0.16712  0.19841  0.27359  2.22510 
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+-0.34503  0.08759  0.16558  0.18905  0.26696  0.97692 
+[1] "DxSchizo:RegionHIPPO"
+[1] "Reproducibility information:"
+[1] "2018-05-06 00:50:02 EDT"
+      user     system    elapsed 
+393307.685     37.979 393418.888 
+Session info ----------------------------------------------------------------------------------------------------------
+ setting  value                                      
+ version  R version 3.4.3 Patched (2018-01-20 r74142)
+ system   x86_64, linux-gnu                          
+ ui       X11                                        
+ language (EN)                                       
+ collate  en_US.UTF-8                                
+ tz       US/Eastern                                 
+ date     2018-05-06                                 
+
+Packages --------------------------------------------------------------------------------------------------------------
+ package              * version   date       source        
+ base                 * 3.4.3     2018-01-20 local         
+ Biobase              * 2.38.0    2017-11-07 Bioconductor  
+ BiocGenerics         * 0.24.0    2017-11-29 Bioconductor  
+ bitops                 1.0-6     2013-08-17 CRAN (R 3.4.1)
+ colorspace             1.3-2     2016-12-14 CRAN (R 3.4.1)
+ compiler               3.4.3     2018-01-20 local         
+ datasets             * 3.4.3     2018-01-20 local         
+ DelayedArray         * 0.4.1     2017-11-07 Bioconductor  
+ devtools             * 1.13.5    2018-02-18 CRAN (R 3.4.3)
+ digest                 0.6.15    2018-01-28 cran (@0.6.15)
+ edgeR                * 3.20.9    2018-04-18 Bioconductor  
+ GenomeInfoDb         * 1.14.0    2017-11-29 Bioconductor  
+ GenomeInfoDbData       1.0.0     2018-01-09 Bioconductor  
+ GenomicRanges        * 1.30.3    2018-04-18 Bioconductor  
+ getopt               * 1.20.2    2018-02-16 CRAN (R 3.4.3)
+ graphics             * 3.4.3     2018-01-20 local         
+ grDevices            * 3.4.3     2018-01-20 local         
+ grid                   3.4.3     2018-01-20 local         
+ IRanges              * 2.12.0    2017-11-29 Bioconductor  
+ lattice                0.20-35   2017-03-25 CRAN (R 3.4.3)
+ limma                * 3.34.9    2018-04-18 Bioconductor  
+ locfit                 1.5-9.1   2013-04-20 CRAN (R 3.4.1)
+ Matrix                 1.2-12    2017-11-30 CRAN (R 3.4.3)
+ matrixStats          * 0.53.1    2018-02-11 CRAN (R 3.4.3)
+ memoise                1.1.0     2017-04-21 CRAN (R 3.4.1)
+ methods              * 3.4.3     2018-01-20 local         
+ parallel             * 3.4.3     2018-01-20 local         
+ Rcpp                   0.12.16   2018-03-13 CRAN (R 3.4.3)
+ RCurl                  1.95-4.10 2018-01-04 CRAN (R 3.4.2)
+ S4Vectors            * 0.16.0    2017-11-29 Bioconductor  
+ statmod                1.4.30    2017-06-18 CRAN (R 3.4.1)
+ stats                * 3.4.3     2018-01-20 local         
+ stats4               * 3.4.3     2018-01-20 local         
+ SummarizedExperiment * 1.8.1     2018-01-09 Bioconductor  
+ tools                  3.4.3     2018-01-20 local         
+ utils                * 3.4.3     2018-01-20 local         
+ withr                  2.1.2     2018-03-15 CRAN (R 3.4.3)
+ XVector                0.18.0    2017-11-29 Bioconductor  
+ zlibbioc               1.24.0    2017-11-07 Bioconductor  
+**** Job ends ****
+Sun May  6 00:50:02 EDT 2018

@@ -3638,3 +3638,303 @@ gBlocks
      Fraction of slow calculations: 0.000000
     ..connectivity..
     ..matrix multiplication (system BLAS)..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 2 into file rda/jxn_qSVA-block.2.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking kME in modules..
+     ..removing 84 genes from module 1 because their KME is too low.
+     ..removing 7 genes from module 2 because their KME is too low.
+     ..removing 3 genes from module 3 because their KME is too low.
+     ..removing 37 genes from module 4 because their KME is too low.
+     ..removing 1 genes from module 5 because their KME is too low.
+     ..removing 4 genes from module 6 because their KME is too low.
+     ..removing 2 genes from module 7 because their KME is too low.
+     ..removing 4 genes from module 8 because their KME is too low.
+     ..removing 4 genes from module 9 because their KME is too low.
+     ..removing 1 genes from module 10 because their KME is too low.
+     ..removing 3 genes from module 12 because their KME is too low.
+     ..removing 8 genes from module 13 because their KME is too low.
+     ..removing 2 genes from module 14 because their KME is too low.
+     ..removing 1 genes from module 21 because their KME is too low.
+     ..removing 2 genes from module 22 because their KME is too low.
+ ..Working on block 3 .
+    TOM calculation: adjacency..
+    ..will use 4 parallel threads.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication (system BLAS)..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 3 into file rda/jxn_qSVA-block.3.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking kME in modules..
+     ..removing 19843 genes from module 1 because their KME is too low.
+     ..removing 52 genes from module 2 because their KME is too low.
+ ..Working on block 4 .
+    TOM calculation: adjacency..
+    ..will use 4 parallel threads.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication (system BLAS)..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 4 into file rda/jxn_qSVA-block.4.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking kME in modules..
+     ..removing 15001 genes from module 1 because their KME is too low.
+     ..removing 2933 genes from module 2 because their KME is too low.
+     ..removing 163 genes from module 3 because their KME is too low.
+     ..removing 87 genes from module 4 because their KME is too low.
+     ..removing 5 genes from module 5 because their KME is too low.
+     ..removing 127 genes from module 6 because their KME is too low.
+     ..removing 71 genes from module 7 because their KME is too low.
+     ..removing 5 genes from module 8 because their KME is too low.
+     ..removing 44 genes from module 9 because their KME is too low.
+     ..removing 10 genes from module 10 because their KME is too low.
+     ..removing 1 genes from module 15 because their KME is too low.
+ ..Working on block 5 .
+    TOM calculation: adjacency..
+    ..will use 4 parallel threads.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication (system BLAS)..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 5 into file rda/jxn_qSVA-block.5.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking kME in modules..
+     ..removing 2486 genes from module 1 because their KME is too low.
+     ..removing 2214 genes from module 2 because their KME is too low.
+     ..removing 978 genes from module 3 because their KME is too low.
+     ..removing 481 genes from module 4 because their KME is too low.
+     ..removing 173 genes from module 5 because their KME is too low.
+     ..removing 90 genes from module 6 because their KME is too low.
+     ..removing 13 genes from module 7 because their KME is too low.
+     ..removing 145 genes from module 8 because their KME is too low.
+     ..removing 81 genes from module 9 because their KME is too low.
+     ..removing 40 genes from module 11 because their KME is too low.
+     ..removing 139 genes from module 12 because their KME is too low.
+     ..removing 5 genes from module 13 because their KME is too low.
+     ..removing 73 genes from module 14 because their KME is too low.
+     ..removing 91 genes from module 15 because their KME is too low.
+     ..removing 12 genes from module 16 because their KME is too low.
+     ..removing 42 genes from module 17 because their KME is too low.
+     ..removing 22 genes from module 18 because their KME is too low.
+     ..removing 2 genes from module 19 because their KME is too low.
+     ..removing 6 genes from module 20 because their KME is too low.
+     ..removing 2 genes from module 21 because their KME is too low.
+     ..removing 51 genes from module 22 because their KME is too low.
+     ..removing 8 genes from module 23 because their KME is too low.
+     ..removing 4 genes from module 24 because their KME is too low.
+     ..removing 18 genes from module 25 because their KME is too low.
+     ..removing 1 genes from module 26 because their KME is too low.
+     ..removing 17 genes from module 27 because their KME is too low.
+     ..removing 4 genes from module 29 because their KME is too low.
+     ..removing 11 genes from module 31 because their KME is too low.
+     ..removing 3 genes from module 32 because their KME is too low.
+     ..removing 2 genes from module 34 because their KME is too low.
+     ..removing 4 genes from module 35 because their KME is too low.
+     ..removing 1 genes from module 37 because their KME is too low.
+     ..removing 1 genes from module 40 because their KME is too low.
+     ..removing 14 genes from module 42 because their KME is too low.
+     ..removing 2 genes from module 43 because their KME is too low.
+ ..Working on block 6 .
+    TOM calculation: adjacency..
+    ..will use 4 parallel threads.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication (system BLAS)..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 6 into file rda/jxn_qSVA-block.6.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking kME in modules..
+     ..removing 2399 genes from module 1 because their KME is too low.
+     ..removing 1871 genes from module 2 because their KME is too low.
+     ..removing 961 genes from module 3 because their KME is too low.
+     ..removing 675 genes from module 4 because their KME is too low.
+     ..removing 496 genes from module 5 because their KME is too low.
+     ..removing 394 genes from module 6 because their KME is too low.
+     ..removing 401 genes from module 7 because their KME is too low.
+     ..removing 342 genes from module 8 because their KME is too low.
+     ..removing 158 genes from module 9 because their KME is too low.
+     ..removing 291 genes from module 10 because their KME is too low.
+     ..removing 171 genes from module 11 because their KME is too low.
+     ..removing 219 genes from module 12 because their KME is too low.
+     ..removing 125 genes from module 13 because their KME is too low.
+     ..removing 84 genes from module 14 because their KME is too low.
+     ..removing 92 genes from module 15 because their KME is too low.
+     ..removing 32 genes from module 16 because their KME is too low.
+     ..removing 59 genes from module 17 because their KME is too low.
+     ..removing 61 genes from module 18 because their KME is too low.
+     ..removing 43 genes from module 19 because their KME is too low.
+     ..removing 27 genes from module 20 because their KME is too low.
+     ..removing 53 genes from module 21 because their KME is too low.
+     ..removing 2 genes from module 22 because their KME is too low.
+     ..removing 52 genes from module 23 because their KME is too low.
+     ..removing 32 genes from module 24 because their KME is too low.
+     ..removing 14 genes from module 25 because their KME is too low.
+     ..removing 29 genes from module 26 because their KME is too low.
+     ..removing 5 genes from module 28 because their KME is too low.
+     ..removing 3 genes from module 29 because their KME is too low.
+     ..removing 20 genes from module 30 because their KME is too low.
+     ..removing 17 genes from module 31 because their KME is too low.
+     ..removing 7 genes from module 32 because their KME is too low.
+     ..removing 11 genes from module 33 because their KME is too low.
+     ..removing 1 genes from module 34 because their KME is too low.
+     ..removing 3 genes from module 35 because their KME is too low.
+     ..removing 6 genes from module 36 because their KME is too low.
+     ..removing 3 genes from module 37 because their KME is too low.
+     ..removing 1 genes from module 39 because their KME is too low.
+     ..removing 20 genes from module 40 because their KME is too low.
+     ..removing 9 genes from module 41 because their KME is too low.
+     ..removing 4 genes from module 42 because their KME is too low.
+     ..removing 3 genes from module 44 because their KME is too low.
+     ..removing 7 genes from module 45 because their KME is too low.
+     ..removing 1 genes from module 47 because their KME is too low.
+     ..removing 1 genes from module 48 because their KME is too low.
+     ..removing 5 genes from module 51 because their KME is too low.
+     ..removing 11 genes from module 52 because their KME is too low.
+     ..removing 3 genes from module 53 because their KME is too low.
+     ..removing 2 genes from module 54 because their KME is too low.
+     ..removing 9 genes from module 55 because their KME is too low.
+     ..removing 2 genes from module 56 because their KME is too low.
+     ..removing 3 genes from module 58 because their KME is too low.
+     ..removing 2 genes from module 62 because their KME is too low.
+     ..removing 2 genes from module 63 because their KME is too low.
+     ..removing 5 genes from module 64 because their KME is too low.
+     ..removing 2 genes from module 65 because their KME is too low.
+     ..removing 1 genes from module 68 because their KME is too low.
+     ..removing 1 genes from module 70 because their KME is too low.
+     ..removing 2 genes from module 72 because their KME is too low.
+     ..removing 3 genes from module 73 because their KME is too low.
+     ..removing 1 genes from module 75 because their KME is too low.
+     ..removing 2 genes from module 78 because their KME is too low.
+ ..Working on block 7 .
+    TOM calculation: adjacency..
+    ..will use 4 parallel threads.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication (system BLAS)..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 7 into file rda/jxn_qSVA-block.7.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking kME in modules..
+     ..removing 417 genes from module 1 because their KME is too low.
+     ..removing 6 genes from module 3 because their KME is too low.
+     ..removing 2 genes from module 5 because their KME is too low.
+     ..removing 1 genes from module 11 because their KME is too low.
+ ..Working on block 8 .
+    TOM calculation: adjacency..
+    ..will use 4 parallel threads.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication (system BLAS)..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 8 into file rda/jxn_qSVA-block.8.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking kME in modules..
+     ..removing 4113 genes from module 1 because their KME is too low.
+     ..removing 367 genes from module 2 because their KME is too low.
+     ..removing 5 genes from module 3 because their KME is too low.
+     ..removing 5 genes from module 4 because their KME is too low.
+ ..Working on block 9 .
+    TOM calculation: adjacency..
+    ..will use 4 parallel threads.
+     Fraction of slow calculations: 0.000000
+    ..connectivity..
+    ..matrix multiplication (system BLAS)..
+    ..normalization..
+    ..done.
+   ..saving TOM for block 9 into file rda/jxn_qSVA-block.9.RData
+ ....clustering..
+ ....detecting modules..
+ ....calculating module eigengenes..
+ ....checking kME in modules..
+     ..removing 3247 genes from module 1 because their KME is too low.
+     ..removing 1920 genes from module 2 because their KME is too low.
+     ..removing 1881 genes from module 3 because their KME is too low.
+     ..removing 121 genes from module 4 because their KME is too low.
+     ..removing 132 genes from module 5 because their KME is too low.
+     ..removing 173 genes from module 6 because their KME is too low.
+     ..removing 30 genes from module 8 because their KME is too low.
+     ..removing 46 genes from module 9 because their KME is too low.
+     ..removing 13 genes from module 10 because their KME is too low.
+     ..removing 14 genes from module 11 because their KME is too low.
+     ..removing 11 genes from module 12 because their KME is too low.
+     ..removing 1 genes from module 13 because their KME is too low.
+     ..removing 11 genes from module 14 because their KME is too low.
+ ..merging modules that are too close..
+     mergeCloseModules: Merging modules whose distance is less than 0.25
+       Calculating new MEs...
+
+     0      1      2      3      4      5      6      7      8      9     10 
+187830   7526   6955   2840   2585   2455   2088   2014   2013   1686   1610 
+    11     12     13     14     15     16     17     18     19     20     21 
+  1510   1306   1288   1277   1211    710    663    638    487    447    425 
+    22     23     24     25     26     27     28     29     30     31     32 
+   416    406    400    370    369    369    359    349    349    341    338 
+    33     34     35     36     37     38     39     40     41     42     43 
+   297    290    280    264    231    227    218    203    188    187    186 
+    44     45     46     47     48     49     50     51     52     53     54 
+   177    174    170    162    161    151    150    147    145    144    144 
+    55     56     57     58     59     60     61     62     63     64     65 
+   144    137    136    135    131    126    123    122    118    114    110 
+    66     67     68     69     70     71     72     73     74     75     76 
+   108    108    107    107    106    105    104    102     99     96     94 
+    77     78     79     80     81     82     83     84     85     86     87 
+    94     92     92     92     92     91     90     89     88     87     87 
+    88     89     90     91     92     93     94     95     96     97     98 
+    87     87     87     87     87     85     83     82     82     82     80 
+    99    100    101    102    103    104    105    106    107    108    109 
+    80     77     76     75     73     73     73     72     71     71     71 
+   110    111    112    113    114    115    116    117    118    119    120 
+    70     70     70     69     68     68     68     68     68     67     67 
+   121    122    123    124    125    126    127    128    129    130    131 
+    67     66     66     66     63     63     62     62     62     62     61 
+   132    133    134    135    136    137    138    139    140    141    142 
+    61     61     61     61     60     60     60     59     59     58     58 
+   143    144    145    146    147    148    149    150    151    152    153 
+    57     56     56     55     55     55     55     55     53     52     52 
+   154    155    156    157    158    159    160    161    162    163    164 
+    52     52     51     51     51     51     50     50     50     49     49 
+   165    166    167    168    169    170    171    172    173    174    175 
+    49     49     48     47     47     46     46     45     45     45     45 
+   176    177    178    179    180    181    182    183    184    185    186 
+    45     45     44     44     44     44     43     43     43     43     43 
+   187    188    189    190    191    192    193    194    195    196    197 
+    42     42     41     41     41     40     40     40     40     40     39 
+   198    199    200    201    202    203    204    205    206    207    208 
+    39     39     39     39     38     38     38     38     38     38     38 
+   209    210    211    212    213    214    215    216    217    218    219 
+    37     37     37     37     36     36     36     35     35     35     35 
+   220    221    222    223    224    225    226    227    228    229    230 
+    35     34     34     34     34     33     33     33     33     33     33 
+   231    232    233    234    235    236    237    238    239    240    241 
+    33     33     32     32     32     31     31     31     31     31     31 
+   242    243    244    245    246    247 
+    30     30     30     30     30     30 
+null device 
+          1 
+Error in moduleEigengenes(t(jExprsQsva), jnetQsva$colors) : 
+  Error : cannot allocate vector of size 262.9 Gb
+Execution halted
+**** Job ends ****
+Mon May  7 22:28:10 EDT 2018
