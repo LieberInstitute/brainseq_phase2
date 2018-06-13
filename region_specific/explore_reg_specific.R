@@ -366,6 +366,16 @@ run_go <- function(genes, ont = c('BP', 'MF', 'CC')) {
             error = function(e) { return(NULL) })
     })
     names(go_cluster) <- ont
+    
+    genes_ncbi <- lapply(lapply(attr(genes_venn, 'intersections'), bitr, fromType = 'ENSEMBL', toType = 'ENTREZID', OrgDb = 'org.Hs.eg.db'), function(x) x$ENTREZID)
+    
+    uni_ncbi <- bitr(uni, fromType = 'ENSEMBL', toType = 'ENTREZID', OrgDb = 'org.Hs.eg.db')$ENTREZID
+    
+    go_cluster$KEGG <- tryCatch(compareCluster(genes_ncbi, fun = 'enrichKEGG',
+        universe = uni_ncbi, organism = 'hsa', pAdjustMethod = 'BH',
+        pvalueCutoff = 0.1, qvalueCutoff = 0.05, keyType = 'ncbi-geneid'),
+        error = function(e) { return(NULL) })
+
     return(go_cluster)
 }
 
