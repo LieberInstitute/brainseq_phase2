@@ -753,6 +753,35 @@ run_go <- function(genes, ont = c('BP', 'MF', 'CC')) {
     return(go_cluster)
 }
 
+run_go_novenn <- function(genes, ont = c('BP', 'MF', 'CC')) {
+    ## Change to ENSEMBL ids
+    genes_ens <- sapply(genes, function(x) { gsub('\\..*', '', x) })
+
+    ## Run GO analysis
+    go_cluster <- lapply(ont, function(bp) {
+        message(paste(Sys.time(), 'running GO analysis for', bp))
+        tryCatch(compareCluster(genes_ens, fun = "enrichGO",
+            universe = uni, OrgDb = 'org.Hs.eg.db',
+            ont = bp, pAdjustMethod = "BH",
+            pvalueCutoff  = 0.1, qvalueCutoff  = 0.05,
+            readable = TRUE, keyType = 'ENSEMBL'),
+            error = function(e) { return(NULL) })
+    })
+    names(go_cluster) <- ont
+    
+    genes_ncbi <- lapply(lapply(genes_ens, bitr, fromType = 'ENSEMBL', toType = 'ENTREZID', OrgDb = 'org.Hs.eg.db'), function(x) x$ENTREZID)
+    
+    uni_ncbi <- bitr(uni, fromType = 'ENSEMBL', toType = 'ENTREZID', OrgDb = 'org.Hs.eg.db')$ENTREZID
+    
+    go_cluster$KEGG <- tryCatch(compareCluster(genes_ncbi, fun = 'enrichKEGG',
+        universe = uni_ncbi, organism = 'hsa', pAdjustMethod = 'BH',
+        pvalueCutoff = 0.1, qvalueCutoff = 0.05, keyType = 'ncbi-geneid'),
+        error = function(e) { return(NULL) })
+        
+    return(go_cluster)
+}
+
+
 
 ## Development DE genes
 if(!file.exists('rda/go_de_genes.Rdata')) {
@@ -765,6 +794,16 @@ if(!file.exists('rda/go_de_genes.Rdata')) {
 }
 sapply(go_de_genes, class)
 
+if(!file.exists('rda/go_de_genes_novenn.Rdata')) {
+    system.time( go_de_genes_novenn <- run_go_novenn(de_genes[c('gene', 'exon', 'jxn')]) )
+    message(paste(Sys.time(), 'saving rda/go_de_genes_novenn.Rdata'))
+    save(go_de_genes_novenn, file = 'rda/go_de_genes_novenn.Rdata')
+} else {
+    message(paste(Sys.time(), 'loading rda/go_de_genes_novenn.Rdata'))
+    load('rda/go_de_genes_novenn.Rdata', verbose = TRUE)
+}
+sapply(go_de_genes_novenn, class)
+
 ## Case-control DE genes
 if(!file.exists('rda/go_case_genes.Rdata')) {
     system.time( go_case_genes <- run_go(case_genes[c('gene', 'exon', 'jxn')]) )
@@ -776,6 +815,16 @@ if(!file.exists('rda/go_case_genes.Rdata')) {
 }
 sapply(go_case_genes, class)
 
+if(!file.exists('rda/go_case_genes_novenn.Rdata')) {
+    system.time( go_case_genes_novenn <- run_go_novenn(case_genes[c('gene', 'exon', 'jxn')]) )
+    message(paste(Sys.time(), 'saving rda/go_case_genes_novenn.Rdata'))
+    save(go_case_genes_novenn, file = 'rda/go_case_genes_novenn.Rdata')
+} else {
+    message(paste(Sys.time(), 'loading rda/go_case_genes_novenn.Rdata'))
+    load('rda/go_case_genes_novenn.Rdata', verbose = TRUE)
+}
+sapply(go_case_genes_novenn, class)
+
 if(!file.exists('rda/go_case_genes_fdr1.Rdata')) {
     system.time( go_case_genes_fdr1 <- run_go(case_genes_fdr1[c('gene', 'exon', 'jxn')]) )
     message(paste(Sys.time(), 'saving rda/go_case_genes_fdr1.Rdata'))
@@ -785,6 +834,16 @@ if(!file.exists('rda/go_case_genes_fdr1.Rdata')) {
     load('rda/go_case_genes_fdr1.Rdata', verbose = TRUE)
 }
 sapply(go_case_genes_fdr1, class)
+
+if(!file.exists('rda/go_case_genes_fdr1_novenn.Rdata')) {
+    system.time( go_case_genes_fdr1_novenn <- run_go_novenn(case_genes_fdr1[c('gene', 'exon', 'jxn')]) )
+    message(paste(Sys.time(), 'saving rda/go_case_genes_fdr1_novenn.Rdata'))
+    save(go_case_genes_fdr1_novenn, file = 'rda/go_case_genes_fdr1_novenn.Rdata')
+} else {
+    message(paste(Sys.time(), 'loading rda/go_case_genes_fdr1_novenn.Rdata'))
+    load('rda/go_case_genes_fdr1_novenn.Rdata', verbose = TRUE)
+}
+sapply(go_case_genes_fdr1_novenn, class)
 
 ## eQTL interaction genes
 if(!file.exists('rda/go_me_genes.Rdata')) {
@@ -797,6 +856,17 @@ if(!file.exists('rda/go_me_genes.Rdata')) {
 }
 sapply(go_me_genes, class)
 
+if(!file.exists('rda/go_me_genes_novenn.Rdata')) {
+    system.time( go_me_genes_novenn <- run_go_novenn(me_genes[c('gene', 'exon', 'jxn')]) )
+    message(paste(Sys.time(), 'saving rda/go_me_genes_novenn.Rdata'))
+    save(go_me_genes_novenn, file = 'rda/go_me_genes_novenn.Rdata')
+} else {
+    message(paste(Sys.time(), 'loading rda/go_me_genes_novenn.Rdata'))
+    load('rda/go_me_genes_novenn.Rdata', verbose = TRUE)
+}
+sapply(go_me_genes_novenn, class)
+
+
 if(!file.exists('rda/go_me_genes_fdr05.Rdata')) {
     system.time( go_me_genes_fdr05 <- run_go(me_genes_fdr05[c('gene', 'exon', 'jxn')]) )
     message(paste(Sys.time(), 'saving rda/go_me_genes_fdr05.Rdata'))
@@ -806,6 +876,16 @@ if(!file.exists('rda/go_me_genes_fdr05.Rdata')) {
     load('rda/go_me_genes_fdr05.Rdata', verbose = TRUE)
 }
 sapply(go_me_genes_fdr05, class)
+
+if(!file.exists('rda/go_me_genes_fdr05_novenn.Rdata')) {
+    system.time( go_me_genes_fdr05_novenn <- run_go_novenn(me_genes_fdr05[c('gene', 'exon', 'jxn')]) )
+    message(paste(Sys.time(), 'saving rda/go_me_genes_fdr05_novenn.Rdata'))
+    save(go_me_genes_fdr05_novenn, file = 'rda/go_me_genes_fdr05_novenn.Rdata')
+} else {
+    message(paste(Sys.time(), 'loading rda/go_me_genes_fdr05_novenn.Rdata'))
+    load('rda/go_me_genes_fdr05_novenn.Rdata', verbose = TRUE)
+}
+sapply(go_me_genes_fdr05_novenn, class)
 
 
 simplify_go <- function(x) {
@@ -870,6 +950,46 @@ dev.off()
 
 pdf('pdf/go_all_me_genes_fdr05.pdf', width = 14, height = 8, useDingbats = FALSE)
 plot_go(go_me_genes_fdr05, cat = NULL)
+dev.off()
+
+
+
+## novenn
+pdf('pdf/go_de_genes_novenn.pdf', width = 14, height = 9, useDingbats = FALSE)
+plot_go(go_de_genes_novenn)
+dev.off()
+
+pdf('pdf/go_case_genes_novenn.pdf', width = 14, height = 8, useDingbats = FALSE)
+plot_go(go_case_genes_novenn)
+dev.off()
+
+pdf('pdf/go_case_genes_fdr1_novenn.pdf', width = 14, height = 8, useDingbats = FALSE)
+plot_go(go_case_genes_fdr1_novenn)
+dev.off()
+
+pdf('pdf/go_me_genes_novenn.pdf', width = 14, height = 8, useDingbats = FALSE)
+plot_go(go_me_genes_novenn)
+dev.off()
+
+pdf('pdf/go_me_genes_fdr05_novenn.pdf', width = 14, height = 8, useDingbats = FALSE)
+plot_go(go_me_genes_fdr05_novenn)
+dev.off()
+
+## all
+pdf('pdf/go_all_de_genes_novenn.pdf', width = 14, height = 50, useDingbats = FALSE)
+plot_go(go_de_genes_novenn, cat = NULL)
+dev.off()
+
+pdf('pdf/go_all_case_genes_fdr1_novenn.pdf', width = 18, height = 15, useDingbats = FALSE)
+plot_go(go_case_genes_fdr1_novenn, cat = NULL)
+dev.off()
+
+pdf('pdf/go_all_me_genes_novenn.pdf', width = 14, height = 11, useDingbats = FALSE)
+plot_go(go_me_genes_novenn, cat = NULL)
+dev.off()
+
+pdf('pdf/go_all_me_genes_fdr05_novenn.pdf', width = 14, height = 13, useDingbats = FALSE)
+plot_go(go_me_genes_fdr05_novenn, cat = NULL)
 dev.off()
 
 

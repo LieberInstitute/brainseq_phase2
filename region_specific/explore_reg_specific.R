@@ -379,6 +379,44 @@ run_go <- function(genes, ont = c('BP', 'MF', 'CC')) {
     return(go_cluster)
 }
 
+run_go_region <- function(genes, ont = c('BP', 'MF', 'CC'), set = 'adult') {
+    
+    exp <- if(set == 'adult') top$adult_gene else top$fetal_gene
+    
+    ## Split by which brain region has the hightest expr
+    genes_reg <- do.call(c, lapply(genes, function(g) {
+        s <- sign(exp$logFC[match(g, rownames(exp))])
+        s <- c('-1' = 'D', '1' = 'H')[as.character(s)]
+        split(g, s)
+    }))
+    
+    ## Change to ENSEMBL ids
+    genes_ens <- sapply(genes_reg, function(x) { gsub('\\..*', '', x) })
+
+    ## Run GO analysis
+    go_cluster <- lapply(ont, function(bp) {
+        message(paste(Sys.time(), 'running GO analysis for', bp))
+        tryCatch(compareCluster(genes_ens, fun = "enrichGO",
+            universe = uni, OrgDb = 'org.Hs.eg.db',
+            ont = bp, pAdjustMethod = "BH",
+            pvalueCutoff  = 0.1, qvalueCutoff  = 0.05,
+            readable = TRUE, keyType = 'ENSEMBL'),
+            error = function(e) { return(NULL) })
+    })
+    names(go_cluster) <- ont
+    
+    genes_ncbi <- lapply(lapply(genes_ens, bitr, fromType = 'ENSEMBL', toType = 'ENTREZID', OrgDb = 'org.Hs.eg.db'), function(x) x$ENTREZID)
+    
+    uni_ncbi <- bitr(uni, fromType = 'ENSEMBL', toType = 'ENTREZID', OrgDb = 'org.Hs.eg.db')$ENTREZID
+    
+    go_cluster$KEGG <- tryCatch(compareCluster(genes_ncbi, fun = 'enrichKEGG',
+        universe = uni_ncbi, organism = 'hsa', pAdjustMethod = 'BH',
+        pvalueCutoff = 0.1, qvalueCutoff = 0.05, keyType = 'ncbi-geneid'),
+        error = function(e) { return(NULL) })
+
+    return(go_cluster)
+}
+
 ## Reg specific genes
 if(!file.exists('rda/go_de_genes.Rdata')) {
     system.time( go_de_genes_adult <- run_go(de_genes$adult[c('gene', 'exon', 'jxn')]) )
@@ -391,6 +429,20 @@ if(!file.exists('rda/go_de_genes.Rdata')) {
 }
 sapply(go_de_genes_adult, class)
 sapply(go_de_genes_fetal, class)
+
+
+## Reg specific genes - by brain region
+if(!file.exists('rda/go_de_genes_brain.Rdata')) {
+    system.time( go_de_genes_brain_adult <- run_go_region(de_genes$adult[c('gene', 'exon', 'jxn')]) )
+    system.time( go_de_genes_brain_fetal <- run_go_region(de_genes$fetal[c('gene', 'exon', 'jxn')], set = 'fetal') )
+    message(paste(Sys.time(), 'saving rda/go_de_genes.Rdata'))
+    save(go_de_genes_brain_adult, go_de_genes_brain_fetal, file = 'rda/go_de_genes_brain.Rdata')
+} else {
+    message(paste(Sys.time(), 'loading rda/go_de_genes_brain.Rdata'))
+    load('rda/go_de_genes_brain.Rdata', verbose = TRUE)
+}
+sapply(go_de_genes_brain_adult, class)
+sapply(go_de_genes_brain_fetal, class)
 
 simplify_go <- function(x) {
     gsub('jxn', 'J', gsub('exon', 'E', gsub('gene', 'G', x)))
@@ -422,6 +474,14 @@ pdf('pdf/go_de_genes_fetal.pdf', width = 30, height = 9, useDingbats = FALSE)
 plot_go(go_de_genes_fetal)
 dev.off()
 
+pdf('pdf/go_de_genes_brain_adult.pdf', width = 14, height = 11, useDingbats = FALSE)
+plot_go(go_de_genes_brain_adult)
+dev.off()
+
+pdf('pdf/go_de_genes_brain_fetal.pdf', width = 30, height = 11, useDingbats = FALSE)
+plot_go(go_de_genes_brain_fetal)
+dev.off()
+
 ## all
 pdf('pdf/go_all_de_genes_adult.pdf', width = 14, height = 50, useDingbats = FALSE)
 plot_go(go_de_genes_adult, cat = NULL)
@@ -430,6 +490,15 @@ dev.off()
 pdf('pdf/go_all_de_genes_fetal.pdf', width = 30, height = 50, useDingbats = FALSE)
 plot_go(go_de_genes_fetal, cat = NULL)
 dev.off()
+
+pdf('pdf/go_all_de_genes_brain_adult.pdf', width = 14, height = 100, useDingbats = FALSE)
+plot_go(go_de_genes_brain_adult, cat = NULL)
+dev.off()
+
+pdf('pdf/go_all_de_genes_brain_fetal.pdf', width = 30, height = 50, useDingbats = FALSE)
+plot_go(go_de_genes_brain_fetal, cat = NULL)
+dev.off()
+
 
 ## Volcano plots
 rep_brain <- function(x) {
