@@ -291,8 +291,6 @@ if(!file.exists('rda/de_genes.Rdata')) {
     load('rda/de_genes.Rdata', verbose = TRUE)
 }
 
-
-
 sapply(de_genes, function(x) sapply(x, length))
 #      adult fetal
 # gene  1612    32
@@ -300,16 +298,62 @@ sapply(de_genes, function(x) sapply(x, length))
 # jxn   1897     6
 # tx    1414     1
 
+
+if(!file.exists('rda/de_genes_sign.Rdata')) {
+    de_genes_sign <- lapply(names(pinfo[[1]]), function(agegrp) {
+        res2 <- lapply(names(pinfo), function(feat) {
+            res3 <- lapply(c('DLPFC', 'HIPPO'), function(reg) {
+                curr <- pinfo[[feat]][[agegrp]]
+                de <- rownames(curr[ sign(curr$logFC) == ifelse(reg == 'DLPFC', -1, 1), ])
+                m <- match(gsub('.*gene.|.*exon.|.*jxn.|.*tx.', '', de),
+                    names(rses[[feat]]))
+                print(table(!is.na(m)))
+                if(feat %in% c('gene', 'exon')) {
+                    res <- rowRanges(rses[[feat]])$gencodeID[m]
+                } else if(feat == 'jxn') {
+                    res <- rowRanges(rses[[feat]])$gencodeGeneID[m]
+                    res <- res[!is.na(res)]
+                } else {
+                    res <- rowRanges(rses[[feat]])$gene_id[m]
+                }
+                return(unique(res))
+            })
+            names(res3) <- c('DLPFC', 'HIPPO')
+            return(res3)
+        })
+        names(res2) <- names(pinfo)
+        return(do.call(c, res2))
+    })
+    names(de_genes_sign) <- names(pinfo$gene)
+    save(de_genes_sign, file = 'rda/de_genes_sign.Rdata')
+} else {
+    message(paste(Sys.time(), 'loading rda/de_genes_sign.Rdata'))
+    load('rda/de_genes_sign.Rdata', verbose = TRUE)
+}
+
+sapply(de_genes_sign, function(x) sapply(x, length))
+#            adult fetal
+# gene.DLPFC   823    30
+# gene.HIPPO   789     2
+# exon.DLPFC  1335     8
+# exon.HIPPO  1368     3
+# jxn.DLPFC    949     4
+# jxn.HIPPO    959     2
+# tx.DLPFC     827     0
+# tx.HIPPO     596     1
+
+
+
 ## Pretty venn code
 venn_cols <- brewer.pal('Set1', n = 4)
 names(venn_cols) <- names(de_genes[[1]])
 make_venn <- function(genes, title = 'DE features grouped by gene id') {
     v <- venn.diagram(genes, filename = NULL,
         main = title,
-        col = 'transparent', fill = venn_cols[names(genes)],
+        col = 'transparent', fill = venn_cols[seq_len(length(genes))],
         alpha = 0.5, margin = 0,
         main.cex = 2, cex = 2, cat.fontcase = 'bold', cat.cex = 2,
-        cat.col = venn_cols[names(genes)])
+        cat.col = venn_cols[seq_len(length(genes))])
     grid.newpage()
     grid.draw(v)
 }
@@ -319,8 +363,32 @@ make_venn(de_genes$adult, title = 'DE features grouped by gene id (adult)')
 make_venn(de_genes$adult[c('gene', 'exon', 'jxn')], title = 'DE features grouped by gene id (adult)')
 make_venn(de_genes$fetal, title = 'DE features grouped by gene id (prenatal)')
 make_venn(de_genes$fetal[c('gene', 'exon', 'jxn')], title = 'DE features grouped by gene id (prenatal)')
-dev.off()
 
+
+make_venn(de_genes_sign$adult[c(1, 3, 5, 7)], title = 'DE features grouped by gene id (adult)')
+make_venn(de_genes_sign$adult[c(1, 3, 5)], title = 'DE features grouped by gene id (adult)')
+make_venn(de_genes_sign$fetal[c(1, 3, 5, 7)], title = 'DE features grouped by gene id (prenatal)')
+make_venn(de_genes_sign$fetal[c(1, 3, 5)], title = 'DE features grouped by gene id (prenatal)')
+
+make_venn(de_genes_sign$adult[c(2, 4, 6, 8)], title = 'DE features grouped by gene id (adult)')
+make_venn(de_genes_sign$adult[c(2, 4, 6)], title = 'DE features grouped by gene id (adult)')
+make_venn(de_genes_sign$fetal[c(2, 4, 6, 8)], title = 'DE features grouped by gene id (prenatal)')
+make_venn(de_genes_sign$fetal[c(2, 4, 6)], title = 'DE features grouped by gene id (prenatal)')
+
+
+make_venn(de_genes_sign$adult[c(1:2, 3:4)], title = 'DE features grouped by gene id (adult)')
+make_venn(de_genes_sign$fetal[c(1:2, 3:4)], title = 'DE features grouped by gene id (prenatal)')
+
+make_venn(de_genes_sign$adult[c(1:2, 5:6)], title = 'DE features grouped by gene id (adult)')
+make_venn(de_genes_sign$fetal[c(1:2, 5:6)], title = 'DE features grouped by gene id (prenatal)')
+
+make_venn(de_genes_sign$adult[c(3:4, 5:6)], title = 'DE features grouped by gene id (adult)')
+make_venn(de_genes_sign$fetal[c(3:4, 5:6)], title = 'DE features grouped by gene id (prenatal)')
+
+make_venn(de_genes_sign$adult[c(1:2, 7:8)], title = 'DE features grouped by gene id (adult)')
+make_venn(de_genes_sign$fetal[c(1:2, 7:8)], title = 'DE features grouped by gene id (prenatal)')
+dev.off()
+system('rm VennDiagram*.log')
 
 ## Go analysis
 gene_ens <- lapply(names(rses), function(feat) {
@@ -367,6 +435,7 @@ run_go <- function(genes, ont = c('BP', 'MF', 'CC')) {
     })
     names(go_cluster) <- ont
     
+    message(paste(Sys.time(), 'running GO analysis for KEGG'))
     genes_ncbi <- lapply(lapply(attr(genes_venn, 'intersections'), bitr, fromType = 'ENSEMBL', toType = 'ENTREZID', OrgDb = 'org.Hs.eg.db'), function(x) x$ENTREZID)
     
     uni_ncbi <- bitr(uni, fromType = 'ENSEMBL', toType = 'ENTREZID', OrgDb = 'org.Hs.eg.db')$ENTREZID
@@ -379,19 +448,9 @@ run_go <- function(genes, ont = c('BP', 'MF', 'CC')) {
     return(go_cluster)
 }
 
-run_go_region <- function(genes, ont = c('BP', 'MF', 'CC'), set = 'adult') {
-    
-    exp <- if(set == 'adult') top$adult_gene else top$fetal_gene
-    
-    ## Split by which brain region has the hightest expr
-    genes_reg <- do.call(c, lapply(genes, function(g) {
-        s <- sign(exp$logFC[match(g, rownames(exp))])
-        s <- c('-1' = 'D', '1' = 'H')[as.character(s)]
-        split(g, s)
-    }))
-    
+run_go_novenn <- function(genes, ont = c('BP', 'MF', 'CC'), set = 'adult') {
     ## Change to ENSEMBL ids
-    genes_ens <- sapply(genes_reg, function(x) { gsub('\\..*', '', x) })
+    genes_ens <- sapply(genes, function(x) { gsub('\\..*', '', x) })
 
     ## Run GO analysis
     go_cluster <- lapply(ont, function(bp) {
@@ -405,6 +464,7 @@ run_go_region <- function(genes, ont = c('BP', 'MF', 'CC'), set = 'adult') {
     })
     names(go_cluster) <- ont
     
+    message(paste(Sys.time(), 'running GO analysis for KEGG'))
     genes_ncbi <- lapply(lapply(genes_ens, bitr, fromType = 'ENSEMBL', toType = 'ENTREZID', OrgDb = 'org.Hs.eg.db'), function(x) x$ENTREZID)
     
     uni_ncbi <- bitr(uni, fromType = 'ENSEMBL', toType = 'ENTREZID', OrgDb = 'org.Hs.eg.db')$ENTREZID
@@ -433,8 +493,8 @@ sapply(go_de_genes_fetal, class)
 
 ## Reg specific genes - by brain region
 if(!file.exists('rda/go_de_genes_brain.Rdata')) {
-    system.time( go_de_genes_brain_adult <- run_go_region(de_genes$adult[c('gene', 'exon', 'jxn')]) )
-    system.time( go_de_genes_brain_fetal <- run_go_region(de_genes$fetal[c('gene', 'exon', 'jxn')], set = 'fetal') )
+    system.time( go_de_genes_brain_adult <- run_go_novenn(de_genes_sign$adult[1:6]) )
+    system.time( go_de_genes_brain_fetal <- run_go_novenn(de_genes_sign$fetal[1:6], set = 'fetal') )
     message(paste(Sys.time(), 'saving rda/go_de_genes.Rdata'))
     save(go_de_genes_brain_adult, go_de_genes_brain_fetal, file = 'rda/go_de_genes_brain.Rdata')
 } else {
@@ -445,7 +505,7 @@ sapply(go_de_genes_brain_adult, class)
 sapply(go_de_genes_brain_fetal, class)
 
 simplify_go <- function(x) {
-    gsub('jxn', 'J', gsub('exon', 'E', gsub('gene', 'G', x)))
+    gsub('LPFC|IPPO', '', gsub('jxn', 'J', gsub('exon', 'E', gsub('gene', 'G', x))))
 }
 
 plot_go <- function(go_cluster, cat = 10) {
