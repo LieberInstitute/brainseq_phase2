@@ -13,20 +13,21 @@ snpInd = which(rownames(snpMap) == "rs10708380:150158001:TG:T")
 snpMap = snpMap[-snpInd,]
 
 ## risk loci from PGC paper
-indexLoci = read.csv("pgc_riskLoci.csv", stringsAsFactors=FALSE) ## 881
-indexIndex = which(snpMap$pos_hg19 %in% indexLoci$hg19POS)	# keep 456
+indexLoci = read.csv("pgc_riskLoci.csv", stringsAsFactors=FALSE) ## 179
+indexLoci$hg19POS = paste0(indexLoci$Chromosome, ":", indexLoci$snp_pos_hg19)
+indexIndex = which(snpMap$pos_hg19 %in% indexLoci$hg19POS)	# keep 135
 
 ## risk loci from PGC paper + rAggr proxy markers
-riskLoci = read.csv("rAggr_results_881.csv", stringsAsFactors=FALSE)	# 13,592 snps
+riskLoci = read.csv("rAggr_results_179.csv", stringsAsFactors=FALSE)	# 10,981 snps
 riskLoci_full = riskLoci
 colnames(riskLoci) = colnames(riskLoci_full) = gsub("\\.", "_", colnames(riskLoci))
 riskLoci$hg19POS1 = paste0(riskLoci$SNP1_Chr, ":", riskLoci$SNP1_Pos) 
 riskLoci$hg19POS2 = paste0(riskLoci$SNP2_Chr, ":", riskLoci$SNP2_Pos) 
 
 ## keep SNPs from list
-keepIndex = which(snpMap$pos_hg19 %in% riskLoci$hg19POS2)	# keep 10,777 snps from snpMap
+keepIndex = which(snpMap$pos_hg19 %in% riskLoci$hg19POS2)	# keep 9735 snps from snpMap
 snpMap = snpMap[keepIndex,]
-keepIndex = which(riskLoci$hg19POS2 %in% snpMap$pos_hg19)	# keep 10,754 snps from riskLoci
+keepIndex = which(riskLoci$hg19POS2 %in% snpMap$pos_hg19)	# keep 9698 snps from riskLoci
 riskLoci = riskLoci[keepIndex,]
 
 snpMap$Status = ifelse(snpMap$pos_hg19 %in% indexLoci$hg19POS, "Index","Proxy")
@@ -51,16 +52,8 @@ riskLoci_full$Status2 = ifelse(riskLoci_full$hg19POS2 %in% indexLoci$hg19POS, "I
 
 ################
 ## load table
-amyg = read.csv("raggr_suggestive881_snps_amyg_eqtls_fdr01.csv", row.names=1)
-sacc = read.csv("raggr_suggestive881_snps_sacc_eqtls_fdr01.csv", row.names=1)
-dlp = read.csv("raggr_suggestive881_snps_dlpfc_eqtls_fdr01.csv", row.names=1)
-
-## none of the 3 mismatching exons are in the significant results
-# load("/dcl01/lieber/ajaffe/lab/zandiHyde_bipolar_rnaseq/eqtl_exprs_cutoffs/eQTL_expressed_rse_dlpfc.rda")
-# u = as.data.frame(rowRanges(rse_exon)[which(rowRanges(rse_exon)$matchAmygStrand == FALSE)])$exonPos
-# dlp$featPOS = paste0(dlp$feat_chr,":",dlp$feat_start,"-",dlp$feat_end)
-# which(dlp$featPOS %in% u)
-# # integer(0)
+dlp = read.csv("raggr179snps_dlp_eqtls_fdr01.csv", row.names=1)
+hippo = read.csv("raggr179snps_hippo_eqtls_fdr01.csv", row.names=1)
 
 ## unique SNPs
 length(unique(sacc$hg19POS))
@@ -128,7 +121,11 @@ venn.diagram(list(Amygdala = amyg$Symbol, sACC = sacc$Symbol, DLPFC = dlp$Symbol
 ###### Index SNP info ##########
 ################################################################
 
-region = amyg
+## Sort riskLoci by R2 so highest linked are chosen (i.e. index matches with itself)
+riskLoci = riskLoci[order(riskLoci$Status2, decreasing=FALSE),]
+riskLoci = riskLoci[order(riskLoci$R_squared, decreasing=TRUE),]
+
+region = hippo
 
 ## note which proxy snps have a significant result
 riskLoci$proxy_FDRsig = "na"
@@ -194,12 +191,11 @@ leadVarPos = riskLoci$hg19POS1[leadVarInd]
 region$leadVariant_indicator = (region$hg19POS == leadVarPos)
 
 
-amyg = region
+hippo = region
 
 
-write.csv(sacc, file="raggr_881_snps_sacc_eqtls_fdr01.csv")
-write.csv(amyg, file="raggr_881_snps_amyg_eqtls_fdr01.csv")
-write.csv(dlp, file="raggr_881_snps_dlpfc_eqtls_fdr01.csv")
+write.csv(dlp, file="raggr_179_snps_dlp_eqtls_fdr01.csv")
+write.csv(hippo, file="raggr_179_snps_hippo_eqtls_fdr01.csv")
 
 
 
