@@ -97,9 +97,9 @@ save(enetQsva, exonMap, file = "rda/exon_wgcnaModules.rda")
     load("rda/exon_wgcnaModules.rda", verbose = TRUE)
 }
 
-table(enetQsva$colors)  ## 39 clusters. top 10:
-#    0     1     2     3     4     5     6     7     8     9    10
-# 14928   913   775   642   632   612   605   550   406   397   359
+head(table(enetQsva$colors), 11)  ## 39 clusters. top 10:
+#      0      1      2      3      4      5      6      7      8      9     10
+# 149882   9088   9024   3481   3326   3292   3039   3037   2441   2400   2244
 
 
 
@@ -140,9 +140,9 @@ if(!file.exists('rda/jxn_wgcnaModules.rda')) {
     load("rda/jxn_wgcnaModules.rda", verbose = TRUE)
 }
 
-table(jnetQsva$colors)  ## 39 clusters. top 10:
-#    0     1     2     3     4     5     6     7     8     9    10
-# 14928   913   775   642   632   612   605   550   406   397   359
+head(table(jnetQsva$colors), 11)  ## 39 clusters. top 10:
+#      0      1      2      3      4      5      6      7      8      9     10
+# 187830   7526   6955   2840   2585   2455   2088   2014   2013   1686   1610
 
 
 
