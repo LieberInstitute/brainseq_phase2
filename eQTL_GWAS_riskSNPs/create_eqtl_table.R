@@ -19,11 +19,28 @@ sigEqtlDlpfc_sub = allEqtl[allEqtl$FDR < 0.01,]
 ################
 ## metrics
 
-## total features
-nrow(sigEqtlHippo_sub)   ## 66,923
-nrow(sigEqtlDlpfc_sub) ## 106,438
+## unique SNPs and index SNPs
+length(unique(h$snps))
+length(unique(h$snps[which(h$snps %in% riskLoci$SNP1_Name)]))
+length(unique(d$snps))
+length(unique(d$snps[which(d$snps %in% riskLoci$SNP1_Name)]))
 
-## per feature
+## unique features by type
+tapply(sigEqtlHippo_sub$gene, sigEqtlHippo_sub$Type, function(x) length(unique(x)))
+# Exon Gene  Jxn   Tx
+# 857  123  507  244
+tapply(sigEqtlDlpfc_sub$gene, sigEqtlDlpfc_sub$Type, function(x) length(unique(x)))
+# Exon Gene  Jxn   Tx
+#  1363  171  659  332
+
+## total snp-feature pairs
+## from xx genes
+nrow(sigEqtlHippo_sub)   ## 66,923
+length(unique(sigEqtlHippo_sub$EnsemblGeneID))
+nrow(sigEqtlDlpfc_sub) ## 106,438
+length(unique(sigEqtlDlpfc_sub$EnsemblGeneID))
+
+## total features by type
 table(sigEqtlHippo_sub$Type)
 # Exon 	 Gene  Jxn   Tx
 # 33122  4795 19377  9629
