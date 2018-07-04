@@ -1,6 +1,6 @@
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=100G,h_vmem=100G,h_fsize=300G
+#$ -l mem_free=30G,h_vmem=30G,h_fsize=300G
 #$ -N wgcna_exon
 #$ -o logs/wgcna_exon.txt
 #$ -e logs/wgcna_exon.txt

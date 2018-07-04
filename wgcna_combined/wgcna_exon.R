@@ -134,7 +134,7 @@ dev.off()
 ################
 
 exonMap = as.data.frame(exonMap)
-rownames(exonMap) = exonMap$gencodeID
+#rownames(exonMap) = exonMap$gencodeID
 
 moduleInds = split(seq_len(nrow(exonExprsQsva)), enetQsva$colors)
 names(moduleInds) = paste0("Cluster_", names(moduleInds))
