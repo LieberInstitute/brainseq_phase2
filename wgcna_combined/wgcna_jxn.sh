@@ -1,10 +1,9 @@
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=100G,h_vmem=100G,h_fsize=300G
+#$ -l mem_free=400G,h_vmem=400G,h_fsize=300G
 #$ -N wgcna_jxn
 #$ -o logs/wgcna_jxn.txt
 #$ -e logs/wgcna_jxn.txt
-#$ -pe local 4
 #$ -m e
 #$ -hold_jid get_ind_exons_jxns
 
