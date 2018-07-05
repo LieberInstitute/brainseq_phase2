@@ -14,7 +14,7 @@ library('org.Hs.eg.db')
 library('devtools')
 
 allowWGCNAThreads()
-cores <- 1
+cores <- 2
 enableWGCNAThreads(nThreads = cores)
 
 dir.create('rda', showWarnings = FALSE)

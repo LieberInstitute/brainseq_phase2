@@ -1,10 +1,11 @@
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=400G,h_vmem=400G,h_fsize=300G
+#$ -l mem_free=200G,h_vmem=200G,h_fsize=300G
 #$ -N wgcna_jxn
 #$ -o logs/wgcna_jxn.txt
 #$ -e logs/wgcna_jxn.txt
 #$ -m e
+#$ -pe local 2
 #$ -hold_jid get_ind_exons_jxns
 
 echo "**** Job starts ****"
