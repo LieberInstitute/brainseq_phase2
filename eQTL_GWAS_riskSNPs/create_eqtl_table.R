@@ -68,7 +68,6 @@ tapply(sigEqtlDlpfc_sub$EnsemblGeneID, sigEqtlDlpfc_sub$Type, function(x) length
 # Exon Gene  Jxn   Tx
 #  270  171  204  216
 
-
 pal = brewer.pal(8,"Set1")
 venn.diagram(list(Hippo = unique(sigEqtlHippo_sub$snps), DLPFC = unique(sigEqtlDlpfc_sub$snps)), 
 	fill = pal[1:2], main="", main.pos = c(.5, .05), cat.cex = 1.9, cex=3,
@@ -94,7 +93,32 @@ venn.diagram(list(Hippo = unique(sigEqtlHippo_sub$gene[which(sigEqtlHippo_sub$Ty
 				DLPFC = unique(sigEqtlDlpfc_sub$gene[which(sigEqtlDlpfc_sub$Type=="Tx")])), 
 	fill = pal[1:2], main="", main.pos = c(.5, .05), cat.cex = 1.9, cex=3,
 	margin = .1, imagetype="png",  filename = "venn_unique_feats_Tx.png")	
-
+	
+##############################
+## PDF version, Leo's colors	
+pal = c('dark orange','skyblue3')
+v = venn.diagram(list(HIPPO = unique(sigEqtlHippo_sub$snps[which(sigEqtlHippo_sub$snps %in% riskLoci$SNP1_Name)]),
+					DLPFC = unique(sigEqtlDlpfc_sub$snps[which(sigEqtlDlpfc_sub$snps %in% riskLoci$SNP1_Name)])), 
+	fill = pal[1:2], main="", main.pos = c(.5, .05), cat.cex = 1.9, cex=3,
+	margin = .1, filename = NULL)	
+pdf('venn_unique_IndexSNP.pdf', useDingbats = FALSE)
+    grid.draw(v)
+dev.off()
+## PDF of Br Numbers
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_gene.Rdata")
+keepInd = which(colData(rse_gene)$Age > 13)
+rse_gene = rse_gene[,keepInd]
+pd = colData(rse_gene)
+pal = c('dark orange','skyblue3')
+v = venn.diagram(list(HIPPO = unique(pd$BrNum[which(pd$Region=="HIPPO")]),
+					DLPFC = unique(pd$BrNum[which(pd$Region=="DLPFC")]) ), 
+	fill = pal[1:2], main="", main.pos = c(.5, .05), cat.cex = 1.9, cex=3,
+	margin = .1, filename = NULL)	
+pdf('venn_unique_RNumbers.pdf', useDingbats = FALSE)
+    grid.draw(v)
+dev.off()
+rm(rse_gene,pd)
+##############################
 	
 ## can you guys also tabulate how many of the SNPs only associate with 1 gene
 h = sigEqtlHippo_sub[order(sigEqtlHippo_sub$snps),]
