@@ -96,7 +96,7 @@ venn.diagram(list(Hippo = unique(sigEqtlHippo_sub$gene[which(sigEqtlHippo_sub$Ty
 	
 ##############################
 ## PDF version, Leo's colors	
-pal = c('dark orange','skyblue3')
+pal = c('skyblue3','dark orange')
 v = venn.diagram(list(HIPPO = unique(sigEqtlHippo_sub$snps[which(sigEqtlHippo_sub$snps %in% riskLoci$SNP1_Name)]),
 					DLPFC = unique(sigEqtlDlpfc_sub$snps[which(sigEqtlDlpfc_sub$snps %in% riskLoci$SNP1_Name)])), 
 	fill = pal[1:2], main="", main.pos = c(.5, .05), cat.cex = 1.9, cex=3,
@@ -109,7 +109,6 @@ load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_gene.Rdata")
 keepInd = which(colData(rse_gene)$Age > 13)
 rse_gene = rse_gene[,keepInd]
 pd = colData(rse_gene)
-pal = c('dark orange','skyblue3')
 v = venn.diagram(list(HIPPO = unique(pd$BrNum[which(pd$Region=="HIPPO")]),
 					DLPFC = unique(pd$BrNum[which(pd$Region=="DLPFC")]) ), 
 	fill = pal[1:2], main="", main.pos = c(.5, .05), cat.cex = 1.9, cex=3,
