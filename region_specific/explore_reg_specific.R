@@ -167,6 +167,10 @@ if(!file.exists('rda/rep_span.Rdata')) {
         n_sign <- sum(sign(pinfo$logFC) == sign(pinfo$span_logFC) & pinfo[, pvar] < cut)
         data.frame(pvar = pvar, cutoff = cut, type = type_sub, age = age_sub, replicated = n, number_de = sum(pinfo[, pvar] < cut), total = nrow(pinfo), replicated_sign = n_sign, stringsAsFactors = FALSE)
     }, pvar = rep(rep(c('adj.P.Val', 'P.Bonf'), each = 6), 4 * 2), cut = rep(c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001), 2 * 4 * 2), type_sub = rep(rep(unique(pcheck_both$type), each = 6 * 2), 2), age_sub = rep(unique(pcheck_both$age), each = 4 * 6 * 2), SIMPLIFY = FALSE, USE.NAMES = FALSE))
+    
+    ## Fix order of features and ages
+    rep_span$age <- factor(ifelse(rep_span$age == 'fetal', 'prenatal', 'adult'), levels = c('prenatal', 'adult'))
+    rep_span$type <- factor(rep_span$type, levels = c('gene', 'exon', 'jxn', 'tx'))
     save(rep_span, file = 'rda/rep_span.Rdata')
 } else {
     message(paste(Sys.time(), 'rda/rep_span.Rdata'))
@@ -186,6 +190,7 @@ ggplot(rep_span, aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01,
 ggplot(rep_span, aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = number_de / total * 100, color = pvar)) + facet_grid(age ~ type) + ylab('Percent of DE features') + xlab('p-threshold') + geom_point() + theme_grey(base_size = 18) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(color='P-value method') + ylim(c(0, 100))
 
 dev.off()
+
 
 pdf('pdf/replication_exploration_subset.pdf', width = 8, height =  10, useDingbats = FALSE)
 ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated / number_de)) + facet_grid(type ~ age) + ylab('Replication rate') + xlab('p-value threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylim(c(0, 1)) + geom_line(aes(y = replicated / number_de, x = rep(1:6, 6)))
@@ -590,6 +595,10 @@ volcano_custom <- function(var, foo = make_volcano) {
 
     df <- df[complete.cases(df), ]
     df$age[df$age == 'fetal'] <- 'prenatal'
+    
+    ## Fix order
+    df$age <- factor(df$age, levels = c('prenatal', 'adult'))
+    df$type <- factor(df$type, levels = c('gene', 'exon', 'jxn'))
 
     g <- foo(df, v = var)
     print(g)
