@@ -1,0 +1,21 @@
+**** Job starts ****
+Fri Aug  3 10:33:22 EDT 2018
+**** JHPCE info ****
+User: lcollado
+Job id: 5386122
+Job name: step1-fastqc-gtex.dlpfc
+Hostname: compute-077
+Task id: 1
+****
+Sample id: SRR600361
+****
+Started analysis of SRR600361_1.fastq.gz
+Approx 5% complete for SRR600361_1.fastq.gz
+Approx 10% complete for SRR600361_1.fastq.gz
+Approx 15% complete for SRR600361_1.fastq.gz
+Approx 20% complete for SRR600361_1.fastq.gz
+Approx 25% complete for SRR600361_1.fastq.gz
+Approx 30% complete for SRR600361_1.fastq.gz
+Approx 35% complete for SRR600361_1.fastq.gz
+Approx 40% complete for SRR600361_1.fastq.gz
+Approx 45% complete for SRR600361_1.fastq.gz

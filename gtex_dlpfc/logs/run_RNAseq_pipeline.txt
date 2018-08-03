@@ -1,0 +1,82 @@
+**** checking that R packages are present ****
+Fri Aug  3 10:30:46 EDT 2018
+
+
+
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+**** checking that RSeQC is installed ****
+Fri Aug  3 10:31:21 EDT 2018
+**** checking that checksumdir is installed ****
+Fri Aug  3 10:31:27 EDT 2018
+**** Saving the reproducibility information in logs/pipeline_information.txt ****
+Fri Aug  3 10:31:29 EDT 2018
+**** Finding the sample information ****
+Fri Aug  3 10:32:57 EDT 2018
+[1] "Reproducibility information:"
+[1] "2018-08-03 10:33:01 EDT"
+   user  system elapsed 
+  2.564   1.177   3.807 
+Session info ----------------------------------------------------------------------------------------------------------
+ setting  value                                      
+ version  R version 3.5.0 Patched (2018-04-30 r74679)
+ system   x86_64, linux-gnu                          
+ ui       X11                                        
+ language (EN)                                       
+ collate  en_US.UTF-8                                
+ tz       US/Eastern                                 
+ date     2018-08-03                                 
+
+Packages --------------------------------------------------------------------------------------------------------------
+ package   * version date       source        
+ base      * 3.5.0   2018-05-02 local         
+ compiler    3.5.0   2018-05-02 local         
+ datasets  * 3.5.0   2018-05-02 local         
+ devtools  * 1.13.6  2018-06-27 CRAN (R 3.5.0)
+ digest      0.6.15  2018-01-28 CRAN (R 3.5.0)
+ getopt    * 1.20.2  2018-02-16 CRAN (R 3.5.0)
+ graphics  * 3.5.0   2018-05-02 local         
+ grDevices * 3.5.0   2018-05-02 local         
+ memoise     1.1.0   2017-04-21 CRAN (R 3.5.0)
+ methods   * 3.5.0   2018-05-02 local         
+ stats     * 3.5.0   2018-05-02 local         
+ utils     * 3.5.0   2018-05-02 local         
+ withr       2.1.2   2018-03-15 CRAN (R 3.5.0)
+**** Creating bash scripts for every step ****
+Creating script step1-fastqc-gtex.dlpfc
+qsub .step1-fastqc-gtex.dlpfc.sh
+Your job-array 5386122.1-108:1 ("step1-fastqc-gtex.dlpfc") has been submitted
+Creating script step2-trim-gtex.dlpfc
+qsub .step2-trim-gtex.dlpfc.sh
+Your job-array 5386123.1-108:1 ("step2-trim-gtex.dlpfc") has been submitted
+Creating script step3-hisat2-gtex.dlpfc
+qsub .step3-hisat2-gtex.dlpfc.sh
+Your job-array 5386124.1-108:1 ("step3-hisat2-gtex.dlpfc") has been submitted
+Creating script step3b-infer-strandness-gtex.dlpfc
+qsub .step3b-infer-strandness-gtex.dlpfc.sh
+Your job 5386125 ("step3b-infer-strandness-gtex.dlpfc") has been submitted
+Creating script step4-featCounts-gtex.dlpfc
+qsub .step4-featCounts-gtex.dlpfc.sh
+Your job-array 5386126.1-108:1 ("step4-featCounts-gtex.dlpfc") has been submitted
+qsub .step4-featCounts-gtex.dlpfc_clean.sh
+Your job 5386127 ("step4-featCounts-gtex.dlpfc_clean") has been submitted
+Creating script step5-coverage-gtex.dlpfc
+qsub .step5-coverage-gtex.dlpfc.sh
+Your job-array 5386128.1-108:1 ("step5-coverage-gtex.dlpfc") has been submitted
+Creating script step5b-meanCoverage-gtex.dlpfc
+qsub .step5b-meanCoverage-gtex.dlpfc.sh
+Your job 5386129 ("step5b-meanCoverage-gtex.dlpfc") has been submitted
+Ignoring --cores 8 and will use 2 cores
+Creating script step6-txQuant-gtex.dlpfc
+qsub .step6-txQuant-gtex.dlpfc.sh
+Your job-array 5386130.1-108:1 ("step6-txQuant-gtex.dlpfc") has been submitted
+Creating script step7-Rcounts-gtex.dlpfc
+qsub .step7-Rcounts-gtex.dlpfc.sh
+Your job 5386131 ("step7-Rcounts-gtex.dlpfc") has been submitted
+Creating script step8-callVariants-gtex.dlpfc
+qsub .step8-callVariants-gtex.dlpfc.sh
+Your job-array 5386132.1-108:1 ("step8-callVariants-gtex.dlpfc") has been submitted
+Creating script step8b-mergeVariantCalls-gtex.dlpfc
+qsub .step8b-mergeVariantCalls-gtex.dlpfc.sh
+Your job 5386133 ("step8b-mergeVariantCalls-gtex.dlpfc") has been submitted
+qsub .step9-findERs-gtex.dlpfc.sh
+Your job 5386134 ("step9-findERs-gtex.dlpfc") has been submitted
