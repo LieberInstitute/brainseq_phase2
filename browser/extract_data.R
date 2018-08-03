@@ -1,3 +1,5 @@
+## Adapted from /users/ajaffe/Lieber/Projects/RNAseq/DLPFC_eQTL_paper/joint/filter_replicated_eqtls.R
+
 library('SummarizedExperiment')
 library('jaffelab')
 library('devtools')
@@ -22,6 +24,10 @@ snpMap$pos_hg19 = paste0(snpMap$CHR, ":", snpMap$POS)
 # snp = snp[keepIndex,]
 
 pd = colData(rse_gene)
+
+identical(pd$BrNum, rownames(mds))
+identical(pd$BrNum, colnames(snp))
+
 mds = mds[pd$BrNum,]
 snp = snp[,pd$BrNum]
 rownames(mds) = colnames(snp) = pd$RNum
