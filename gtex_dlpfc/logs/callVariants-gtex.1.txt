@@ -1,0 +1,14 @@
+**** Job starts ****
+Tue Aug  7 11:23:56 EDT 2018
+**** JHPCE info ****
+User: lcollado
+Job id: 5394047
+Job name: step8-callVariants-gtex.dlpfc
+Hostname: compute-102
+Task id: 1
+****
+Sample id: SRR600361
+****
+[mpileup] 1 samples in 1 input files
+**** Job ends ****
+Tue Aug  7 11:27:15 EDT 2018

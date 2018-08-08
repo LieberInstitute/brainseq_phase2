@@ -1,0 +1,171 @@
+**** Job starts ****
+Tue Aug  7 11:24:57 EDT 2018
+**** JHPCE info ****
+User: lcollado
+Job id: 5394039
+Job name: step3b-infer-strandness-gtex.dlpfc
+Hostname: compute-056
+****
+2018-08-07 11:25:00 processing HISAT2_out/infer_strandness/SRR1072367.txt
+2018-08-07 11:25:00 processing HISAT2_out/infer_strandness/SRR1084649.txt
+2018-08-07 11:25:00 processing HISAT2_out/infer_strandness/SRR1084842.txt
+2018-08-07 11:25:00 processing HISAT2_out/infer_strandness/SRR1085495.txt
+2018-08-07 11:25:00 processing HISAT2_out/infer_strandness/SRR1099499.txt
+2018-08-07 11:25:00 processing HISAT2_out/infer_strandness/SRR1102055.txt
+2018-08-07 11:25:00 processing HISAT2_out/infer_strandness/SRR1314163.txt
+2018-08-07 11:25:00 processing HISAT2_out/infer_strandness/SRR1315970.txt
+2018-08-07 11:25:00 processing HISAT2_out/infer_strandness/SRR1316940.txt
+2018-08-07 11:25:00 processing HISAT2_out/infer_strandness/SRR1317344.txt
+2018-08-07 11:25:00 processing HISAT2_out/infer_strandness/SRR1318163.txt
+2018-08-07 11:25:01 processing HISAT2_out/infer_strandness/SRR1320115.txt
+2018-08-07 11:25:01 processing HISAT2_out/infer_strandness/SRR1320963.txt
+2018-08-07 11:25:01 processing HISAT2_out/infer_strandness/SRR1326179.txt
+2018-08-07 11:25:01 processing HISAT2_out/infer_strandness/SRR1328895.txt
+2018-08-07 11:25:01 processing HISAT2_out/infer_strandness/SRR1331579.txt
+2018-08-07 11:25:01 processing HISAT2_out/infer_strandness/SRR1333741.txt
+2018-08-07 11:25:01 processing HISAT2_out/infer_strandness/SRR1336548.txt
+2018-08-07 11:25:01 processing HISAT2_out/infer_strandness/SRR1337098.txt
+2018-08-07 11:25:01 processing HISAT2_out/infer_strandness/SRR1337412.txt
+2018-08-07 11:25:01 processing HISAT2_out/infer_strandness/SRR1340508.txt
+2018-08-07 11:25:01 processing HISAT2_out/infer_strandness/SRR1341365.txt
+2018-08-07 11:25:01 processing HISAT2_out/infer_strandness/SRR1341763.txt
+2018-08-07 11:25:01 processing HISAT2_out/infer_strandness/SRR1342045.txt
+2018-08-07 11:25:02 processing HISAT2_out/infer_strandness/SRR1348159.txt
+2018-08-07 11:25:02 processing HISAT2_out/infer_strandness/SRR1348360.txt
+2018-08-07 11:25:02 processing HISAT2_out/infer_strandness/SRR1354446.txt
+2018-08-07 11:25:02 processing HISAT2_out/infer_strandness/SRR1356444.txt
+2018-08-07 11:25:02 processing HISAT2_out/infer_strandness/SRR1356619.txt
+2018-08-07 11:25:02 processing HISAT2_out/infer_strandness/SRR1357478.txt
+2018-08-07 11:25:02 processing HISAT2_out/infer_strandness/SRR1360128.txt
+2018-08-07 11:25:02 processing HISAT2_out/infer_strandness/SRR1360563.txt
+2018-08-07 11:25:02 processing HISAT2_out/infer_strandness/SRR1361567.txt
+2018-08-07 11:25:02 processing HISAT2_out/infer_strandness/SRR1367943.txt
+2018-08-07 11:25:02 processing HISAT2_out/infer_strandness/SRR1368772.txt
+2018-08-07 11:25:02 processing HISAT2_out/infer_strandness/SRR1375571.txt
+2018-08-07 11:25:02 processing HISAT2_out/infer_strandness/SRR1381673.txt
+2018-08-07 11:25:02 processing HISAT2_out/infer_strandness/SRR1386708.txt
+2018-08-07 11:25:02 processing HISAT2_out/infer_strandness/SRR1387264.txt
+2018-08-07 11:25:03 processing HISAT2_out/infer_strandness/SRR1387809.txt
+2018-08-07 11:25:03 processing HISAT2_out/infer_strandness/SRR1389979.txt
+2018-08-07 11:25:03 processing HISAT2_out/infer_strandness/SRR1390601.txt
+2018-08-07 11:25:03 processing HISAT2_out/infer_strandness/SRR1399779.txt
+2018-08-07 11:25:03 processing HISAT2_out/infer_strandness/SRR1402900.txt
+2018-08-07 11:25:03 processing HISAT2_out/infer_strandness/SRR1408208.txt
+2018-08-07 11:25:03 processing HISAT2_out/infer_strandness/SRR1408368.txt
+2018-08-07 11:25:03 processing HISAT2_out/infer_strandness/SRR1413562.txt
+2018-08-07 11:25:03 processing HISAT2_out/infer_strandness/SRR1414897.txt
+2018-08-07 11:25:03 processing HISAT2_out/infer_strandness/SRR1415234.txt
+2018-08-07 11:25:03 processing HISAT2_out/infer_strandness/SRR1416477.txt
+2018-08-07 11:25:03 processing HISAT2_out/infer_strandness/SRR1416754.txt
+2018-08-07 11:25:03 processing HISAT2_out/infer_strandness/SRR1418127.txt
+2018-08-07 11:25:04 processing HISAT2_out/infer_strandness/SRR1418837.txt
+2018-08-07 11:25:04 processing HISAT2_out/infer_strandness/SRR1421177.txt
+2018-08-07 11:25:04 processing HISAT2_out/infer_strandness/SRR1432123.txt
+2018-08-07 11:25:04 processing HISAT2_out/infer_strandness/SRR1434526.txt
+2018-08-07 11:25:04 processing HISAT2_out/infer_strandness/SRR1435020.txt
+2018-08-07 11:25:04 processing HISAT2_out/infer_strandness/SRR1435293.txt
+2018-08-07 11:25:04 processing HISAT2_out/infer_strandness/SRR1435775.txt
+2018-08-07 11:25:04 processing HISAT2_out/infer_strandness/SRR1437538.txt
+2018-08-07 11:25:04 processing HISAT2_out/infer_strandness/SRR1439873.txt
+2018-08-07 11:25:04 processing HISAT2_out/infer_strandness/SRR1440986.txt
+2018-08-07 11:25:04 processing HISAT2_out/infer_strandness/SRR1442571.txt
+2018-08-07 11:25:04 processing HISAT2_out/infer_strandness/SRR1444622.txt
+2018-08-07 11:25:04 processing HISAT2_out/infer_strandness/SRR1444678.txt
+2018-08-07 11:25:04 processing HISAT2_out/infer_strandness/SRR1447693.txt
+2018-08-07 11:25:05 processing HISAT2_out/infer_strandness/SRR1453341.txt
+2018-08-07 11:25:05 processing HISAT2_out/infer_strandness/SRR1453851.txt
+2018-08-07 11:25:05 processing HISAT2_out/infer_strandness/SRR1454803.txt
+2018-08-07 11:25:05 processing HISAT2_out/infer_strandness/SRR1455925.txt
+2018-08-07 11:25:05 processing HISAT2_out/infer_strandness/SRR1457482.txt
+2018-08-07 11:25:05 processing HISAT2_out/infer_strandness/SRR1457503.txt
+2018-08-07 11:25:05 processing HISAT2_out/infer_strandness/SRR1464373.txt
+2018-08-07 11:25:05 processing HISAT2_out/infer_strandness/SRR1468514.txt
+2018-08-07 11:25:05 processing HISAT2_out/infer_strandness/SRR1468955.txt
+2018-08-07 11:25:05 processing HISAT2_out/infer_strandness/SRR1471817.txt
+2018-08-07 11:25:05 processing HISAT2_out/infer_strandness/SRR1471943.txt
+2018-08-07 11:25:05 processing HISAT2_out/infer_strandness/SRR1474553.txt
+2018-08-07 11:25:06 processing HISAT2_out/infer_strandness/SRR1474777.txt
+2018-08-07 11:25:06 processing HISAT2_out/infer_strandness/SRR1476571.txt
+2018-08-07 11:25:06 processing HISAT2_out/infer_strandness/SRR1485459.txt
+2018-08-07 11:25:06 processing HISAT2_out/infer_strandness/SRR1487194.txt
+2018-08-07 11:25:06 processing HISAT2_out/infer_strandness/SRR1487362.txt
+2018-08-07 11:25:06 processing HISAT2_out/infer_strandness/SRR1487685.txt
+2018-08-07 11:25:06 processing HISAT2_out/infer_strandness/SRR1488651.txt
+2018-08-07 11:25:06 processing HISAT2_out/infer_strandness/SRR1500868.txt
+2018-08-07 11:25:06 processing HISAT2_out/infer_strandness/SRR595926.txt
+2018-08-07 11:25:06 processing HISAT2_out/infer_strandness/SRR600361.txt
+2018-08-07 11:25:06 processing HISAT2_out/infer_strandness/SRR602314.txt
+2018-08-07 11:25:07 processing HISAT2_out/infer_strandness/SRR602516.txt
+2018-08-07 11:25:07 processing HISAT2_out/infer_strandness/SRR602704.txt
+2018-08-07 11:25:07 processing HISAT2_out/infer_strandness/SRR604262.txt
+2018-08-07 11:25:07 processing HISAT2_out/infer_strandness/SRR604456.txt
+2018-08-07 11:25:07 processing HISAT2_out/infer_strandness/SRR607337.txt
+2018-08-07 11:25:07 processing HISAT2_out/infer_strandness/SRR613627.txt
+2018-08-07 11:25:07 processing HISAT2_out/infer_strandness/SRR614802.txt
+2018-08-07 11:25:07 processing HISAT2_out/infer_strandness/SRR657635.txt
+2018-08-07 11:25:07 processing HISAT2_out/infer_strandness/SRR657754.txt
+2018-08-07 11:25:07 processing HISAT2_out/infer_strandness/SRR657777.txt
+2018-08-07 11:25:07 processing HISAT2_out/infer_strandness/SRR658307.txt
+2018-08-07 11:25:07 processing HISAT2_out/infer_strandness/SRR661349.txt
+2018-08-07 11:25:08 processing HISAT2_out/infer_strandness/SRR661973.txt
+2018-08-07 11:25:08 processing HISAT2_out/infer_strandness/SRR662233.txt
+2018-08-07 11:25:08 processing HISAT2_out/infer_strandness/SRR662534.txt
+2018-08-07 11:25:08 processing HISAT2_out/infer_strandness/SRR663633.txt
+2018-08-07 11:25:08 processing HISAT2_out/infer_strandness/SRR814967.txt
+2018-08-07 11:25:08 processing HISAT2_out/infer_strandness/SRR818033.txt
+2018-08-07 11:25:08 processing HISAT2_out/infer_strandness/SRR818210.txt
+$infer_library
+
+PairEnd 
+    108 
+
+$infer_pattern1
+
+1++,1--,2+-,2-+ 
+            108 
+
+$infer_pattern2
+
+1+-,1-+,2++,2-- 
+            108 
+
+ infer_frac_undetermined infer_frac_pattern1 infer_frac_pattern2
+ Min.   :0.3069          Min.   :0.003200    Min.   :0.003400   
+ 1st Qu.:0.9781          1st Qu.:0.005925    1st Qu.:0.006275   
+ Median :0.9838          Median :0.007750    Median :0.008150   
+ Mean   :0.9564          Mean   :0.021647    Mean   :0.021941   
+ 3rd Qu.:0.9879          3rd Qu.:0.010625    3rd Qu.:0.011100   
+ Max.   :0.9930          Max.   :0.346500    Max.   :0.346600   
+null device 
+          1 
+2018-08-07 11:25:08 will use the following pattern for bam2wig: none
+   user  system elapsed 
+  1.467   0.351  10.837 
+2018-08-07 11:25:08
+Session info ----------------------------------------------------------------------------------------------------------
+ setting  value                                      
+ version  R version 3.5.0 Patched (2018-04-30 r74679)
+ system   x86_64, linux-gnu                          
+ ui       X11                                        
+ language (EN)                                       
+ collate  en_US.UTF-8                                
+ tz       US/Eastern                                 
+ date     2018-08-07                                 
+
+Packages --------------------------------------------------------------------------------------------------------------
+ package   * version date       source        
+ base      * 3.5.0   2018-05-02 local         
+ compiler    3.5.0   2018-05-02 local         
+ datasets  * 3.5.0   2018-05-02 local         
+ devtools  * 1.13.6  2018-06-27 CRAN (R 3.5.0)
+ digest      0.6.15  2018-01-28 CRAN (R 3.5.0)
+ getopt    * 1.20.2  2018-02-16 CRAN (R 3.5.0)
+ graphics  * 3.5.0   2018-05-02 local         
+ grDevices * 3.5.0   2018-05-02 local         
+ memoise     1.1.0   2017-04-21 CRAN (R 3.5.0)
+ methods   * 3.5.0   2018-05-02 local         
+ stats     * 3.5.0   2018-05-02 local         
+ utils     * 3.5.0   2018-05-02 local         
+ withr       2.1.2   2018-03-15 CRAN (R 3.5.0)
+**** Job ends ****
+Tue Aug  7 11:25:09 EDT 2018

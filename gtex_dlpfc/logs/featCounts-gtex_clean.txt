@@ -1,0 +1,10 @@
+**** Job starts ****
+Wed Aug  8 01:10:45 EDT 2018
+**** JHPCE info ****
+User: lcollado
+Job id: 5394041
+Job name: step4-featCounts-gtex.dlpfc_clean
+Hostname: compute-047
+****
+**** Job ends ****
+Wed Aug  8 01:10:46 EDT 2018

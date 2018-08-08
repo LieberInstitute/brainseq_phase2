@@ -1,0 +1,14 @@
+**** Job starts ****
+Fri Aug  3 11:51:13 EDT 2018
+**** JHPCE info ****
+User: lcollado
+Job id: 5386123
+Job name: step2-trim-gtex.dlpfc
+Hostname: compute-055
+Task id: 1
+****
+Sample id: SRR600361
+****
+No trimming required!
+**** Job ends ****
+Fri Aug  3 11:51:13 EDT 2018

@@ -1,6 +1,6 @@
 # Usage:
 # qrsh -l bluejay,mem_free=100G,h_vmem=100G,h_fsize=100G
-# module load conda_R/3.4.x
+# module load conda_R/3.5
 # Rscript subset_gtex.R  > logs/subset_gtex.txt 2>&1
 
 library('SummarizedExperiment')

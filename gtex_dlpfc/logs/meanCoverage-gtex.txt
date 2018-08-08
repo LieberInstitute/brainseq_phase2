@@ -1,0 +1,15 @@
+**** Job starts ****
+Tue Aug  7 21:27:35 EDT 2018
+**** JHPCE info ****
+User: lcollado
+Job id: 5394043
+Job name: step5b-meanCoverage-gtex.dlpfc
+Hostname: compute-075
+****
+Unloading conda_R/3.5
+*****************************
+Tue Aug  7 21:27:37 EDT 2018
+Processing unstranded data
+*****************************
+**** Job ends ****
+Wed Aug  8 02:19:44 EDT 2018

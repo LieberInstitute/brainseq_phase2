@@ -1,0 +1,19 @@
+**** Job starts ****
+Fri Aug  3 12:05:33 EDT 2018
+**** JHPCE info ****
+User: lcollado
+Job id: 5386124
+Job name: step3-hisat2-gtex.dlpfc
+Hostname: compute-082
+Task id: 1
+****
+Sample id: SRR600361
+****
+HISAT2 alignment run on original untrimmed paired-end reads
+**** Filtering unmapped segments ****
+Fri Aug  3 12:21:44 EDT 2018
+[bam_sort_core] merging from 40 files...
+**** Inferring strandedness with infer_experiment.py ****
+Fri Aug  3 13:31:49 EDT 2018
+**** Job ends ****
+Fri Aug  3 13:31:59 EDT 2018
