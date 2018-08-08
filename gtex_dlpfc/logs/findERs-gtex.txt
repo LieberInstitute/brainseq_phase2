@@ -9448,3 +9448,610 @@ No methods found in package ‘IRanges’ for request: ‘subset’ when loading
 2018-08-08 13:32:25 loadCoverage: loading BigWig file Coverage/mean.bw
 2018-08-08 13:32:26 loadCoverage: applying the cutoff to the merged data
 2018-08-08 13:32:26 filterData: originally there were 2043 rows, now there are 2043 rows. Meaning that 0 percent was filtered.
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:33:05 processing KI270417.1 with cutoff 6.4
+2018-08-08 13:33:05 found no regions for KI270417.1 with cutoff 6.4
+2018-08-08 13:33:06 processing KI270417.1 with cutoff 6.5
+2018-08-08 13:33:06 found no regions for KI270417.1 with cutoff 6.5
+2018-08-08 13:33:06 processing KI270417.1 with cutoff 6.6
+2018-08-08 13:33:06 found no regions for KI270417.1 with cutoff 6.6
+2018-08-08 13:33:06 processing KI270417.1 with cutoff 6.7
+2018-08-08 13:33:06 found no regions for KI270417.1 with cutoff 6.7
+2018-08-08 13:33:06 processing KI270417.1 with cutoff 6.8
+2018-08-08 13:33:06 found no regions for KI270417.1 with cutoff 6.8
+2018-08-08 13:33:06 processing KI270417.1 with cutoff 6.9
+2018-08-08 13:33:06 found no regions for KI270417.1 with cutoff 6.9
+2018-08-08 13:33:06 processing KI270417.1 with cutoff 7
+2018-08-08 13:33:06 found no regions for KI270417.1 with cutoff 7
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:33:07 processing KI270417.1 with cutoff 5.7
+2018-08-08 13:33:07 found no regions for KI270417.1 with cutoff 5.7
+2018-08-08 13:33:07 processing KI270417.1 with cutoff 5.8
+2018-08-08 13:33:07 found no regions for KI270417.1 with cutoff 5.8
+2018-08-08 13:33:07 processing KI270417.1 with cutoff 5.9
+2018-08-08 13:33:07 found no regions for KI270417.1 with cutoff 5.9
+2018-08-08 13:33:07 processing KI270417.1 with cutoff 6
+2018-08-08 13:33:07 found no regions for KI270417.1 with cutoff 6
+2018-08-08 13:33:07 processing KI270417.1 with cutoff 6.1
+2018-08-08 13:33:07 found no regions for KI270417.1 with cutoff 6.1
+2018-08-08 13:33:07 processing KI270417.1 with cutoff 6.2
+2018-08-08 13:33:07 found no regions for KI270417.1 with cutoff 6.2
+2018-08-08 13:33:08 processing KI270417.1 with cutoff 6.3
+2018-08-08 13:33:08 found no regions for KI270417.1 with cutoff 6.3
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:33:08 processing KI270417.1 with cutoff 0.2
+2018-08-08 13:33:08 found no regions for KI270417.1 with cutoff 0.2
+2018-08-08 13:33:08 processing KI270417.1 with cutoff 0.3
+2018-08-08 13:33:08 found no regions for KI270417.1 with cutoff 0.3
+2018-08-08 13:33:08 processing KI270417.1 with cutoff 0.4
+2018-08-08 13:33:08 found no regions for KI270417.1 with cutoff 0.4
+2018-08-08 13:33:08 processing KI270417.1 with cutoff 0.5
+2018-08-08 13:33:08 found no regions for KI270417.1 with cutoff 0.5
+2018-08-08 13:33:08 processing KI270417.1 with cutoff 0.6
+2018-08-08 13:33:08 found no regions for KI270417.1 with cutoff 0.6
+2018-08-08 13:33:08 processing KI270417.1 with cutoff 0.7
+2018-08-08 13:33:08 found no regions for KI270417.1 with cutoff 0.7
+2018-08-08 13:33:08 processing KI270417.1 with cutoff 0.8
+2018-08-08 13:33:08 found no regions for KI270417.1 with cutoff 0.8
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:33:08 processing KI270417.1 with cutoff 0.9
+2018-08-08 13:33:08 found no regions for KI270417.1 with cutoff 0.9
+2018-08-08 13:33:08 processing KI270417.1 with cutoff 1
+2018-08-08 13:33:09 found no regions for KI270417.1 with cutoff 1
+2018-08-08 13:33:09 processing KI270417.1 with cutoff 1.1
+2018-08-08 13:33:09 found no regions for KI270417.1 with cutoff 1.1
+2018-08-08 13:33:09 processing KI270417.1 with cutoff 1.2
+2018-08-08 13:33:09 found no regions for KI270417.1 with cutoff 1.2
+2018-08-08 13:33:09 processing KI270417.1 with cutoff 1.3
+2018-08-08 13:33:09 found no regions for KI270417.1 with cutoff 1.3
+2018-08-08 13:33:09 processing KI270417.1 with cutoff 1.4
+2018-08-08 13:33:09 found no regions for KI270417.1 with cutoff 1.4
+2018-08-08 13:33:09 processing KI270417.1 with cutoff 1.5
+2018-08-08 13:33:09 found no regions for KI270417.1 with cutoff 1.5
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:33:09 processing KI270417.1 with cutoff 4.3
+2018-08-08 13:33:09 found no regions for KI270417.1 with cutoff 4.3
+2018-08-08 13:33:09 processing KI270417.1 with cutoff 4.4
+2018-08-08 13:33:09 found no regions for KI270417.1 with cutoff 4.4
+2018-08-08 13:33:09 processing KI270417.1 with cutoff 4.5
+2018-08-08 13:33:09 found no regions for KI270417.1 with cutoff 4.5
+2018-08-08 13:33:09 processing KI270417.1 with cutoff 4.6
+2018-08-08 13:33:09 found no regions for KI270417.1 with cutoff 4.6
+2018-08-08 13:33:09 processing KI270417.1 with cutoff 4.7
+2018-08-08 13:33:09 found no regions for KI270417.1 with cutoff 4.7
+2018-08-08 13:33:09 processing KI270417.1 with cutoff 4.8
+2018-08-08 13:33:09 found no regions for KI270417.1 with cutoff 4.8
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 4.9
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 4.9
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:33:09 processing KI270417.1 with cutoff 3.7
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 3.7
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 3.8
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 3.8
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 3.9
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 3.9
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 4
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 4
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 4.1
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 4.1
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 4.2
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 4.2
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 1.6
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 1.6
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 1.7
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 1.7
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 1.8
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 1.8
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 1.9
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 1.9
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 2
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 2
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 2.1
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 2.1
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 2.2
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 2.2
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 3
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 3
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 3.1
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 3.1
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 3.2
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 3.2
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 3.3
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 3.3
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 3.4
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 3.4
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 3.5
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 3.5
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 3.6
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 3.6
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:33:10 processing KI270417.1 with cutoff 2.3
+2018-08-08 13:33:10 found no regions for KI270417.1 with cutoff 2.3
+2018-08-08 13:33:11 processing KI270417.1 with cutoff 2.4
+2018-08-08 13:33:11 found no regions for KI270417.1 with cutoff 2.4
+2018-08-08 13:33:11 processing KI270417.1 with cutoff 2.5
+2018-08-08 13:33:11 found no regions for KI270417.1 with cutoff 2.5
+2018-08-08 13:33:11 processing KI270417.1 with cutoff 2.6
+2018-08-08 13:33:11 found no regions for KI270417.1 with cutoff 2.6
+2018-08-08 13:33:11 processing KI270417.1 with cutoff 2.7
+2018-08-08 13:33:11 found no regions for KI270417.1 with cutoff 2.7
+2018-08-08 13:33:11 processing KI270417.1 with cutoff 2.8
+2018-08-08 13:33:11 found no regions for KI270417.1 with cutoff 2.8
+2018-08-08 13:33:11 processing KI270417.1 with cutoff 2.9
+2018-08-08 13:33:11 found no regions for KI270417.1 with cutoff 2.9
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:33:17 processing KI270417.1 with cutoff 5
+2018-08-08 13:33:17 found no regions for KI270417.1 with cutoff 5
+2018-08-08 13:33:17 processing KI270417.1 with cutoff 5.1
+2018-08-08 13:33:17 found no regions for KI270417.1 with cutoff 5.1
+2018-08-08 13:33:17 processing KI270417.1 with cutoff 5.2
+2018-08-08 13:33:17 found no regions for KI270417.1 with cutoff 5.2
+2018-08-08 13:33:17 processing KI270417.1 with cutoff 5.3
+2018-08-08 13:33:17 found no regions for KI270417.1 with cutoff 5.3
+2018-08-08 13:33:17 processing KI270417.1 with cutoff 5.4
+2018-08-08 13:33:18 found no regions for KI270417.1 with cutoff 5.4
+2018-08-08 13:33:18 processing KI270417.1 with cutoff 5.5
+2018-08-08 13:33:18 found no regions for KI270417.1 with cutoff 5.5
+2018-08-08 13:33:18 processing KI270417.1 with cutoff 5.6
+2018-08-08 13:33:18 found no regions for KI270417.1 with cutoff 5.6
+2018-08-08 13:33:18 loading meanCov for KI270418.1
+2018-08-08 13:33:18 loadCoverage: loading BigWig file Coverage/mean.bw
+2018-08-08 13:33:18 loadCoverage: applying the cutoff to the merged data
+2018-08-08 13:33:19 filterData: originally there were 2145 rows, now there are 2145 rows. Meaning that 0 percent was filtered.
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:34:03 processing KI270418.1 with cutoff 1.6
+2018-08-08 13:34:04 found no regions for KI270418.1 with cutoff 1.6
+2018-08-08 13:34:04 processing KI270418.1 with cutoff 1.7
+2018-08-08 13:34:04 found no regions for KI270418.1 with cutoff 1.7
+2018-08-08 13:34:04 processing KI270418.1 with cutoff 1.8
+2018-08-08 13:34:04 found no regions for KI270418.1 with cutoff 1.8
+2018-08-08 13:34:04 processing KI270418.1 with cutoff 1.9
+2018-08-08 13:34:04 found no regions for KI270418.1 with cutoff 1.9
+2018-08-08 13:34:04 processing KI270418.1 with cutoff 2
+2018-08-08 13:34:04 found no regions for KI270418.1 with cutoff 2
+2018-08-08 13:34:04 processing KI270418.1 with cutoff 2.1
+2018-08-08 13:34:04 found no regions for KI270418.1 with cutoff 2.1
+2018-08-08 13:34:04 processing KI270418.1 with cutoff 2.2
+2018-08-08 13:34:04 found no regions for KI270418.1 with cutoff 2.2
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:34:08 processing KI270418.1 with cutoff 3
+2018-08-08 13:34:08 found no regions for KI270418.1 with cutoff 3
+2018-08-08 13:34:09 processing KI270418.1 with cutoff 3.1
+2018-08-08 13:34:09 found no regions for KI270418.1 with cutoff 3.1
+2018-08-08 13:34:09 processing KI270418.1 with cutoff 3.2
+2018-08-08 13:34:09 found no regions for KI270418.1 with cutoff 3.2
+2018-08-08 13:34:09 processing KI270418.1 with cutoff 3.3
+2018-08-08 13:34:09 found no regions for KI270418.1 with cutoff 3.3
+2018-08-08 13:34:09 processing KI270418.1 with cutoff 3.4
+2018-08-08 13:34:09 found no regions for KI270418.1 with cutoff 3.4
+2018-08-08 13:34:09 processing KI270418.1 with cutoff 3.5
+2018-08-08 13:34:09 found no regions for KI270418.1 with cutoff 3.5
+2018-08-08 13:34:09 processing KI270418.1 with cutoff 3.6
+2018-08-08 13:34:09 found no regions for KI270418.1 with cutoff 3.6
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:34:10 processing KI270418.1 with cutoff 0.9
+2018-08-08 13:34:10 found no regions for KI270418.1 with cutoff 0.9
+2018-08-08 13:34:10 processing KI270418.1 with cutoff 1
+2018-08-08 13:34:10 found no regions for KI270418.1 with cutoff 1
+2018-08-08 13:34:10 processing KI270418.1 with cutoff 1.1
+2018-08-08 13:34:10 found no regions for KI270418.1 with cutoff 1.1
+2018-08-08 13:34:10 processing KI270418.1 with cutoff 1.2
+2018-08-08 13:34:10 found no regions for KI270418.1 with cutoff 1.2
+2018-08-08 13:34:10 processing KI270418.1 with cutoff 1.3
+2018-08-08 13:34:10 found no regions for KI270418.1 with cutoff 1.3
+2018-08-08 13:34:10 processing KI270418.1 with cutoff 1.4
+2018-08-08 13:34:11 found no regions for KI270418.1 with cutoff 1.4
+2018-08-08 13:34:11 processing KI270418.1 with cutoff 1.5
+2018-08-08 13:34:11 found no regions for KI270418.1 with cutoff 1.5
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:34:12 processing KI270418.1 with cutoff 6.4
+2018-08-08 13:34:12 found no regions for KI270418.1 with cutoff 6.4
+2018-08-08 13:34:12 processing KI270418.1 with cutoff 6.5
+2018-08-08 13:34:12 found no regions for KI270418.1 with cutoff 6.5
+2018-08-08 13:34:12 processing KI270418.1 with cutoff 6.6
+2018-08-08 13:34:12 found no regions for KI270418.1 with cutoff 6.6
+2018-08-08 13:34:12 processing KI270418.1 with cutoff 6.7
+2018-08-08 13:34:12 found no regions for KI270418.1 with cutoff 6.7
+2018-08-08 13:34:12 processing KI270418.1 with cutoff 6.8
+2018-08-08 13:34:12 found no regions for KI270418.1 with cutoff 6.8
+2018-08-08 13:34:12 processing KI270418.1 with cutoff 6.9
+2018-08-08 13:34:13 found no regions for KI270418.1 with cutoff 6.9
+2018-08-08 13:34:13 processing KI270418.1 with cutoff 7
+2018-08-08 13:34:13 found no regions for KI270418.1 with cutoff 7
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:34:12 processing KI270418.1 with cutoff 4.3
+2018-08-08 13:34:12 found no regions for KI270418.1 with cutoff 4.3
+2018-08-08 13:34:12 processing KI270418.1 with cutoff 4.4
+2018-08-08 13:34:12 found no regions for KI270418.1 with cutoff 4.4
+2018-08-08 13:34:12 processing KI270418.1 with cutoff 4.5
+2018-08-08 13:34:12 found no regions for KI270418.1 with cutoff 4.5
+2018-08-08 13:34:12 processing KI270418.1 with cutoff 4.6
+2018-08-08 13:34:12 found no regions for KI270418.1 with cutoff 4.6
+2018-08-08 13:34:12 processing KI270418.1 with cutoff 4.7
+2018-08-08 13:34:12 found no regions for KI270418.1 with cutoff 4.7
+2018-08-08 13:34:12 processing KI270418.1 with cutoff 4.8
+2018-08-08 13:34:13 found no regions for KI270418.1 with cutoff 4.8
+2018-08-08 13:34:13 processing KI270418.1 with cutoff 4.9
+2018-08-08 13:34:13 found no regions for KI270418.1 with cutoff 4.9
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:34:12 processing KI270418.1 with cutoff 3.7
+2018-08-08 13:34:12 found no regions for KI270418.1 with cutoff 3.7
+2018-08-08 13:34:12 processing KI270418.1 with cutoff 3.8
+2018-08-08 13:34:12 found no regions for KI270418.1 with cutoff 3.8
+2018-08-08 13:34:12 processing KI270418.1 with cutoff 3.9
+2018-08-08 13:34:12 found no regions for KI270418.1 with cutoff 3.9
+2018-08-08 13:34:12 processing KI270418.1 with cutoff 4
+2018-08-08 13:34:12 found no regions for KI270418.1 with cutoff 4
+2018-08-08 13:34:12 processing KI270418.1 with cutoff 4.1
+2018-08-08 13:34:12 found no regions for KI270418.1 with cutoff 4.1
+2018-08-08 13:34:13 processing KI270418.1 with cutoff 4.2
+2018-08-08 13:34:13 found no regions for KI270418.1 with cutoff 4.2
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:34:14 processing KI270418.1 with cutoff 0.2
+2018-08-08 13:34:14 found no regions for KI270418.1 with cutoff 0.2
+2018-08-08 13:34:14 processing KI270418.1 with cutoff 0.3
+2018-08-08 13:34:14 found no regions for KI270418.1 with cutoff 0.3
+2018-08-08 13:34:14 processing KI270418.1 with cutoff 0.4
+2018-08-08 13:34:14 found no regions for KI270418.1 with cutoff 0.4
+2018-08-08 13:34:14 processing KI270418.1 with cutoff 0.5
+2018-08-08 13:34:14 found no regions for KI270418.1 with cutoff 0.5
+2018-08-08 13:34:14 processing KI270418.1 with cutoff 0.6
+2018-08-08 13:34:14 found no regions for KI270418.1 with cutoff 0.6
+2018-08-08 13:34:14 processing KI270418.1 with cutoff 0.7
+2018-08-08 13:34:15 found no regions for KI270418.1 with cutoff 0.7
+2018-08-08 13:34:15 processing KI270418.1 with cutoff 0.8
+2018-08-08 13:34:15 found no regions for KI270418.1 with cutoff 0.8
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:34:12 processing KI270418.1 with cutoff 5.7
+2018-08-08 13:34:13 found no regions for KI270418.1 with cutoff 5.7
+2018-08-08 13:34:13 processing KI270418.1 with cutoff 5.8
+2018-08-08 13:34:13 found no regions for KI270418.1 with cutoff 5.8
+2018-08-08 13:34:14 processing KI270418.1 with cutoff 5.9
+2018-08-08 13:34:14 found no regions for KI270418.1 with cutoff 5.9
+2018-08-08 13:34:14 processing KI270418.1 with cutoff 6
+2018-08-08 13:34:14 found no regions for KI270418.1 with cutoff 6
+2018-08-08 13:34:14 processing KI270418.1 with cutoff 6.1
+2018-08-08 13:34:14 found no regions for KI270418.1 with cutoff 6.1
+2018-08-08 13:34:14 processing KI270418.1 with cutoff 6.2
+2018-08-08 13:34:15 found no regions for KI270418.1 with cutoff 6.2
+2018-08-08 13:34:15 processing KI270418.1 with cutoff 6.3
+2018-08-08 13:34:15 found no regions for KI270418.1 with cutoff 6.3
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:34:14 processing KI270418.1 with cutoff 2.3
+2018-08-08 13:34:15 found no regions for KI270418.1 with cutoff 2.3
+2018-08-08 13:34:15 processing KI270418.1 with cutoff 2.4
+2018-08-08 13:34:15 found no regions for KI270418.1 with cutoff 2.4
+2018-08-08 13:34:15 processing KI270418.1 with cutoff 2.5
+2018-08-08 13:34:15 found no regions for KI270418.1 with cutoff 2.5
+2018-08-08 13:34:15 processing KI270418.1 with cutoff 2.6
+2018-08-08 13:34:15 found no regions for KI270418.1 with cutoff 2.6
+2018-08-08 13:34:15 processing KI270418.1 with cutoff 2.7
+2018-08-08 13:34:15 found no regions for KI270418.1 with cutoff 2.7
+2018-08-08 13:34:15 processing KI270418.1 with cutoff 2.8
+2018-08-08 13:34:15 found no regions for KI270418.1 with cutoff 2.8
+2018-08-08 13:34:15 processing KI270418.1 with cutoff 2.9
+2018-08-08 13:34:15 found no regions for KI270418.1 with cutoff 2.9
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:34:20 processing KI270418.1 with cutoff 5
+2018-08-08 13:34:20 found no regions for KI270418.1 with cutoff 5
+2018-08-08 13:34:20 processing KI270418.1 with cutoff 5.1
+2018-08-08 13:34:20 found no regions for KI270418.1 with cutoff 5.1
+2018-08-08 13:34:20 processing KI270418.1 with cutoff 5.2
+2018-08-08 13:34:21 found no regions for KI270418.1 with cutoff 5.2
+2018-08-08 13:34:21 processing KI270418.1 with cutoff 5.3
+2018-08-08 13:34:21 found no regions for KI270418.1 with cutoff 5.3
+2018-08-08 13:34:21 processing KI270418.1 with cutoff 5.4
+2018-08-08 13:34:21 found no regions for KI270418.1 with cutoff 5.4
+2018-08-08 13:34:21 processing KI270418.1 with cutoff 5.5
+2018-08-08 13:34:21 found no regions for KI270418.1 with cutoff 5.5
+2018-08-08 13:34:21 processing KI270418.1 with cutoff 5.6
+2018-08-08 13:34:21 found no regions for KI270418.1 with cutoff 5.6
+2018-08-08 13:34:21 loading meanCov for KI270420.1
+2018-08-08 13:34:21 loadCoverage: loading BigWig file Coverage/mean.bw
+2018-08-08 13:34:22 loadCoverage: applying the cutoff to the merged data
+2018-08-08 13:34:22 filterData: originally there were 2321 rows, now there are 2321 rows. Meaning that 0 percent was filtered.
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:35:11 processing KI270420.1 with cutoff 3.7
+2018-08-08 13:35:11 found no regions for KI270420.1 with cutoff 3.7
+2018-08-08 13:35:11 processing KI270420.1 with cutoff 3.8
+2018-08-08 13:35:11 found no regions for KI270420.1 with cutoff 3.8
+2018-08-08 13:35:11 processing KI270420.1 with cutoff 3.9
+2018-08-08 13:35:11 found no regions for KI270420.1 with cutoff 3.9
+2018-08-08 13:35:11 processing KI270420.1 with cutoff 4
+2018-08-08 13:35:11 found no regions for KI270420.1 with cutoff 4
+2018-08-08 13:35:11 processing KI270420.1 with cutoff 4.1
+2018-08-08 13:35:11 found no regions for KI270420.1 with cutoff 4.1
+2018-08-08 13:35:11 processing KI270420.1 with cutoff 4.2
+2018-08-08 13:35:11 found no regions for KI270420.1 with cutoff 4.2
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:35:11 processing KI270420.1 with cutoff 6.4
+2018-08-08 13:35:11 found no regions for KI270420.1 with cutoff 6.4
+2018-08-08 13:35:11 processing KI270420.1 with cutoff 6.5
+2018-08-08 13:35:11 found no regions for KI270420.1 with cutoff 6.5
+2018-08-08 13:35:11 processing KI270420.1 with cutoff 6.6
+2018-08-08 13:35:11 found no regions for KI270420.1 with cutoff 6.6
+2018-08-08 13:35:11 processing KI270420.1 with cutoff 6.7
+2018-08-08 13:35:12 found no regions for KI270420.1 with cutoff 6.7
+2018-08-08 13:35:12 processing KI270420.1 with cutoff 6.8
+2018-08-08 13:35:12 found no regions for KI270420.1 with cutoff 6.8
+2018-08-08 13:35:12 processing KI270420.1 with cutoff 6.9
+2018-08-08 13:35:12 found no regions for KI270420.1 with cutoff 6.9
+2018-08-08 13:35:12 processing KI270420.1 with cutoff 7
+2018-08-08 13:35:12 found no regions for KI270420.1 with cutoff 7
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:35:11 processing KI270420.1 with cutoff 0.9
+2018-08-08 13:35:11 found no regions for KI270420.1 with cutoff 0.9
+2018-08-08 13:35:11 processing KI270420.1 with cutoff 1
+2018-08-08 13:35:12 found no regions for KI270420.1 with cutoff 1
+2018-08-08 13:35:12 processing KI270420.1 with cutoff 1.1
+2018-08-08 13:35:12 found no regions for KI270420.1 with cutoff 1.1
+2018-08-08 13:35:12 processing KI270420.1 with cutoff 1.2
+2018-08-08 13:35:12 found no regions for KI270420.1 with cutoff 1.2
+2018-08-08 13:35:12 processing KI270420.1 with cutoff 1.3
+2018-08-08 13:35:12 found no regions for KI270420.1 with cutoff 1.3
+2018-08-08 13:35:12 processing KI270420.1 with cutoff 1.4
+2018-08-08 13:35:12 found no regions for KI270420.1 with cutoff 1.4
+2018-08-08 13:35:12 processing KI270420.1 with cutoff 1.5
+2018-08-08 13:35:12 found no regions for KI270420.1 with cutoff 1.5
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:35:12 processing KI270420.1 with cutoff 3
+2018-08-08 13:35:12 found no regions for KI270420.1 with cutoff 3
+2018-08-08 13:35:12 processing KI270420.1 with cutoff 3.1
+2018-08-08 13:35:12 found no regions for KI270420.1 with cutoff 3.1
+2018-08-08 13:35:12 processing KI270420.1 with cutoff 3.2
+2018-08-08 13:35:12 found no regions for KI270420.1 with cutoff 3.2
+2018-08-08 13:35:12 processing KI270420.1 with cutoff 3.3
+2018-08-08 13:35:12 found no regions for KI270420.1 with cutoff 3.3
+2018-08-08 13:35:12 processing KI270420.1 with cutoff 3.4
+2018-08-08 13:35:12 found no regions for KI270420.1 with cutoff 3.4
+2018-08-08 13:35:12 processing KI270420.1 with cutoff 3.5
+2018-08-08 13:35:12 found no regions for KI270420.1 with cutoff 3.5
+2018-08-08 13:35:13 processing KI270420.1 with cutoff 3.6
+2018-08-08 13:35:13 found no regions for KI270420.1 with cutoff 3.6
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:35:13 processing KI270420.1 with cutoff 5.7
+2018-08-08 13:35:13 found no regions for KI270420.1 with cutoff 5.7
+2018-08-08 13:35:13 processing KI270420.1 with cutoff 5.8
+2018-08-08 13:35:13 found no regions for KI270420.1 with cutoff 5.8
+2018-08-08 13:35:13 processing KI270420.1 with cutoff 5.9
+2018-08-08 13:35:13 found no regions for KI270420.1 with cutoff 5.9
+2018-08-08 13:35:13 processing KI270420.1 with cutoff 6
+2018-08-08 13:35:13 found no regions for KI270420.1 with cutoff 6
+2018-08-08 13:35:13 processing KI270420.1 with cutoff 6.1
+2018-08-08 13:35:13 found no regions for KI270420.1 with cutoff 6.1
+2018-08-08 13:35:13 processing KI270420.1 with cutoff 6.2
+2018-08-08 13:35:13 found no regions for KI270420.1 with cutoff 6.2
+2018-08-08 13:35:13 processing KI270420.1 with cutoff 6.3
+2018-08-08 13:35:13 found no regions for KI270420.1 with cutoff 6.3
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:35:13 processing KI270420.1 with cutoff 4.3
+2018-08-08 13:35:13 found no regions for KI270420.1 with cutoff 4.3
+2018-08-08 13:35:13 processing KI270420.1 with cutoff 4.4
+2018-08-08 13:35:13 found no regions for KI270420.1 with cutoff 4.4
+2018-08-08 13:35:13 processing KI270420.1 with cutoff 4.5
+2018-08-08 13:35:13 found no regions for KI270420.1 with cutoff 4.5
+2018-08-08 13:35:14 processing KI270420.1 with cutoff 4.6
+2018-08-08 13:35:14 found no regions for KI270420.1 with cutoff 4.6
+2018-08-08 13:35:14 processing KI270420.1 with cutoff 4.7
+2018-08-08 13:35:14 found no regions for KI270420.1 with cutoff 4.7
+2018-08-08 13:35:14 processing KI270420.1 with cutoff 4.8
+2018-08-08 13:35:14 found no regions for KI270420.1 with cutoff 4.8
+2018-08-08 13:35:14 processing KI270420.1 with cutoff 4.9
+2018-08-08 13:35:14 found no regions for KI270420.1 with cutoff 4.9
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:35:15 processing KI270420.1 with cutoff 0.2
+2018-08-08 13:35:15 found no regions for KI270420.1 with cutoff 0.2
+2018-08-08 13:35:15 processing KI270420.1 with cutoff 0.3
+2018-08-08 13:35:15 found no regions for KI270420.1 with cutoff 0.3
+2018-08-08 13:35:15 processing KI270420.1 with cutoff 0.4
+2018-08-08 13:35:15 found no regions for KI270420.1 with cutoff 0.4
+2018-08-08 13:35:15 processing KI270420.1 with cutoff 0.5
+2018-08-08 13:35:15 found no regions for KI270420.1 with cutoff 0.5
+2018-08-08 13:35:15 processing KI270420.1 with cutoff 0.6
+2018-08-08 13:35:15 found no regions for KI270420.1 with cutoff 0.6
+2018-08-08 13:35:15 processing KI270420.1 with cutoff 0.7
+2018-08-08 13:35:15 found no regions for KI270420.1 with cutoff 0.7
+2018-08-08 13:35:16 processing KI270420.1 with cutoff 0.8
+2018-08-08 13:35:16 found no regions for KI270420.1 with cutoff 0.8
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:35:16 processing KI270420.1 with cutoff 2.3
+2018-08-08 13:35:16 found no regions for KI270420.1 with cutoff 2.3
+2018-08-08 13:35:16 processing KI270420.1 with cutoff 2.4
+2018-08-08 13:35:16 found no regions for KI270420.1 with cutoff 2.4
+2018-08-08 13:35:17 processing KI270420.1 with cutoff 2.5
+2018-08-08 13:35:17 found no regions for KI270420.1 with cutoff 2.5
+2018-08-08 13:35:17 processing KI270420.1 with cutoff 2.6
+2018-08-08 13:35:17 found no regions for KI270420.1 with cutoff 2.6
+2018-08-08 13:35:17 processing KI270420.1 with cutoff 2.7
+2018-08-08 13:35:17 found no regions for KI270420.1 with cutoff 2.7
+2018-08-08 13:35:17 processing KI270420.1 with cutoff 2.8
+2018-08-08 13:35:17 found no regions for KI270420.1 with cutoff 2.8
+2018-08-08 13:35:17 processing KI270420.1 with cutoff 2.9
+2018-08-08 13:35:17 found no regions for KI270420.1 with cutoff 2.9
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:35:16 processing KI270420.1 with cutoff 1.6
+2018-08-08 13:35:16 found no regions for KI270420.1 with cutoff 1.6
+2018-08-08 13:35:16 processing KI270420.1 with cutoff 1.7
+2018-08-08 13:35:17 found no regions for KI270420.1 with cutoff 1.7
+2018-08-08 13:35:17 processing KI270420.1 with cutoff 1.8
+2018-08-08 13:35:17 found no regions for KI270420.1 with cutoff 1.8
+2018-08-08 13:35:17 processing KI270420.1 with cutoff 1.9
+2018-08-08 13:35:17 found no regions for KI270420.1 with cutoff 1.9
+2018-08-08 13:35:17 processing KI270420.1 with cutoff 2
+2018-08-08 13:35:17 found no regions for KI270420.1 with cutoff 2
+2018-08-08 13:35:17 processing KI270420.1 with cutoff 2.1
+2018-08-08 13:35:17 found no regions for KI270420.1 with cutoff 2.1
+2018-08-08 13:35:17 processing KI270420.1 with cutoff 2.2
+2018-08-08 13:35:17 found no regions for KI270420.1 with cutoff 2.2
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:35:23 processing KI270420.1 with cutoff 5
+2018-08-08 13:35:23 found no regions for KI270420.1 with cutoff 5
+2018-08-08 13:35:23 processing KI270420.1 with cutoff 5.1
+2018-08-08 13:35:23 found no regions for KI270420.1 with cutoff 5.1
+2018-08-08 13:35:23 processing KI270420.1 with cutoff 5.2
+2018-08-08 13:35:23 found no regions for KI270420.1 with cutoff 5.2
+2018-08-08 13:35:23 processing KI270420.1 with cutoff 5.3
+2018-08-08 13:35:23 found no regions for KI270420.1 with cutoff 5.3
+2018-08-08 13:35:23 processing KI270420.1 with cutoff 5.4
+2018-08-08 13:35:23 found no regions for KI270420.1 with cutoff 5.4
+2018-08-08 13:35:23 processing KI270420.1 with cutoff 5.5
+2018-08-08 13:35:23 found no regions for KI270420.1 with cutoff 5.5
+2018-08-08 13:35:24 processing KI270420.1 with cutoff 5.6
+2018-08-08 13:35:24 found no regions for KI270420.1 with cutoff 5.6
+2018-08-08 13:35:24 loading meanCov for KI270422.1
+2018-08-08 13:35:24 loadCoverage: loading BigWig file Coverage/mean.bw
+2018-08-08 13:35:24 loadCoverage: applying the cutoff to the merged data
+2018-08-08 13:35:24 filterData: originally there were 1445 rows, now there are 1445 rows. Meaning that 0 percent was filtered.
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:36:05 processing KI270422.1 with cutoff 0.9
+2018-08-08 13:36:05 found no regions for KI270422.1 with cutoff 0.9
+2018-08-08 13:36:05 processing KI270422.1 with cutoff 1
+2018-08-08 13:36:05 found no regions for KI270422.1 with cutoff 1
+2018-08-08 13:36:05 processing KI270422.1 with cutoff 1.1
+2018-08-08 13:36:05 found no regions for KI270422.1 with cutoff 1.1
+2018-08-08 13:36:05 processing KI270422.1 with cutoff 1.2
+2018-08-08 13:36:06 found no regions for KI270422.1 with cutoff 1.2
+2018-08-08 13:36:06 processing KI270422.1 with cutoff 1.3
+2018-08-08 13:36:06 found no regions for KI270422.1 with cutoff 1.3
+2018-08-08 13:36:06 processing KI270422.1 with cutoff 1.4
+2018-08-08 13:36:06 found no regions for KI270422.1 with cutoff 1.4
+2018-08-08 13:36:06 processing KI270422.1 with cutoff 1.5
+2018-08-08 13:36:06 found no regions for KI270422.1 with cutoff 1.5
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:36:07 processing KI270422.1 with cutoff 3.7
+2018-08-08 13:36:07 found no regions for KI270422.1 with cutoff 3.7
+2018-08-08 13:36:07 processing KI270422.1 with cutoff 3.8
+2018-08-08 13:36:07 found no regions for KI270422.1 with cutoff 3.8
+2018-08-08 13:36:07 processing KI270422.1 with cutoff 3.9
+2018-08-08 13:36:07 found no regions for KI270422.1 with cutoff 3.9
+2018-08-08 13:36:07 processing KI270422.1 with cutoff 4
+2018-08-08 13:36:07 found no regions for KI270422.1 with cutoff 4
+2018-08-08 13:36:07 processing KI270422.1 with cutoff 4.1
+2018-08-08 13:36:07 found no regions for KI270422.1 with cutoff 4.1
+2018-08-08 13:36:08 processing KI270422.1 with cutoff 4.2
+2018-08-08 13:36:08 found no regions for KI270422.1 with cutoff 4.2
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:36:07 processing KI270422.1 with cutoff 4.3
+2018-08-08 13:36:07 found no regions for KI270422.1 with cutoff 4.3
+2018-08-08 13:36:07 processing KI270422.1 with cutoff 4.4
+2018-08-08 13:36:07 found no regions for KI270422.1 with cutoff 4.4
+2018-08-08 13:36:07 processing KI270422.1 with cutoff 4.5
+2018-08-08 13:36:07 found no regions for KI270422.1 with cutoff 4.5
+2018-08-08 13:36:08 processing KI270422.1 with cutoff 4.6
+2018-08-08 13:36:08 found no regions for KI270422.1 with cutoff 4.6
+2018-08-08 13:36:08 processing KI270422.1 with cutoff 4.7
+2018-08-08 13:36:08 found no regions for KI270422.1 with cutoff 4.7
+2018-08-08 13:36:08 processing KI270422.1 with cutoff 4.8
+2018-08-08 13:36:08 found no regions for KI270422.1 with cutoff 4.8
+2018-08-08 13:36:08 processing KI270422.1 with cutoff 4.9
+2018-08-08 13:36:08 found no regions for KI270422.1 with cutoff 4.9
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:36:08 processing KI270422.1 with cutoff 0.2
+2018-08-08 13:36:09 processing KI270422.1 with cutoff 0.3
+2018-08-08 13:36:09 found no regions for KI270422.1 with cutoff 0.3
+2018-08-08 13:36:09 processing KI270422.1 with cutoff 0.4
+2018-08-08 13:36:09 found no regions for KI270422.1 with cutoff 0.4
+2018-08-08 13:36:09 processing KI270422.1 with cutoff 0.5
+2018-08-08 13:36:09 found no regions for KI270422.1 with cutoff 0.5
+2018-08-08 13:36:09 processing KI270422.1 with cutoff 0.6
+2018-08-08 13:36:09 found no regions for KI270422.1 with cutoff 0.6
+2018-08-08 13:36:09 processing KI270422.1 with cutoff 0.7
+2018-08-08 13:36:09 found no regions for KI270422.1 with cutoff 0.7
+2018-08-08 13:36:09 processing KI270422.1 with cutoff 0.8
+2018-08-08 13:36:09 found no regions for KI270422.1 with cutoff 0.8
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:36:10 processing KI270422.1 with cutoff 1.6
+2018-08-08 13:36:10 found no regions for KI270422.1 with cutoff 1.6
+2018-08-08 13:36:10 processing KI270422.1 with cutoff 1.7
+2018-08-08 13:36:10 found no regions for KI270422.1 with cutoff 1.7
+2018-08-08 13:36:10 processing KI270422.1 with cutoff 1.8
+2018-08-08 13:36:10 found no regions for KI270422.1 with cutoff 1.8
+2018-08-08 13:36:10 processing KI270422.1 with cutoff 1.9
+2018-08-08 13:36:10 found no regions for KI270422.1 with cutoff 1.9
+2018-08-08 13:36:11 processing KI270422.1 with cutoff 2
+2018-08-08 13:36:11 found no regions for KI270422.1 with cutoff 2
+2018-08-08 13:36:11 processing KI270422.1 with cutoff 2.1
+2018-08-08 13:36:11 found no regions for KI270422.1 with cutoff 2.1
+2018-08-08 13:36:11 processing KI270422.1 with cutoff 2.2
+2018-08-08 13:36:11 found no regions for KI270422.1 with cutoff 2.2
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:36:11 processing KI270422.1 with cutoff 6.4
+2018-08-08 13:36:12 found no regions for KI270422.1 with cutoff 6.4
+2018-08-08 13:36:12 processing KI270422.1 with cutoff 6.5
+2018-08-08 13:36:12 found no regions for KI270422.1 with cutoff 6.5
+2018-08-08 13:36:12 processing KI270422.1 with cutoff 6.6
+2018-08-08 13:36:12 found no regions for KI270422.1 with cutoff 6.6
+2018-08-08 13:36:12 processing KI270422.1 with cutoff 6.7
+2018-08-08 13:36:12 found no regions for KI270422.1 with cutoff 6.7
+2018-08-08 13:36:12 processing KI270422.1 with cutoff 6.8
+2018-08-08 13:36:12 found no regions for KI270422.1 with cutoff 6.8
+2018-08-08 13:36:12 processing KI270422.1 with cutoff 6.9
+2018-08-08 13:36:12 found no regions for KI270422.1 with cutoff 6.9
+2018-08-08 13:36:12 processing KI270422.1 with cutoff 7
+2018-08-08 13:36:12 found no regions for KI270422.1 with cutoff 7
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:36:11 processing KI270422.1 with cutoff 5
+2018-08-08 13:36:11 found no regions for KI270422.1 with cutoff 5
+2018-08-08 13:36:12 processing KI270422.1 with cutoff 5.1
+2018-08-08 13:36:12 found no regions for KI270422.1 with cutoff 5.1
+2018-08-08 13:36:12 processing KI270422.1 with cutoff 5.2
+2018-08-08 13:36:12 found no regions for KI270422.1 with cutoff 5.2
+2018-08-08 13:36:12 processing KI270422.1 with cutoff 5.3
+2018-08-08 13:36:12 found no regions for KI270422.1 with cutoff 5.3
+2018-08-08 13:36:12 processing KI270422.1 with cutoff 5.4
+2018-08-08 13:36:12 found no regions for KI270422.1 with cutoff 5.4
+2018-08-08 13:36:12 processing KI270422.1 with cutoff 5.5
+2018-08-08 13:36:12 found no regions for KI270422.1 with cutoff 5.5
+2018-08-08 13:36:12 processing KI270422.1 with cutoff 5.6
+2018-08-08 13:36:12 found no regions for KI270422.1 with cutoff 5.6
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:36:18 processing KI270422.1 with cutoff 5.7
+2018-08-08 13:36:19 found no regions for KI270422.1 with cutoff 5.7
+2018-08-08 13:36:19 processing KI270422.1 with cutoff 5.8
+2018-08-08 13:36:19 found no regions for KI270422.1 with cutoff 5.8
+2018-08-08 13:36:19 processing KI270422.1 with cutoff 5.9
+2018-08-08 13:36:19 found no regions for KI270422.1 with cutoff 5.9
+2018-08-08 13:36:19 processing KI270422.1 with cutoff 6
+2018-08-08 13:36:19 found no regions for KI270422.1 with cutoff 6
+2018-08-08 13:36:19 processing KI270422.1 with cutoff 6.1
+2018-08-08 13:36:19 found no regions for KI270422.1 with cutoff 6.1
+2018-08-08 13:36:19 processing KI270422.1 with cutoff 6.2
+2018-08-08 13:36:19 found no regions for KI270422.1 with cutoff 6.2
+2018-08-08 13:36:19 processing KI270422.1 with cutoff 6.3
+2018-08-08 13:36:19 found no regions for KI270422.1 with cutoff 6.3
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:36:19 processing KI270422.1 with cutoff 3
+2018-08-08 13:36:19 found no regions for KI270422.1 with cutoff 3
+2018-08-08 13:36:19 processing KI270422.1 with cutoff 3.1
+2018-08-08 13:36:19 found no regions for KI270422.1 with cutoff 3.1
+2018-08-08 13:36:19 processing KI270422.1 with cutoff 3.2
+2018-08-08 13:36:19 found no regions for KI270422.1 with cutoff 3.2
+2018-08-08 13:36:19 processing KI270422.1 with cutoff 3.3
+2018-08-08 13:36:19 found no regions for KI270422.1 with cutoff 3.3
+2018-08-08 13:36:19 processing KI270422.1 with cutoff 3.4
+2018-08-08 13:36:19 found no regions for KI270422.1 with cutoff 3.4
+2018-08-08 13:36:20 processing KI270422.1 with cutoff 3.5
+2018-08-08 13:36:20 found no regions for KI270422.1 with cutoff 3.5
+2018-08-08 13:36:20 processing KI270422.1 with cutoff 3.6
+2018-08-08 13:36:20 found no regions for KI270422.1 with cutoff 3.6
+No methods found in package ‘IRanges’ for request: ‘subset’ when loading ‘derfinder’
+2018-08-08 13:36:22 processing KI270422.1 with cutoff 2.3
+2018-08-08 13:36:22 found no regions for KI270422.1 with cutoff 2.3
+2018-08-08 13:36:22 processing KI270422.1 with cutoff 2.4
+2018-08-08 13:36:22 found no regions for KI270422.1 with cutoff 2.4
+2018-08-08 13:36:22 processing KI270422.1 with cutoff 2.5
+2018-08-08 13:36:22 found no regions for KI270422.1 with cutoff 2.5
+2018-08-08 13:36:22 processing KI270422.1 with cutoff 2.6
+2018-08-08 13:36:22 found no regions for KI270422.1 with cutoff 2.6
+2018-08-08 13:36:22 processing KI270422.1 with cutoff 2.7
+2018-08-08 13:36:22 found no regions for KI270422.1 with cutoff 2.7
+2018-08-08 13:36:23 processing KI270422.1 with cutoff 2.8
+2018-08-08 13:36:23 found no regions for KI270422.1 with cutoff 2.8
+2018-08-08 13:36:23 processing KI270422.1 with cutoff 2.9
+2018-08-08 13:36:23 found no regions for KI270422.1 with cutoff 2.9
+2018-08-08 13:36:23 loading meanCov for KI270429.1
+2018-08-08 13:36:23 loadCoverage: loading BigWig file Coverage/mean.bw
+2018-08-08 13:36:23 loadCoverage: applying the cutoff to the merged data
+2018-08-08 13:36:23 filterData: originally there were 1361 rows, now there are 1361 rows. Meaning that 0 percent was filtered.

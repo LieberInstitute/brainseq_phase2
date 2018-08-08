@@ -20,3 +20,6 @@ genotype_data
 jxns
 .Rproj.user
 degradation_strand*/*sum.tsv
+psychENCODE
+## For Carrie's circular RNA project
+genotype_data_carrie_n410
