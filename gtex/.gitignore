@@ -9,3 +9,4 @@ Salmon_tx
 *.rda
 *.Rdata
 *.csv
+snps_to_extract.txt

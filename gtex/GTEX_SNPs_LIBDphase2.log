@@ -1,0 +1,24 @@
+PLINK v1.90b3a 64-bit (12 Jan 2015)
+8 arguments: --bfile /dcl01/lieber/ajaffe/PublicData/SRA_GTEX/Genotypes/Merged/GTEX_Brain_Illumina_Omni5M_Omni2pt5M_imputed_maf005_geno10_hwe1e6 --extract snps_to_extract.txt --out GTEX_SNPs_LIBDphase2 --recode A-transpose
+Hostname: compute-095
+Working directory: /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex
+Start time: Fri Aug  3 11:09:54 2018
+
+Random number seed: 1533308994
+258365 MB RAM detected; reserving 129182 MB for main workspace.
+Allocated 17242 MB successfully, after larger attempt(s) failed.
+14095229 variants loaded from .bim file.
+466 people (124 males, 67 females, 275 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to GTEX_SNPs_LIBDphase2.nosex .
+--extract: 6827646 variants remaining.
+Warning: At least 24139 duplicate IDs in --extract file.
+Using 1 thread (no multithreaded calculations invoked).
+Before main variant filters, 466 founders and 0 nonfounders present.
+Calculating allele frequencies... done.
+Total genotyping rate is 0.995045.
+6827646 variants and 466 people pass filters and QC.
+Note: No phenotypes present.
+Warning: Underscore(s) present in sample IDs.
+--recode A-transpose to GTEX_SNPs_LIBDphase2.traw ... done.
+
+End time: Fri Aug  3 11:10:38 2018
