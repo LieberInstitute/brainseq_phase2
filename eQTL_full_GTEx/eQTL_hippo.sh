@@ -4,11 +4,18 @@
 #$ -N bsII_hippo_eQTL
 #$ -o ./eqtl_tables/logs/eQTL_hippo_4_features.txt
 #$ -e ./eqtl_tables/logs/eQTL_hippo_4_features.txt
-#$ -m a
+#$ -m e
 echo "**** Job starts ****"
 date
 
-Rscript /dcl01/lieber/ajaffe/lab/brainseq_phase2/run_eqtls_hippo.R
+echo "**** JHPCE info ****"
+echo "User: ${USER}"
+echo "Job id: ${JOB_ID}"
+echo "Job name: ${JOB_NAME}"
+echo "Hostname: ${HOSTNAME}"
+echo "Task id: ${TASK_ID}"
+
+Rscript run_eqtls_hippo.R
 
 echo "**** Job ends ****"
 date

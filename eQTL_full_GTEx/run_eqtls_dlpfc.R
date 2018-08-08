@@ -5,38 +5,46 @@ library(SummarizedExperiment)
 library(jaffelab)
 library(MatrixEQTL)
 library(sva)
+library('devtools')
+
+dir.create('rdas', showWarnings = FALSE)
+dir.create('eqtl_tables', showWarnings = FALSE)
 
 ######################
 ### load data ####
 ######################
 
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_gene.Rdata")
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_exon.Rdata")
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_jxn.Rdata")
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_tx.Rdata")
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_gene.Rdata")
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_exon.Rdata")
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_jxn.Rdata")
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_tx.Rdata")
 
 # # fix junction row names
-# rownames(rse_jxn) = paste0(seqnames(rse_jxn),":",start(rse_jxn),"-",end(rse_jxn),"(",strand(rse_jxn),")")
+# rownames(rse_gtex_jxn) = paste0(seqnames(rse_gtex_jxn),":",start(rse_gtex_jxn),"-",end(rse_gtex_jxn),"(",strand(rse_gtex_jxn),")")
 
 # # sum totalMapped IntegerLists (so getRPKM works later)
-# colData(rse_tx)$totalMapped =
-	# colData(rse_jxn)$totalMapped =
-	# colData(rse_exon)$totalMapped = 
-	# colData(rse_gene)$totalMapped  = sapply(colData(rse_gene)$totalMapped, sum)
+# colData(rse_gtex_tx)$totalMapped =
+	# colData(rse_gtex_jxn)$totalMapped =
+	# colData(rse_gtex_exon)$totalMapped = 
+	# colData(rse_gtex_gene)$totalMapped  = sapply(colData(rse_gtex_gene)$totalMapped, sum)
 
 ## keep adult samples & correct region
-keepInd = which(colData(rse_gene)$Age > 13 & colData(rse_gene)$Region == "DLPFC")
-rse_gene = rse_gene[,keepInd]
-rse_exon = rse_exon[,keepInd]
-rse_jxn = rse_jxn[,keepInd]
-rse_tx = rse_tx[,keepInd]
+dim(rse_gtex_gene)
+## Not really filtering by age here
+summary(colData(rse_gtex_gene)$age)
+keepInd = which(colData(rse_gtex_gene)$age > 13 & colData(rse_gtex_gene)$Region == "DLPFC")
+length(keepInd)
+rse_gtex_gene = rse_gtex_gene[,keepInd]
+rse_gtex_exon = rse_gtex_exon[,keepInd]
+rse_gtex_jxn = rse_gtex_jxn[,keepInd]
+rse_gtex_tx = rse_gtex_tx[,keepInd]
 
 ## extract pd and rpkms
-pd = colData(rse_gene)
-geneRpkm = assays(rse_gene)$rpkm
-exonRpkm = assays(rse_exon)$rpkm
-jxnRp10m = assays(rse_jxn)$rp10m
-txTpm = assays(rse_tx)$tpm
+pd = colData(rse_gtex_gene)
+geneRpkm = assays(rse_gtex_gene)$rpkm
+exonRpkm = assays(rse_gtex_exon)$rpkm
+jxnRp10m = assays(rse_gtex_jxn)$rp10m
+txTpm = assays(rse_gtex_tx)$tpm
 
 
 ######################
@@ -44,41 +52,53 @@ txTpm = assays(rse_tx)$tpm
 ######################
 
 ## load SNP data
-load("genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n551.rda")
+load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/genotypeData_GTEx_hippoPlusDlpfc_simplified.rda', verbose = TRUE)
 
 ### make mds and snp dimensions equal to N
-###(repeat rows or columns for BrNum replicates)
-mds = mds[pd$BrNum,]
-snp = snp[,pd$BrNum]
-rownames(mds) = colnames(snp) = pd$RNum
+m <- match(rownames(pd), pdGtex$sra_accession)
+## Same number and location of NAs with
+# m <- match(pd$sampid, pdGtex$SAMPID)
+# m <- match(rownames(pd), pdGtex$sra_accession)
+## This one has a few different matches, but NA locations are identical.
+# m <- match(ss(as.character(pd$subjid), '-', 2), pdGtex$SUBJID)
+m1 <- which(!is.na(m))
+m2 <- m[!is.na(m)]
 
+## Number of samples dropped at this stage and remaining
+length(m) - length(m1)
+length(m1)
 
-## drop SNPs not mapping to hg38
-keepIndex = which(!is.na(snpMap$chr_hg38))
-snpMap = snpMap[keepIndex,]
-snp = snp[keepIndex,]
+pd <- pd[m1, ]
+rse_gtex_gene <- rse_gtex_gene[,m1]
+rse_gtex_exon <- rse_gtex_exon[,m1]
+rse_gtex_jxn <- rse_gtex_jxn[,m1]
+rse_gtex_tx <- rse_gtex_tx[,m1]
 
+pdGtex <- pdGtex[m2, ]
+snpGtex <- snpGtex[, m2]
+
+dim(pdGtex)
+dim(snpGtex)
+
+colnames(snpGtex) = rownames(pd)
 
 ######################
 # statistical model ##
 ######################
 
-pd$Dx = factor(pd$Dx,
-	levels = c("Control", "Schizo"))
-
-mod = model.matrix(~Dx + Sex + as.matrix(mds[,1:5]),
+mod = model.matrix(~ Sex + as.matrix(pdGtex[, paste0('snpPC', 1:5)]),
 	data = pd)
-colnames(mod)[4:8] = colnames(mds)[1:5]
+colnames(mod)[3:7] = paste0('snpPC', 1:5)
 
 
 ######################
 # create SNP objects #
 ######################
 
-theSnps = SlicedData$new(as.matrix(snp))
+theSnps = SlicedData$new(as.matrix(snpGtex))
 theSnps$ResliceCombined(sliceSize = 50000)
 
-snpspos = snpMap[,c("SNP","chr_hg38","pos_hg38")]
+snpspos = snpMapGtex[,c("SNP","chr_hg38","pos_hg38")]
 colnames(snpspos) = c("name","chr","pos")
 
 
@@ -116,23 +136,23 @@ covsTx = SlicedData$new(t(cbind(mod[,-1],txPCs)))
 ##########################
 
 ###### gene level
-posGene = as.data.frame(rowRanges(rse_gene))[,1:3]
+posGene = as.data.frame(rowRanges(rse_gtex_gene))[,1:3]
 posGene$name = rownames(posGene)
 posGene = posGene[,c(4,1:3)]
 
 ##### exon level 
-posExon = as.data.frame(rowRanges(rse_exon))[,1:3]
+posExon = as.data.frame(rowRanges(rse_gtex_exon))[,1:3]
 posExon$name = rownames(posExon)
 posExon = posExon[,c(4,1:3)]
 
 ##### junction level 
-posJxn = as.data.frame(rowRanges(rse_jxn))[,1:3]
+posJxn = as.data.frame(rowRanges(rse_gtex_jxn))[,1:3]
 posJxn$name = rownames(posJxn)
 posJxn = posJxn[,c(4,1:3)]
 names(posJxn)[2:4] = c("Chr", "Start","End")
 
 ##### transcript level 
-posTx = as.data.frame(rowRanges(rse_tx))[,1:3]
+posTx = as.data.frame(rowRanges(rse_gtex_tx))[,1:3]
 posTx$name = rownames(posTx)
 posTx = posTx[,c(4,1:3)]
 names(posTx)[2:4] = c("Chr", "Start","End")
@@ -218,41 +238,41 @@ txEqtl$snps = as.character(txEqtl$snps)
 # add gene annotation info #####
 ################################
 
-geneEqtl$Symbol = rowRanges(rse_gene)$Symbol[match(geneEqtl$gene, rownames(rse_gene))]
-geneEqtl$EnsemblGeneID = rowRanges(rse_gene)$ensemblID[match(geneEqtl$gene, rownames(rse_gene))]
+geneEqtl$Symbol = rowRanges(rse_gtex_gene)$Symbol[match(geneEqtl$gene, rownames(rse_gtex_gene))]
+geneEqtl$EnsemblGeneID = rowRanges(rse_gtex_gene)$ensemblID[match(geneEqtl$gene, rownames(rse_gtex_gene))]
 geneEqtl$Type = "Gene"
 geneEqtl$Class = "InGen"
 geneEqtl = DataFrame(geneEqtl)
-# geneEqtl$gene_type = rowRanges(rse_gene)$gene_type[match(geneEqtl$gene, rownames(rse_gene))]
+# geneEqtl$gene_type = rowRanges(rse_gtex_gene)$gene_type[match(geneEqtl$gene, rownames(rse_gtex_gene))]
 
-exonEqtl$Symbol = rowRanges(rse_exon)$Symbol[match(exonEqtl$gene, rownames(rse_exon))]
-exonEqtl$EnsemblGeneID = rowRanges(rse_exon)$ensemblID[match(exonEqtl$gene, rownames(rse_exon))]
+exonEqtl$Symbol = rowRanges(rse_gtex_exon)$Symbol[match(exonEqtl$gene, rownames(rse_gtex_exon))]
+exonEqtl$EnsemblGeneID = rowRanges(rse_gtex_exon)$ensemblID[match(exonEqtl$gene, rownames(rse_gtex_exon))]
 exonEqtl$Type = "Exon"
 exonEqtl$Class = "InGen"
 exonEqtl = DataFrame(exonEqtl)
-# exonEqtl$gene_type = rowRanges(rse_exon)$gene_type[match(exonEqtl$gene, rownames(rse_exon))]
+# exonEqtl$gene_type = rowRanges(rse_gtex_exon)$gene_type[match(exonEqtl$gene, rownames(rse_gtex_exon))]
 
-jxnEqtl$Symbol = rowRanges(rse_jxn)$newGeneSymbol[match(jxnEqtl$gene, rownames(rse_jxn))]
-jxnEqtl$EnsemblGeneID = rowRanges(rse_jxn)$newGeneID[match(jxnEqtl$gene, rownames(rse_jxn))]
+jxnEqtl$Symbol = rowRanges(rse_gtex_jxn)$newGeneSymbol[match(jxnEqtl$gene, rownames(rse_gtex_jxn))]
+jxnEqtl$EnsemblGeneID = rowRanges(rse_gtex_jxn)$newGeneID[match(jxnEqtl$gene, rownames(rse_gtex_jxn))]
 jxnEqtl$Type = "Jxn"
-jxnEqtl$Class = rowRanges(rse_jxn)$Class[match(jxnEqtl$gene, rownames(rse_jxn))]
+jxnEqtl$Class = rowRanges(rse_gtex_jxn)$Class[match(jxnEqtl$gene, rownames(rse_gtex_jxn))]
 jxnEqtl = DataFrame(jxnEqtl)
-# jxnEqtl$gene_type = rowRanges(rse_jxn)$gene_type[match(jxnEqtl$gene, rownames(rse_jxn))]
+# jxnEqtl$gene_type = rowRanges(rse_gtex_jxn)$gene_type[match(jxnEqtl$gene, rownames(rse_gtex_jxn))]
 
-txEqtl$Symbol = rowRanges(rse_tx)$gene_name[match(txEqtl$gene, rownames(rse_tx))]
-txEqtl$EnsemblGeneID = ss(rowRanges(rse_tx)$gene_id[match(txEqtl$gene, rownames(rse_tx))],"\\.",1)
+txEqtl$Symbol = rowRanges(rse_gtex_tx)$gene_name[match(txEqtl$gene, rownames(rse_gtex_tx))]
+txEqtl$EnsemblGeneID = ss(rowRanges(rse_gtex_tx)$gene_id[match(txEqtl$gene, rownames(rse_gtex_tx))],"\\.",1)
 txEqtl$Type = "Tx"
 txEqtl$Class = "InGen"
 txEqtl = DataFrame(txEqtl)
-# txEqtl$gene_type = rowRanges(rse_tx)$gene_type[match(txEqtl$gene, rownames(rse_tx))]
+# txEqtl$gene_type = rowRanges(rse_gtex_tx)$gene_type[match(txEqtl$gene, rownames(rse_gtex_tx))]
 
 
 # merge
 allEqtl = rbind(geneEqtl, exonEqtl, jxnEqtl, txEqtl)
-allEqtl$gencodeTx = CharacterList(c(as.list(rowRanges(rse_gene)$gencodeTx[match(geneEqtl$gene, 
-	rownames(rse_gene))]),
-	as.list(rowRanges(rse_exon)$gencodeTx[match(exonEqtl$gene, rownames(rse_exon))]),
-	as.list(rowRanges(rse_jxn)$gencodeTx[match(jxnEqtl$gene, rownames(rse_jxn))]),
+allEqtl$gencodeTx = CharacterList(c(as.list(rowRanges(rse_gtex_gene)$gencodeTx[match(geneEqtl$gene, 
+	rownames(rse_gtex_gene))]),
+	as.list(rowRanges(rse_gtex_exon)$gencodeTx[match(exonEqtl$gene, rownames(rse_gtex_exon))]),
+	as.list(rowRanges(rse_gtex_jxn)$gencodeTx[match(jxnEqtl$gene, rownames(rse_gtex_jxn))]),
 	as.list(txEqtl$gene)))
 save(allEqtl, file="eqtl_tables/mergedEqtl_output_dlpfc_4features.rda",compress=TRUE)
 
@@ -276,3 +296,10 @@ save(allEqtl, file="eqtl_tables/mergedEqtl_output_dlpfc_4features.rda",compress=
 # sapply(sigEqtlList, function(x) table(x$Class[!duplicated(x$gene)]))
 # sapply(sigEqtlList, function(x) prop.table(table(x$Class)))
 
+
+## Reproducibility information
+print('Reproducibility information:')
+Sys.time()
+proc.time()
+options(width = 120)
+session_info()
