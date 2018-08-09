@@ -70,10 +70,14 @@ length(m) - length(m1)
 length(m1)
 
 pd <- pd[m1, ]
-rse_gtex_gene <- rse_gtex_gene[,m1]
-rse_gtex_exon <- rse_gtex_exon[,m1]
-rse_gtex_jxn <- rse_gtex_jxn[,m1]
-rse_gtex_tx <- rse_gtex_tx[,m1]
+rse_gtex_gene <- rse_gtex_gene[, m1]
+rse_gtex_exon <- rse_gtex_exon[, m1]
+rse_gtex_jxn <- rse_gtex_jxn[, m1]
+rse_gtex_tx <- rse_gtex_tx[, m1]
+geneRpkm <- geneRpkm[, m1]
+exonRpkm <- exonRpkm[, m1]
+jxnRp10m <- jxnRp10m[, m1]
+txTpm <- txTpm[, m1]
 
 pdGtex <- pdGtex[m2, ]
 snpGtex <- snpGtex[, m2]
@@ -124,6 +128,9 @@ pcaTx = prcomp(t(log2(txTpm+1)))
 kTx = num.sv(log2(txTpm+1), mod, vfilter=50000)
 kTx = min(kTx, 25)
 txPCs = pcaTx$x[,1:kTx]
+
+print('k info for the PCAs')
+c('kGene' = kGene, 'kExon' = kExon, 'kJxn' = kJxn, 'kTx' = kTx)
 
 save(genePCs, exonPCs, jxnPCs, txPCs, 
 	file="rdas/pcs_4features_combined_regions_filtered_over13.rda")
