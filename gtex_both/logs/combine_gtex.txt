@@ -74,42 +74,42 @@ The following object is masked from ‘package:devtools’:
 
     install_bioc
 
-2018-08-08 13:14:06 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/rse_gtex_exon.Rdata
+2018-08-09 01:38:03 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/rse_gtex_exon.Rdata
 Loading objects:
   rse_gtex_exon
-2018-08-08 13:14:16 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_dlpfc/rse_gtex_exon.Rdata
+2018-08-09 01:38:18 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_dlpfc/rse_gtex_exon.Rdata
 Loading objects:
   rse_gtex_exon
-2018-08-08 13:14:24 combining rses
-2018-08-08 13:14:28 saving new rse file
-2018-08-08 13:17:18 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/rse_gtex_gene.Rdata
+2018-08-09 01:38:29 combining rses
+2018-08-09 01:38:41 saving new rse file
+2018-08-09 01:43:37 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/rse_gtex_gene.Rdata
 Loading objects:
   rse_gtex_gene
-2018-08-08 13:17:19 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_dlpfc/rse_gtex_gene.Rdata
+2018-08-09 01:43:38 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_dlpfc/rse_gtex_gene.Rdata
 Loading objects:
   rse_gtex_gene
-2018-08-08 13:17:19 combining rses
-2018-08-08 13:17:20 saving new rse file
-2018-08-08 13:17:33 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/rse_gtex_jxn.Rdata
+2018-08-09 01:43:39 combining rses
+2018-08-09 01:43:39 saving new rse file
+2018-08-09 01:44:01 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/rse_gtex_jxn.Rdata
 Loading objects:
   rse_gtex_jxn
-2018-08-08 13:17:41 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_dlpfc/rse_gtex_jxn.Rdata
+2018-08-09 01:44:10 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_dlpfc/rse_gtex_jxn.Rdata
 Loading objects:
   rse_gtex_jxn
-2018-08-08 13:17:51 combining rses
-2018-08-08 13:20:29 saving new rse file
-2018-08-08 13:22:15 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/rse_gtex_tx.Rdata
+2018-08-09 01:44:23 combining rses
+2018-08-09 01:48:00 saving new rse file
+2018-08-09 01:51:20 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex/rse_gtex_tx.Rdata
 Loading objects:
   rse_gtex_tx
-2018-08-08 13:22:18 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_dlpfc/rse_gtex_tx.Rdata
+2018-08-09 01:51:23 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_dlpfc/rse_gtex_tx.Rdata
 Loading objects:
   rse_gtex_tx
-2018-08-08 13:22:22 combining rses
-2018-08-08 13:22:22 saving new rse file
+2018-08-09 01:51:27 combining rses
+2018-08-09 01:51:27 saving new rse file
 [1] "Reproducibility information:"
-[1] "2018-08-08 13:22:48 EDT"
+[1] "2018-08-09 01:51:54 EDT"
    user  system elapsed 
-540.474   2.714 548.406 
+814.574  11.559 859.865 
 Session info ----------------------------------------------------------------------------------------------------------
  setting  value                                      
  version  R version 3.5.0 Patched (2018-04-30 r74679)
@@ -118,7 +118,7 @@ Session info -------------------------------------------------------------------
  language (EN)                                       
  collate  en_US.UTF-8                                
  tz       US/Eastern                                 
- date     2018-08-08                                 
+ date     2018-08-09                                 
 
 Packages --------------------------------------------------------------------------------------------------------------
  package              * version   date       source                                   

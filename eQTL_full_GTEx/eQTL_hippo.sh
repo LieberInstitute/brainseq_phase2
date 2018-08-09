@@ -1,6 +1,6 @@
 #!/bin/bash
 #$ -cwd
-#$ -l bluejay,mem_free=150G,h_vmem=150G,h_fsize=200G
+#$ -l mem_free=150G,h_vmem=150G,h_fsize=200G
 #$ -N bsII_hippo_eQTL
 #$ -o ./eqtl_tables/logs/eQTL_hippo_4_features.txt
 #$ -e ./eqtl_tables/logs/eQTL_hippo_4_features.txt

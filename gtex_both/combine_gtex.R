@@ -58,12 +58,29 @@ xx <- lapply(unique(feat), function(feature) {
     message(paste(Sys.time(), 'saving new rse file'))
     if(feature == 'gene') {
         rse_gtex_gene <- new_rse
+        assays(rse_gtex_gene)$rpkm <- recount::getRPKM(rse_gtex_gene, 'Length')
         save(rse_gtex_gene, file = 'rse_gtex_gene.Rdata')
     } else if (feature == 'exon') {
         rse_gtex_exon <- new_rse
+        assays(rse_gtex_exon)$rpkm <- recount::getRPKM(rse_gtex_exon, 'Length')
         save(rse_gtex_exon, file = 'rse_gtex_exon.Rdata')
     } else if (feature == 'jxn') {
         rse_gtex_jxn <- new_rse
+        rowRanges(rse_gtex_jxn)$Length <- 100
+        jxn <- assays(rse_gtex_jxn)$counts
+        rownames(jxn) <- seq_len(nrow(jxn))
+        jxn <- as.matrix(as.data.frame(jxn))
+        
+        jxn_gr <- rowRanges(rse_gtex_jxn)
+        names(jxn_gr) <- seq_len(nrow(jxn))
+        jxn_col <- colData(rse_gtex_jxn)
+        rse_gtex_jxn <- SummarizedExperiment(assays = list(counts = jxn),
+            rowRanges = jxn_gr, colData = jxn_col)
+        ## Fix rownames
+        rownames(jxn) <- paste0(seqnames(rse_gtex_jxn), ":",
+            start(rse_gtex_jxn), "-", end(rse_gtex_jxn), "(",
+            strand(rse_gtex_jxn), ")")
+        assays(rse_gtex_jxn)$rp10m <- recount::getRPKM(rse_gtex_jxn, 'Length')
         save(rse_gtex_jxn, file = 'rse_gtex_jxn.Rdata')
     } else if (feature == 'tx') {
         rse_gtex_tx <- new_rse 
