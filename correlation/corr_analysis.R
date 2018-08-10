@@ -1,3 +1,7 @@
+## Usage:
+# qrsh -l mem_free=100G,h_vmem=100G,h_fsize=100G
+# Rscript corr_analysis.R  > logs/corr_analysis.txt 2>&1
+
 library('SummarizedExperiment')
 library('jaffelab')
 library('devtools')
