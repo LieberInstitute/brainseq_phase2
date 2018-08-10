@@ -121,6 +121,24 @@ save(expr, cleaned, file = 'rda/expr_and_cleaned.Rdata')
 message(paste(Sys.time(), 'saving corr results info'))
 save(corr_expr, corr_cleaned, file = 'rda/corrs.Rdata')
 
+pdf('hist.pdf', useDingbats = FALSE)
+mapply(function(dat, set, type) {
+    hist(dat, main = paste(type, '-', set), col = 'light blue')
+}, corr_expr, names(corr_expr), 'expr')
+mapply(function(dat, set, type) {
+    hist(dat, main = paste(type, '-', set), col = "#009E73")
+}, corr_cleaned, names(corr_cleaned), 'cleaned expr (keeping Dx)')
+dev.off()
+
+library('scales')
+pdf('expr_vs_cleaned.pdf', useDingbats = FALSE)
+mapply(function(x, y, set) {
+    m <- !is.na(x) & !is.na(y)
+    plot(x[m], y[m], xlab = 'expr', ylab = 'cleaned', main = set, pch = 19, col = alpha("#D55E00", 1/10))
+}, corr_expr, corr_cleaned, names(corr_expr))
+dev.off()
+
+
 ## Reproducibility information
 print('Reproducibility information:')
 Sys.time()
