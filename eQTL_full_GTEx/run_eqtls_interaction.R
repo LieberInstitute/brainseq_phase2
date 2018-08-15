@@ -195,9 +195,9 @@ jxnSlice$ResliceCombined(sliceSize = 5000)
 txSlice$ResliceCombined(sliceSize = 5000)
 
 
-keep = c("theSnps","snpspos","geneSlice","covsGene","posGene","exonSlice","covsExon","posExon",
+#keep = c("theSnps","snpspos","geneSlice","covsGene","posGene","exonSlice","covsExon","posExon",
 		"jxnSlice","covsJxn","posJxn","txSlice","covsTx","posTx")
-rm(list=ls()[! ls() %in% keep])
+#rm(list=ls()[! ls() %in% keep])
 print("....beginning eQTL analysis....")
 
 
@@ -245,11 +245,11 @@ save(meGene, meExon, meJxn, meTx,
 ######################
 ###### annotate ######
 
-# load("eqtl_tables/matrixEqtl_output_interaction_4features.rda")
-# load("data/zandiHypde_bipolar_rseTx_n511.rda")
-# load("data/zandiHypde_bipolar_rseJxn_n511.rda")
-# load("data/zandiHypde_bipolar_rseExon_n511.rda")
-# load("data/zandiHypde_bipolar_rseGene_n511.rda")
+# load("eqtl_tables/matrixEqtl_output_interaction_4features.rda", verbose = TRUE)
+# load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_gene.Rdata", verbose = TRUE)
+# load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_exon.Rdata", verbose = TRUE)
+# load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_jxn.Rdata", verbose = TRUE)
+# load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_tx.Rdata", verbose = TRUE)
 
 # extract
 geneEqtl = meGene$cis$eqtls
