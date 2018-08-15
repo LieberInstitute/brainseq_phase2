@@ -207,7 +207,7 @@ print("....beginning eQTL analysis....")
 
 meGene = Matrix_eQTL_main(snps=theSnps, gene = geneSlice, 
 	cvrt = covsGene, output_file_name.cis =  ".ctxt" ,
-	pvOutputThreshold.cis = 0.001,  pvOutputThreshold=0,
+	pvOutputThreshold.cis = 1,  pvOutputThreshold=0,
 	snpspos = snpspos, genepos = posGene, 
 	useModel = modelLINEAR_CROSS,	cisDist=2.5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
@@ -215,7 +215,7 @@ save(meGene, file="eqtl_tables/matrixEqtl_output_interaction_gene.rda")
 	
 meExon = Matrix_eQTL_main(snps=theSnps, gene = exonSlice, 
 	cvrt = covsExon, output_file_name.cis =  ".ctxt" ,
-	pvOutputThreshold.cis = 0.001,  pvOutputThreshold=0,
+	pvOutputThreshold.cis = 1,  pvOutputThreshold=0,
 	snpspos = snpspos, genepos = posExon, 
 	useModel = modelLINEAR_CROSS,	cisDist=2.5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
@@ -223,7 +223,7 @@ save(meExon, file="eqtl_tables/matrixEqtl_output_interaction_exon.rda")
 	
 meJxn = Matrix_eQTL_main(snps=theSnps, gene = jxnSlice, 
 	cvrt = covsJxn, output_file_name.cis =  ".ctxt" ,
-	pvOutputThreshold.cis = 0.001,  pvOutputThreshold=0,
+	pvOutputThreshold.cis = 1,  pvOutputThreshold=0,
 	snpspos = snpspos, genepos = posJxn, 
 	useModel = modelLINEAR_CROSS,	cisDist=2.5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
@@ -231,7 +231,7 @@ save(meJxn,	file="eqtl_tables/matrixEqtl_output_interaction_jxn.rda")
 	
 meTx = Matrix_eQTL_main(snps=theSnps, gene = txSlice, 
 	cvrt = covsTx, output_file_name.cis =  ".ctxt" ,
-	pvOutputThreshold.cis = 0.001,  pvOutputThreshold=0,
+	pvOutputThreshold.cis = 1,  pvOutputThreshold=0,
 	snpspos = snpspos, genepos = posTx, 
 	useModel = modelLINEAR_CROSS,	cisDist=2.5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
