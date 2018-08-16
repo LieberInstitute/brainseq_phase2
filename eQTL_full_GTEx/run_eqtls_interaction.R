@@ -196,7 +196,7 @@ txSlice$ResliceCombined(sliceSize = 5000)
 
 
 #keep = c("theSnps","snpspos","geneSlice","covsGene","posGene","exonSlice","covsExon","posExon",
-		"jxnSlice","covsJxn","posJxn","txSlice","covsTx","posTx")
+#		"jxnSlice","covsJxn","posJxn","txSlice","covsTx","posTx")
 #rm(list=ls()[! ls() %in% keep])
 print("....beginning eQTL analysis....")
 
