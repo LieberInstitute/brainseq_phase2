@@ -11,6 +11,7 @@ dir.create('eqtl_tables', showWarnings = FALSE)
 ######################
 ### load data ####
 ######################
+if(!file.exists('eqtl_tables/matrixEqtl_output_interaction_4features.rda')) {
 
 load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_gene.Rdata")
 load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_exon.Rdata")
@@ -245,11 +246,13 @@ save(meGene, meExon, meJxn, meTx,
 ######################
 ###### annotate ######
 
-# load("eqtl_tables/matrixEqtl_output_interaction_4features.rda", verbose = TRUE)
-# load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_gene.Rdata", verbose = TRUE)
-# load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_exon.Rdata", verbose = TRUE)
-# load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_jxn.Rdata", verbose = TRUE)
-# load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_tx.Rdata", verbose = TRUE)
+} else {
+load("eqtl_tables/matrixEqtl_output_interaction_4features.rda", verbose = TRUE)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_gene.Rdata", verbose = TRUE)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_exon.Rdata", verbose = TRUE)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_jxn.Rdata", verbose = TRUE)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_tx.Rdata", verbose = TRUE)
+}
 
 # extract
 geneEqtl = meGene$cis$eqtls
@@ -303,11 +306,11 @@ txEqtl = DataFrame(txEqtl)
 
 # merge
 allEqtl = rbind(geneEqtl, exonEqtl, jxnEqtl, txEqtl)
-allEqtl$gencodeTx = CharacterList(c(as.list(rowRanges(rse_gtex_gene)$gencodeTx[match(geneEqtl$gene, 
-	rownames(rse_gtex_gene))]),
-	as.list(rowRanges(rse_gtex_exon)$gencodeTx[match(exonEqtl$gene, rownames(rse_gtex_exon))]),
-	as.list(rowRanges(rse_gtex_jxn)$gencodeTx[match(jxnEqtl$gene, rownames(rse_gtex_jxn))]),
-	as.list(txEqtl$gene)))
+# allEqtl$gencodeTx = CharacterList(c(as.list(rowRanges(rse_gtex_gene)$gencodeTx[match(geneEqtl$gene,
+#     rownames(rse_gtex_gene))]),
+#     as.list(rowRanges(rse_gtex_exon)$gencodeTx[match(exonEqtl$gene, rownames(rse_gtex_exon))]),
+#     as.list(rowRanges(rse_gtex_jxn)$gencodeTx[match(jxnEqtl$gene, rownames(rse_gtex_jxn))]),
+#     as.list(txEqtl$gene)))
 save(allEqtl, file="eqtl_tables/mergedEqtl_output_interaction_4features.rda",compress=TRUE)
 
 

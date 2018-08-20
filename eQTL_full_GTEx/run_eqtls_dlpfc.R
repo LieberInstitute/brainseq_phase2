@@ -283,11 +283,11 @@ txEqtl = DataFrame(txEqtl)
 
 # merge
 allEqtl = rbind(geneEqtl, exonEqtl, jxnEqtl, txEqtl)
-allEqtl$gencodeTx = CharacterList(c(as.list(rowRanges(rse_gtex_gene)$gencodeTx[match(geneEqtl$gene, 
-	rownames(rse_gtex_gene))]),
-	as.list(rowRanges(rse_gtex_exon)$gencodeTx[match(exonEqtl$gene, rownames(rse_gtex_exon))]),
-	as.list(rowRanges(rse_gtex_jxn)$gencodeTx[match(jxnEqtl$gene, rownames(rse_gtex_jxn))]),
-	as.list(txEqtl$gene)))
+# allEqtl$gencodeTx = CharacterList(c(as.list(rowRanges(rse_gtex_gene)$gencodeTx[match(geneEqtl$gene,
+#     rownames(rse_gtex_gene))]),
+#     as.list(rowRanges(rse_gtex_exon)$gencodeTx[match(exonEqtl$gene, rownames(rse_gtex_exon))]),
+#     as.list(rowRanges(rse_gtex_jxn)$gencodeTx[match(jxnEqtl$gene, rownames(rse_gtex_jxn))]),
+#     as.list(txEqtl$gene)))
 save(allEqtl, file="eqtl_tables/mergedEqtl_output_dlpfc_4features.rda",compress=TRUE)
 
 
