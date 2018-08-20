@@ -1,10 +1,10 @@
 **** Job starts ****
-Thu Aug  9 10:25:35 EDT 2018
+Fri Aug 17 11:09:40 EDT 2018
 **** JHPCE info ****
 User: lcollado
-Job id: 5402230
+Job id: 5446666
 Job name: bsII_dlpfc_eQTL
-Hostname: compute-048
+Hostname: compute-054
 Task id: 
 Loading required package: GenomicRanges
 Loading required package: stats4
@@ -117,563 +117,602 @@ Matching data files and location files
 24652of24652 genes matched
 3194576of3194576 SNPs matched
 
-Task finished in 9.54899999999998 seconds
+Task finished in 7.25900000000001 seconds
 Reordering SNPs
 
-Task finished in 61.8820000000001 seconds
+Task finished in 50.498 seconds
 Reordering genes
 
-Task finished in 15.009 seconds
+Task finished in 12.201 seconds
 Processing covariates
 Task finished in 0.00399999999990541 seconds
 Processing gene expression data (imputation, residualization)
-Task finished in 0.326999999999771 seconds
+Task finished in 0.320999999999913 seconds
 Creating output file(s)
-Task finished in 0.05600000000004 seconds
+Task finished in 0.101000000000113 seconds
 Performing eQTL analysis
- 0.31% done, 5,663 cis-eQTLs
- 1.87% done, 11,501 cis-eQTLs
- 3.43% done, 16,879 cis-eQTLs
- 5.00% done, 21,820 cis-eQTLs
- 6.56% done, 24,589 cis-eQTLs
- 8.12% done, 32,722 cis-eQTLs
- 9.68% done, 35,870 cis-eQTLs
-11.24% done, 39,311 cis-eQTLs
-12.81% done, 43,942 cis-eQTLs
-14.37% done, 49,398 cis-eQTLs
-15.93% done, 54,069 cis-eQTLs
-17.50% done, 61,485 cis-eQTLs
-19.06% done, 62,929 cis-eQTLs
-20.62% done, 66,409 cis-eQTLs
-20.93% done, 68,971 cis-eQTLs
-22.50% done, 72,401 cis-eQTLs
-24.06% done, 80,269 cis-eQTLs
-25.62% done, 83,370 cis-eQTLs
-27.18% done, 88,706 cis-eQTLs
-28.74% done, 93,760 cis-eQTLs
-30.31% done, 96,421 cis-eQTLs
-31.87% done, 100,170 cis-eQTLs
-33.43% done, 108,481 cis-eQTLs
-35.00% done, 112,481 cis-eQTLs
-36.56% done, 115,499 cis-eQTLs
-38.12% done, 120,551 cis-eQTLs
-39.68% done, 125,595 cis-eQTLs
-41.25% done, 140,685 cis-eQTLs
-42.81% done, 158,717 cis-eQTLs
-44.37% done, 162,627 cis-eQTLs
-45.93% done, 164,183 cis-eQTLs
-46.25% done, 166,336 cis-eQTLs
-47.81% done, 170,496 cis-eQTLs
-49.37% done, 177,854 cis-eQTLs
-50.93% done, 194,193 cis-eQTLs
-52.50% done, 198,686 cis-eQTLs
-54.06% done, 203,797 cis-eQTLs
-55.62% done, 208,039 cis-eQTLs
-57.18% done, 211,010 cis-eQTLs
-58.75% done, 215,549 cis-eQTLs
-60.31% done, 219,834 cis-eQTLs
-61.87% done, 226,187 cis-eQTLs
-63.43% done, 229,228 cis-eQTLs
-65.00% done, 235,664 cis-eQTLs
-66.56% done, 241,438 cis-eQTLs
-68.12% done, 246,832 cis-eQTLs
-69.68% done, 255,540 cis-eQTLs
-70.00% done, 256,666 cis-eQTLs
-71.56% done, 260,917 cis-eQTLs
-73.12% done, 265,484 cis-eQTLs
-74.68% done, 269,474 cis-eQTLs
-76.25% done, 272,843 cis-eQTLs
-77.81% done, 278,370 cis-eQTLs
-79.37% done, 282,858 cis-eQTLs
-80.93% done, 289,565 cis-eQTLs
-82.50% done, 298,789 cis-eQTLs
-84.06% done, 305,932 cis-eQTLs
-85.62% done, 311,350 cis-eQTLs
-87.18% done, 337,608 cis-eQTLs
-88.75% done, 338,933 cis-eQTLs
-89.06% done, 342,896 cis-eQTLs
-90.62% done, 345,957 cis-eQTLs
-92.18% done, 353,439 cis-eQTLs
-93.75% done, 369,445 cis-eQTLs
-95.31% done, 376,872 cis-eQTLs
-96.87% done, 381,353 cis-eQTLs
-98.43% done, 388,537 cis-eQTLs
-100.00% done, 393,990 cis-eQTLs
-Task finished in 9046.016 seconds
+ 0.31% done, 859,082 cis-eQTLs
+ 1.87% done, 1,428,904 cis-eQTLs
+ 3.43% done, 1,974,087 cis-eQTLs
+ 5.00% done, 2,751,078 cis-eQTLs
+ 6.56% done, 3,279,516 cis-eQTLs
+ 8.12% done, 4,026,770 cis-eQTLs
+ 9.68% done, 4,564,310 cis-eQTLs
+11.24% done, 5,111,806 cis-eQTLs
+12.81% done, 5,818,885 cis-eQTLs
+14.37% done, 6,392,594 cis-eQTLs
+15.93% done, 6,866,386 cis-eQTLs
+17.50% done, 7,358,486 cis-eQTLs
+19.06% done, 7,752,167 cis-eQTLs
+20.62% done, 7,895,255 cis-eQTLs
+20.93% done, 8,237,006 cis-eQTLs
+22.50% done, 8,693,180 cis-eQTLs
+24.06% done, 9,345,139 cis-eQTLs
+25.62% done, 9,725,191 cis-eQTLs
+27.18% done, 10,237,179 cis-eQTLs
+28.74% done, 10,905,893 cis-eQTLs
+30.31% done, 11,270,059 cis-eQTLs
+31.87% done, 11,651,454 cis-eQTLs
+33.43% done, 12,055,704 cis-eQTLs
+35.00% done, 12,419,576 cis-eQTLs
+36.56% done, 12,861,248 cis-eQTLs
+38.12% done, 13,233,010 cis-eQTLs
+39.68% done, 13,883,151 cis-eQTLs
+41.25% done, 14,612,471 cis-eQTLs
+42.81% done, 15,918,380 cis-eQTLs
+44.37% done, 16,238,358 cis-eQTLs
+45.93% done, 16,504,439 cis-eQTLs
+46.25% done, 16,657,824 cis-eQTLs
+47.81% done, 17,120,735 cis-eQTLs
+49.37% done, 17,623,160 cis-eQTLs
+50.93% done, 18,221,535 cis-eQTLs
+52.50% done, 18,760,616 cis-eQTLs
+54.06% done, 19,201,699 cis-eQTLs
+55.62% done, 19,602,821 cis-eQTLs
+57.18% done, 19,991,750 cis-eQTLs
+58.75% done, 20,445,875 cis-eQTLs
+60.31% done, 21,001,963 cis-eQTLs
+61.87% done, 21,681,506 cis-eQTLs
+63.43% done, 22,113,391 cis-eQTLs
+65.00% done, 22,618,753 cis-eQTLs
+66.56% done, 23,183,876 cis-eQTLs
+68.12% done, 23,814,123 cis-eQTLs
+69.68% done, 24,460,870 cis-eQTLs
+70.00% done, 24,578,488 cis-eQTLs
+71.56% done, 25,119,073 cis-eQTLs
+73.12% done, 25,683,315 cis-eQTLs
+74.68% done, 26,029,111 cis-eQTLs
+76.25% done, 26,627,400 cis-eQTLs
+77.81% done, 27,278,910 cis-eQTLs
+79.37% done, 28,218,334 cis-eQTLs
+80.93% done, 28,882,449 cis-eQTLs
+82.50% done, 29,832,340 cis-eQTLs
+84.06% done, 30,618,493 cis-eQTLs
+85.62% done, 31,575,178 cis-eQTLs
+87.18% done, 32,630,493 cis-eQTLs
+88.75% done, 32,725,641 cis-eQTLs
+89.06% done, 33,522,395 cis-eQTLs
+90.62% done, 33,971,448 cis-eQTLs
+92.18% done, 35,076,684 cis-eQTLs
+93.75% done, 36,268,236 cis-eQTLs
+95.31% done, 37,258,125 cis-eQTLs
+96.87% done, 37,983,143 cis-eQTLs
+98.43% done, 38,769,045 cis-eQTLs
+100.00% done, 39,434,254 cis-eQTLs
+Task finished in 5465.865 seconds
 
 Matching data files and location files
 396581of396581 genes matched
 3194576of3194576 SNPs matched
 
-Task finished in 3.59799999999996 seconds
+Task finished in 3.71799999999985 seconds
 Reordering genes
 
-Task finished in 15.860999999999 seconds
+Task finished in 18.1170000000002 seconds
 Processing covariates
-Task finished in 0.00400000000081491 seconds
+Task finished in 0.00299999999970169 seconds
 Processing gene expression data (imputation, residualization)
-Task finished in 4.87099999999919 seconds
+Task finished in 5.51100000000042 seconds
 Creating output file(s)
-Task finished in 0.117000000000189 seconds
+Task finished in 3.78999999999996 seconds
 Performing eQTL analysis
- 0.01% done, 16,800 cis-eQTLs
- 0.03% done, 43,095 cis-eQTLs
- 0.05% done, 43,140 cis-eQTLs
- 1.60% done, 43,327 cis-eQTLs
- 1.62% done, 85,056 cis-eQTLs
- 1.64% done, 90,092 cis-eQTLs
- 3.20% done, 136,341 cis-eQTLs
- 3.22% done, 141,279 cis-eQTLs
- 4.78% done, 157,359 cis-eQTLs
- 4.80% done, 181,596 cis-eQTLs
- 6.36% done, 186,606 cis-eQTLs
- 6.38% done, 205,186 cis-eQTLs
- 7.94% done, 209,372 cis-eQTLs
- 7.96% done, 250,878 cis-eQTLs
- 9.53% done, 251,385 cis-eQTLs
- 9.55% done, 291,359 cis-eQTLs
-11.11% done, 292,961 cis-eQTLs
-11.13% done, 313,962 cis-eQTLs
-11.15% done, 324,686 cis-eQTLs
-12.71% done, 342,610 cis-eQTLs
-12.73% done, 362,532 cis-eQTLs
-14.29% done, 382,310 cis-eQTLs
-14.31% done, 413,719 cis-eQTLs
-14.33% done, 413,856 cis-eQTLs
-15.89% done, 477,421 cis-eQTLs
-17.46% done, 477,426 cis-eQTLs
-17.48% done, 520,865 cis-eQTLs
-17.50% done, 534,278 cis-eQTLs
-19.06% done, 552,827 cis-eQTLs
-19.08% done, 553,633 cis-eQTLs
-20.64% done, 592,630 cis-eQTLs
-20.66% done, 594,965 cis-eQTLs
-22.22% done, 615,117 cis-eQTLs
-22.24% done, 630,122 cis-eQTLs
-23.80% done, 659,700 cis-eQTLs
-23.82% done, 721,580 cis-eQTLs
-23.84% done, 732,698 cis-eQTLs
-25.41% done, 747,404 cis-eQTLs
-25.42% done, 748,518 cis-eQTLs
-26.99% done, 779,533 cis-eQTLs
-27.01% done, 780,208 cis-eQTLs
-28.57% done, 809,205 cis-eQTLs
-28.59% done, 823,473 cis-eQTLs
-30.15% done, 843,235 cis-eQTLs
-30.17% done, 845,665 cis-eQTLs
-31.73% done, 873,398 cis-eQTLs
-33.30% done, 875,344 cis-eQTLs
-33.32% done, 933,035 cis-eQTLs
-34.88% done, 938,233 cis-eQTLs
-34.90% done, 962,983 cis-eQTLs
-36.46% done, 981,530 cis-eQTLs
-36.48% done, 988,033 cis-eQTLs
-38.04% done, 1,030,575 cis-eQTLs
-38.06% done, 1,030,633 cis-eQTLs
-39.60% done, 1,030,633 cis-eQTLs
-39.62% done, 1,052,955 cis-eQTLs
-39.64% done, 1,056,243 cis-eQTLs
-41.21% done, 1,074,724 cis-eQTLs
-41.23% done, 1,129,613 cis-eQTLs
-42.79% done, 1,262,081 cis-eQTLs
-42.81% done, 1,275,348 cis-eQTLs
-44.37% done, 1,309,748 cis-eQTLs
-45.93% done, 1,311,508 cis-eQTLs
-45.95% done, 1,330,901 cis-eQTLs
-47.51% done, 1,334,561 cis-eQTLs
-47.53% done, 1,361,855 cis-eQTLs
-49.10% done, 1,390,413 cis-eQTLs
-49.12% done, 1,409,908 cis-eQTLs
-50.68% done, 1,481,926 cis-eQTLs
-50.70% done, 1,523,412 cis-eQTLs
-52.26% done, 1,527,836 cis-eQTLs
-52.28% done, 1,545,878 cis-eQTLs
-53.84% done, 1,549,957 cis-eQTLs
-53.86% done, 1,578,352 cis-eQTLs
-55.42% done, 1,589,240 cis-eQTLs
-55.44% done, 1,607,121 cis-eQTLs
-57.01% done, 1,626,978 cis-eQTLs
-57.03% done, 1,631,838 cis-eQTLs
-58.59% done, 1,659,925 cis-eQTLs
-58.61% done, 1,664,845 cis-eQTLs
-60.17% done, 1,684,678 cis-eQTLs
-60.19% done, 1,688,405 cis-eQTLs
-61.75% done, 1,715,257 cis-eQTLs
-61.77% done, 1,727,647 cis-eQTLs
-63.33% done, 1,743,902 cis-eQTLs
-63.35% done, 1,753,091 cis-eQTLs
-64.92% done, 1,778,507 cis-eQTLs
-64.94% done, 1,794,839 cis-eQTLs
-66.50% done, 1,831,631 cis-eQTLs
-66.52% done, 1,844,082 cis-eQTLs
-68.08% done, 1,888,440 cis-eQTLs
-68.10% done, 1,903,351 cis-eQTLs
-69.66% done, 1,922,616 cis-eQTLs
-69.68% done, 1,956,687 cis-eQTLs
-69.70% done, 1,980,270 cis-eQTLs
-71.26% done, 2,008,770 cis-eQTLs
-71.28% done, 2,030,515 cis-eQTLs
-72.85% done, 2,042,929 cis-eQTLs
-72.87% done, 2,066,854 cis-eQTLs
-74.43% done, 2,087,936 cis-eQTLs
-74.45% done, 2,096,538 cis-eQTLs
-76.01% done, 2,111,437 cis-eQTLs
-76.03% done, 2,122,257 cis-eQTLs
-77.59% done, 2,147,570 cis-eQTLs
-77.61% done, 2,166,608 cis-eQTLs
-79.17% done, 2,179,906 cis-eQTLs
-79.19% done, 2,209,755 cis-eQTLs
-79.21% done, 2,217,026 cis-eQTLs
-80.78% done, 2,251,506 cis-eQTLs
-80.80% done, 2,277,685 cis-eQTLs
-82.36% done, 2,290,671 cis-eQTLs
-82.38% done, 2,336,262 cis-eQTLs
-82.40% done, 2,366,294 cis-eQTLs
-83.96% done, 2,378,386 cis-eQTLs
-83.98% done, 2,407,346 cis-eQTLs
-84.00% done, 2,436,306 cis-eQTLs
-85.56% done, 2,451,049 cis-eQTLs
-85.58% done, 2,489,211 cis-eQTLs
-85.60% done, 2,496,123 cis-eQTLs
-87.16% done, 2,540,036 cis-eQTLs
-87.18% done, 2,569,308 cis-eQTLs
-87.20% done, 2,731,650 cis-eQTLs
-88.76% done, 2,759,521 cis-eQTLs
-88.78% done, 2,791,399 cis-eQTLs
-88.80% done, 2,822,420 cis-eQTLs
-90.37% done, 2,836,719 cis-eQTLs
-90.39% done, 2,849,794 cis-eQTLs
-91.95% done, 2,859,098 cis-eQTLs
-91.97% done, 2,889,928 cis-eQTLs
-91.99% done, 2,907,428 cis-eQTLs
-92.01% done, 2,915,972 cis-eQTLs
-93.57% done, 2,989,932 cis-eQTLs
-93.59% done, 3,020,304 cis-eQTLs
-93.61% done, 3,021,798 cis-eQTLs
-95.15% done, 3,021,798 cis-eQTLs
-95.17% done, 3,059,289 cis-eQTLs
-95.19% done, 3,077,518 cis-eQTLs
-96.75% done, 3,125,243 cis-eQTLs
-96.77% done, 3,143,455 cis-eQTLs
-98.33% done, 3,156,553 cis-eQTLs
-98.35% done, 3,211,767 cis-eQTLs
-98.37% done, 3,216,027 cis-eQTLs
-99.94% done, 3,251,864 cis-eQTLs
-99.96% done, 3,254,078 cis-eQTLs
-99.98% done, 3,256,944 cis-eQTLs
-100.00% done, 3,257,368 cis-eQTLs
-Task finished in 10702.205 seconds
+ 0.01% done, 6,869,859 cis-eQTLs
+ 0.03% done, 13,991,340 cis-eQTLs
+ 0.05% done, 14,018,211 cis-eQTLs
+ 1.60% done, 14,174,134 cis-eQTLs
+ 1.62% done, 22,270,665 cis-eQTLs
+ 1.64% done, 23,208,685 cis-eQTLs
+ 3.20% done, 30,355,667 cis-eQTLs
+ 3.22% done, 31,032,163 cis-eQTLs
+ 4.78% done, 36,362,342 cis-eQTLs
+ 4.80% done, 42,798,366 cis-eQTLs
+ 6.36% done, 44,528,077 cis-eQTLs
+ 6.38% done, 50,422,747 cis-eQTLs
+ 7.94% done, 52,355,712 cis-eQTLs
+ 7.96% done, 60,477,053 cis-eQTLs
+ 9.53% done, 60,907,018 cis-eQTLs
+ 9.55% done, 69,149,574 cis-eQTLs
+11.11% done, 70,310,952 cis-eQTLs
+11.13% done, 77,675,962 cis-eQTLs
+11.15% done, 80,222,520 cis-eQTLs
+12.71% done, 85,164,152 cis-eQTLs
+12.73% done, 92,285,702 cis-eQTLs
+14.29% done, 93,198,599 cis-eQTLs
+14.31% done, 101,149,811 cis-eQTLs
+14.33% done, 101,251,224 cis-eQTLs
+15.89% done, 110,214,618 cis-eQTLs
+17.46% done, 110,237,492 cis-eQTLs
+17.48% done, 117,100,242 cis-eQTLs
+17.50% done, 117,794,838 cis-eQTLs
+19.06% done, 124,814,161 cis-eQTLs
+19.08% done, 125,390,699 cis-eQTLs
+20.64% done, 132,488,269 cis-eQTLs
+20.66% done, 134,551,724 cis-eQTLs
+22.22% done, 140,814,816 cis-eQTLs
+22.24% done, 143,762,589 cis-eQTLs
+23.80% done, 147,188,147 cis-eQTLs
+23.82% done, 153,893,128 cis-eQTLs
+23.84% done, 156,384,050 cis-eQTLs
+25.41% done, 161,463,211 cis-eQTLs
+25.42% done, 161,969,646 cis-eQTLs
+26.99% done, 169,785,958 cis-eQTLs
+27.01% done, 170,298,287 cis-eQTLs
+28.57% done, 177,767,134 cis-eQTLs
+28.59% done, 181,937,603 cis-eQTLs
+30.15% done, 186,308,852 cis-eQTLs
+30.17% done, 187,343,293 cis-eQTLs
+31.73% done, 193,805,406 cis-eQTLs
+33.30% done, 194,595,871 cis-eQTLs
+33.32% done, 199,256,275 cis-eQTLs
+34.88% done, 201,749,403 cis-eQTLs
+34.90% done, 204,470,560 cis-eQTLs
+36.46% done, 209,205,501 cis-eQTLs
+36.48% done, 210,947,421 cis-eQTLs
+38.04% done, 216,429,993 cis-eQTLs
+38.06% done, 216,481,755 cis-eQTLs
+39.60% done, 216,489,416 cis-eQTLs
+39.62% done, 223,941,257 cis-eQTLs
+39.64% done, 225,275,968 cis-eQTLs
+41.21% done, 230,880,719 cis-eQTLs
+41.23% done, 234,364,386 cis-eQTLs
+42.79% done, 255,012,234 cis-eQTLs
+42.81% done, 257,524,137 cis-eQTLs
+44.37% done, 261,891,662 cis-eQTLs
+45.93% done, 262,308,074 cis-eQTLs
+45.95% done, 267,070,553 cis-eQTLs
+47.51% done, 268,779,164 cis-eQTLs
+47.53% done, 273,955,294 cis-eQTLs
+49.10% done, 277,124,266 cis-eQTLs
+49.12% done, 280,915,842 cis-eQTLs
+50.68% done, 284,956,114 cis-eQTLs
+50.70% done, 290,197,123 cis-eQTLs
+52.26% done, 291,862,743 cis-eQTLs
+52.28% done, 298,166,049 cis-eQTLs
+53.84% done, 299,770,130 cis-eQTLs
+53.86% done, 304,536,995 cis-eQTLs
+55.42% done, 308,417,856 cis-eQTLs
+55.44% done, 310,820,365 cis-eQTLs
+57.01% done, 315,115,836 cis-eQTLs
+57.03% done, 316,609,005 cis-eQTLs
+58.59% done, 322,838,082 cis-eQTLs
+58.61% done, 324,409,814 cis-eQTLs
+60.17% done, 329,930,941 cis-eQTLs
+60.19% done, 331,320,523 cis-eQTLs
+61.75% done, 337,536,565 cis-eQTLs
+61.77% done, 341,964,722 cis-eQTLs
+63.33% done, 344,772,734 cis-eQTLs
+63.35% done, 348,570,980 cis-eQTLs
+64.92% done, 353,115,928 cis-eQTLs
+64.94% done, 355,133,985 cis-eQTLs
+66.50% done, 361,402,723 cis-eQTLs
+66.52% done, 363,044,223 cis-eQTLs
+68.08% done, 368,959,350 cis-eQTLs
+68.10% done, 374,294,549 cis-eQTLs
+69.66% done, 377,279,144 cis-eQTLs
+69.68% done, 385,291,499 cis-eQTLs
+69.70% done, 389,153,647 cis-eQTLs
+71.26% done, 392,854,354 cis-eQTLs
+71.28% done, 397,713,445 cis-eQTLs
+72.85% done, 401,194,668 cis-eQTLs
+72.87% done, 406,487,292 cis-eQTLs
+74.43% done, 409,389,115 cis-eQTLs
+74.45% done, 411,026,822 cis-eQTLs
+76.01% done, 417,542,749 cis-eQTLs
+76.03% done, 422,070,980 cis-eQTLs
+77.59% done, 426,451,305 cis-eQTLs
+77.61% done, 432,599,437 cis-eQTLs
+79.17% done, 435,723,534 cis-eQTLs
+79.19% done, 443,141,146 cis-eQTLs
+79.21% done, 443,763,404 cis-eQTLs
+80.78% done, 451,511,057 cis-eQTLs
+80.80% done, 456,440,803 cis-eQTLs
+82.36% done, 459,173,399 cis-eQTLs
+82.38% done, 468,657,221 cis-eQTLs
+82.40% done, 473,004,236 cis-eQTLs
+83.96% done, 476,326,465 cis-eQTLs
+83.98% done, 482,439,332 cis-eQTLs
+84.00% done, 487,047,755 cis-eQTLs
+85.56% done, 490,943,562 cis-eQTLs
+85.58% done, 501,116,443 cis-eQTLs
+85.60% done, 504,046,969 cis-eQTLs
+87.16% done, 508,435,611 cis-eQTLs
+87.18% done, 515,658,643 cis-eQTLs
+87.20% done, 521,583,026 cis-eQTLs
+88.76% done, 524,239,496 cis-eQTLs
+88.78% done, 532,357,304 cis-eQTLs
+88.80% done, 538,908,206 cis-eQTLs
+90.37% done, 541,396,821 cis-eQTLs
+90.39% done, 546,213,514 cis-eQTLs
+91.95% done, 548,308,321 cis-eQTLs
+91.97% done, 556,036,364 cis-eQTLs
+91.99% done, 564,991,863 cis-eQTLs
+92.01% done, 566,706,605 cis-eQTLs
+93.57% done, 575,583,344 cis-eQTLs
+93.59% done, 584,967,230 cis-eQTLs
+93.61% done, 585,607,201 cis-eQTLs
+95.15% done, 585,760,068 cis-eQTLs
+95.17% done, 594,947,787 cis-eQTLs
+95.19% done, 597,879,562 cis-eQTLs
+96.75% done, 602,494,081 cis-eQTLs
+96.77% done, 608,408,269 cis-eQTLs
+98.33% done, 610,170,358 cis-eQTLs
+98.35% done, 619,338,041 cis-eQTLs
+98.37% done, 620,847,168 cis-eQTLs
+99.94% done, 628,093,400 cis-eQTLs
+99.96% done, 629,170,676 cis-eQTLs
+99.98% done, 630,411,547 cis-eQTLs
+100.00% done, 630,735,668 cis-eQTLs
+Task finished in 20408.695 seconds
 
 Matching data files and location files
 297181of297181 genes matched
 3194576of3194576 SNPs matched
 
-Task finished in 3.98199999999997 seconds
+Task finished in 4.85800000000017 seconds
 Reordering genes
 
-Task finished in 15.1110000000008 seconds
+Task finished in 18.0479999999989 seconds
 Processing covariates
-Task finished in 0.0029999999969732 seconds
+Task finished in 0.00400000000081491 seconds
 Processing gene expression data (imputation, residualization)
-Task finished in 3.98800000000119 seconds
+Task finished in 4.45500000000175 seconds
 Creating output file(s)
-Task finished in 0.330000000001746 seconds
+Task finished in 49.7029999999977 seconds
 Performing eQTL analysis
- 0.02% done, 18,733 cis-eQTLs
- 0.05% done, 25,677 cis-eQTLs
- 1.61% done, 40,601 cis-eQTLs
- 1.64% done, 46,841 cis-eQTLs
- 3.20% done, 72,463 cis-eQTLs
- 3.22% done, 73,309 cis-eQTLs
- 4.79% done, 88,763 cis-eQTLs
- 4.81% done, 99,662 cis-eQTLs
- 6.38% done, 111,467 cis-eQTLs
- 6.40% done, 115,320 cis-eQTLs
- 7.96% done, 142,949 cis-eQTLs
- 9.53% done, 143,310 cis-eQTLs
- 9.55% done, 165,022 cis-eQTLs
-11.11% done, 170,709 cis-eQTLs
-11.14% done, 181,912 cis-eQTLs
-12.70% done, 193,297 cis-eQTLs
-12.73% done, 206,058 cis-eQTLs
-14.29% done, 228,053 cis-eQTLs
-14.32% done, 237,342 cis-eQTLs
-15.88% done, 264,588 cis-eQTLs
-15.91% done, 265,918 cis-eQTLs
-17.47% done, 291,820 cis-eQTLs
-17.50% done, 302,364 cis-eQTLs
-19.06% done, 318,827 cis-eQTLs
-20.62% done, 319,997 cis-eQTLs
-20.65% done, 338,813 cis-eQTLs
-22.21% done, 343,100 cis-eQTLs
-22.23% done, 356,380 cis-eQTLs
-23.80% done, 370,610 cis-eQTLs
-23.82% done, 390,221 cis-eQTLs
-25.39% done, 392,728 cis-eQTLs
-25.41% done, 401,260 cis-eQTLs
-26.97% done, 419,558 cis-eQTLs
-27.00% done, 420,762 cis-eQTLs
-28.56% done, 445,940 cis-eQTLs
-30.13% done, 446,423 cis-eQTLs
-30.15% done, 458,801 cis-eQTLs
-31.71% done, 472,036 cis-eQTLs
-31.74% done, 475,067 cis-eQTLs
-33.30% done, 505,536 cis-eQTLs
-34.86% done, 515,863 cis-eQTLs
-34.89% done, 528,912 cis-eQTLs
-36.45% done, 540,816 cis-eQTLs
-36.48% done, 541,198 cis-eQTLs
-38.04% done, 562,155 cis-eQTLs
-39.60% done, 572,029 cis-eQTLs
-39.63% done, 579,472 cis-eQTLs
-41.19% done, 591,883 cis-eQTLs
-41.22% done, 628,598 cis-eQTLs
-42.78% done, 721,090 cis-eQTLs
-44.34% done, 723,191 cis-eQTLs
-44.37% done, 743,952 cis-eQTLs
-45.93% done, 751,066 cis-eQTLs
-45.96% done, 756,761 cis-eQTLs
-47.52% done, 774,285 cis-eQTLs
-49.08% done, 780,632 cis-eQTLs
-49.11% done, 795,592 cis-eQTLs
-50.67% done, 847,553 cis-eQTLs
-50.70% done, 865,907 cis-eQTLs
-52.26% done, 879,269 cis-eQTLs
-52.29% done, 883,021 cis-eQTLs
-53.85% done, 903,827 cis-eQTLs
-55.41% done, 907,305 cis-eQTLs
-55.44% done, 916,217 cis-eQTLs
-57.00% done, 929,797 cis-eQTLs
-58.56% done, 931,073 cis-eQTLs
-58.59% done, 946,878 cis-eQTLs
-60.15% done, 956,117 cis-eQTLs
-60.18% done, 962,979 cis-eQTLs
-61.74% done, 971,894 cis-eQTLs
-61.77% done, 985,801 cis-eQTLs
-63.33% done, 993,924 cis-eQTLs
-63.35% done, 1,002,513 cis-eQTLs
-64.92% done, 1,023,080 cis-eQTLs
-64.94% done, 1,025,064 cis-eQTLs
-66.51% done, 1,047,626 cis-eQTLs
-68.07% done, 1,048,237 cis-eQTLs
-68.09% done, 1,071,365 cis-eQTLs
-69.66% done, 1,079,595 cis-eQTLs
-69.68% done, 1,107,371 cis-eQTLs
-71.25% done, 1,109,098 cis-eQTLs
-71.27% done, 1,123,434 cis-eQTLs
-72.83% done, 1,135,067 cis-eQTLs
-72.86% done, 1,145,973 cis-eQTLs
-74.42% done, 1,165,459 cis-eQTLs
-75.98% done, 1,166,875 cis-eQTLs
-76.01% done, 1,182,600 cis-eQTLs
-76.04% done, 1,182,798 cis-eQTLs
-77.57% done, 1,183,608 cis-eQTLs
-77.60% done, 1,201,882 cis-eQTLs
-77.63% done, 1,204,560 cis-eQTLs
-79.19% done, 1,229,414 cis-eQTLs
-79.21% done, 1,234,319 cis-eQTLs
-80.78% done, 1,256,340 cis-eQTLs
-80.80% done, 1,262,743 cis-eQTLs
-82.36% done, 1,289,568 cis-eQTLs
-82.39% done, 1,298,996 cis-eQTLs
-83.95% done, 1,317,859 cis-eQTLs
-83.98% done, 1,334,841 cis-eQTLs
-85.54% done, 1,350,546 cis-eQTLs
-85.57% done, 1,364,202 cis-eQTLs
-87.13% done, 1,377,995 cis-eQTLs
-87.16% done, 1,547,676 cis-eQTLs
-87.18% done, 1,547,676 cis-eQTLs
-88.72% done, 1,548,270 cis-eQTLs
-88.75% done, 1,582,351 cis-eQTLs
-88.77% done, 1,585,897 cis-eQTLs
-90.33% done, 1,601,584 cis-eQTLs
-91.90% done, 1,605,843 cis-eQTLs
-91.92% done, 1,626,133 cis-eQTLs
-91.95% done, 1,632,129 cis-eQTLs
-93.51% done, 1,671,859 cis-eQTLs
-93.54% done, 1,679,189 cis-eQTLs
-95.10% done, 1,700,842 cis-eQTLs
-95.13% done, 1,711,986 cis-eQTLs
-96.69% done, 1,738,673 cis-eQTLs
-96.71% done, 1,744,972 cis-eQTLs
-98.28% done, 1,749,926 cis-eQTLs
-98.30% done, 1,780,206 cis-eQTLs
-99.86% done, 1,784,481 cis-eQTLs
-99.89% done, 1,803,217 cis-eQTLs
-99.92% done, 1,808,215 cis-eQTLs
-99.94% done, 1,808,736 cis-eQTLs
-Task finished in 8733.698 seconds
+ 0.02% done, 7,032,886 cis-eQTLs
+ 0.05% done, 9,967,690 cis-eQTLs
+ 1.61% done, 14,646,483 cis-eQTLs
+ 1.64% done, 16,508,395 cis-eQTLs
+ 3.20% done, 22,480,396 cis-eQTLs
+ 3.22% done, 23,015,660 cis-eQTLs
+ 4.79% done, 28,425,475 cis-eQTLs
+ 4.81% done, 31,207,204 cis-eQTLs
+ 6.38% done, 36,132,212 cis-eQTLs
+ 6.40% done, 37,520,497 cis-eQTLs
+ 7.96% done, 44,796,963 cis-eQTLs
+ 9.53% done, 44,919,319 cis-eQTLs
+ 9.55% done, 50,533,052 cis-eQTLs
+11.11% done, 53,470,254 cis-eQTLs
+11.14% done, 57,124,310 cis-eQTLs
+12.70% done, 60,807,699 cis-eQTLs
+12.73% done, 65,148,029 cis-eQTLs
+14.29% done, 68,941,767 cis-eQTLs
+14.32% done, 71,966,252 cis-eQTLs
+15.88% done, 77,905,248 cis-eQTLs
+15.91% done, 78,376,528 cis-eQTLs
+17.47% done, 83,893,806 cis-eQTLs
+17.50% done, 84,858,868 cis-eQTLs
+19.06% done, 91,253,893 cis-eQTLs
+20.62% done, 91,841,820 cis-eQTLs
+20.65% done, 97,786,028 cis-eQTLs
+22.21% done, 99,717,426 cis-eQTLs
+22.23% done, 103,699,269 cis-eQTLs
+23.80% done, 106,150,954 cis-eQTLs
+23.82% done, 112,004,654 cis-eQTLs
+25.39% done, 112,830,281 cis-eQTLs
+25.41% done, 116,361,133 cis-eQTLs
+26.97% done, 121,386,907 cis-eQTLs
+27.00% done, 121,648,644 cis-eQTLs
+28.56% done, 129,520,921 cis-eQTLs
+30.13% done, 129,676,509 cis-eQTLs
+30.15% done, 133,781,657 cis-eQTLs
+31.71% done, 137,921,265 cis-eQTLs
+31.74% done, 138,636,191 cis-eQTLs
+33.30% done, 143,104,383 cis-eQTLs
+34.86% done, 145,401,036 cis-eQTLs
+34.89% done, 147,402,801 cis-eQTLs
+36.45% done, 151,926,797 cis-eQTLs
+36.48% done, 152,131,339 cis-eQTLs
+38.04% done, 156,529,109 cis-eQTLs
+39.60% done, 159,418,260 cis-eQTLs
+39.63% done, 162,296,948 cis-eQTLs
+41.19% done, 166,611,181 cis-eQTLs
+41.22% done, 168,635,160 cis-eQTLs
+42.78% done, 182,957,015 cis-eQTLs
+44.34% done, 184,153,809 cis-eQTLs
+44.37% done, 188,147,430 cis-eQTLs
+45.93% done, 191,114,163 cis-eQTLs
+45.96% done, 192,575,655 cis-eQTLs
+47.52% done, 197,940,841 cis-eQTLs
+49.08% done, 198,772,711 cis-eQTLs
+49.11% done, 202,902,549 cis-eQTLs
+50.67% done, 206,704,267 cis-eQTLs
+50.70% done, 209,929,929 cis-eQTLs
+52.26% done, 213,795,550 cis-eQTLs
+52.29% done, 215,641,605 cis-eQTLs
+53.85% done, 221,124,422 cis-eQTLs
+55.41% done, 222,748,151 cis-eQTLs
+55.44% done, 225,385,722 cis-eQTLs
+57.00% done, 229,386,670 cis-eQTLs
+58.56% done, 229,653,218 cis-eQTLs
+58.59% done, 234,902,010 cis-eQTLs
+60.15% done, 237,903,332 cis-eQTLs
+60.18% done, 240,652,186 cis-eQTLs
+61.74% done, 244,017,853 cis-eQTLs
+61.77% done, 249,074,525 cis-eQTLs
+63.33% done, 251,093,428 cis-eQTLs
+63.35% done, 254,758,379 cis-eQTLs
+64.92% done, 259,579,949 cis-eQTLs
+64.94% done, 260,258,176 cis-eQTLs
+66.51% done, 267,032,044 cis-eQTLs
+68.07% done, 267,345,635 cis-eQTLs
+68.09% done, 273,957,091 cis-eQTLs
+69.66% done, 275,663,739 cis-eQTLs
+69.68% done, 282,674,380 cis-eQTLs
+71.25% done, 283,216,500 cis-eQTLs
+71.27% done, 288,044,132 cis-eQTLs
+72.83% done, 291,617,560 cis-eQTLs
+72.86% done, 294,565,253 cis-eQTLs
+74.42% done, 298,568,107 cis-eQTLs
+75.98% done, 299,224,105 cis-eQTLs
+76.01% done, 306,310,777 cis-eQTLs
+76.04% done, 307,031,344 cis-eQTLs
+77.57% done, 309,378,331 cis-eQTLs
+77.60% done, 318,420,383 cis-eQTLs
+77.63% done, 319,316,624 cis-eQTLs
+79.19% done, 326,692,299 cis-eQTLs
+79.21% done, 328,143,685 cis-eQTLs
+80.78% done, 335,082,007 cis-eQTLs
+80.80% done, 336,382,053 cis-eQTLs
+82.36% done, 343,748,380 cis-eQTLs
+82.39% done, 345,631,428 cis-eQTLs
+83.95% done, 350,076,073 cis-eQTLs
+83.98% done, 354,028,904 cis-eQTLs
+85.54% done, 358,551,547 cis-eQTLs
+85.57% done, 364,256,320 cis-eQTLs
+87.13% done, 366,900,554 cis-eQTLs
+87.16% done, 375,032,277 cis-eQTLs
+87.18% done, 375,035,813 cis-eQTLs
+88.72% done, 375,262,196 cis-eQTLs
+88.75% done, 383,476,828 cis-eQTLs
+88.77% done, 384,635,494 cis-eQTLs
+90.33% done, 389,587,131 cis-eQTLs
+91.90% done, 390,778,225 cis-eQTLs
+91.92% done, 398,927,866 cis-eQTLs
+91.95% done, 400,995,553 cis-eQTLs
+93.51% done, 408,857,429 cis-eQTLs
+93.54% done, 411,812,143 cis-eQTLs
+95.10% done, 418,297,545 cis-eQTLs
+95.13% done, 420,054,746 cis-eQTLs
+96.69% done, 425,761,366 cis-eQTLs
+96.71% done, 427,738,932 cis-eQTLs
+98.28% done, 428,956,975 cis-eQTLs
+98.30% done, 436,093,436 cis-eQTLs
+99.86% done, 437,848,602 cis-eQTLs
+99.89% done, 441,750,624 cis-eQTLs
+99.92% done, 442,946,756 cis-eQTLs
+99.94% done, 443,127,317 cis-eQTLs
+Task finished in 26700.384 seconds
 
 Matching data files and location files
 92732of92732 genes matched
 3194576of3194576 SNPs matched
 
-Task finished in 4.03600000000006 seconds
+Task finished in 8.50299999999697 seconds
 Reordering genes
 
-Task finished in 11.987000000001 seconds
+Task finished in 25.5640000000058 seconds
 Processing covariates
-Task finished in 0.0029999999969732 seconds
+Task finished in 0.00699999999778811 seconds
 Processing gene expression data (imputation, residualization)
-Task finished in 1.18700000000172 seconds
+Task finished in 2.43099999999686 seconds
 Creating output file(s)
-Task finished in 0.221000000001368 seconds
+Task finished in 49.9110000000001 seconds
 Performing eQTL analysis
- 0.08% done, 12,228 cis-eQTLs
- 1.64% done, 24,211 cis-eQTLs
- 3.20% done, 34,070 cis-eQTLs
- 4.76% done, 36,290 cis-eQTLs
- 4.85% done, 48,701 cis-eQTLs
- 6.41% done, 58,304 cis-eQTLs
- 7.97% done, 72,186 cis-eQTLs
- 9.53% done, 78,696 cis-eQTLs
- 9.62% done, 82,278 cis-eQTLs
-11.18% done, 93,605 cis-eQTLs
-12.74% done, 105,563 cis-eQTLs
-14.30% done, 117,652 cis-eQTLs
-15.87% done, 120,113 cis-eQTLs
-15.95% done, 131,377 cis-eQTLs
-17.51% done, 142,987 cis-eQTLs
-19.07% done, 150,210 cis-eQTLs
-20.64% done, 160,256 cis-eQTLs
-22.20% done, 162,234 cis-eQTLs
-22.28% done, 170,990 cis-eQTLs
-23.84% done, 187,625 cis-eQTLs
-25.41% done, 193,709 cis-eQTLs
-26.97% done, 202,649 cis-eQTLs
-27.05% done, 203,649 cis-eQTLs
-28.61% done, 214,817 cis-eQTLs
-30.18% done, 222,448 cis-eQTLs
-31.74% done, 231,650 cis-eQTLs
-33.30% done, 249,537 cis-eQTLs
-34.86% done, 251,509 cis-eQTLs
-34.95% done, 258,655 cis-eQTLs
-36.51% done, 265,293 cis-eQTLs
-38.07% done, 276,333 cis-eQTLs
-39.63% done, 286,974 cis-eQTLs
-41.20% done, 291,190 cis-eQTLs
-41.28% done, 305,979 cis-eQTLs
-42.84% done, 338,107 cis-eQTLs
-44.40% done, 347,009 cis-eQTLs
-45.97% done, 355,923 cis-eQTLs
-47.53% done, 364,557 cis-eQTLs
-49.09% done, 372,740 cis-eQTLs
-49.17% done, 379,714 cis-eQTLs
-50.74% done, 411,525 cis-eQTLs
-52.30% done, 420,940 cis-eQTLs
-53.86% done, 432,002 cis-eQTLs
-55.42% done, 435,131 cis-eQTLs
-55.50% done, 437,338 cis-eQTLs
-57.07% done, 446,401 cis-eQTLs
-58.63% done, 454,301 cis-eQTLs
-60.19% done, 462,072 cis-eQTLs
-61.75% done, 471,785 cis-eQTLs
-61.84% done, 474,284 cis-eQTLs
-63.40% done, 480,430 cis-eQTLs
-64.96% done, 492,061 cis-eQTLs
-66.52% done, 501,878 cis-eQTLs
-68.09% done, 513,872 cis-eQTLs
-68.17% done, 513,890 cis-eQTLs
-69.65% done, 513,890 cis-eQTLs
-69.73% done, 529,154 cis-eQTLs
-71.29% done, 539,752 cis-eQTLs
-72.86% done, 551,548 cis-eQTLs
-74.42% done, 554,502 cis-eQTLs
-74.50% done, 557,534 cis-eQTLs
-76.06% done, 566,657 cis-eQTLs
-77.63% done, 579,744 cis-eQTLs
-79.19% done, 592,731 cis-eQTLs
-79.27% done, 594,443 cis-eQTLs
-80.83% done, 610,271 cis-eQTLs
-82.40% done, 631,510 cis-eQTLs
-83.96% done, 639,638 cis-eQTLs
-84.04% done, 649,125 cis-eQTLs
-85.60% done, 667,692 cis-eQTLs
-87.17% done, 684,229 cis-eQTLs
-87.25% done, 735,498 cis-eQTLs
-88.81% done, 753,350 cis-eQTLs
-90.37% done, 762,653 cis-eQTLs
-91.94% done, 767,488 cis-eQTLs
-92.02% done, 779,354 cis-eQTLs
-93.58% done, 810,550 cis-eQTLs
-95.14% done, 819,390 cis-eQTLs
-95.23% done, 828,867 cis-eQTLs
-96.79% done, 842,285 cis-eQTLs
-98.35% done, 859,781 cis-eQTLs
-99.91% done, 870,435 cis-eQTLs
-100.00% done, 873,543 cis-eQTLs
-Task finished in 6930.077 seconds
+ 0.08% done, 3,061,697 cis-eQTLs
+ 1.64% done, 5,245,665 cis-eQTLs
+ 3.20% done, 6,999,982 cis-eQTLs
+ 4.76% done, 7,340,618 cis-eQTLs
+ 4.85% done, 9,800,796 cis-eQTLs
+ 6.41% done, 11,641,251 cis-eQTLs
+ 7.97% done, 13,959,235 cis-eQTLs
+ 9.53% done, 15,747,086 cis-eQTLs
+ 9.62% done, 16,105,831 cis-eQTLs
+11.18% done, 18,628,318 cis-eQTLs
+12.74% done, 21,307,045 cis-eQTLs
+14.30% done, 23,422,588 cis-eQTLs
+15.87% done, 23,785,087 cis-eQTLs
+15.95% done, 25,695,104 cis-eQTLs
+17.51% done, 27,512,220 cis-eQTLs
+19.07% done, 29,185,797 cis-eQTLs
+20.64% done, 31,304,330 cis-eQTLs
+22.20% done, 31,846,968 cis-eQTLs
+22.28% done, 33,470,622 cis-eQTLs
+23.84% done, 36,094,628 cis-eQTLs
+25.41% done, 37,475,357 cis-eQTLs
+26.97% done, 39,369,931 cis-eQTLs
+27.05% done, 39,589,469 cis-eQTLs
+28.61% done, 42,472,274 cis-eQTLs
+30.18% done, 43,902,430 cis-eQTLs
+31.74% done, 45,535,234 cis-eQTLs
+33.30% done, 46,917,905 cis-eQTLs
+34.86% done, 47,484,846 cis-eQTLs
+34.95% done, 48,261,037 cis-eQTLs
+36.51% done, 49,880,872 cis-eQTLs
+38.07% done, 51,435,155 cis-eQTLs
+39.63% done, 53,732,834 cis-eQTLs
+41.20% done, 54,909,553 cis-eQTLs
+41.28% done, 56,159,864 cis-eQTLs
+42.84% done, 60,495,688 cis-eQTLs
+44.40% done, 61,538,389 cis-eQTLs
+45.97% done, 62,997,064 cis-eQTLs
+47.53% done, 64,684,590 cis-eQTLs
+49.09% done, 65,770,482 cis-eQTLs
+49.17% done, 66,465,126 cis-eQTLs
+50.74% done, 68,809,972 cis-eQTLs
+52.30% done, 70,797,722 cis-eQTLs
+53.86% done, 72,554,995 cis-eQTLs
+55.42% done, 73,767,856 cis-eQTLs
+55.50% done, 74,219,170 cis-eQTLs
+57.07% done, 75,913,526 cis-eQTLs
+58.63% done, 77,673,192 cis-eQTLs
+60.19% done, 79,337,669 cis-eQTLs
+61.75% done, 81,049,647 cis-eQTLs
+61.84% done, 81,671,255 cis-eQTLs
+63.40% done, 83,369,812 cis-eQTLs
+64.96% done, 85,029,717 cis-eQTLs
+66.52% done, 86,846,641 cis-eQTLs
+68.09% done, 89,304,325 cis-eQTLs
+68.17% done, 89,313,717 cis-eQTLs
+69.65% done, 89,313,800 cis-eQTLs
+69.73% done, 92,404,974 cis-eQTLs
+71.29% done, 94,608,576 cis-eQTLs
+72.86% done, 96,751,163 cis-eQTLs
+74.42% done, 97,430,715 cis-eQTLs
+74.50% done, 97,938,971 cis-eQTLs
+76.06% done, 100,388,669 cis-eQTLs
+77.63% done, 103,103,996 cis-eQTLs
+79.19% done, 105,811,768 cis-eQTLs
+79.27% done, 105,966,866 cis-eQTLs
+80.83% done, 108,927,147 cis-eQTLs
+82.40% done, 112,660,737 cis-eQTLs
+83.96% done, 114,041,160 cis-eQTLs
+84.04% done, 115,934,862 cis-eQTLs
+85.60% done, 119,687,627 cis-eQTLs
+87.17% done, 122,176,707 cis-eQTLs
+87.25% done, 123,912,247 cis-eQTLs
+88.81% done, 127,589,980 cis-eQTLs
+90.37% done, 129,599,554 cis-eQTLs
+91.94% done, 130,277,981 cis-eQTLs
+92.02% done, 133,842,424 cis-eQTLs
+93.58% done, 138,191,673 cis-eQTLs
+95.14% done, 140,161,468 cis-eQTLs
+95.23% done, 141,394,043 cis-eQTLs
+96.79% done, 143,924,207 cis-eQTLs
+98.35% done, 146,824,513 cis-eQTLs
+99.91% done, 148,268,390 cis-eQTLs
+100.00% done, 148,995,460 cis-eQTLs
+Task finished in 10521.394 seconds
 
-[1] "Reproducibility information:"
-[1] "2018-08-09 20:59:55 EDT"
-     user    system   elapsed 
-36552.330  1360.501 38060.325 
-Session info ----------------------------------------------------------------------------------------------------------
- setting  value                                      
- version  R version 3.5.0 Patched (2018-04-30 r74679)
- system   x86_64, linux-gnu                          
- ui       X11                                        
- language (EN)                                       
- collate  en_US.UTF-8                                
- tz       US/Eastern                                 
- date     2018-08-09                                 
+**** Job starts ****
+Mon Aug 20 15:01:26 EDT 2018
+**** JHPCE info ****
+User: lcollado
+Job id: 5450647
+Job name: bsII_dlpfc_eQTL
+Hostname: compute-054
+Task id: 
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
 
-Packages --------------------------------------------------------------------------------------------------------------
- package              * version   date       source                                   
- annotate               1.58.0    2018-05-03 Bioconductor                             
- AnnotationDbi          1.42.1    2018-05-17 Bioconductor                             
- base                 * 3.5.0     2018-05-02 local                                    
- Biobase              * 2.40.0    2018-05-02 Bioconductor                             
- BiocGenerics         * 0.26.0    2018-05-03 Bioconductor                             
- BiocParallel         * 1.14.2    2018-07-08 Bioconductor                             
- bit                    1.1-14    2018-05-29 CRAN (R 3.5.0)                           
- bit64                  0.9-7     2017-05-08 CRAN (R 3.5.0)                           
- bitops                 1.0-6     2013-08-17 CRAN (R 3.5.0)                           
- blob                   1.1.1     2018-03-25 CRAN (R 3.5.0)                           
- compiler               3.5.0     2018-05-02 local                                    
- datasets             * 3.5.0     2018-05-02 local                                    
- DBI                    1.0.0     2018-05-02 CRAN (R 3.5.0)                           
- DelayedArray         * 0.6.2     2018-07-23 Bioconductor                             
- devtools             * 1.13.6    2018-06-27 CRAN (R 3.5.0)                           
- digest                 0.6.15    2018-01-28 CRAN (R 3.5.0)                           
- genefilter           * 1.62.0    2018-05-03 Bioconductor                             
- GenomeInfoDb         * 1.16.0    2018-05-03 Bioconductor                             
- GenomeInfoDbData       1.1.0     2018-04-17 Bioconductor                             
- GenomicRanges        * 1.32.6    2018-07-20 Bioconductor                             
- graphics             * 3.5.0     2018-05-02 local                                    
- grDevices            * 3.5.0     2018-05-02 local                                    
- grid                   3.5.0     2018-05-02 local                                    
- IRanges              * 2.14.10   2018-05-17 Bioconductor                             
- jaffelab             * 0.99.21   2018-05-03 Github (LieberInstitute/jaffelab@7ed0ab7)
- lattice                0.20-35   2017-03-25 CRAN (R 3.5.0)                           
- limma                  3.36.2    2018-06-21 Bioconductor                             
- Matrix                 1.2-14    2018-04-13 CRAN (R 3.5.0)                           
- MatrixEQTL           * 2.2       2018-01-13 CRAN (R 3.5.0)                           
- matrixStats          * 0.54.0    2018-07-23 CRAN (R 3.5.0)                           
- memoise                1.1.0     2017-04-21 CRAN (R 3.5.0)                           
- methods              * 3.5.0     2018-05-02 local                                    
- mgcv                 * 1.8-23    2018-01-21 CRAN (R 3.5.0)                           
- nlme                 * 3.1-137   2018-04-07 CRAN (R 3.5.0)                           
- parallel             * 3.5.0     2018-05-02 local                                    
- rafalib              * 1.0.0     2015-08-09 CRAN (R 3.5.0)                           
- RColorBrewer           1.1-2     2014-12-07 CRAN (R 3.5.0)                           
- Rcpp                   0.12.18   2018-07-23 CRAN (R 3.5.0)                           
- RCurl                  1.95-4.11 2018-07-15 CRAN (R 3.5.0)                           
- RSQLite                2.1.1     2018-05-06 CRAN (R 3.5.0)                           
- S4Vectors            * 0.18.3    2018-06-13 Bioconductor                             
- segmented              0.5-3.0   2017-11-30 CRAN (R 3.5.0)                           
- splines                3.5.0     2018-05-02 local                                    
- stats                * 3.5.0     2018-05-02 local                                    
- stats4               * 3.5.0     2018-05-02 local                                    
- SummarizedExperiment * 1.10.1    2018-05-17 Bioconductor                             
- survival               2.42-3    2018-04-16 CRAN (R 3.5.0)                           
- sva                  * 3.28.0    2018-05-02 Bioconductor                             
- tools                  3.5.0     2018-05-02 local                                    
- utils                * 3.5.0     2018-05-02 local                                    
- withr                  2.1.2     2018-03-15 CRAN (R 3.5.0)                           
- XML                    3.98-1.12 2018-07-15 CRAN (R 3.5.0)                           
- xtable                 1.8-2     2016-02-05 CRAN (R 3.5.0)                           
- XVector                0.20.0    2018-05-03 Bioconductor                             
- zlibbioc               1.26.0    2018-05-02 Bioconductor                             
-**** Job ends ****
-Thu Aug  9 20:59:56 EDT 2018
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colMeans,
+    colnames, colSums, dirname, do.call, duplicated, eval, evalq,
+    Filter, Find, get, grep, grepl, intersect, is.unsorted, lapply,
+    lengths, Map, mapply, match, mget, order, paste, pmax, pmax.int,
+    pmin, pmin.int, Position, rank, rbind, Reduce, rowMeans, rownames,
+    rowSums, sapply, setdiff, sort, table, tapply, union, unique,
+    unsplit, which, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:base’:
+
+    expand.grid
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: DelayedArray
+Loading required package: matrixStats
+
+Attaching package: ‘matrixStats’
+
+The following objects are masked from ‘package:Biobase’:
+
+    anyMissing, rowMedians
+
+Loading required package: BiocParallel
+
+Attaching package: ‘DelayedArray’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+
+The following objects are masked from ‘package:base’:
+
+    aperm, apply
+
+Loading required package: rafalib
+Loading required package: mgcv
+Loading required package: nlme
+
+Attaching package: ‘nlme’
+
+The following object is masked from ‘package:IRanges’:
+
+    collapse
+
+This is mgcv 1.8-23. For overview type 'help("mgcv-package")'.
+Loading required package: genefilter
+
+Attaching package: ‘genefilter’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    rowSds, rowVars
+
+
+Attaching package: ‘devtools’
+
+The following object is masked from ‘package:rafalib’:
+
+    install_bioc
+
+Loading objects:
+  meGene
+  meExon
+  meJxn
+  meTx
+Loading objects:
+  rse_gtex_gene
+Loading objects:
+  rse_gtex_exon
+Loading objects:
+  rse_gtex_jxn
+Loading objects:
+  rse_gtex_tx

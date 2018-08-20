@@ -13,6 +13,7 @@ dir.create('eqtl_tables', showWarnings = FALSE)
 ######################
 ### load data ####
 ######################
+if(!file.exists('eqtl_tables/matrixEqtl_output_hippo_4features.rda')) {
 
 load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_gene.Rdata")
 load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_exon.Rdata")
@@ -219,11 +220,11 @@ save(meGene, meExon, meJxn, meTx,
 ######################
 ###### annotate ######
 
-# load("eqtl_tables/matrixEqtl_output_hippo_4features.rda")
-# load("count_data/hippo_ribozero_brainseq_phase2_hg38_rseTx_merged_n449.rda")
-# load("count_data/hippo_ribozero_brainseq_phase2_hg38_rseJxn_merged_n449.rda")
-# load("count_data/hippo_ribozero_brainseq_phase2_hg38_rseExon_merged_n449.rda")
-# load("count_data/hippo_ribozero_brainseq_phase2_hg38_rseGene_merged_n449.rda")
+} else {
+## Resume after memory failure
+load('eqtl_tables/matrixEqtl_output_hippo_4features.rda', verbose = TRUE)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_gene.Rdata", verbose = TRUE)
+}
 
 # extract
 geneEqtl = meGene$cis$eqtls
@@ -245,6 +246,12 @@ txEqtl$snps = as.character(txEqtl$snps)
 ################################
 # add gene annotation info #####
 ################################
+
+## Continue with manual run after memory crash
+rm(meGene, meExon, meJxn, meTx)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_exon.Rdata", verbose = TRUE)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_jxn.Rdata", verbose = TRUE)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_tx.Rdata", verbose = TRUE)
 
 geneEqtl$Symbol = rowRanges(rse_gtex_gene)$Symbol[match(geneEqtl$gene, rownames(rse_gtex_gene))]
 geneEqtl$EnsemblGeneID = rowRanges(rse_gtex_gene)$ensemblID[match(geneEqtl$gene, rownames(rse_gtex_gene))]
@@ -273,7 +280,6 @@ txEqtl$Type = "Tx"
 txEqtl$Class = "InGen"
 txEqtl = DataFrame(txEqtl)
 # txEqtl$gene_type = rowRanges(rse_gtex_tx)$gene_type[match(txEqtl$gene, rownames(rse_gtex_tx))]
-
 
 # merge
 allEqtl = rbind(geneEqtl, exonEqtl, jxnEqtl, txEqtl)

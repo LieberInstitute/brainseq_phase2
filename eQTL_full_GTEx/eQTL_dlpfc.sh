@@ -1,6 +1,6 @@
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=250G,h_vmem=250G,h_fsize=200G
+#$ -l mem_free=440G,h_vmem=440G,h_fsize=200G
 #$ -N bsII_dlpfc_eQTL
 #$ -o ./eqtl_tables/logs/eQTL_dlpfc_4_features.txt
 #$ -e ./eqtl_tables/logs/eQTL_dlpfc_4_features.txt
