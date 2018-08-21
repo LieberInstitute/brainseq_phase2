@@ -605,10 +605,10 @@ Performing eQTL analysis
 Task finished in 10521.394 seconds
 
 **** Job starts ****
-Mon Aug 20 15:01:26 EDT 2018
+Mon Aug 20 16:00:19 EDT 2018
 **** JHPCE info ****
 User: lcollado
-Job id: 5450647
+Job id: 5450674
 Job name: bsII_dlpfc_eQTL
 Hostname: compute-054
 Task id: 
@@ -716,3 +716,76 @@ Loading objects:
   rse_gtex_jxn
 Loading objects:
   rse_gtex_tx
+[1] "Reproducibility information:"
+[1] "2018-08-21 01:59:17 EDT"
+     user    system   elapsed 
+35584.191   341.815 35938.530 
+Session info ----------------------------------------------------------------------------------------------------------
+ setting  value                                      
+ version  R version 3.5.0 Patched (2018-04-30 r74679)
+ system   x86_64, linux-gnu                          
+ ui       X11                                        
+ language (EN)                                       
+ collate  en_US.UTF-8                                
+ tz       US/Eastern                                 
+ date     2018-08-21                                 
+
+Packages --------------------------------------------------------------------------------------------------------------
+ package              * version   date       source                                   
+ annotate               1.58.0    2018-05-03 Bioconductor                             
+ AnnotationDbi          1.42.1    2018-05-17 Bioconductor                             
+ base                 * 3.5.0     2018-05-02 local                                    
+ Biobase              * 2.40.0    2018-05-02 Bioconductor                             
+ BiocGenerics         * 0.26.0    2018-05-03 Bioconductor                             
+ BiocParallel         * 1.14.2    2018-07-08 Bioconductor                             
+ bit                    1.1-14    2018-05-29 CRAN (R 3.5.0)                           
+ bit64                  0.9-7     2017-05-08 CRAN (R 3.5.0)                           
+ bitops                 1.0-6     2013-08-17 CRAN (R 3.5.0)                           
+ blob                   1.1.1     2018-03-25 CRAN (R 3.5.0)                           
+ compiler               3.5.0     2018-05-02 local                                    
+ datasets             * 3.5.0     2018-05-02 local                                    
+ DBI                    1.0.0     2018-05-02 CRAN (R 3.5.0)                           
+ DelayedArray         * 0.6.2     2018-07-23 Bioconductor                             
+ devtools             * 1.13.6    2018-06-27 CRAN (R 3.5.0)                           
+ digest                 0.6.15    2018-01-28 CRAN (R 3.5.0)                           
+ genefilter           * 1.62.0    2018-05-03 Bioconductor                             
+ GenomeInfoDb         * 1.16.0    2018-05-03 Bioconductor                             
+ GenomeInfoDbData       1.1.0     2018-04-17 Bioconductor                             
+ GenomicRanges        * 1.32.6    2018-07-20 Bioconductor                             
+ graphics             * 3.5.0     2018-05-02 local                                    
+ grDevices            * 3.5.0     2018-05-02 local                                    
+ grid                   3.5.0     2018-05-02 local                                    
+ IRanges              * 2.14.10   2018-05-17 Bioconductor                             
+ jaffelab             * 0.99.21   2018-05-03 Github (LieberInstitute/jaffelab@7ed0ab7)
+ lattice                0.20-35   2017-03-25 CRAN (R 3.5.0)                           
+ limma                  3.36.2    2018-06-21 Bioconductor                             
+ Matrix                 1.2-14    2018-04-13 CRAN (R 3.5.0)                           
+ MatrixEQTL           * 2.2       2018-01-13 CRAN (R 3.5.0)                           
+ matrixStats          * 0.54.0    2018-07-23 CRAN (R 3.5.0)                           
+ memoise                1.1.0     2017-04-21 CRAN (R 3.5.0)                           
+ methods              * 3.5.0     2018-05-02 local                                    
+ mgcv                 * 1.8-23    2018-01-21 CRAN (R 3.5.0)                           
+ nlme                 * 3.1-137   2018-04-07 CRAN (R 3.5.0)                           
+ parallel             * 3.5.0     2018-05-02 local                                    
+ rafalib              * 1.0.0     2015-08-09 CRAN (R 3.5.0)                           
+ RColorBrewer           1.1-2     2014-12-07 CRAN (R 3.5.0)                           
+ Rcpp                   0.12.18   2018-07-23 CRAN (R 3.5.0)                           
+ RCurl                  1.95-4.11 2018-07-15 CRAN (R 3.5.0)                           
+ RSQLite                2.1.1     2018-05-06 CRAN (R 3.5.0)                           
+ S4Vectors            * 0.18.3    2018-06-13 Bioconductor                             
+ segmented              0.5-3.0   2017-11-30 CRAN (R 3.5.0)                           
+ splines                3.5.0     2018-05-02 local                                    
+ stats                * 3.5.0     2018-05-02 local                                    
+ stats4               * 3.5.0     2018-05-02 local                                    
+ SummarizedExperiment * 1.10.1    2018-05-17 Bioconductor                             
+ survival               2.42-3    2018-04-16 CRAN (R 3.5.0)                           
+ sva                  * 3.28.0    2018-05-02 Bioconductor                             
+ tools                  3.5.0     2018-05-02 local                                    
+ utils                * 3.5.0     2018-05-02 local                                    
+ withr                  2.1.2     2018-03-15 CRAN (R 3.5.0)                           
+ XML                    3.98-1.12 2018-07-15 CRAN (R 3.5.0)                           
+ xtable                 1.8-2     2016-02-05 CRAN (R 3.5.0)                           
+ XVector                0.20.0    2018-05-03 Bioconductor                             
+ zlibbioc               1.26.0    2018-05-02 Bioconductor                             
+**** Job ends ****
+Tue Aug 21 01:59:24 EDT 2018
