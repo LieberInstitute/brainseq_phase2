@@ -341,6 +341,174 @@ subset(indv_kegg_cleaned_sczd, padj < 0.05)
 # 13 -0.015603131 0.0049429940 -3.156615 1.781964e-03 0.7893232    0.8049264  hsa00460              Cyanoamino acid metabolism       5 0.0311158305
 save(indv_kegg_expr_sczd, indv_kegg_cleaned_sczd, file = 'rda/indv_kegg_sczd.Rdata')
 
+
+
+## Now by GO groups
+entrez <- rowRanges(simple_rse[['DLPFC']][['gene']])$EntrezID
+length(entrez[!is.na(entrez)])
+# [1] 16677
+ggo_cc <- groupGO(as.character(entrez[!is.na(entrez)]), 'org.Hs.eg.db', ont = 'CC', level = 3)
+ggo_bp <- groupGO(as.character(entrez[!is.na(entrez)]), 'org.Hs.eg.db', ont = 'BP', level = 3)
+ggo_mf <- groupGO(as.character(entrez[!is.na(entrez)]), 'org.Hs.eg.db', ont = 'MF', level = 3)
+all_ggo <- list('CC' = ggo_cc, 'BP' = ggo_bp, 'MF' = ggo_mf)
+save(all_ggo, file = 'rda/all_ggo.Rdata')
+(ggo_len <- sapply(all_ggo, function(x) { y <- summary(x); sum(y$Count > 1)}))
+#  CC  BP  MF
+# 327 338  95
+
+computecor_go <- function(ggo, exp) {
+    df <- ggo@result
+    df <- df[df$Count > 1, ]
+    gos <- as.character(df$ID)
+    res <- lapply(gos, function(go) {
+        message(paste(Sys.time(), 'processing pathway', go))
+        genes <- strsplit(as.character(df$geneID[which(gos == go)]), '/')[[1]]
+        m <- match(genes, as.character(rowRanges(simple_rse[['DLPFC']][['gene']])$EntrezID))
+        stopifnot(!any(is.na(m)))
+        paircor(exp[['DLPFC']][['geneRpkm']][m, ], exp[['HIPPO']][['geneRpkm']][m, ])
+    })
+    names(res) <- gos
+    
+    filt <- sapply(res, function(x) { !any(is.na(x))})
+    print('Removing those with some NAs (FALSE in the table)')
+    print(table(filt))
+    res <- res[filt]
+    
+    return(res)
+}
+
+indv_go_expr <- lapply(all_ggo, computecor_go, exp = expr)
+indv_go_cleaned <- lapply(all_ggo, computecor_go, exp = cleaned)
+save(indv_go_expr, indv_go_cleaned, file = 'rda/indv_go_corr.Rdata')
+
+pdf('pdf/indv_mean_go.pdf', useDingbats = FALSE)
+for(i in 1:3) {
+    plot(sapply(indv_go_expr[[i]], mean), sapply(indv_go_cleaned[[i]], mean), xlab = 'expr', ylab = 'cleaned', main = paste('mean correlation for', ggo_len[i], names(indv_go_expr)[i], 'GOs'), pch = 19, col = 'darkviolet')
+    hist(sapply(indv_go_expr[[i]], mean), main = paste0('mean GO corr - expr -' , names(indv_go_expr)[i]), col = 'deepskyblue3')
+    hist(sapply(indv_go_cleaned[[i]], mean), main = paste0('mean GO corr - cleaned - ', names(indv_go_expr)[i]), col = '#009E73')
+}
+dev.off()
+
+
+kegg_go <- function(go_cor, go_info, type, go_type) {
+    dx <- colData(simple_rse[['DLPFC']][['gene']])$Dx
+    dx <- factor(ifelse(dx == 'Schizo', 'SCZD', ifelse(dx == 'Control', 'Control', 'hmm')))
+    # > levels(dx)
+    # [1] "Control" "SCZD"
+    
+    go_info <- go_info@result   
+    go_info$ID <- as.character(go_info$ID)
+    go_info$Description <- as.character(go_info$Description)
+    go_info$GeneRatio <- as.character(go_info$GeneRatio)
+    go_info$geneID <- as.character(go_info$geneID)
+    
+    
+    
+    res <- do.call(rbind, mapply(function(pathway, pathname) {
+        f <- lm(pathway ~ dx)
+        p <- summary(f)$coef[2, 4]
+        ylim <- range(pathway)
+        
+        boxplot(pathway ~ dx, main = paste0(go_type, ' ', pathname, ': ',
+            go_info$Description[which(go_info$ID == pathname)[1]],
+            '\np-value: ', signif(p, 3)),
+            ylim = ylim,
+            xlab = 'SCZD diagnosis', outline = FALSE, ylab = paste('Correlation -', type))
+        points(pathway ~ jitter(as.numeric(dx), amount = 0.15), cex = 1.5, pch = 21, bg = ifelse(type == 'expr', 'deepskyblue3', '#009E73'))
+                
+        c(summary(f)$coef[2, ], mean_sczd = mean(pathway[dx == 'SCZD']), mean_control = mean(pathway[dx == 'Control']))
+    }, go_cor, names(go_cor), SIMPLIFY = FALSE))
+    
+    m <- match(rownames(res), go_info$ID)
+    res <- cbind(res, go_info[m, ])
+    res$n_genes <- as.integer(sapply(sapply(lapply(res$GeneRatio, strsplit, '/'), '[', 1), '[', 1))
+    res$padj <- p.adjust(res[, 'Pr(>|t|)'], method = 'fdr')
+    res <- res[order(res$padj, decreasing = FALSE), ]
+    rownames(res) <- NULL
+    
+    return(res)
+}
+
+indv_go_expr_sczd <- indv_go_cleaned_sczd <- vector('list', 3)
+names(indv_go_expr_sczd) <- names(indv_go_cleaned_sczd) <- names(indv_go_cleaned)
+pdf('pdf/indv_box_sczd_go.pdf', useDingbats = FALSE)
+for(i in 1:3) {
+    message(paste(Sys.time(), 'processing', names(indv_go_cleaned)[i], '- expr'))
+    indv_go_expr_sczd[[i]] <- kegg_go(indv_go_expr[[i]], all_ggo[[i]], 'expr', names(indv_go_expr)[i])
+    message(paste(Sys.time(), 'processing', names(indv_go_cleaned)[i], '- cleaned'))
+    indv_go_cleaned_sczd[[i]] <- kegg_go(indv_go_cleaned[[i]], all_ggo[[i]], 'cleaned', names(indv_go_cleaned)[i])
+}
+dev.off()
+
+
+sapply(indv_go_expr_sczd, nrow)
+#sapply(indv_go_cleaned_sczd, nrow)
+#  CC  BP  MF
+# 327 337  95
+
+sapply(indv_go_expr_sczd, function(x) { sum(x$padj < 0.05 )})
+# CC BP MF
+#  5  0  2
+sapply(indv_go_cleaned_sczd, function(x) { sum(x$padj < 0.05 )})
+# CC BP MF
+# 10 14  3
+options(width = 200)
+lapply(lapply(indv_go_expr_sczd, subset, padj < 0.05), function(x) { x[, -11]})
+# $CC
+#       Estimate   Std. Error   t value     Pr(>|t|) mean_sczd mean_control         ID                                        Description Count GeneRatio n_genes       padj
+# 1 -0.002933467 0.0007621624 -3.848874 0.0001490311 0.9899106    0.9928441 GO:0002199                    zona pellucida receptor complex     8   8/16644       8 0.04837948
+# 2  0.280051753 0.0820167908  3.414566 0.0007397474 0.9082569    0.6282051 GO:0005602                    complement component C1 complex     2   2/16644       2 0.04837948
+# 3  0.040855594 0.0116233227  3.514967 0.0005177219 0.9262735    0.8854179 GO:0036454                              growth factor complex     4   4/16644       4 0.04837948
+# 4  0.040855594 0.0116233227  3.514967 0.0005177219 0.9262735    0.8854179 GO:0016942 insulin-like growth factor binding protein complex     4   4/16644       4 0.04837948
+# 5 -0.159255207 0.0465609938 -3.420357 0.0007248384 0.5741280    0.7333832 GO:0030906                  retromer, cargo-selective complex     4   4/16644       4 0.04837948
+#
+# $BP
+#  [1] Estimate     Std. Error   t value      Pr(>|t|)     mean_sczd    mean_control ID           Description  Count        GeneRatio    n_genes      padj
+# <0 rows> (or 0-length row.names)
+#
+# $MF
+#     Estimate  Std. Error   t value     Pr(>|t|)  mean_sczd mean_control         ID             Description Count GeneRatio n_genes       padj
+# 1  0.4249588 0.119323251  3.561408 0.0004377293 0.02752294   -0.3974359 GO:0050436     microfibril binding     2   2/16644       2 0.04158428
+# 2 -0.0103953 0.003117011 -3.335022 0.0009757660 0.97852616    0.9889215 GO:0008384 IkappaB kinase activity     3   3/16644       3 0.04634888
+lapply(lapply(indv_go_cleaned_sczd, subset, padj < 0.05), function(x) { x[, -11]})
+# $CC
+#        Estimate   Std. Error   t value     Pr(>|t|) mean_sczd mean_control         ID                              Description Count GeneRatio n_genes       padj
+# 1  -0.002589671 0.0006587388 -3.931256 0.0001081201 0.9422399    0.9448296 GO:0005875           microtubule associated complex   135 135/16644     135 0.02870965
+# 2  -0.006130560 0.0016981598 -3.610120 0.0003663869 0.9593958    0.9655264 GO:1990131                 Gtr1-Gtr2 GTPase complex     4   4/16644       4 0.02870965
+# 3  -0.036624693 0.0101221684 -3.618266 0.0003555804 0.8154615    0.8520862 GO:0044326                     dendritic spine neck     4   4/16644       4 0.02870965
+# 4  -0.011914673 0.0033403774 -3.566864 0.0004291340 0.8128534    0.8247681 GO:0045178                       basal part of cell    42  42/16644      42 0.02870965
+# 5  -0.005732611 0.0016100037 -3.560619 0.0004389855 0.8879753    0.8937079 GO:0090543                            Flemming body    23  23/16644      23 0.02870965
+# 6  -0.018027721 0.0053059401 -3.397649 0.0007849614 0.7793642    0.7973919 GO:0099240 intrinsic component of synaptic membrane     9   9/16644       9 0.04278039
+# 7  -0.002330112 0.0007092071 -3.285517 0.0011562681 0.9672466    0.9695768 GO:0000974                            Prp19 complex    13  13/16644      13 0.04377292
+# 8   0.056213484 0.0173373911  3.242327 0.0013386213 0.8003857    0.7441722 GO:0030689                              Noc complex     3   3/16644       3 0.04377292
+# 9  -0.323453305 0.0996645652 -3.245419 0.0013247249 0.3944954    0.7179487 GO:0043511                          inhibin complex     2   2/16644       2 0.04377292
+# 10 -0.007370197 0.0022702302 -3.246454 0.0013201080 0.8291516    0.8365218 GO:0072562                      blood microparticle    62  62/16644      62 0.04377292
+#
+# $BP
+#        Estimate  Std. Error   t value     Pr(>|t|) mean_sczd mean_control         ID                                                      Description Count GeneRatio n_genes         padj
+# 1  -0.008584444 0.001791930 -4.790613 2.781277e-06 0.9514168    0.9600012 GO:0044110                         growth involved in symbiotic interaction     6   6/16644       6 0.0009372903
+# 2  -0.006666111 0.001477834 -4.510731 9.743652e-06 0.8921225    0.8987886 GO:0007585                                     respiratory gaseous exchange    50  50/16644      50 0.0016418054
+# 3   0.057537157 0.014098412  4.081109 5.949020e-05 0.5501997    0.4926625 GO:0061744                                                   motor behavior     5   5/16644       5 0.0066827319
+# 4  -0.008929998 0.002251035 -3.967063 9.388695e-05 0.9396881    0.9486181 GO:0008340                                  determination of adult lifespan    10  10/16644      10 0.0079099754
+# 5  -0.005343728 0.001386367 -3.854482 1.458351e-04 0.8372702    0.8426139 GO:0001816                                              cytokine production   514 514/16644     514 0.0081722943
+# 6  -0.007919468 0.002070762 -3.824423 1.637541e-04 0.8214242    0.8293436 GO:0044706                             multi-multicellular organism process   148 148/16644     148 0.0081722943
+# 7  -0.005717320 0.001498620 -3.815056 1.697509e-04 0.9614569    0.9671742 GO:1900454             positive regulation of long term synaptic depression     4   4/16644       4 0.0081722943
+# 8  -0.004628983 0.001272581 -3.637477 3.312693e-04 0.8771629    0.8817919 GO:0006457                                                  protein folding   224 224/16644     224 0.0139547173
+# 9  -0.005932432 0.001661894 -3.569682 4.247576e-04 0.8449342    0.8508666 GO:0002440              production of molecular mediator of immune response   122 122/16644     122 0.0159048111
+# 10  0.012302585 0.003605407  3.412260 7.457652e-04 0.8050615    0.7927589 GO:0045494                                   photoreceptor cell maintenance    25  25/16644      25 0.0251322885
+# 11 -0.005301388 0.001609693 -3.293415 1.125530e-03 0.8521564    0.8574578 GO:0002253                                    activation of immune response   423 423/16644     423 0.0344821600
+# 12 -0.007411402 0.002285888 -3.242242 1.339005e-03 0.9411178    0.9485292 GO:0060033                                  anatomical structure regression     7   7/16644       7 0.0376037119
+# 13 -0.004705034 0.001490353 -3.156993 1.779746e-03 0.9213972    0.9261023 GO:0035036                                            sperm-egg recognition    24  24/16644      24 0.0428410170
+# 14 -0.004894814 0.001548555 -3.160891 1.756965e-03 0.8541901    0.8590849 GO:0051091 positive regulation of DNA binding transcription factor activity   209 209/16644     209 0.0428410170
+#
+# $MF
+#       Estimate  Std. Error   t value     Pr(>|t|) mean_sczd mean_control         ID                Description Count GeneRatio n_genes       padj
+# 1 -0.010348218 0.003022956 -3.423211 0.0007175930 0.9006746    0.9110228 GO:0098748 endocytic adaptor activity    11  11/16644      11 0.02966208
+# 2 -0.003167418 0.000905006 -3.499887 0.0005465153 0.8768780    0.8800454 GO:0048037           cofactor binding   401 401/16644     401 0.02966208
+# 3 -0.005409429 0.001616273 -3.346854 0.0009366973 0.9463041    0.9517135 GO:0051920     peroxiredoxin activity     8   8/16644       8 0.02966208
+save(indv_go_expr_sczd, indv_go_cleaned_sczd, file = 'rda/indv_go_sczd.Rdata')
+
+
 ## Re-loading if necessary
 if(FALSE) {
     f <- dir('rda', full.names = TRUE)
