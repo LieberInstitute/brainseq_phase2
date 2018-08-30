@@ -15,10 +15,10 @@ dir.create('eqtl_tables', showWarnings = FALSE)
 ######################
 if(!file.exists('eqtl_tables/matrixEqtl_output_dlpfc_4features.rda')) {
 
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_gene.Rdata")
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_exon.Rdata")
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_jxn.Rdata")
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_tx.Rdata")
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/rse_gtex_gene_subset.Rdata")
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/rse_gtex_exon_subset.Rdata")
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/rse_gtex_jxn_subset.Rdata")
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/rse_gtex_tx_subset.Rdata")
 
 # # fix junction row names
 # rownames(rse_gtex_jxn) = paste0(seqnames(rse_gtex_jxn),":",start(rse_gtex_jxn),"-",end(rse_gtex_jxn),"(",strand(rse_gtex_jxn),")")
@@ -222,7 +222,7 @@ save(meGene, meExon, meJxn, meTx,
 } else {
 ## Resume after memory failure
 load('eqtl_tables/matrixEqtl_output_dlpfc_4features.rda', verbose = TRUE)
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_gene.Rdata", verbose = TRUE)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/rse_gtex_gene_subset.Rdata", verbose = TRUE)
 }
 
 # extract
@@ -248,9 +248,9 @@ txEqtl$snps = as.character(txEqtl$snps)
 
 ## Continue with manual run after memory crash
 rm(meGene, meExon, meJxn, meTx)
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_exon.Rdata", verbose = TRUE)
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_jxn.Rdata", verbose = TRUE)
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/gtex_both/rse_gtex_tx.Rdata", verbose = TRUE)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/rse_gtex_exon_subset.Rdata", verbose = TRUE)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/rse_gtex_jxn_subset.Rdata", verbose = TRUE)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/rse_gtex_tx_subset.Rdata", verbose = TRUE)
 
 geneEqtl$Symbol = rowRanges(rse_gtex_gene)$Symbol[match(geneEqtl$gene, rownames(rse_gtex_gene))]
 geneEqtl$EnsemblGeneID = rowRanges(rse_gtex_gene)$ensemblID[match(geneEqtl$gene, rownames(rse_gtex_gene))]
