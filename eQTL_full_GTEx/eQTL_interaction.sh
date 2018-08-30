@@ -1,6 +1,6 @@
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=300G,h_vmem=300G,h_fsize=200G
+#$ -l mem_free=150G,h_vmem=150G,h_fsize=200G
 #$ -N inter_eQTL_bsII
 #$ -o eqtl_tables/logs/eQTL_interaction_4_features2.txt
 #$ -e eqtl_tables/logs/eQTL_interaction_4_features2.txt
