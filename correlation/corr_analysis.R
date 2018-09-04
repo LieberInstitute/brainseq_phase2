@@ -684,38 +684,38 @@ corr_de_feat
 # $HIPPO$exon$expr.pval
 #        Corr
 # DE       FALSE   TRUE
-#   FALSE  65382 128441
-#   TRUE       6     20
+#   FALSE 127801 260167
+#   TRUE      43    153
 #
 # $HIPPO$exon$expr.fdr
 #        Corr
-# DE      FALSE  TRUE
-#   FALSE 94978 98845
-#   TRUE     12    14
+# DE       FALSE   TRUE
+#   FALSE 185908 202060
+#   TRUE      59    137
 #
 # $HIPPO$exon$expr.fwer
 #        Corr
 # DE       FALSE   TRUE
-#   FALSE 191563   2260
-#   TRUE      26      0
+#   FALSE 383612   4355
+#   TRUE     196      0
 #
 # $HIPPO$exon$cleaned.pval
 #        Corr
 # DE       FALSE   TRUE
-#   FALSE  21039 172784
-#   TRUE       4     22
+#   FALSE  42912 345056
+#   TRUE       6    190
 #
 # $HIPPO$exon$cleaned.fdr
 #        Corr
 # DE       FALSE   TRUE
-#   FALSE  25689 168134
-#   TRUE       4     22
+#   FALSE  51709 336259
+#   TRUE      12    184
 #
 # $HIPPO$exon$cleaned.fwer
 #        Corr
 # DE       FALSE   TRUE
-#   FALSE 186711   7112
-#   TRUE      25      1
+#   FALSE 373599  14369
+#   TRUE     190      6
 #
 #
 # $HIPPO$jxn
@@ -788,7 +788,6 @@ corr_de_feat
 #   FALSE 79008  2940
 
 
-
 print('Exon/jxn/tx level chisq test pvals')
 lapply(corr_de_feat, function(region) { do.call(cbind, lapply(region, calc_chi_pval)) } )
 # $DLPFC
@@ -801,13 +800,13 @@ lapply(corr_de_feat, function(region) { do.call(cbind, lapply(region, calc_chi_p
 # cleaned.fwer 1.453986e-01 0.7534788 1.0000000
 #
 # $HIPPO
-#                   exon       jxn           tx
-# expr.pval    0.3463280 0.3463280 0.000000e+00
-# expr.fdr     0.9248146 0.9248146 5.099046e-26
-# expr.fwer    1.0000000 1.0000000 0.000000e+00
-# cleaned.pval 0.6692196 0.6692196 0.000000e+00
-# cleaned.fdr  0.9751166 0.9751166 0.000000e+00
-# cleaned.fwer 1.0000000 1.0000000 0.000000e+00
+#                      exon       jxn           tx
+# expr.pval    1.371415e-03 0.3463280 0.000000e+00
+# expr.fdr     8.646780e-07 0.9248146 5.099046e-26
+# expr.fwer    2.491119e-01 1.0000000 0.000000e+00
+# cleaned.pval 5.473622e-04 0.6692196 0.000000e+00
+# cleaned.fdr  4.201927e-03 0.9751166 0.000000e+00
+# cleaned.fwer 7.741272e-01 1.0000000 0.000000e+00
 
 lapply(corr_de_feat, function(region) { do.call(cbind, lapply(region, calc_chi_pval)) < 0.05 } )
 # $DLPFC
@@ -821,11 +820,11 @@ lapply(corr_de_feat, function(region) { do.call(cbind, lapply(region, calc_chi_p
 #
 # $HIPPO
 #               exon   jxn   tx
-# expr.pval    FALSE FALSE TRUE
-# expr.fdr     FALSE FALSE TRUE
+# expr.pval     TRUE FALSE TRUE
+# expr.fdr      TRUE FALSE TRUE
 # expr.fwer    FALSE FALSE TRUE
-# cleaned.pval FALSE FALSE TRUE
-# cleaned.fdr  FALSE FALSE TRUE
+# cleaned.pval  TRUE FALSE TRUE
+# cleaned.fdr   TRUE FALSE TRUE
 # cleaned.fwer FALSE FALSE TRUE
 
 save(corr_de_gene, corr_de_feat, file = 'rda/corr_de.Rdata')
