@@ -63,13 +63,14 @@ library(RColorBrewer)
 library(VennDiagram)
 
 pal = c('skyblue3','dark orange')
-venn.diagram(list(Hippo = unique(hippo$IndexSNP), 
+v = venn.diagram(list(Hippo = unique(hippo$IndexSNP), 
 				  DLPFC = unique(dlp$IndexSNP) ), 
 	fill = pal[1:2], main="", main.pos = c(.5, .05), cat.cex = 1.9, cex=3,
-	margin = .1, imagetype="png",  filename = "venn_unique_IndexSNP_UPDATED.png")
+	margin = .1, imagetype="png",  filename = NULL)
 
-
-
+pdf('venn_unique_IndexSNP_UPDATED.pdf', useDingbats = FALSE)
+    grid.draw(v)
+dev.off()
 	
 	
 	

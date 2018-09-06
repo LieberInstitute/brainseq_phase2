@@ -8,6 +8,8 @@ library(jaffelab)
 ## what percent of eQTLs are in the same direction and then also marginally significant
 
 
+#### load in, subset, resave
+
 ###################
 ###### DLPFC ######
 ###################
@@ -89,13 +91,13 @@ h_sig_txs = h_sig[which(h_sig$Type=="Tx"),]
 
 ## subset GTEx to our results
 print("HIPPO gene")
-hippo_gtex_genes2 = hippo_gtex_genes[rownames(h_sig_genes),]
+hippo_gtex_genes = hippo_gtex_genes[rownames(h_sig_genes),]
 print("HIPPO exon")
-hippo_gtex_exons2 = hippo_gtex_exons[rownames(h_sig_exons),]
+hippo_gtex_exons = hippo_gtex_exons[rownames(h_sig_exons),]
 print("HIPPO jxns")
-hippo_gtex_jxns2 = hippo_gtex_jxns[rownames(h_sig_jxns),]
+hippo_gtex_jxns = hippo_gtex_jxns[rownames(h_sig_jxns),]
 print("HIPPO tx")
-hippo_gtex_txs2 = hippo_gtex_txs[rownames(h_sig_txs),]
+hippo_gtex_txs = hippo_gtex_txs[rownames(h_sig_txs),]
 
 
 ### Save separately for easier loading
@@ -115,7 +117,7 @@ rm(list=ls())
 
 
 # GTEx
-load("eqtl_tables/mergedEqtl_output_inter_4features.rda", verbose=TRUE)
+load("eqtl_tables/mergedEqtl_output_interaction_4features.rda", verbose=TRUE)
 # break up into pieces
 inter_gtex_genes = allEqtl[which(allEqtl$Type=="Gene"),]
 inter_gtex_exons = allEqtl[which(allEqtl$Type=="Exon"),]
@@ -129,7 +131,7 @@ rownames(inter_gtex_txs) = paste0(inter_gtex_txs$snps,"_",inter_gtex_txs$gene)
 
 
 # BrainSeq
-load("../eQTL_full/eqtl_tables/mergedEqtl_output_inter_4features.rda", verbose=TRUE)
+load("../eQTL_full/eqtl_tables/mergedEqtl_output_interaction_4features.rda", verbose=TRUE)
 # keep only significant
 i_sig = allEqtl[allEqtl$FDR < 0.01,]
 rownames(i_sig) = paste0(i_sig$snps,"_",i_sig$gene)
@@ -140,10 +142,14 @@ i_sig_jxns = i_sig[which(i_sig$Type=="Jxn"),]
 i_sig_txs = i_sig[which(i_sig$Type=="Tx"),]
 
 ## subset GTEx to our results
-inter_gtex_genes2 = inter_gtex_genes[rownames(i_sig_genes),]
-inter_gtex_exons2 = inter_gtex_exons[rownames(i_sig_exons),]
-inter_gtex_jxns2 = inter_gtex_jxns[rownames(i_sig_jxns),]
-inter_gtex_txs2 = inter_gtex_txs[rownames(i_sig_txs),]
+print("Interaction gene")
+inter_gtex_genes = inter_gtex_genes[rownames(i_sig_genes),]
+print("Interaction exon")
+inter_gtex_exons = inter_gtex_exons[rownames(i_sig_exons),]
+print("Interaction jxn")
+inter_gtex_jxns = inter_gtex_jxns[rownames(i_sig_jxns),]
+print("Interaction tx")
+inter_gtex_txs = inter_gtex_txs[rownames(i_sig_txs),]
 
 
 ### Save separately for easier loading
