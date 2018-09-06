@@ -52,6 +52,11 @@ snp = snp[keepIndex,]
 ################
 ## load table
 load("eqtl_tables/mergedEqtl_output_dlpfc_4features.rda", verbose=TRUE)
+dlp = allEqtl
+
+load("eqtl_tables/mergedEqtl_output_hippo_4features.rda", verbose=TRUE)
+hippo = allEqtl
+
 hippo = allEqtl[which(allEqtl$Type=="Gene"),]
 hippo$Symbol = as.character(hippo$Symbol)
 
@@ -70,18 +75,20 @@ exonRpkm = assays(rse_exon)$rpkm
 jxnRp10m = assays(rse_jxn)$rp10m
 txTpm = assays(rse_tx)$tpm
 
-## residualize expression		
-gExprs = log2(geneRpkm+1)		
-gExprs = cleaningY(gExprs, mod, P=1)
+load('eqtl_tables/rdas/pcs_hippo_4features_filtered_over13.rda', verbose = TRUE)
 
-eExprs = log2(exonRpkm+1)		
-eExprs = cleaningY(eExprs, mod, P=1)
+## residualize expression        
+gExprs = log2(geneRpkm+1)        
+gExprs = cleaningY(gExprs, cbind(mod, genePCs), P=1)
 
-jExprs = log2(jxnRp10m+1)		
-jExprs = cleaningY(jExprs, mod, P=1)
+eExprs = log2(exonRpkm+1)        
+eExprs = cleaningY(eExprs, cbind(mod, exonPCs), P=1)
 
-tExprs = log2(txTpm+1)		
-tExprs = cleaningY(tExprs, mod, P=1)
+jExprs = log2(jxnRp10m+1)        
+jExprs = cleaningY(jExprs, cbind(mod, jxnPCs), P=1)
+
+tExprs = log2(txTpm+1)        
+tExprs = cleaningY(tExprs, cbind(mod, txPCs), P=1)
 
 
 exprsAdj = rbind(gExprs,eExprs,jExprs,tExprs)
@@ -116,17 +123,21 @@ dev.off()
 ### PGC index snps
 
 pgc = read.csv("../eQTL_GWAS_riskSNPs/41588_2018_59_MOESM3_ESM.csv", stringsAsFactors=FALSE)
-
 index = pgc$"Index.SNP..dbSNP.b141."
+
 hippo2 = allEqtl[which(allEqtl$snps %in% index),]
 hippo2 = hippo2[order(hippo2$FDR, decreasing=FALSE),]
+
+dlp2 = dlp[which(dlp$snps %in% index),]
+dlp2 = dlp2[order(dlp2$FDR, decreasing=FALSE),]
+
 
 
 pdf("hippo_top_eqtl_PGC_indexSNPs.pdf", h=6, w=6, useDingbats=FALSE)
 par(mar=c(5,5,5,2), cex.main=1.8, cex.lab=1.5, cex.axis=1.5)
 palette(brewer.pal(8,"Spectral"))			
 ## plot
-for (i in 1:30) {
+for (i in 1:15) {
 	symi = hippo2[i,"Symbol"]
 	symi[is.na(symi)]=""
 	snpi = hippo2[i,"snps"]
@@ -141,7 +152,7 @@ for (i in 1:30) {
 	points(exprsAdj[feati,] ~ jitter(snp[snpi,]+1),
 			   pch=21, 
 			   bg=as.numeric(snp[snpi,])+2,cex=1.5)
-	legend("top",paste0("p=",p_i))
+	legend("topleft",paste0("p=",p_i))
 }
 dev.off()
 
