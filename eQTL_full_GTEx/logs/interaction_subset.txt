@@ -82,3 +82,9 @@ The following object is masked from ‘package:rafalib’:
 
 Loading objects:
   allEqtl
+Error in `rownames<-`(`*tmp*`, value = c("rs114652528:100198263:T:C_ENST00000390946.1",  : 
+  duplicate rownames not allowed
+Calls: rownames<- -> rownames<-
+Execution halted
+**** Job ends ****
+Thu Sep  6 12:33:01 EDT 2018

@@ -82,3 +82,7 @@ The following object is masked from ‘package:rafalib’:
 
 Loading objects:
   allEqtl
+Loading objects:
+  allEqtl
+[1] "DLPFC gene"
+[1] "DLPFC exon"
