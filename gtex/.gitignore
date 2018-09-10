@@ -10,3 +10,4 @@ Salmon_tx
 *.Rdata
 *.csv
 snps_to_extract.txt
+*traw

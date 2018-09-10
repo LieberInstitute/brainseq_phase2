@@ -27,9 +27,13 @@ snpMap = read_delim("/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/Brai
 snpMap = as.data.frame(snpMap)
 snpMap$chrpos = paste0("chr", snpMap$X1, ":", snpMap$X4)
 
-mm = match(snpMap$chrpos, snpMapGtex$chrpos)
-snpMap = snpMap[!is.na(mm),]
-snpMapGtex = snpMapGtex[mm[!is.na(mm)],]
+## keep those in LIBD by coordinates
+snpMapGtex = snpMapGtex[snpMapGtex$chrpos %in% snpMap$chrpos,]
+dim(snpMapGtex)
+
+## stop and check
+stopifnot(all(snpMapGtex$chrpos %in% snpMap$chrpos))
+
 cat(snpMapGtex$X2, file="snps_to_extract.txt", sep="\n")
 
 ## pull snps
@@ -46,6 +50,9 @@ snpGtex = as.data.frame(genotypes[,-(1:6)])
 ## reformat
 colnames(snpGtex) = ss(colnames(snpGtex), "_",1)
 rownames(snpMapGtex) = rownames(snpGtex) = snpMapGtex$SNP
+
+snpMap$X1[snpMap$X1 == "23"] = "X"
+snpMap$chrpos = paste0("chr", snpMap$X1, ":", snpMap$X4)
 
 ### add MDS
 mds = read.table("/dcl01/lieber/ajaffe/PublicData/SRA_GTEX/Genotypes/Merged/GTEX_Brain_Illumina_Omni5M_Omni2pt5M_imputed_maf05_geno10_hwe1e6.mds",
@@ -64,16 +71,49 @@ mds = mds[mm2[!is.na(mm2)],]
 ## combine
 pdGtex = cbind(pdGtex, mds[,4:13])
 colnames(pdGtex)[257:266] = paste0("snpPC", 1:10)
+
+## add LIBD SNP id
+ttPos = table(snpMapGtex$chrpos)
+table(snpMapGtex$chrpos %in% snpMap$chrpos)
+
+snpMapGtex$chrpos_ref_count = paste(snpMapGtex$chrpos, snpMapGtex$ALT, snpMapGtex$COUNTED,sep="_") 
+snpMap$chrpos_ref_count = paste(snpMap$chrpos, snpMap$X6, snpMap$X5, sep="_")
+snpMap$chrpos_count_ref = paste(snpMap$chrpos, snpMap$X5, snpMap$X6, sep="_")
+snpMapGtex$numPos=ttPos[snpMapGtex$chrpos]
+
+snpMapGtex$mmGtexToLibd = match(snpMapGtex$chrpos_ref_count, snpMap$chrpos_ref_count)
+snpMapGtex$mmGtexToLibdFlip = match(snpMapGtex$chrpos_ref_count, snpMap$chrpos_count_ref)
+
+## check things out
+table(is.na(snpMapGtex$mmGtexToLibd), snpMapGtex$numPos)
+table(is.na(snpMapGtex$mmGtexToLibdFlip), snpMapGtex$numPos)
+table(is.na(snpMapGtex$mmGtexToLibdFlip) & is.na(snpMapGtex$mmGtexToLibd), snpMapGtex$numPos)
+
+## only keep those that also match on alleles (plus chrpos)
+snpGtex = snpGtex[!(is.na(snpMapGtex$mmGtexToLibdFlip) & is.na(snpMapGtex$mmGtexToLibd)),]
+snpMapGtex = snpMapGtex[!(is.na(snpMapGtex$mmGtexToLibdFlip) & is.na(snpMapGtex$mmGtexToLibd)),]
+nrow(snpGtex)
+identical(nrow(snpGtex), nrow(snpMapGtex))
+
+## flip some alleles
+flipIndex = which(!is.na(snpMapGtex$mmGtexToLibdFlip))
+snpGtex[flipIndex,] = 2 - snpGtex[flipIndex,]
+snpMapGtex$ALT[flipIndex] = snpMap$X5[snpMapGtex$mmGtexToLibdFlip[flipIndex]]
+snpMapGtex$COUNTED[flipIndex] = snpMap$X6[snpMapGtex$mmGtexToLibdFlip[flipIndex]]
+snpMapGtex$mmGtexToLibd[is.na(snpMapGtex$mmGtexToLibd)] = snpMapGtex$mmGtexToLibdFlip[is.na(snpMapGtex$mmGtexToLibd)]
+table(is.na(snpMapGtex$mmGtexToLibd))
+snpMapGtex$SNP = snpMap$X2[snpMapGtex$mmGtexToLibd]
+snpMapGtex$OLDSNP = rownames(snpMapGtex)
+
 save(snpGtex, snpMapGtex, pdGtex, 	compress=TRUE,
-	file = "genotypeData_GTEx_hippoPlusDlpfc.rda")
+	file = "genotypeData_GTEx_hippoPlusDlpfc_LIBDmatched.rda")
     
 ## Simplify some things for later (on the eQTL code)
-load('genotypeData_GTEx_hippoPlusDlpfc.rda', verbose = TRUE)
+load('genotypeData_GTEx_hippoPlusDlpfc_LIBDmatched.rda', verbose = TRUE)
 load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n551.rda', verbose = TRUE)
 
-## Match by chr position
-snpMap$chrpos <- paste0('chr', snpMap$CHR, ':', snpMap$POS)
-m <- match(snpMapGtex$chrpos, snpMap$chrpos)
+## Match by name
+m <- match(snpMapGtex$SNP, snpMap$SNP)
 table(is.na(m))
 #   FALSE
 # 6827646
@@ -190,7 +230,8 @@ dim(pdGtex)
 # [1] 3125283      21
 # > dim(pdGtex)
 # [1] 190 266
-
+# > dim(snpMapGtex) # aj 9/7 update
+# [1] 3135500      26
 ## Save again
 save(snpGtex, snpMapGtex, pdGtex, 	compress=TRUE,
 	file = "genotypeData_GTEx_hippoPlusDlpfc_simplified.rda")
