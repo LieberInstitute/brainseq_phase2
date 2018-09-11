@@ -57,7 +57,7 @@ snpMap$chrpos = paste0("chr", snpMap$X1, ":", snpMap$X4)
 ### add MDS
 mds = read.table("/dcl01/lieber/ajaffe/PublicData/SRA_GTEX/Genotypes/Merged/GTEX_Brain_Illumina_Omni5M_Omni2pt5M_imputed_maf05_geno10_hwe1e6.mds",
 	header=TRUE, as.is=TRUE)
-	mds = mds[match(ss(colnames(snpGtex), "-", 2), ss(mds$IID, "-", 2)),]
+#	mds = mds[match(ss(colnames(snpGtex), "-", 2), ss(mds$IID, "-", 2)),]
 mds= mds[match(colnames(snpGtex), mds$FID),]
 
 ## filter to people
