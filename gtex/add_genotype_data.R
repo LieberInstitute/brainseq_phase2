@@ -75,6 +75,8 @@ colnames(pdGtex)[257:266] = paste0("snpPC", 1:10)
 ## add LIBD SNP id
 ttPos = table(snpMapGtex$chrpos)
 table(snpMapGtex$chrpos %in% snpMap$chrpos)
+#    TRUE
+# 6889947
 
 snpMapGtex$chrpos_ref_count = paste(snpMapGtex$chrpos, snpMapGtex$ALT, snpMapGtex$COUNTED,sep="_") 
 snpMap$chrpos_ref_count = paste(snpMap$chrpos, snpMap$X6, snpMap$X5, sep="_")
@@ -86,14 +88,24 @@ snpMapGtex$mmGtexToLibdFlip = match(snpMapGtex$chrpos_ref_count, snpMap$chrpos_c
 
 ## check things out
 table(is.na(snpMapGtex$mmGtexToLibd), snpMapGtex$numPos)
+#             1       2       3       4       5       6
+# FALSE 6469589   70874    6304     956      96      17
+# TRUE   300664   35378    4763    1128     159      19
 table(is.na(snpMapGtex$mmGtexToLibdFlip), snpMapGtex$numPos)
+#             1       2       3       4       5       6
+# FALSE  300416    2896     184      29       1       0
+# TRUE  6469837  103356   10883    2055     254      36
 table(is.na(snpMapGtex$mmGtexToLibdFlip) & is.na(snpMapGtex$mmGtexToLibd), snpMapGtex$numPos)
+#             1       2       3       4       5       6
+# FALSE 6770005   73696    6480     979      97      17
+# TRUE      248   32556    4587    1105     158      19
 
 ## only keep those that also match on alleles (plus chrpos)
 snpGtex = snpGtex[!(is.na(snpMapGtex$mmGtexToLibdFlip) & is.na(snpMapGtex$mmGtexToLibd)),]
 snpMapGtex = snpMapGtex[!(is.na(snpMapGtex$mmGtexToLibdFlip) & is.na(snpMapGtex$mmGtexToLibd)),]
 nrow(snpGtex)
-identical(nrow(snpGtex), nrow(snpMapGtex))
+# [1] 6851274
+stopifnot(identical(nrow(snpGtex), nrow(snpMapGtex)))
 
 ## flip some alleles
 flipIndex = which(!is.na(snpMapGtex$mmGtexToLibdFlip))
@@ -102,6 +114,8 @@ snpMapGtex$ALT[flipIndex] = snpMap$X5[snpMapGtex$mmGtexToLibdFlip[flipIndex]]
 snpMapGtex$COUNTED[flipIndex] = snpMap$X6[snpMapGtex$mmGtexToLibdFlip[flipIndex]]
 snpMapGtex$mmGtexToLibd[is.na(snpMapGtex$mmGtexToLibd)] = snpMapGtex$mmGtexToLibdFlip[is.na(snpMapGtex$mmGtexToLibd)]
 table(is.na(snpMapGtex$mmGtexToLibd))
+#   FALSE
+# 6851274
 snpMapGtex$SNP = snpMap$X2[snpMapGtex$mmGtexToLibd]
 snpMapGtex$OLDSNP = rownames(snpMapGtex)
 
@@ -116,7 +130,7 @@ load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/BrainSeq_Phase2_Rib
 m <- match(snpMapGtex$SNP, snpMap$SNP)
 table(is.na(m))
 #   FALSE
-# 6827646
+# 6851274
 identical(m, 1:length(m))
 # FALSE
 
@@ -194,7 +208,7 @@ table(snpMap$fdr_any)
 missinginfo <- snpMap[m, colnames(snpMap)[!colnames(snpMap) %in% colnames(snpMapGtex)]]
 table(is.na(missinginfo$pos_hg38))
 #   FALSE    TRUE
-# 6827197     449
+# 6850824     450
 snpMapGtex <- cbind(snpMapGtex, missinginfo)
 
 ## Dims at this point
@@ -202,9 +216,9 @@ dim(snpGtex)
 dim(snpMapGtex)
 dim(pdGtex)
 # > dim(snpGtex)
-# [1] 6827646     190
+# [1] 6851274     190
 # > dim(snpMapGtex)
-# [1] 6827646      21
+# [1] 6851274      26
 # > dim(pdGtex)
 # [1] 190 266
 
@@ -225,13 +239,12 @@ dim(snpGtex)
 dim(snpMapGtex)
 dim(pdGtex)
 # > dim(snpGtex)
-# [1] 3125283     190
+# [1] 3135320     190
 # > dim(snpMapGtex)
-# [1] 3125283      21
+# [1] 3135320      26
 # > dim(pdGtex)
 # [1] 190 266
-# > dim(snpMapGtex) # aj 9/7 update
-# [1] 3135500      26
+
 ## Save again
 save(snpGtex, snpMapGtex, pdGtex, 	compress=TRUE,
 	file = "genotypeData_GTEx_hippoPlusDlpfc_simplified.rda")
@@ -251,7 +264,7 @@ devtools::session_info()
 #  language (EN)
 #  collate  en_US.UTF-8
 #  tz       US/Eastern
-#  date     2018-08-30
+#  date     2018-09-11
 #
 # Packages --------------------------------------------------------------------------------------------------------------
 #  package          * version   date       source
@@ -278,13 +291,16 @@ devtools::session_info()
 #  grDevices        * 3.5.0     2018-05-02 local
 #  grid               3.5.0     2018-05-02 local
 #  gtable             0.2.0     2016-02-26 CRAN (R 3.5.0)
+#  hms                0.4.2     2018-03-10 CRAN (R 3.5.0)
 #  htmltools          0.3.6     2017-04-28 CRAN (R 3.5.0)
 #  htmlwidgets        1.2       2018-04-19 CRAN (R 3.5.0)
 #  httpuv             1.4.5     2018-07-19 CRAN (R 3.5.0)
 #  IRanges          * 2.14.10   2018-05-17 Bioconductor
+#  jaffelab         * 0.99.21   2018-05-03 Github (LieberInstitute/jaffelab@7ed0ab7)
 #  later              0.7.3     2018-06-08 CRAN (R 3.5.0)
 #  lattice            0.20-35   2017-03-25 CRAN (R 3.5.0)
 #  lazyeval           0.2.1     2017-10-29 CRAN (R 3.5.0)
+#  limma              3.36.2    2018-06-21 Bioconductor
 #  magrittr           1.5       2014-11-22 CRAN (R 3.5.0)
 #  memoise            1.1.0     2017-04-21 CRAN (R 3.5.0)
 #  methods          * 3.5.0     2018-05-02 local
@@ -297,15 +313,21 @@ devtools::session_info()
 #  promises           1.0.1     2018-04-13 CRAN (R 3.5.0)
 #  purrr              0.2.5     2018-05-29 CRAN (R 3.5.0)
 #  R6                 2.2.2     2017-06-17 CRAN (R 3.5.0)
+#  rafalib          * 1.0.0     2015-08-09 CRAN (R 3.5.0)
+#  RColorBrewer       1.1-2     2014-12-07 CRAN (R 3.5.0)
 #  Rcpp               0.12.18   2018-07-23 CRAN (R 3.5.0)
 #  RCurl              1.95-4.11 2018-07-15 CRAN (R 3.5.0)
+#  readr            * 1.1.1     2017-05-16 CRAN (R 3.5.0)
 #  rlang              0.2.1     2018-05-30 cran (@0.2.1)
 #  rmote            * 0.3.4     2018-05-02 deltarho (R 3.5.0)
 #  S4Vectors        * 0.18.3    2018-06-13 Bioconductor
 #  scales             0.5.0     2017-08-24 CRAN (R 3.5.0)
+#  segmented          0.5-3.0   2017-11-30 CRAN (R 3.5.0)
 #  servr              0.10      2018-05-30 CRAN (R 3.5.0)
 #  stats            * 3.5.0     2018-05-02 local
 #  stats4           * 3.5.0     2018-05-02 local
+#  stringi            1.2.4     2018-07-20 CRAN (R 3.5.0)
+#  stringr          * 1.3.1     2018-05-10 CRAN (R 3.5.0)
 #  tibble             1.4.2     2018-01-22 CRAN (R 3.5.0)
 #  tidyselect         0.2.4     2018-02-26 CRAN (R 3.5.0)
 #  tools              3.5.0     2018-05-02 local
@@ -314,3 +336,4 @@ devtools::session_info()
 #  xfun               0.3       2018-07-06 CRAN (R 3.5.0)
 #  XVector            0.20.0    2018-05-03 Bioconductor
 #  zlibbioc           1.26.0    2018-05-02 Bioconductor
+ 
