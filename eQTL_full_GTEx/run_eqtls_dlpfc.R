@@ -30,11 +30,11 @@ load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/rdas/rse_gtex_tx_s
 	# colData(rse_gtex_gene)$totalMapped  = sapply(colData(rse_gtex_gene)$totalMapped, sum)
 
 ## keep adult samples & correct region
-dim(rse_gtex_gene)
+print(dim(rse_gtex_gene))
 ## Not really filtering by age here
 summary(colData(rse_gtex_gene)$age)
 keepInd = which(colData(rse_gtex_gene)$age > 13 & colData(rse_gtex_gene)$Region == "DLPFC")
-length(keepInd)
+print(length(keepInd))
 rse_gtex_gene = rse_gtex_gene[,keepInd]
 rse_gtex_exon = rse_gtex_exon[,keepInd]
 rse_gtex_jxn = rse_gtex_jxn[,keepInd]
@@ -66,8 +66,8 @@ m1 <- which(!is.na(m))
 m2 <- m[!is.na(m)]
 
 ## Number of samples dropped at this stage and remaining
-length(m) - length(m1)
-length(m1)
+print(length(m) - length(m1))
+print(length(m1))
 
 pd <- pd[m1, ]
 rse_gtex_gene <- rse_gtex_gene[, m1]
@@ -82,8 +82,8 @@ txTpm <- txTpm[, m1]
 pdGtex <- pdGtex[m2, ]
 snpGtex <- snpGtex[, m2]
 
-dim(pdGtex)
-dim(snpGtex)
+print(dim(pdGtex))
+print(dim(snpGtex))
 
 colnames(snpGtex) = rownames(pd)
 
@@ -128,7 +128,7 @@ kTx = num.sv(log2(txTpm+1), mod, vfilter=50000)
 txPCs = pcaTx$x[,1:kTx]
 
 print('k info for the PCAs')
-c('kGene' = kGene, 'kExon' = kExon, 'kJxn' = kJxn, 'kTx' = kTx)
+print(c('kGene' = kGene, 'kExon' = kExon, 'kJxn' = kJxn, 'kTx' = kTx))
 
 save(genePCs, exonPCs, jxnPCs, txPCs, 
 	file="rdas/pcs_dlpfc_4features_filtered_over13.rda")
