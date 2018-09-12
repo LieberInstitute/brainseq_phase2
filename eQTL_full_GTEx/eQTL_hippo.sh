@@ -1,6 +1,6 @@
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=175G,h_vmem=175G,h_fsize=200G
+#$ -l mem_free=140G,h_vmem=140G,h_fsize=200G
 #$ -N bsII_hippo_eQTL
 #$ -o ./eqtl_tables/logs/eQTL_hippo_4_features.txt
 #$ -e ./eqtl_tables/logs/eQTL_hippo_4_features.txt
