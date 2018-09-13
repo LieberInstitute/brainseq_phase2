@@ -2,6 +2,7 @@
 ### libraries
 library(SummarizedExperiment)
 library(jaffelab)
+library('data.table')
 library('devtools')
 
 ## in each region, and in interaction:
