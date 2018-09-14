@@ -71,22 +71,22 @@ subset_gtex <- function(gtex, brainseq) {
 message(paste(Sys.time(), 'matching gene results'))
 dlpfc_gtex_genes <- subset_gtex(dlpfc_gtex_genes, d_sig_genes)
 message(paste(Sys.time(), 'saving gene results'))
-save(dlpfc_gtex_genes,d_sig_genes, "dlpfc_compare_genes.rda")
+save(dlpfc_gtex_genes,d_sig_genes, file = "dlpfc_compare_genes.rda")
 
 message(paste(Sys.time(), 'matching exon results'))
 dlpfc_gtex_exons = dlpfc_gtex_exons[rownames(d_sig_exons),]
 message(paste(Sys.time(), 'saving exon results'))
-save(dlpfc_gtex_exons,d_sig_exons, "dlpfc_compare_exons.rda")
+save(dlpfc_gtex_exons,d_sig_exons, file = "dlpfc_compare_exons.rda")
 
 message(paste(Sys.time(), 'matching jxn results'))
 dlpfc_gtex_jxns = dlpfc_gtex_jxns[rownames(d_sig_jxns),]
 message(paste(Sys.time(), 'saving jxn results'))
-save(dlpfc_gtex_jxns,d_sig_jxns, "dlpfc_compare_jxns.rda")
+save(dlpfc_gtex_jxns,d_sig_jxns, file = "dlpfc_compare_jxns.rda")
 
 message(paste(Sys.time(), 'matching tx results'))
 dlpfc_gtex_txs = dlpfc_gtex_txs[rownames(d_sig_txs),]
 message(paste(Sys.time(), 'saving tx results'))
-save(dlpfc_gtex_txs,d_sig_txs, "dlpfc_compare_txs.rda")
+save(dlpfc_gtex_txs,d_sig_txs, file = "dlpfc_compare_txs.rda")
 
 
 ## Reproducibility information

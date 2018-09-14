@@ -46,7 +46,7 @@ message(paste(Sys.time(), 'subsetting to significant results'))
 h_sig = allEqtl[allEqtl$FDR < 0.01,]
 rm(allEqtl)
 
-message(paste(Sys.time(), 'breaking up by feature')
+message(paste(Sys.time(), 'breaking up by feature'))
 h_sig_genes = h_sig[h_sig$Type=="Gene",]
 h_sig_exons = h_sig[h_sig$Type=="Exon",]
 h_sig_jxns = h_sig[h_sig$Type=="Jxn",]
@@ -70,22 +70,22 @@ subset_gtex <- function(gtex, brainseq) {
 message(paste(Sys.time(), 'matching gene results'))
 hippo_gtex_genes <- subset_gtex(hippo_gtex_genes, h_sig_genes)
 message(paste(Sys.time(), 'saving gene results'))
-save(hippo_gtex_genes,h_sig_genes, "hippo_compare_genes.rda")
+save(hippo_gtex_genes,h_sig_genes, file = "hippo_compare_genes.rda")
 
 message(paste(Sys.time(), 'matching exon results'))
 hippo_gtex_exons = hippo_gtex_exons[rownames(h_sig_exons),]
 message(paste(Sys.time(), 'saving exon results'))
-save(hippo_gtex_exons,h_sig_exons, "hippo_compare_exons.rda")
+save(hippo_gtex_exons,h_sig_exons, file = "hippo_compare_exons.rda")
 
 message(paste(Sys.time(), 'matching jxn results'))
 hippo_gtex_jxns = hippo_gtex_jxns[rownames(h_sig_jxns),]
 message(paste(Sys.time(), 'saving jxn results'))
-save(hippo_gtex_jxns,h_sig_jxns, "hippo_compare_jxns.rda")
+save(hippo_gtex_jxns,h_sig_jxns, file = "hippo_compare_jxns.rda")
 
 message(paste(Sys.time(), 'matching tx results'))
 hippo_gtex_txs = hippo_gtex_txs[rownames(h_sig_txs),]
 message(paste(Sys.time(), 'saving tx results'))
-save(hippo_gtex_txs,h_sig_txs, "hippo_compare_txs.rda")
+save(hippo_gtex_txs,h_sig_txs, file = "hippo_compare_txs.rda")
 
 ## Reproducibility information
 print('Reproducibility information:')

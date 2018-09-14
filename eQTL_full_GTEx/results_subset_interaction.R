@@ -73,22 +73,22 @@ subset_gtex <- function(gtex, brainseq) {
 message(paste(Sys.time(), 'matching gene results'))
 inter_gtex_genes <- subset_gtex(inter_gtex_genes, i_sig_genes)
 message(paste(Sys.time(), 'saving gene results'))
-save(inter_gtex_genes,i_sig_genes, "inter_compare_genes.rda")
+save(inter_gtex_genes,i_sig_genes, file = "inter_compare_genes.rda")
 
 message(paste(Sys.time(), 'matching exon results'))
 inter_gtex_exons = inter_gtex_exons[rownames(i_sig_exons),]
 message(paste(Sys.time(), 'saving exon results'))
-save(inter_gtex_exons,i_sig_exons, "inter_compare_exons.rda")
+save(inter_gtex_exons,i_sig_exons, file = "inter_compare_exons.rda")
 
 message(paste(Sys.time(), 'matching jxn results'))
 inter_gtex_jxns = inter_gtex_jxns[rownames(i_sig_jxns),]
 message(paste(Sys.time(), 'saving jxn results'))
-save(inter_gtex_jxns,i_sig_jxns, "inter_compare_jxns.rda")
+save(inter_gtex_jxns,i_sig_jxns, file = "inter_compare_jxns.rda")
 
 message(paste(Sys.time(), 'matching tx results'))
 inter_gtex_txs = inter_gtex_txs[rownames(i_sig_txs),]
 message(paste(Sys.time(), 'saving tx results'))
-save(inter_gtex_txs,i_sig_txs, "inter_compare_txs.rda")
+save(inter_gtex_txs,i_sig_txs, file = "inter_compare_txs.rda")
 
 ## Reproducibility information
 print('Reproducibility information:')
