@@ -546,7 +546,7 @@ indv_corrsczd_expr <- lapply(c(outGene, list('combined' = rbind(outGene[['HIPPO_
 #   339    37
 #
 # FALSE
-#   293
+#   287
 indv_corrsczd_cleaned <- lapply(c(outGene, list('combined' = rbind(outGene[['HIPPO_matchQSV']], outGene[['DLPFC_matchQSV']]))), computecor_sczd, exp = cleaned)
 
 
@@ -556,12 +556,15 @@ corrsczd_info <- function(corrsczd, type) {
     # > levels(dx)
     # [1] "Control" "SCZD"
     
+    n_genes <- c(48, 245, 171, 339, 293)
+    names(n_genes) <- names(corrsczd)
+    
     res <- do.call(rbind, mapply(function(pathway, pathname) {
         f <- lm(pathway ~ dx)
         p <- summary(f)$coef[2, 4]
         ylim <- range(pathway)
         
-        boxplot(pathway ~ dx, main = paste0(pathname, ': ',
+        boxplot(pathway ~ dx, main = paste0(gsub('_matchQSV', '', pathname), ': (# DE: ', n_genes[pathname], ')',
             '\np-value: ', signif(p, 3)),
             ylim = ylim,
             xlab = 'SCZD diagnosis', outline = FALSE, ylab = paste('Correlation -', type))
@@ -571,10 +574,11 @@ corrsczd_info <- function(corrsczd, type) {
     }, corrsczd, names(corrsczd), SIMPLIFY = FALSE))
     
     res <- as.data.frame(res)
-    res$n_genes <- c(48, 245, 171, 339, 293)
+    res$n_genes <- n_genes
     res$set <- names(corrsczd)
     res$padj <- p.adjust(res[, 'Pr(>|t|)'], method = 'fdr')
     res <- res[order(res$padj, decreasing = FALSE), ]
+    res$padj_sig <- res$padj < 0.05
     rownames(res) <- NULL
     
     return(res)
@@ -586,19 +590,19 @@ indv_corrsczd_info_cleaned <- corrsczd_info(indv_corrsczd_cleaned, 'cleaned')
 dev.off()
 options(width = 120)
 indv_corrsczd_info_expr
-#        Estimate  Std. Error    t value  Pr(>|t|) mean_sczd mean_control n_genes            set      padj
-# 1 -0.0008518767 0.005349746 -0.1592368 0.8736045 0.9389143    0.9397661      48 HIPPO_matchQSV 0.8736045
-# 2 -0.0014287886 0.005414014 -0.2639056 0.7920593 0.9124227    0.9138515     245 DLPFC_matchQSV 0.8736045
-# 3 -0.0006810401 0.003531634 -0.1928399 0.8472332 0.9264122    0.9270933     171           BSP1 0.8736045
-# 4 -0.0026563724 0.005823791 -0.4561242 0.6486771 0.9146195    0.9172759     339            CMC 0.8736045
-# 5 -0.0011000972 0.005267718 -0.2088375 0.8347367 0.9157445    0.9168446     293       combined 0.8736045
+#        Estimate  Std. Error    t value  Pr(>|t|) mean_sczd mean_control n_genes            set      padj padj_sig
+# 1 -0.0008518767 0.005349746 -0.1592368 0.8736045 0.9389143    0.9397661      48 HIPPO_matchQSV 0.8736045    FALSE
+# 2 -0.0014287886 0.005414014 -0.2639056 0.7920593 0.9124227    0.9138515     245 DLPFC_matchQSV 0.8736045    FALSE
+# 3 -0.0006810401 0.003531634 -0.1928399 0.8472332 0.9264122    0.9270933     171           BSP1 0.8736045    FALSE
+# 4 -0.0026563724 0.005823791 -0.4561242 0.6486771 0.9146195    0.9172759     339            CMC 0.8736045    FALSE
+# 5 -0.0012598500 0.005208582 -0.2418796 0.8090619 0.9160847    0.9173445     293       combined 0.8736045    FALSE
 indv_corrsczd_info_cleaned
-#        Estimate  Std. Error    t value     Pr(>|t|) mean_sczd mean_control n_genes            set         padj
-# 1 -0.0187940225 0.003019046 -6.2251529 1.891553e-09 0.7856714    0.8044655      48 HIPPO_matchQSV 9.457767e-09
-# 2  0.0013918067 0.001547340  0.8994834 3.692180e-01 0.8623785    0.8609867     171           BSP1 6.153634e-01
-# 3 -0.0018085495 0.001784012 -1.0137539 3.116319e-01 0.8150913    0.8168999     293       combined 6.153634e-01
-# 4  0.0007077981 0.001791474  0.3950927 6.930947e-01 0.8221908    0.8214830     245 DLPFC_matchQSV 6.930947e-01
-# 5 -0.0005068032 0.001219738 -0.4155016 6.781135e-01 0.8477722    0.8482790     339            CMC 6.930947e-01
+#        Estimate  Std. Error    t value     Pr(>|t|) mean_sczd mean_control n_genes            set         padj padj_sig
+# 1 -0.0187940225 0.003019046 -6.2251529 1.891553e-09 0.7856714    0.8044655      48 HIPPO_matchQSV 9.457767e-09     TRUE
+# 2  0.0007077981 0.001791474  0.3950927 6.930947e-01 0.8221908    0.8214830     245 DLPFC_matchQSV 6.930947e-01    FALSE
+# 3  0.0013918067 0.001547340  0.8994834 3.692180e-01 0.8623785    0.8609867     171           BSP1 6.930947e-01    FALSE
+# 4 -0.0005068032 0.001219738 -0.4155016 6.781135e-01 0.8477722    0.8482790     339            CMC 6.930947e-01    FALSE
+# 5 -0.0007077617 0.001671337 -0.4234705 6.722982e-01 0.8213347    0.8220425     293       combined 6.930947e-01    FALSE
 
 save(indv_corrsczd_expr, indv_corrsczd_cleaned, indv_corrsczd_info_expr, indv_corrsczd_info_cleaned, file = 'rda/indv_corrsczd.Rdata')
 
