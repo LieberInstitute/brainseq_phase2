@@ -4,7 +4,7 @@
 #$ -N interaction_subset
 #$ -o logs/interaction_subset.txt
 #$ -e logs/interaction_subset.txt
-#$ -m a
+#$ -m e
 echo "**** Job starts ****"
 date
 

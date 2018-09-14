@@ -4,7 +4,7 @@
 #$ -N hippo_subset
 #$ -o logs/hippo_subset.txt
 #$ -e logs/hippo_subset.txt
-#$ -m a
+#$ -m e
 echo "**** Job starts ****"
 date
 

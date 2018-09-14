@@ -4,7 +4,7 @@
 #$ -N dlpfc_subset
 #$ -o logs/dlpfc_subset.txt
 #$ -e logs/dlpfc_subset.txt
-#$ -m a
+#$ -m e
 echo "**** Job starts ****"
 date
 

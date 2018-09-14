@@ -55,7 +55,16 @@ rm(h_sig)
 
 ## subset GTEx to our results
 subset_gtex <- function(gtex, brainseq) {
-    gtex[gtex$snps == brainseq$snps & gtex$gene == brainseq$gene, ]
+    message(paste(Sys.time(), 'converting brainseq to data.table'))
+    brainseq <- data.table(as.data.frame(brainseq))
+    
+    message(paste(Sys.time(), 'create keys: gtex'))
+    setkey(gtex, snps, gene)
+    message(paste(Sys.time(), 'create keys: brainseq'))
+    setkey(brainseq, snps, gene)
+
+    message(paste(Sys.time(), 'subset gtex by brainseq'))
+    gtex[.(brainseq$snps, brainseq$gene)]
 }
 
 message(paste(Sys.time(), 'matching gene results'))
