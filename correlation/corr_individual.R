@@ -564,7 +564,7 @@ corrsczd_info <- function(corrsczd, type) {
         p <- summary(f)$coef[2, 4]
         ylim <- range(pathway)
         
-        boxplot(pathway ~ dx, main = paste0(gsub('_matchQSV', '', pathname), ': (# DE: ', n_genes[pathname], ')',
+        boxplot(pathway ~ dx, main = paste0(gsub('_matchQSV', '', pathname), ' (# DE: ', n_genes[pathname], ')',
             '\np-value: ', signif(p, 3)),
             ylim = ylim,
             xlab = 'SCZD diagnosis', outline = FALSE, ylab = paste('Correlation -', type))
