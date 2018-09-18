@@ -446,10 +446,11 @@ design <- cbind(with(colData(rse), model.matrix(~ Dx * Region)),
     modQsva[, -grep('Dx|RegionHIPPO|Intercept', colnames(modQsva))]
 )
 stopifnot(is.fullrank(design))
-maincol <- grep(':', colnames(design))
-mod <- design[, c(1, maincol, 2:(maincol - 1), (maincol + 1):ncol(design))]
+# maincol <- grep(':', colnames(design))
+# mod <- design[, c(1, maincol, 2:(maincol - 1), (maincol + 1):ncol(design))]
 
-exprsCleaned <- cleaningY(exprsNorm$gene, mod, P = 2)
+## Actually keep the Dx and region effects too for visualization purposes
+exprsCleaned <- cleaningY(exprsNorm$gene, design, P = 4)
 
 plot_top <- function(i, normtype = 'cleaned') {
     g <- genes$gene[i]
