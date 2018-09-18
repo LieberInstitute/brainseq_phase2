@@ -50,11 +50,18 @@ message(paste(Sys.time(), 'subsetting to significant results'))
 i_sig = allEqtl[allEqtl$FDR < 0.01,]
 rm(allEqtl)
 
-message(paste(Sys.time(), 'breaking up by feature'))
-i_sig_genes = i_sig[i_sig$Type=="Gene",]
-i_sig_exons = i_sig[i_sig$Type=="Exon",]
-i_sig_jxns = i_sig[i_sig$Type=="Jxn",]
-i_sig_txs = i_sig[i_sig$Type=="Tx",]
+message(paste(Sys.time(), 'breaking up by feature and converting to data.table'))
+proc_brainseq <- function(df) {
+    message(paste(Sys.time(), 'coercing to data.table'))
+    DT <- data.table(as.data.frame(df))
+    message(paste(Sys.time(), 'setting keys'))
+    setkey(DT, snps, gene)
+    return(DT)
+}
+i_sig_genes = proc_brainseq(i_sig[i_sig$Type=="Gene",])
+i_sig_exons = proc_brainseq(i_sig[i_sig$Type=="Exon",])
+i_sig_jxns = proc_brainseq(i_sig[i_sig$Type=="Jxn",])
+i_sig_txs = proc_brainseq(i_sig[i_sig$Type=="Tx",])
 rm(i_sig)
 
 ## subset GTEx to our results
@@ -64,8 +71,6 @@ subset_gtex <- function(gtex, brainseq) {
     
     message(paste(Sys.time(), 'create keys: gtex'))
     setkey(gtex, snps, gene)
-    message(paste(Sys.time(), 'create keys: brainseq'))
-    setkey(brainseq, snps, gene)
 
     message(paste(Sys.time(), 'subset gtex by brainseq'))
     gtex[.(brainseq$snps, brainseq$gene)]
@@ -77,17 +82,17 @@ message(paste(Sys.time(), 'saving gene results'))
 save(inter_gtex_genes,i_sig_genes, file = "rdas/inter_compare_genes.rda")
 
 message(paste(Sys.time(), 'matching exon results'))
-inter_gtex_exons = inter_gtex_exons[rownames(i_sig_exons),]
+inter_gtex_exons <- subset_gtex(inter_gtex_exons, i_sig_exons)
 message(paste(Sys.time(), 'saving exon results'))
 save(inter_gtex_exons,i_sig_exons, file = "rdas/inter_compare_exons.rda")
 
 message(paste(Sys.time(), 'matching jxn results'))
-inter_gtex_jxns = inter_gtex_jxns[rownames(i_sig_jxns),]
+inter_gtex_jxns <- subset_gtex(inter_gtex_jxns, i_sig_jxns)
 message(paste(Sys.time(), 'saving jxn results'))
 save(inter_gtex_jxns,i_sig_jxns, file = "rdas/inter_compare_jxns.rda")
 
 message(paste(Sys.time(), 'matching tx results'))
-inter_gtex_txs = inter_gtex_txs[rownames(i_sig_txs),]
+inter_gtex_txs <- subset_gtex(inter_gtex_txs, i_sig_txs)
 message(paste(Sys.time(), 'saving tx results'))
 save(inter_gtex_txs,i_sig_txs, file = "rdas/inter_compare_txs.rda")
 

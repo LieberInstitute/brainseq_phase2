@@ -49,11 +49,18 @@ message(paste(Sys.time(), 'subsetting to significant results'))
 d_sig = allEqtl[allEqtl$FDR < 0.01,]
 rm(allEqtl)
 
-message(paste(Sys.time(), 'breaking up by feature'))
-d_sig_genes = d_sig[d_sig$Type=="Gene",]
-d_sig_exons = d_sig[d_sig$Type=="Exon",]
-d_sig_jxns = d_sig[d_sig$Type=="Jxn",]
-d_sig_txs = d_sig[d_sig$Type=="Tx",]
+message(paste(Sys.time(), 'breaking up by feature and converting to data.table'))
+proc_brainseq <- function(df) {
+    message(paste(Sys.time(), 'coercing to data.table'))
+    DT <- data.table(as.data.frame(df))
+    message(paste(Sys.time(), 'setting keys'))
+    setkey(DT, snps, gene)
+    return(DT)
+}
+d_sig_genes = proc_brainseq(d_sig[d_sig$Type=="Gene",])
+d_sig_exons = proc_brainseq(d_sig[d_sig$Type=="Exon",])
+d_sig_jxns = proc_brainseq(d_sig[d_sig$Type=="Jxn",])
+d_sig_txs = proc_brainseq(d_sig[d_sig$Type=="Tx",])
 rm(d_sig)
 
 ## subset GTEx to our results
@@ -63,30 +70,27 @@ subset_gtex <- function(gtex, brainseq) {
     
     message(paste(Sys.time(), 'create keys: gtex'))
     setkey(gtex, snps, gene)
-    message(paste(Sys.time(), 'create keys: brainseq'))
-    setkey(brainseq, snps, gene)
 
     message(paste(Sys.time(), 'subset gtex by brainseq'))
     gtex[.(brainseq$snps, brainseq$gene)]
 }
-
 message(paste(Sys.time(), 'matching gene results'))
 dlpfc_gtex_genes <- subset_gtex(dlpfc_gtex_genes, d_sig_genes)
 message(paste(Sys.time(), 'saving gene results'))
 save(dlpfc_gtex_genes,d_sig_genes, file = "rdas/dlpfc_compare_genes.rda")
 
 message(paste(Sys.time(), 'matching exon results'))
-dlpfc_gtex_exons = dlpfc_gtex_exons[rownames(d_sig_exons),]
+dlpfc_gtex_exons <- subset_gtex(dlpfc_gtex_exons, d_sig_exons)
 message(paste(Sys.time(), 'saving exon results'))
 save(dlpfc_gtex_exons,d_sig_exons, file = "rdas/dlpfc_compare_exons.rda")
 
 message(paste(Sys.time(), 'matching jxn results'))
-dlpfc_gtex_jxns = dlpfc_gtex_jxns[rownames(d_sig_jxns),]
+dlpfc_gtex_jxns <- subset_gtex(dlpfc_gtex_jxns, d_sig_jxns)
 message(paste(Sys.time(), 'saving jxn results'))
 save(dlpfc_gtex_jxns,d_sig_jxns, file = "rdas/dlpfc_compare_jxns.rda")
 
 message(paste(Sys.time(), 'matching tx results'))
-dlpfc_gtex_txs = dlpfc_gtex_txs[rownames(d_sig_txs),]
+dlpfc_gtex_txs <- subset_gtex(dlpfc_gtex_txs, d_sig_txs)
 message(paste(Sys.time(), 'saving tx results'))
 save(dlpfc_gtex_txs,d_sig_txs, file = "rdas/dlpfc_compare_txs.rda")
 

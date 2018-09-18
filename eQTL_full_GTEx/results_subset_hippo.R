@@ -48,11 +48,18 @@ message(paste(Sys.time(), 'subsetting to significant results'))
 h_sig = allEqtl[allEqtl$FDR < 0.01,]
 rm(allEqtl)
 
-message(paste(Sys.time(), 'breaking up by feature'))
-h_sig_genes = h_sig[h_sig$Type=="Gene",]
-h_sig_exons = h_sig[h_sig$Type=="Exon",]
-h_sig_jxns = h_sig[h_sig$Type=="Jxn",]
-h_sig_txs = h_sig[h_sig$Type=="Tx",]
+message(paste(Sys.time(), 'breaking up by feature and converting to data.table'))
+proc_brainseq <- function(df) {
+    message(paste(Sys.time(), 'coercing to data.table'))
+    DT <- data.table(as.data.frame(df))
+    message(paste(Sys.time(), 'setting keys'))
+    setkey(DT, snps, gene)
+    return(DT)
+}
+h_sig_genes = proc_brainseq(h_sig[h_sig$Type=="Gene",])
+h_sig_exons = proc_brainseq(h_sig[h_sig$Type=="Exon",])
+h_sig_jxns = proc_brainseq(h_sig[h_sig$Type=="Jxn",])
+h_sig_txs = proc_brainseq(h_sig[h_sig$Type=="Tx",])
 rm(h_sig)
 
 ## subset GTEx to our results
@@ -62,8 +69,6 @@ subset_gtex <- function(gtex, brainseq) {
     
     message(paste(Sys.time(), 'create keys: gtex'))
     setkey(gtex, snps, gene)
-    message(paste(Sys.time(), 'create keys: brainseq'))
-    setkey(brainseq, snps, gene)
 
     message(paste(Sys.time(), 'subset gtex by brainseq'))
     gtex[.(brainseq$snps, brainseq$gene)]
@@ -75,17 +80,17 @@ message(paste(Sys.time(), 'saving gene results'))
 save(hippo_gtex_genes,h_sig_genes, file = "rdas/hippo_compare_genes.rda")
 
 message(paste(Sys.time(), 'matching exon results'))
-hippo_gtex_exons = hippo_gtex_exons[rownames(h_sig_exons),]
+hippo_gtex_exons <- subset_gtex(hippo_gtex_exons, h_sig_exons)
 message(paste(Sys.time(), 'saving exon results'))
 save(hippo_gtex_exons,h_sig_exons, file = "rdas/hippo_compare_exons.rda")
 
 message(paste(Sys.time(), 'matching jxn results'))
-hippo_gtex_jxns = hippo_gtex_jxns[rownames(h_sig_jxns),]
+hippo_gtex_jxns <- subset_gtex(hippo_gtex_jxns, h_sig_jxns)
 message(paste(Sys.time(), 'saving jxn results'))
 save(hippo_gtex_jxns,h_sig_jxns, file = "rdas/hippo_compare_jxns.rda")
 
 message(paste(Sys.time(), 'matching tx results'))
-hippo_gtex_txs = hippo_gtex_txs[rownames(h_sig_txs),]
+hippo_gtex_txs <- subset_gtex(hippo_gtex_txs h_sig_txs)
 message(paste(Sys.time(), 'saving tx results'))
 save(hippo_gtex_txs,h_sig_txs, file = "rdas/hippo_compare_txs.rda")
 
