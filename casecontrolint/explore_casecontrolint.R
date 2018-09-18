@@ -441,6 +441,16 @@ get_ylim_mult <- function(rang) {
     )
 }
 
+## Add an interaction by region for Dx
+design <- cbind(with(colData(rse), model.matrix(~ Dx * Region)),
+    modQsva[, -grep('Dx|RegionHIPPO|Intercept', colnames(modQsva))]
+)
+stopifnot(is.fullrank(design))
+maincol <- grep(':', colnames(design))
+mod <- design[, c(1, maincol, 2:(maincol - 1), (maincol + 1):ncol(design))]
+
+exprsCleaned <- cleaningY(exprsNorm$gene, mod, P = 2)
+
 plot_top <- function(i, normtype = 'cleaned') {
     g <- genes$gene[i]
     j <- which(outGene[['HIPPO_matchQSV']]$ensemblID == g)
@@ -449,7 +459,7 @@ plot_top <- function(i, normtype = 'cleaned') {
     dx <- factor(ifelse(colData(rse)$Dx == 'Control', 'Control', 'SCZD'), levels = c('Control', 'SCZD'))
     region <- colData(rse)$Region
 
-    y <- exprsNorm$gene[j, ]
+    y <- if(normtype == 'expr') exprsNorm$gene[j, ] else exprsCleaned[j, ]
     boxplot(y ~ dx + region,
             ylab = get_ylab('gene', cleaned = normtype == 'cleaned'),
             main = get_main(i),
@@ -464,9 +474,15 @@ plot_top <- function(i, normtype = 'cleaned') {
 genes$gene <- genes$gene[order(outGene[['HIPPO_matchQSV']]$interaction_adj.P.Val[match(genes$gene, outGene[['HIPPO_matchQSV']]$ensemblID)])]
 
 ## Make the plots
+pdf('pdf/de_gene_expr.pdf')
+for(i in seq_len(length(genes$gene))) {
+    plot_top(i, 'expr')
+}
+dev.off()
+
 pdf('pdf/de_gene_cleaned.pdf')
 for(i in seq_len(length(genes$gene))) {
-    plot_top(i)
+    plot_top(i, 'cleaned')
 }
 dev.off()
 
