@@ -314,6 +314,7 @@ pdf('pdf/venn_de_features.pdf', useDingbats = FALSE)
 make_venn(genes)
 make_venn(genes[c('gene', 'exon', 'jxn')])
 dev.off()
+system('rm VennDiagram*.log')
 
 
 ## Gene ontology analysis
@@ -383,6 +384,7 @@ plot_go <- function(go_cluster, cat = 10) {
     })
 }
 
+## Made with conda_R/3.4.x
 pdf('pdf/go_de_genes.pdf', width = 14, height = 9, useDingbats = FALSE)
 plot_go(go_de_genes)
 dev.off()
