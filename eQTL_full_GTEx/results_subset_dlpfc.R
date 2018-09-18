@@ -46,16 +46,14 @@ load("../eQTL_full/eqtl_tables/mergedEqtl_output_dlpfc_4features.rda", verbose=T
 
 # keep only significant
 message(paste(Sys.time(), 'subsetting to significant results'))
-d_sig = allEqtl[allEqtl$FDR < 0.01,]
+d_sig = data.table(as.data.frame(allEqtl[allEqtl$FDR < 0.01,]))
 rm(allEqtl)
 
-message(paste(Sys.time(), 'breaking up by feature and converting to data.table'))
+message(paste(Sys.time(), 'breaking up by feature'))
 proc_brainseq <- function(df) {
-    message(paste(Sys.time(), 'coercing to data.table'))
-    DT <- data.table(as.data.frame(df))
     message(paste(Sys.time(), 'setting keys'))
-    setkey(DT, snps, gene)
-    return(DT)
+    setkey(df, snps, gene)
+    return(df)
 }
 d_sig_genes = proc_brainseq(d_sig[d_sig$Type=="Gene",])
 d_sig_exons = proc_brainseq(d_sig[d_sig$Type=="Exon",])
@@ -64,16 +62,14 @@ d_sig_txs = proc_brainseq(d_sig[d_sig$Type=="Tx",])
 rm(d_sig)
 
 ## subset GTEx to our results
-subset_gtex <- function(gtex, brainseq) {
-    message(paste(Sys.time(), 'converting brainseq to data.table'))
-    brainseq <- data.table(as.data.frame(brainseq))
-    
+subset_gtex <- function(gtex, brainseq) {    
     message(paste(Sys.time(), 'create keys: gtex'))
     setkey(gtex, snps, gene)
 
     message(paste(Sys.time(), 'subset gtex by brainseq'))
     gtex[.(brainseq$snps, brainseq$gene)]
 }
+
 message(paste(Sys.time(), 'matching gene results'))
 dlpfc_gtex_genes <- subset_gtex(dlpfc_gtex_genes, d_sig_genes)
 message(paste(Sys.time(), 'saving gene results'))
