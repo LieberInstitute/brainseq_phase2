@@ -85,7 +85,7 @@ message(paste(Sys.time(), 'saving jxn results'))
 save(hippo_gtex_jxns,h_sig_jxns, file = "rdas/hippo_compare_jxns.rda")
 
 message(paste(Sys.time(), 'matching tx results'))
-hippo_gtex_txs <- subset_gtex(hippo_gtex_txs h_sig_txs)
+hippo_gtex_txs <- subset_gtex(hippo_gtex_txs, h_sig_txs)
 message(paste(Sys.time(), 'saving tx results'))
 save(hippo_gtex_txs,h_sig_txs, file = "rdas/hippo_compare_txs.rda")
 
