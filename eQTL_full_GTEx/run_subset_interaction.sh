@@ -1,6 +1,6 @@
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=150G,h_vmem=150G,h_fsize=200G
+#$ -l mem_free=110G,h_vmem=110G,h_fsize=200G
 #$ -N interaction_subset
 #$ -o logs/interaction_subset.txt
 #$ -e logs/interaction_subset.txt
