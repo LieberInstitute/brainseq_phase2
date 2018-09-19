@@ -42,7 +42,7 @@ message(paste(Sys.time(), 'saving merged QTLs'))
 save(interaction, file = 'rdas/merged_GTEx_BrainSeq_QTLs_interaction.Rdata')
 
 message(paste(Sys.time(), 'merging hippo QTLs'))
-hippo <- list(),
+hippo <- list(
     'gene' = merge_qtl(hippo_gtex_genes, h_sig_genes),
     'exon' = merge_qtl(hippo_gtex_exons, h_sig_exons),
     'jxn' = merge_qtl(hippo_gtex_jxns, h_sig_jxns),
@@ -162,9 +162,153 @@ comp_qtl_short(interaction, perc = TRUE)
 
 
 comp_qtl_short(hippo)
+# 2018-09-18 21:55:25 removing some NAs from GTEx (TRUEs below) for type gene
+#
+#  FALSE   TRUE
+# 937821 137912
+# 2018-09-18 21:55:27 removing some NAs from GTEx (TRUEs below) for type exon
+#
+#   FALSE    TRUE
+# 5425045  781330
+# 2018-09-18 21:55:38 removing some NAs from GTEx (TRUEs below) for type jxn
+#
+#   FALSE    TRUE
+# 3478432  476817
+# 2018-09-18 21:55:44 removing some NAs from GTEx (TRUEs below) for type tx
+#
+#   FALSE    TRUE
+# 1497731  204844
+# $gene
+#           GTEx p<0.01
+# Equal sign  FALSE   TRUE    Sum
+#      FALSE 171170  15204 186374
+#      TRUE  518619 232828 751447
+#      Sum   689789 248032 937821
+#
+# $exon
+#           GTEx p<0.01
+# Equal sign   FALSE    TRUE     Sum
+#      FALSE 1209677   82436 1292113
+#      TRUE  2947392 1185540 4132932
+#      Sum   4157069 1267976 5425045
+#
+# $jxn
+#           GTEx p<0.01
+# Equal sign   FALSE    TRUE     Sum
+#      FALSE 1058807   29985 1088792
+#      TRUE  1672659  716981 2389640
+#      Sum   2731466  746966 3478432
+#
+# $tx
+#           GTEx p<0.01
+# Equal sign   FALSE    TRUE     Sum
+#      FALSE  284771   19350  304121
+#      TRUE   808193  385417 1193610
+#      Sum   1092964  404767 1497731
+
 comp_qtl_short(hippo, perc = TRUE)
+# $gene
+#           GTEx p<0.01
+# Equal sign     FALSE      TRUE       Sum
+#      FALSE 15.911941  1.413362 17.325303
+#      TRUE  48.210755 21.643661 69.854416
+#      Sum   64.122696 23.057023 87.179718
+#
+# $exon
+#           GTEx p<0.01
+# Equal sign     FALSE      TRUE       Sum
+#      FALSE 19.490878  1.328247 20.819125
+#      TRUE  47.489750 19.101972 66.591722
+#      Sum   66.980629 20.430219 87.410848
+#
+# $jxn
+#           GTEx p<0.01
+# Equal sign      FALSE       TRUE        Sum
+#      FALSE 26.7696673  0.7581065 27.5277739
+#      TRUE  42.2896005 18.1273290 60.4169295
+#      Sum   69.0592678 18.8854355 87.9447034
+#
+# $tx
+#           GTEx p<0.01
+# Equal sign     FALSE      TRUE       Sum
+#      FALSE 16.725900  1.136514 17.862414
+#      TRUE  47.468863 22.637299 70.106163
+#      Sum   64.194764 23.773813 87.968577
+
 comp_qtl_short(dlpfc)
+# 2018-09-18 21:56:41 removing some NAs from GTEx (TRUEs below) for type gene
+#
+#   FALSE    TRUE
+# 1371570  206393
+# 2018-09-18 21:56:44 removing some NAs from GTEx (TRUEs below) for type exon
+#
+#   FALSE    TRUE
+# 7805138 1123171
+# 2018-09-18 21:57:00 removing some NAs from GTEx (TRUEs below) for type jxn
+#
+#   FALSE    TRUE
+# 4630635  629491
+# 2018-09-18 21:57:09 removing some NAs from GTEx (TRUEs below) for type tx
+#
+#   FALSE    TRUE
+# 1994482  276782
+# $gene
+#           GTEx p<0.01
+# Equal sign   FALSE    TRUE     Sum
+#      FALSE  244982   22214  267196
+#      TRUE   750876  353498 1104374
+#      Sum    995858  375712 1371570
+#
+# $exon
+#           GTEx p<0.01
+# Equal sign   FALSE    TRUE     Sum
+#      FALSE 1701101  140661 1841762
+#      TRUE  4187885 1775491 5963376
+#      Sum   5888986 1916152 7805138
+#
+# $jxn
+#           GTEx p<0.01
+# Equal sign   FALSE    TRUE     Sum
+#      FALSE 1277449   47132 1324581
+#      TRUE  2248301 1057753 3306054
+#      Sum   3525750 1104885 4630635
+#
+# $tx
+#           GTEx p<0.01
+# Equal sign   FALSE    TRUE     Sum
+#      FALSE  348925   28295  377220
+#      TRUE  1044562  572700 1617262
+#      Sum   1393487  600995 1994482
+#
+
 comp_qtl_short(dlpfc, perc = TRUE)
+# $gene
+#           GTEx p<0.01
+# Equal sign     FALSE      TRUE       Sum
+#      FALSE 15.525206  1.407764 16.932970
+#      TRUE  47.585146 22.402173 69.987319
+#      Sum   63.110352 23.809937 86.920289
+#
+# $exon
+#           GTEx p<0.01
+# Equal sign    FALSE     TRUE      Sum
+#      FALSE 19.05289  1.57545 20.62834
+#      TRUE  46.90569 19.88608 66.79177
+#      Sum   65.95858 21.46153 87.42012
+#
+# $jxn
+#           GTEx p<0.01
+# Equal sign      FALSE       TRUE        Sum
+#      FALSE 24.2855209  0.8960242 25.1815451
+#      TRUE  42.7423412 20.1088909 62.8512321
+#      Sum   67.0278621 21.0049151 88.0327772
+#
+# $tx
+#           GTEx p<0.01
+# Equal sign     FALSE      TRUE       Sum
+#      FALSE 15.362591  1.245782 16.608373
+#      TRUE  45.990338 25.215034 71.205373
+#      Sum   61.352929 26.460817 87.813746
 
 
 ## Reproducibility information
@@ -173,3 +317,65 @@ Sys.time()
 proc.time()
 options(width = 120)
 session_info()
+
+# Session info ----------------------------------------------------------------------------------------------------------
+#  setting  value
+#  version  R version 3.5.0 Patched (2018-04-30 r74679)
+#  system   x86_64, linux-gnu
+#  ui       X11
+#  language (EN)
+#  collate  en_US.UTF-8
+#  tz       US/Eastern
+#  date     2018-09-18
+#
+# Packages --------------------------------------------------------------------------------------------------------------
+#  package     * version date       source
+#  assertthat    0.2.0   2017-04-11 CRAN (R 3.5.0)
+#  base        * 3.5.0   2018-05-02 local
+#  bindr         0.1.1   2018-03-13 CRAN (R 3.5.0)
+#  bindrcpp      0.2.2   2018-03-29 CRAN (R 3.5.0)
+#  colorout    * 1.2-0   2018-05-02 Github (jalvesaq/colorout@c42088d)
+#  colorspace    1.3-2   2016-12-14 CRAN (R 3.5.0)
+#  compiler      3.5.0   2018-05-02 local
+#  crayon        1.3.4   2017-09-16 CRAN (R 3.5.0)
+#  data.table  * 1.11.4  2018-05-27 cran (@1.11.4)
+#  datasets    * 3.5.0   2018-05-02 local
+#  devtools    * 1.13.6  2018-06-27 CRAN (R 3.5.0)
+#  digest        0.6.15  2018-01-28 CRAN (R 3.5.0)
+#  dplyr         0.7.6   2018-06-29 CRAN (R 3.5.0)
+#  ggplot2       3.0.0   2018-07-03 CRAN (R 3.5.0)
+#  glue          1.3.0   2018-07-17 CRAN (R 3.5.0)
+#  graphics    * 3.5.0   2018-05-02 local
+#  grDevices   * 3.5.0   2018-05-02 local
+#  grid          3.5.0   2018-05-02 local
+#  gtable        0.2.0   2016-02-26 CRAN (R 3.5.0)
+#  htmltools     0.3.6   2017-04-28 CRAN (R 3.5.0)
+#  htmlwidgets   1.2     2018-04-19 CRAN (R 3.5.0)
+#  httpuv        1.4.5   2018-07-19 CRAN (R 3.5.0)
+#  later         0.7.4   2018-08-31 CRAN (R 3.5.0)
+#  lattice       0.20-35 2017-03-25 CRAN (R 3.5.0)
+#  lazyeval      0.2.1   2017-10-29 CRAN (R 3.5.0)
+#  magrittr      1.5     2014-11-22 CRAN (R 3.5.0)
+#  memoise       1.1.0   2017-04-21 CRAN (R 3.5.0)
+#  methods     * 3.5.0   2018-05-02 local
+#  munsell       0.5.0   2018-06-12 CRAN (R 3.5.0)
+#  pillar        1.3.0   2018-07-14 CRAN (R 3.5.0)
+#  pkgconfig     2.0.1   2017-03-21 CRAN (R 3.5.0)
+#  plyr          1.8.4   2016-06-08 CRAN (R 3.5.0)
+#  png           0.1-7   2013-12-03 CRAN (R 3.5.0)
+#  promises      1.0.1   2018-04-13 CRAN (R 3.5.0)
+#  purrr         0.2.5   2018-05-29 CRAN (R 3.5.0)
+#  R6            2.2.2   2017-06-17 CRAN (R 3.5.0)
+#  Rcpp          0.12.18 2018-07-23 CRAN (R 3.5.0)
+#  rlang         0.2.1   2018-05-30 cran (@0.2.1)
+#  rmote       * 0.3.4   2018-05-02 deltarho (R 3.5.0)
+#  scales        1.0.0   2018-08-09 CRAN (R 3.5.0)
+#  servr         0.10    2018-05-30 CRAN (R 3.5.0)
+#  stats       * 3.5.0   2018-05-02 local
+#  tibble        1.4.2   2018-01-22 CRAN (R 3.5.0)
+#  tidyselect    0.2.4   2018-02-26 CRAN (R 3.5.0)
+#  tools         3.5.0   2018-05-02 local
+#  utils       * 3.5.0   2018-05-02 local
+#  withr         2.1.2   2018-03-15 CRAN (R 3.5.0)
+#  xfun          0.3     2018-07-06 CRAN (R 3.5.0)
+
