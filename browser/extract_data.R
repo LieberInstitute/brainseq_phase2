@@ -363,6 +363,10 @@ eQTLfiles <- c(
 stopifnot(all(file.exists(eQTLfiles)))
 
 
+## Looks like the id used is alwasy the libd one (even for the GTEx replication ones)
+## which makes this easier
+setkey(exon_name_map, libd_bsp2)
+
 for(i in seq_len(length(eQTLfiles))) {
     f <- eQTLfiles[i]
     message(paste(Sys.time(), 'loading', f))
@@ -379,14 +383,12 @@ for(i in seq_len(length(eQTLfiles))) {
 
     message(paste(Sys.time(), 'fixing exon ids'))
     e <- DT$feature_id[DT$Type == 'Exon']
-    ## Set key according to the exon id used
-    if(grepl('replication', names(eQTLfiles)[i])) {
-        setkey(exon_name_map, libd_gtex)
-    } else {
-        setkey(exon_name_map, libd_bsp2)
-    }
+
     ## Use data.table syntax ^^
     DT$feature_id[DT$Type == 'Exon'] <- exon_name_map[.(e), gencode]
+    
+    ## Make Type lowercase to match file names from other tables
+    DT$Type <- tolower(DT$Type)
     
     f_new <- paste0('BrainSeqPhaseII_eQTL_', names(eQTLfiles[i]), '.txt')
     message(paste(Sys.time(), 'writing', f_new))
