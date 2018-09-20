@@ -1,5 +1,6 @@
 library('data.table')
 library('GenomicRanges')
+library('limma')
 library('devtools')
 
 ## Load DE results
@@ -647,14 +648,23 @@ lapply(hippo_tab, chisq.test)
 # data:  X[[i]]
 # X-squared = NaN, df = 1, p-value = NA
 
-x <- dlpfc_nums_featv2$gene
-library('limma')
+(dlpfc_set <- sapply(dlpfc_nums_featv2, function(x) {
+    geneSetTest(index = x$pgc[!is.na(x$pgc)], x$t[!is.na(x$pgc)])
+}))
+#      gene      exon       jxn        tx
+# 0.1918706 0.2642180 0.9038824 0.8393053
+(hippo_set <- sapply(hippo_nums_featv2, function(x) {
+    geneSetTest(index = x$pgc[!is.na(x$pgc)], x$t[!is.na(x$pgc)])
+}))
+#       gene       exon        jxn         tx
+# 0.71970632 0.05611169 0.39528526 0.09195294
 
-
-geneSetTest(index = x$pgc[!is.na(x$pgc)], x$t[!is.na(x$pgc)])
-
-lapply(dlpfc_nums_featv2, function(x) 
-
+## Save for later
+save(
+    dlpfc_nums, dlpfc_nums_feat, dlpfc_nums_featv2, dlpfc_tab, dlpfc_set,
+    hippo_nums, hippo_nums_feat, hippo_nums_featv2, hippo_tab, hippo_set,
+    file = 'rdas/pgc_vs_sczd_casecontrol_files.Rdata'
+)
 
 ## Reproducibility information
 print('Reproducibility information:')
@@ -662,3 +672,69 @@ Sys.time()
 proc.time()
 options(width = 120)
 session_info()
+
+# Session info ----------------------------------------------------------------------------------------------------------
+#  setting  value
+#  version  R version 3.5.0 Patched (2018-04-30 r74679)
+#  system   x86_64, linux-gnu
+#  ui       X11
+#  language (EN)
+#  collate  en_US.UTF-8
+#  tz       US/Eastern
+#  date     2018-09-20
+#
+# Packages --------------------------------------------------------------------------------------------------------------
+#  package      * version date       source
+#  assertthat     0.2.0   2017-04-11 CRAN (R 3.5.0)
+#  base         * 3.5.0   2018-05-02 local
+#  bindr          0.1.1   2018-03-13 CRAN (R 3.5.0)
+#  bindrcpp       0.2.2   2018-03-29 CRAN (R 3.5.0)
+#  BiocGenerics * 0.26.0  2018-05-03 Bioconductor
+#  colorout     * 1.2-0   2018-05-02 Github (jalvesaq/colorout@c42088d)
+#  colorspace     1.3-2   2016-12-14 CRAN (R 3.5.0)
+#  compiler       3.5.0   2018-05-02 local
+#  crayon         1.3.4   2017-09-16 CRAN (R 3.5.0)
+#  data.table   * 1.11.4  2018-05-27 cran (@1.11.4)
+#  datasets     * 3.5.0   2018-05-02 local
+#  devtools     * 1.13.6  2018-06-27 CRAN (R 3.5.0)
+#  digest         0.6.15  2018-01-28 CRAN (R 3.5.0)
+#  dplyr          0.7.6   2018-06-29 CRAN (R 3.5.0)
+#  ggplot2        3.0.0   2018-07-03 CRAN (R 3.5.0)
+#  glue           1.3.0   2018-07-17 CRAN (R 3.5.0)
+#  graphics     * 3.5.0   2018-05-02 local
+#  grDevices    * 3.5.0   2018-05-02 local
+#  grid           3.5.0   2018-05-02 local
+#  gtable         0.2.0   2016-02-26 CRAN (R 3.5.0)
+#  htmltools      0.3.6   2017-04-28 CRAN (R 3.5.0)
+#  htmlwidgets    1.2     2018-04-19 CRAN (R 3.5.0)
+#  httpuv         1.4.5   2018-07-19 CRAN (R 3.5.0)
+#  later          0.7.4   2018-08-31 CRAN (R 3.5.0)
+#  lattice        0.20-35 2017-03-25 CRAN (R 3.5.0)
+#  lazyeval       0.2.1   2017-10-29 CRAN (R 3.5.0)
+#  limma        * 3.36.2  2018-06-21 Bioconductor
+#  magrittr       1.5     2014-11-22 CRAN (R 3.5.0)
+#  memoise        1.1.0   2017-04-21 CRAN (R 3.5.0)
+#  methods      * 3.5.0   2018-05-02 local
+#  munsell        0.5.0   2018-06-12 CRAN (R 3.5.0)
+#  parallel     * 3.5.0   2018-05-02 local
+#  pillar         1.3.0   2018-07-14 CRAN (R 3.5.0)
+#  pkgconfig      2.0.1   2017-03-21 CRAN (R 3.5.0)
+#  plyr           1.8.4   2016-06-08 CRAN (R 3.5.0)
+#  png            0.1-7   2013-12-03 CRAN (R 3.5.0)
+#  promises       1.0.1   2018-04-13 CRAN (R 3.5.0)
+#  purrr          0.2.5   2018-05-29 CRAN (R 3.5.0)
+#  R6             2.2.2   2017-06-17 CRAN (R 3.5.0)
+#  Rcpp           0.12.18 2018-07-23 CRAN (R 3.5.0)
+#  rlang          0.2.1   2018-05-30 cran (@0.2.1)
+#  rmote        * 0.3.4   2018-05-02 deltarho (R 3.5.0)
+#  S4Vectors    * 0.18.3  2018-06-13 Bioconductor
+#  scales         1.0.0   2018-08-09 CRAN (R 3.5.0)
+#  servr          0.10    2018-05-30 CRAN (R 3.5.0)
+#  stats        * 3.5.0   2018-05-02 local
+#  stats4       * 3.5.0   2018-05-02 local
+#  tibble         1.4.2   2018-01-22 CRAN (R 3.5.0)
+#  tidyselect     0.2.4   2018-02-26 CRAN (R 3.5.0)
+#  tools          3.5.0   2018-05-02 local
+#  utils        * 3.5.0   2018-05-02 local
+#  withr          2.1.2   2018-03-15 CRAN (R 3.5.0)
+#  xfun           0.3     2018-07-06 CRAN (R 3.5.0)
