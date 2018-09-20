@@ -1,11 +1,11 @@
 Loading git
 **** Job starts ****
-Fri Sep 14 15:06:24 EDT 2018
+Tue Sep 18 17:23:19 EDT 2018
 **** JHPCE info ****
 User: lcollado
-Job id: 5495704
+Job id: 5512976
 Job name: hippo_subset
-Hostname: compute-051
+Hostname: compute-114
 Task id: 
 Loading required package: GenomicRanges
 Loading required package: stats4
@@ -99,36 +99,44 @@ The following object is masked from ‘package:rafalib’:
 
     install_bioc
 
-2018-09-14 15:06:34 loading GTEx eQTL results
+2018-09-18 17:23:30 loading GTEx eQTL results
 Loading objects:
   allEqtl
-2018-09-14 16:32:29 checking for NAs on the GTEx eQTL table
+2018-09-18 19:05:56 checking for NAs on the GTEx eQTL table
 na_vec
      TRUE 
 758634577 
-2018-09-14 16:38:31 convert to a data.table
-2018-09-14 16:47:47 breaking up by feature
-2018-09-14 16:53:09 loading BrainSeq Phase II eQTL results
+2018-09-18 19:14:05 convert to a data.table
+2018-09-18 19:20:44 breaking up by feature
+2018-09-18 19:28:59 loading BrainSeq Phase II eQTL results
 Loading objects:
   allEqtl
-2018-09-14 16:56:30 subsetting to significant results
-2018-09-14 16:56:35 breaking up by feature
-2018-09-14 16:56:40 matching gene results
-2018-09-14 16:56:40 converting brainseq to data.table
-2018-09-14 16:56:41 create keys: gtex
-2018-09-14 16:56:54 create keys: brainseq
-2018-09-14 16:56:56 subset gtex by brainseq
-2018-09-14 16:56:58 saving gene results
-2018-09-14 16:57:56 matching exon results
-2018-09-14 16:57:56 saving exon results
-2018-09-14 17:00:51 matching jxn results
-2018-09-14 17:00:51 saving jxn results
-2018-09-14 17:02:46 matching tx results
-2018-09-14 17:02:46 saving tx results
+2018-09-18 19:33:13 subsetting to significant results
+2018-09-18 19:35:07 breaking up by feature
+2018-09-18 19:35:07 setting keys
+2018-09-18 19:35:09 setting keys
+2018-09-18 19:35:16 setting keys
+2018-09-18 19:35:21 setting keys
+2018-09-18 19:35:24 matching gene results
+2018-09-18 19:35:24 create keys: gtex
+2018-09-18 19:35:36 subset gtex by brainseq
+2018-09-18 19:35:38 saving gene results
+2018-09-18 19:36:26 matching exon results
+2018-09-18 19:36:26 create keys: gtex
+2018-09-18 19:39:02 subset gtex by brainseq
+2018-09-18 19:39:13 saving exon results
+2018-09-18 19:42:18 matching jxn results
+2018-09-18 19:42:18 create keys: gtex
+2018-09-18 19:43:58 subset gtex by brainseq
+2018-09-18 19:44:06 saving jxn results
+2018-09-18 19:46:18 matching tx results
+2018-09-18 19:46:18 create keys: gtex
+2018-09-18 19:46:57 subset gtex by brainseq
+2018-09-18 19:47:01 saving tx results
 [1] "Reproducibility information:"
-[1] "2018-09-14 17:03:29 EDT"
+[1] "2018-09-18 19:47:53 EDT"
     user   system  elapsed 
-6907.694  120.655 7024.772 
+8586.589   96.739 8674.611 
 Session info ----------------------------------------------------------------------------------------------------------
  setting  value                                      
  version  R version 3.5.0 Patched (2018-04-30 r74679)
@@ -137,7 +145,7 @@ Session info -------------------------------------------------------------------
  language (EN)                                       
  collate  en_US.UTF-8                                
  tz       US/Eastern                                 
- date     2018-09-14                                 
+ date     2018-09-18                                 
 
 Packages --------------------------------------------------------------------------------------------------------------
  package              * version   date       source                                   
@@ -181,4 +189,4 @@ Packages -----------------------------------------------------------------------
  XVector                0.20.0    2018-05-03 Bioconductor                             
  zlibbioc               1.26.0    2018-05-02 Bioconductor                             
 **** Job ends ****
-Fri Sep 14 17:03:30 EDT 2018
+Tue Sep 18 19:47:54 EDT 2018
