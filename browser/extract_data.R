@@ -256,7 +256,7 @@ cleaned <- lapply(c('hippo', 'dlpfc', 'interaction'), function(modtype) {
     
     res <- mapply(function(expr, model) {
         as.data.frame(cleaningY(expr, model, P = 1))
-    }, exprs, mods)
+    }, exprs, mods, SIMPLIFY = FALSE)
     
     return(res)
 })
