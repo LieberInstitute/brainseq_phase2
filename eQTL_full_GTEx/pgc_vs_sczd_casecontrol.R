@@ -456,6 +456,204 @@ signif(apply(hippo_nums_feat, 1, phyp_qtl_v2), 3)
 # gene exon  jxn   tx
 #    0    0    0    0
 
+get_nums_featv2 <- function(qtls, des) {
+    mapply(function(qtl, de) {
+        
+        summ <- qtl[, sum(pgc), keyby = gene]
+        
+        res <- data.frame(
+            'feature_id' = rownames(de),
+            't' = de$t,
+            'sczd' = de$adj.P.Val < 0.05,
+            'pgc' = NA,
+            stringsAsFactors = FALSE
+        )
+        
+        m <- match(res$feature_id, summ$gene)
+        res$pgc[!is.na(m)] <- summ$V1[m[!is.na(m)]] > 0
+        return(res) 
+    }, qtls, des, SIMPLIFY = FALSE)
+}
+
+dlpfc_nums_featv2 <- get_nums_featv2(dlpfc,
+    list(
+        'gene' = outGene$DLPFC_matchQSV,
+        'exon' = outFeat$DLPFC$exon,
+        'jxn' = outFeat$DLPFC$jxn,
+        'tx' = outFeat$DLPFC$tx
+    )
+)
+
+hippo_nums_featv2 <- get_nums_featv2(hippo,
+    list(
+        'gene' = outGene$HIPPO_matchQSV,
+        'exon' = outFeat$HIPPO$exon,
+        'jxn' = outFeat$HIPPO$jxn,
+        'tx' = outFeat$HIPPO$tx
+    )
+)
+
+head(dlpfc_nums_featv2$gene)
+#          feature_id           t  sczd pgc
+# 1 ENSG00000227232.5 -0.38564882 FALSE  NA
+# 2 ENSG00000278267.1  0.08617349 FALSE  NA
+# 3 ENSG00000269981.1  1.11204088 FALSE  NA
+# 4 ENSG00000279457.3 -0.90787551 FALSE  NA
+# 5 ENSG00000228463.9 -0.56228106 FALSE  NA
+# 6 ENSG00000236679.2  0.70473228 FALSE  NA
+table(is.na(dlpfc_nums_featv2$gene$pgc))
+# FALSE  TRUE
+# 14261 10391
+
+(dlpfc_tab <- lapply(dlpfc_nums_featv2, function(x) {
+    table(
+        'SCZD DE' = factor(x$sczd, levels = c('FALSE', 'TRUE')),
+        'PGC assoc' = factor(x$pgc, levels = c('FALSE', 'TRUE'))
+    )
+}))
+# $gene
+#        PGC assoc
+# SCZD DE FALSE  TRUE
+#   FALSE 13955   144
+#   TRUE    161     1
+#
+# $exon
+#        PGC assoc
+# SCZD DE  FALSE   TRUE
+#   FALSE 119105   1056
+#   TRUE     138      7
+#
+# $jxn
+#        PGC assoc
+# SCZD DE FALSE  TRUE
+#   FALSE 66704   526
+#   TRUE      6     1
+#
+# $tx
+#        PGC assoc
+# SCZD DE FALSE  TRUE
+#   FALSE 27280   269
+#   TRUE      2     1
+
+(hippo_tab <- lapply(hippo_nums_featv2, function(x) {
+    table(
+        'SCZD DE' = factor(x$sczd, levels = c('FALSE', 'TRUE')),
+        'PGC assoc' = factor(x$pgc, levels = c('FALSE', 'TRUE'))
+    )
+}))
+# $gene
+#        PGC assoc
+# SCZD DE FALSE  TRUE
+#   FALSE 11340   100
+#   TRUE     23     0
+#
+# $exon
+#        PGC assoc
+# SCZD DE FALSE  TRUE
+#   FALSE 88742   694
+#   TRUE     42     0
+#
+# $jxn
+#        PGC assoc
+# SCZD DE FALSE  TRUE
+#   FALSE 51590   426
+#   TRUE      3     0
+#
+# $tx
+#        PGC assoc
+# SCZD DE FALSE  TRUE
+#   FALSE 21758   209
+#   TRUE      0     0
+
+## I think this is the right hypergeometric test:
+# * number of white balls draw: DE gene among PGC associated genes: 1
+# * number of white balls in urn: DE genes: 161 + 1
+# * number of black balls in urn: non DE genes: 13955 + 144
+# * number of balls drawn: PGC associated genes: 1 + 144
+phyper(1, 161 + 1, 13955 + 144, 144 + 1)
+# [1] 0.507626
+sapply(dlpfc_tab, function(x) {
+    phyper(x[2, 2], sum(x[2, ]), sum(x[1, ]), sum(x[, 2]))
+})
+#      gene      exon       jxn        tx
+# 0.5076260 0.9999503 0.9987455 0.9997148
+sapply(hippo_tab, function(x) {
+    phyper(x[2, 2], sum(x[2, ]), sum(x[1, ]), sum(x[, 2]))
+})
+#      gene      exon       jxn        tx
+# 0.8173235 0.7210108 0.9756322 1.0000000
+
+lapply(dlpfc_tab, chisq.test)
+# $gene
+#
+#     Pearson's Chi-squared test with Yates' continuity correction
+#
+# data:  X[[i]]
+# X-squared = 0.013433, df = 1, p-value = 0.9077
+#
+#
+# $exon
+#
+#     Pearson's Chi-squared test with Yates' continuity correction
+#
+# data:  X[[i]]
+# X-squared = 21.474, df = 1, p-value = 3.587e-06
+#
+#
+# $jxn
+#
+#     Pearson's Chi-squared test with Yates' continuity correction
+#
+# data:  X[[i]]
+# X-squared = 3.6404, df = 1, p-value = 0.05639
+#
+#
+# $tx
+#
+#     Pearson's Chi-squared test with Yates' continuity correction
+#
+# data:  X[[i]]
+# X-squared = 7.6085, df = 1, p-value = 0.005809
+
+lapply(hippo_tab, chisq.test)
+# $gene
+#
+#     Pearson's Chi-squared test with Yates' continuity correction
+#
+# data:  X[[i]]
+# X-squared = 5.7023e-29, df = 1, p-value = 1
+#
+#
+# $exon
+#
+#     Pearson's Chi-squared test with Yates' continuity correction
+#
+# data:  X[[i]]
+# X-squared = 3.8966e-26, df = 1, p-value = 1
+#
+#
+# $jxn
+#
+#     Pearson's Chi-squared test with Yates' continuity correction
+#
+# data:  X[[i]]
+# X-squared = 7.1069e-23, df = 1, p-value = 1
+#
+#
+# $tx
+#
+#     Pearson's Chi-squared test
+#
+# data:  X[[i]]
+# X-squared = NaN, df = 1, p-value = NA
+
+x <- dlpfc_nums_featv2$gene
+library('limma')
+
+
+geneSetTest(index = x$pgc[!is.na(x$pgc)], x$t[!is.na(x$pgc)])
+
+lapply(dlpfc_nums_featv2, function(x) 
 
 
 ## Reproducibility information
