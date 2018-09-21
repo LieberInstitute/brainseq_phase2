@@ -1,6 +1,8 @@
 eQTL browser files
 ------------------
 
+Location at JHPCE: `/dcl01/lieber/ajaffe/lab/brainseq_phase2/browser`.
+
 This directory has all the files for creating the eQTL browser. As stated in the [log file](logs/extract_data.txt) the files and their number of lines are:
 
 ```
@@ -68,7 +70,7 @@ Includes many columns, but some of the more useful ones are:
 * `SAMPLE_ID`: actual file ID
 * `RNum`: internal LIBD RNA sequencing ID
 * `BrNum`: internal LIBD brain (subject) ID
-* `Regio`n: either HIPPO or DLPFC
+* `Region`: either HIPPO or DLPFC
 * `Dx`: either Control or SCZD
 * `Age`: numeric age in years
 * `DLFPC_HIPPO_correlation_*` (`*` can be `geneRpkm`, `exonRpkm`, `jxnRp10m` or `txTpm`): HIPPO vs DLPFC correlation across the corresponding feature (only 265 subjects). Values are stored only for the `Region == DLPFC` entries.
@@ -174,7 +176,7 @@ The nominal p-value can be reported for replication purposes.
 
 ### Cleaned (_residualized_) expression tables
 
-The tables contained the expression values for making boxplots or other types of graphs. The expression values are already normalized (RPKM: gene/exon, RP10M: jxn, TPM: tx) and log2 scaled (log2(x + 0.5)) with covariates for the corresponding analysis removed. Samples can be identified using the `analysis_*` columns from the sample table. The column names are the `RNum` from the sample metadata table.
+The tables contained the expression values for making boxplots or other types of graphs. The expression values are already normalized (RPKM: gene/exon, RP10M: jxn, TPM: tx) and log2 scaled (log2(x + 0.5)) with covariates for the corresponding analysis removed. Samples can be identified using the `analysis_*` columns from the sample table. The column names are the `RNum` from the sample metadata table and the rows correspond to the `feature_id`.
 
 #### HIPPO or DLPFC eQTLs
 
