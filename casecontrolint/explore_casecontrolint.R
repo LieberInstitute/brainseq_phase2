@@ -422,7 +422,7 @@ pdf('pdf/go_de_genes_notx.pdf', width = 14, height = 9, useDingbats = FALSE)
 plot_go(go_de_genes_notx)
 dev.off()
 
-pdf('pdf/go_all_de_genes_notx.pdf', width = 16, height = 70, useDingbats = FALSE)
+pdf('pdf/go_all_de_genes_notx.pdf', width = 14, height = 12, useDingbats = FALSE)
 plot_go(go_de_genes_notx, cat = NULL)
 dev.off()
 
