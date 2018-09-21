@@ -174,8 +174,8 @@ save(pd, file = 'rda/pd.Rdata')
 
 
 load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n551.rda", verbose = TRUE)
-## No need for the actual snp info or mds info (first 10 snpPCs are already on pd)
-rm(snp, mds)
+## No need for the actual mds info (first 10 snpPCs are already on pd)
+rm(mds)
 
 ## No need to change from 23 to X
 # > table(snpMap$CHR == "23")
@@ -219,6 +219,18 @@ system('wc -l BrainSeqPhaseII_snp_annotation.txt')
 system('head BrainSeqPhaseII_snp_annotation.txt')
 rm(snpAnnoOut, snpMap)
 
+dim(snp)
+# [1] 7023860     551
+corner(snp)
+#                        Br5168 Br5073 Br5217 Br5234 Br5372 Br5005
+# rs9988021:866319:G:A        0      0      0      0      1      0
+# rs111819742:868861:C:T      0      0      0      0      0      0
+# GA018352                    1      0      0      0      1      0
+# rs3748592                   0      0      0      0      1      0
+# rs2340582                   0      0      0      0      1      0
+# rs4246503                   0      0      0      0      1      0
+fwrite(as.data.frame(snp), row.names = FALSE, sep = '\t', file = 'BrainSeqPhaseII_snp_genotype.txt')
+
 ## Cleaned eQTL expression
 cleaned <- lapply(c('hippo', 'dlpfc', 'interaction'), function(modtype) {
     message(paste(Sys.time(), 'processing', modtype))
@@ -241,6 +253,7 @@ cleaned <- lapply(c('hippo', 'dlpfc', 'interaction'), function(modtype) {
         'jxn' = assays(rse_jxn)$rp10m[,keepInd],
         'tx' = assays(rse_tx)$tpm[,keepInd]
     )
+    exprs <- lapply(exprs, function(x) { log2(x + 0.5) })
 
     if(modtype == 'interaction') {
         mod = model.matrix(~Dx + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + Region,
@@ -307,6 +320,7 @@ cleaned <- lapply(de_analyses, function(modtype) {
         'jxn' = assays(rse_jxn)$rp10m[,keepInd],
         'tx' = assays(rse_tx)$tpm[,keepInd]
     )
+    exprs <- lapply(exprs, function(x) { log2(x + 0.5) })
     
     if(modtype == 'development') {
         design = model.matrix(~Age *Region + agespline_fetal * Region + agespline_birth *Region + agespline_infant *Region + agespline_child * Region + agespline_teen * Region + agespline_adult * Region + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN,

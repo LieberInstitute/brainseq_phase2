@@ -363,7 +363,8 @@ Loading objects:
        92733 BrainSeqPhaseII_feature_annotation_tx.txt
          902 BrainSeqPhaseII_sample_metadata.txt
      7023861 BrainSeqPhaseII_snp_annotation.txt
-  2012427872 total
+     7023861 BrainSeqPhaseII_snp_genotype.txt
+  2019451733 total
 [1] "Reproducibility information:"
 [1] "2018-09-20 20:47:55 EDT"
      user    system   elapsed 
