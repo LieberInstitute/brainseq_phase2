@@ -301,3 +301,130 @@ Loading objects:
 Loading objects:
   allEqtl
 2018-09-20 14:47:18 fixing exon ids
+2018-09-20 15:37:37 writing BrainSeqPhaseII_eQTL_hippo_replication_GTEx.txt
+2018-09-20 15:49:37 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/eqtl_tables/mergedEqtl_output_dlpfc_4features.rda
+Loading objects:
+  allEqtl
+2018-09-20 17:52:54 fixing exon ids
+2018-09-20 18:28:58 writing BrainSeqPhaseII_eQTL_dlpfc_replication_GTEx.txt
+2018-09-20 18:41:11 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/eqtl_tables/mergedEqtl_output_interaction_4features.rda
+Loading objects:
+  allEqtl
+2018-09-20 19:50:10 fixing exon ids
+2018-09-20 19:59:51 writing BrainSeqPhaseII_eQTL_interaction_replication_GTEx.txt
+2018-09-20 20:05:41 lines for each file
+      396584 BrainSeqPhaseII_clean_expression_development_exon.txt
+       24653 BrainSeqPhaseII_clean_expression_development_gene.txt
+      297182 BrainSeqPhaseII_clean_expression_development_jxn.txt
+       92733 BrainSeqPhaseII_clean_expression_development_tx.txt
+      396584 BrainSeqPhaseII_clean_expression_eqtl_dlpfc_exon.txt
+       24653 BrainSeqPhaseII_clean_expression_eqtl_dlpfc_gene.txt
+      297182 BrainSeqPhaseII_clean_expression_eqtl_dlpfc_jxn.txt
+       92733 BrainSeqPhaseII_clean_expression_eqtl_dlpfc_tx.txt
+      396584 BrainSeqPhaseII_clean_expression_eqtl_hippo_exon.txt
+       24653 BrainSeqPhaseII_clean_expression_eqtl_hippo_gene.txt
+      297182 BrainSeqPhaseII_clean_expression_eqtl_hippo_jxn.txt
+       92733 BrainSeqPhaseII_clean_expression_eqtl_hippo_tx.txt
+      396584 BrainSeqPhaseII_clean_expression_eqtl_interaction_exon.txt
+       24653 BrainSeqPhaseII_clean_expression_eqtl_interaction_gene.txt
+      297182 BrainSeqPhaseII_clean_expression_eqtl_interaction_jxn.txt
+       92733 BrainSeqPhaseII_clean_expression_eqtl_interaction_tx.txt
+      396584 BrainSeqPhaseII_clean_expression_regionspecific_adult_exon.txt
+       24653 BrainSeqPhaseII_clean_expression_regionspecific_adult_gene.txt
+      297182 BrainSeqPhaseII_clean_expression_regionspecific_adult_jxn.txt
+       92733 BrainSeqPhaseII_clean_expression_regionspecific_adult_tx.txt
+      396584 BrainSeqPhaseII_clean_expression_regionspecific_prenatal_exon.txt
+       24653 BrainSeqPhaseII_clean_expression_regionspecific_prenatal_gene.txt
+      297182 BrainSeqPhaseII_clean_expression_regionspecific_prenatal_jxn.txt
+       92733 BrainSeqPhaseII_clean_expression_regionspecific_prenatal_tx.txt
+      396584 BrainSeqPhaseII_clean_expression_sczd_casecontrol_dlpfc_exon.txt
+       24653 BrainSeqPhaseII_clean_expression_sczd_casecontrol_dlpfc_gene.txt
+      297182 BrainSeqPhaseII_clean_expression_sczd_casecontrol_dlpfc_jxn.txt
+       92733 BrainSeqPhaseII_clean_expression_sczd_casecontrol_dlpfc_tx.txt
+      396584 BrainSeqPhaseII_clean_expression_sczd_casecontrol_hippo_exon.txt
+       24653 BrainSeqPhaseII_clean_expression_sczd_casecontrol_hippo_gene.txt
+      297182 BrainSeqPhaseII_clean_expression_sczd_casecontrol_hippo_jxn.txt
+       92733 BrainSeqPhaseII_clean_expression_sczd_casecontrol_hippo_tx.txt
+      396584 BrainSeqPhaseII_clean_expression_sczd_casecontrol_interaction_exon.txt
+       24653 BrainSeqPhaseII_clean_expression_sczd_casecontrol_interaction_gene.txt
+      297182 BrainSeqPhaseII_clean_expression_sczd_casecontrol_interaction_jxn.txt
+       92733 BrainSeqPhaseII_clean_expression_sczd_casecontrol_interaction_tx.txt
+    28863540 BrainSeqPhaseII_eQTL_dlpfc_full.txt
+     3698269 BrainSeqPhaseII_eQTL_dlpfc_raggr.txt
+   758634578 BrainSeqPhaseII_eQTL_dlpfc_replication_GTEx.txt
+    22603132 BrainSeqPhaseII_eQTL_hippo_full.txt
+     3698269 BrainSeqPhaseII_eQTL_hippo_raggr.txt
+   758634578 BrainSeqPhaseII_eQTL_hippo_replication_GTEx.txt
+    22603132 BrainSeqPhaseII_eQTL_interaction_full.txt
+   398556091 BrainSeqPhaseII_eQTL_interaction_replication_GTEx.txt
+      396584 BrainSeqPhaseII_feature_annotation_exon.txt
+       24653 BrainSeqPhaseII_feature_annotation_gene.txt
+      297182 BrainSeqPhaseII_feature_annotation_jxn.txt
+       92733 BrainSeqPhaseII_feature_annotation_tx.txt
+         902 BrainSeqPhaseII_sample_metadata.txt
+     7023861 BrainSeqPhaseII_snp_annotation.txt
+  2012427872 total
+[1] "Reproducibility information:"
+[1] "2018-09-20 20:47:55 EDT"
+     user    system   elapsed 
+35664.444  2996.894 36460.998 
+Session info ----------------------------------------------------------------------------------------------------------
+ setting  value                                      
+ version  R version 3.5.0 Patched (2018-04-30 r74679)
+ system   x86_64, linux-gnu                          
+ ui       X11                                        
+ language (EN)                                       
+ collate  en_US.UTF-8                                
+ tz       US/Eastern                                 
+ date     2018-09-20                                 
+
+Packages --------------------------------------------------------------------------------------------------------------
+ package              * version   date       source                                   
+ base                 * 3.5.0     2018-05-02 local                                    
+ Biobase              * 2.40.0    2018-05-02 Bioconductor                             
+ BiocGenerics         * 0.26.0    2018-05-03 Bioconductor                             
+ BiocParallel         * 1.14.2    2018-07-08 Bioconductor                             
+ bitops                 1.0-6     2013-08-17 CRAN (R 3.5.0)                           
+ cellranger             1.1.0     2016-07-27 CRAN (R 3.5.0)                           
+ compiler               3.5.0     2018-05-02 local                                    
+ crayon                 1.3.4     2017-09-16 CRAN (R 3.5.0)                           
+ data.table           * 1.11.4    2018-05-27 cran (@1.11.4)                           
+ datasets             * 3.5.0     2018-05-02 local                                    
+ DelayedArray         * 0.6.5     2018-08-15 Bioconductor                             
+ devtools             * 1.13.6    2018-06-27 CRAN (R 3.5.0)                           
+ digest                 0.6.15    2018-01-28 CRAN (R 3.5.0)                           
+ GenomeInfoDb         * 1.16.0    2018-05-03 Bioconductor                             
+ GenomeInfoDbData       1.1.0     2018-04-17 Bioconductor                             
+ GenomicRanges        * 1.32.6    2018-07-20 Bioconductor                             
+ graphics             * 3.5.0     2018-05-02 local                                    
+ grDevices            * 3.5.0     2018-05-02 local                                    
+ grid                   3.5.0     2018-05-02 local                                    
+ IRanges              * 2.14.10   2018-05-17 Bioconductor                             
+ jaffelab             * 0.99.21   2018-05-03 Github (LieberInstitute/jaffelab@7ed0ab7)
+ lattice                0.20-35   2017-03-25 CRAN (R 3.5.0)                           
+ limma                  3.36.2    2018-06-21 Bioconductor                             
+ Matrix                 1.2-14    2018-04-13 CRAN (R 3.5.0)                           
+ matrixStats          * 0.54.0    2018-07-23 CRAN (R 3.5.0)                           
+ memoise                1.1.0     2017-04-21 CRAN (R 3.5.0)                           
+ methods              * 3.5.0     2018-05-02 local                                    
+ parallel             * 3.5.0     2018-05-02 local                                    
+ pillar                 1.3.0     2018-07-14 CRAN (R 3.5.0)                           
+ rafalib              * 1.0.0     2015-08-09 CRAN (R 3.5.0)                           
+ RColorBrewer           1.1-2     2014-12-07 CRAN (R 3.5.0)                           
+ Rcpp                   0.12.18   2018-07-23 CRAN (R 3.5.0)                           
+ RCurl                  1.95-4.11 2018-07-15 CRAN (R 3.5.0)                           
+ readxl               * 1.1.0     2018-04-20 CRAN (R 3.5.0)                           
+ rlang                  0.2.1     2018-05-30 cran (@0.2.1)                            
+ S4Vectors            * 0.18.3    2018-06-13 Bioconductor                             
+ segmented              0.5-3.0   2017-11-30 CRAN (R 3.5.0)                           
+ stats                * 3.5.0     2018-05-02 local                                    
+ stats4               * 3.5.0     2018-05-02 local                                    
+ SummarizedExperiment * 1.10.1    2018-05-17 Bioconductor                             
+ tibble                 1.4.2     2018-01-22 CRAN (R 3.5.0)                           
+ tools                  3.5.0     2018-05-02 local                                    
+ utils                * 3.5.0     2018-05-02 local                                    
+ withr                  2.1.2     2018-03-15 CRAN (R 3.5.0)                           
+ XVector                0.20.0    2018-05-03 Bioconductor                             
+ zlibbioc               1.26.0    2018-05-02 Bioconductor                             
+**** Job ends ****
+Thu Sep 20 20:48:34 EDT 2018
