@@ -371,6 +371,29 @@ sapply(go_de_genes, class)
 #                   KEGG
 # "compareClusterResult"
 
+## Actually, looks like the object is subsettable with a bit of code
+# if(!file.exists('rda/go_de_genes_notx.Rdata')) {
+#     system.time( go_de_genes_notx <- run_go(genes[c('gene', 'exon', 'jxn')]) )
+#     message(paste(Sys.time(), 'saving rda/go_de_genes_notx.Rdata'))
+#     save(go_de_genes_notx, file = 'rda/go_de_genes_notx.Rdata')
+# } else {
+#     message(paste(Sys.time(), 'loading rda/go_de_genes_notx.Rdata'))
+#     load('rda/go_de_genes_notx.Rdata', verbose = TRUE)
+# }
+
+sub_go <- function(x) {
+    x@compareClusterResult <- x@compareClusterResult[x@compareClusterResult$Cluster != 'tx', ]
+    x@compareClusterResult$Cluster <- factor(x@compareClusterResult$Cluster, levels = c('gene', 'exon', 'jxn'))
+    x@geneClusters <- x@geneClusters[c('gene', 'exon', 'jxn')]
+    return(x)
+}
+go_de_genes_notx <- lapply(go_de_genes, sub_go)
+sapply(go_de_genes_notx, class)
+#                     BP                     MF                     CC
+# "compareClusterResult" "compareClusterResult" "compareClusterResult"
+#                   KEGG
+# "compareClusterResult"
+
 plot_go <- function(go_cluster, cat = 10) {
     lapply(names(go_cluster), function(bp) {
         go <- go_cluster[[bp]]
@@ -394,6 +417,14 @@ pdf('pdf/go_all_de_genes.pdf', width = 16, height = 70, useDingbats = FALSE)
 plot_go(go_de_genes, cat = NULL)
 dev.off()
 
+## Without transcripts
+pdf('pdf/go_de_genes_notx.pdf', width = 14, height = 9, useDingbats = FALSE)
+plot_go(go_de_genes_notx)
+dev.off()
+
+pdf('pdf/go_all_de_genes_notx.pdf', width = 16, height = 70, useDingbats = FALSE)
+plot_go(go_de_genes_notx, cat = NULL)
+dev.off()
 
 get_ylab <- function(type, cleaned = FALSE) {
     if(type %in% c('gene', 'exon', 'jxn')) {
