@@ -394,6 +394,16 @@ sapply(go_de_genes_notx, class)
 #                   KEGG
 # "compareClusterResult"
 
+## Yup, the subsetting worked (tested only with BP and KEGG instead all 4)
+# >     system.time( go_de_genes_notx <- run_go(genes[c('gene', 'exon', 'jxn')], ont = 'BP') )
+#    user  system elapsed
+# 552.696   9.802 572.286
+# > notx <- lapply(go_de_genes, sub_go)
+# > identical(notx$bp, go_de_genes_notx$bp)
+# [1] TRUE
+# > identical(notx$kegg, go_de_genes_notx$kegg)
+# [1] TRUE
+
 plot_go <- function(go_cluster, cat = 10) {
     lapply(names(go_cluster), function(bp) {
         go <- go_cluster[[bp]]
