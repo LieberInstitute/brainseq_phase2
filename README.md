@@ -16,13 +16,13 @@ Collado-Torres L, Burke EE, Peterson A, Shin JH, Straub RE, Rajpurohit A, Semick
 | [`brainspan`](brainspan/) | Code for processing the BrainSpan data. |
 | [`browser`](browser/) | Code for creating the files for the eQTL browser. Contains a detailed README file. |
 | [`caseControl`](caseControl/) | Initial code for the SCZD case-control analysis. Final code is at the [`qsva_brain`](https://github.com/LieberInstitute/qsva_brain) repository. |
-| [`caseControl_HIPPO_checks`](caseControl_HIPPO_checks/) | Code for checking the SCZD case-control HIPPO results. Final code at `qsva_brain` repo. |
+| [`caseControl_HIPPO_checks`](caseControl_HIPPO_checks/) | Code for checking the SCZD case-control HIPPO results. Final code at [`qsva_brain`](https://github.com/LieberInstitute/qsva_brain) repo. |
 | [`casecontrolint`](casecontrolint/) | Code for the brain region and SCZD diagnosis status interaction DE analysis. |
 | [`cellComp`](cellComp/) | Un-used cell composition code. |
 | [`correlation`](correlation/) | DLPFC and HIPPO expression correlation analyses. |
-| [`degradation`](degradation/) | Un-used degradation files. Final degradation code at `qsva_brain` repo. |
-| [`degradation_strand_minus`](degradation_strand_minus/) | Un-used degradation files. Final degradation code at `qsva_brain` repo. |
-| [`degradation_strand_positive`](degradation_strand_positive/) | Un-used degradation files. Final degradation code at `qsva_brain` repo. |
+| [`degradation`](degradation/) | Un-used degradation files. Final degradation code at [`qsva_brain`](https://github.com/LieberInstitute/qsva_brain) repo. |
+| [`degradation_strand_minus`](degradation_strand_minus/) | Un-used degradation files. Final degradation code at [`qsva_brain`](https://github.com/LieberInstitute/qsva_brain) repo. |
+| [`degradation_strand_positive`](degradation_strand_positive/) | Un-used degradation files. Final degradation code at [`qsva_brain`](https://github.com/LieberInstitute/qsva_brain) repo. |
 | [`demographics`](demographics/) | Code for exploring demographic variables such as RIN. |
 | [`development`](development/) | Code for the DE analysis across age using a linear spline model. |
 | [`eQTL_DNAm_mediation`](eQTL_DNAm_mediation/) | Un-used DNA mediation files. |
@@ -30,7 +30,7 @@ Collado-Torres L, Burke EE, Peterson A, Shin JH, Straub RE, Rajpurohit A, Semick
 | [`eQTL_full`](eQTL_full/) | Genome wide eQTL analyses. |
 | [`eQTL_full_GTEx`](eQTL_full_GTEx/) | Replication eQTL analyses using GTEx data. |
 | [`expr_cutoff`](expr_cutoff/) | Code for filtering the features with low expression values and creating the RSE objects used throughout the project. |
-| [`gtex`](gtex/) | Code for processing the HIPPO GTEx data and preparting the genotype data for the eQTL analysis. |
+| [`gtex`](gtex/) | Code for processing the HIPPO GTEx data and preparing the genotype data for the eQTL analysis. |
 | [`gtex_both`](gtex_both/) | Code for merging the DLPFC and HIPPO GTEx data. |
 | [`gtex_dlpfc`](gtex_dlpfc/) | Code for processing the HIPPO GTEx data. |
 | [`region_specific`](region_specific/) | Code for the DE analyses between HIPPO and DLPFC for prenatal and adult controls. |
