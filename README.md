@@ -40,7 +40,7 @@ Collado-Torres L, Burke EE, Peterson A, Shin JH, Straub RE, Rajpurohit A, Semick
 | [`wgcna`](wgcna/) | Un-used WGCNA code for DLPFC and HIPPO. |
 | [`wgcna_combined`](wgcna_combined/) | Un-used WGCNA code for a combined analysis using DLPFC and HIPPO. |
 
-This repository also contains other legacy code outside the previously mentioned directories that was used in early exploration phases of this project.
+This repository also contains other legacy code outside the previously mentioned directories that was used in early exploration phases of this project including the code for resolving some sample swaps and initial quality control checks.
 
 ## LIBD internal:
 
