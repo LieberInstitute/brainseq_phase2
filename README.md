@@ -1,7 +1,11 @@
 BrainSeq Phase 2 analysis
 =========================
 
-This repository contains analysis code for the BrainSeq Phase II project. If you use anything in this repository please cite the following publication:
+This repository contains analysis code for the BrainSeq Phase II project.
+
+## Citation
+
+If you use anything in this repository please cite the following publication:
 
 Collado-Torres L, Burke EE, Peterson A, Shin JH, Straub RE, Rajpurohit A, Semick SA, Ulrich WS, BrainSeq Consortium, Valencia C, Tao R, Deep-Soboslay A, Hyde TM, Kleinman JE, Weinberger DR, Jaffe AE. Regional heterogeneity in gene expression, regulation and coherence in hippocampus  and dorsolateral prefrontal cortex across development and in schizophrenia. JOURNAL + DOI. 2018.
 
