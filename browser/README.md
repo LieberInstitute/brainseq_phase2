@@ -176,7 +176,7 @@ The nominal p-value can be reported for replication purposes.
 
 ### Cleaned (_residualized_) expression tables
 
-The tables contained the expression values for making boxplots or other types of graphs. The expression values are already normalized (RPKM: gene/exon, RP10M: jxn, TPM: tx) and log2 scaled (log2(x + 0.5)) with covariates for the corresponding analysis removed. Samples can be identified using the `analysis_*` columns from the sample table. The column names are the `RNum` from the sample metadata table and the rows correspond to the `feature_id`.
+The tables contained the expression values for making boxplots or other types of graphs. The expression values are already normalized (RPKM: gene/exon, RP10M: jxn, TPM: tx) and log2 scaled (log2(x + 0.5)) with covariates for the corresponding analysis removed. Samples can be identified using the `analysis_*` columns from the sample table. The column names are the `RNum` from the sample metadata table and the rows correspond to the `feature_id` (as in the same order as the feature annotation tables).
 
 #### HIPPO or DLPFC eQTLs
 
