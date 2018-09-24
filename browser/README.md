@@ -101,9 +101,9 @@ Columns:
 7. `counted`: allele quantified
 8. `alt`: alternative allele
 9. `type`
-10. `newref`: new reference allele?
-11. `newcount`: new counted allele?
-12. `name`: snp name
+10. `newref`: new reference allele (use this)
+11. `newcount`: new counted allele (use this)
+12. `name`: snp rs number (use this)
 13. `rsnumguess`: _guessed_ snp name
 
 ### Genotype information
