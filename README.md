@@ -1,7 +1,9 @@
 BrainSeq Phase 2 analysis
 =========================
 
-This repository contains analysis code for the BrainSeq Phase II project.
+This repository contains analysis code for the BrainSeq Phase II project from the BrainSeq Consortium carried out by researchers at the [Lieber Institute for Brain Development](https://www.libd.org/).
+
+If you wish to visualize the eQTL results described in this project, please use the [LIBD eQTL browser](http://eqtl.brainseq.org/).
 
 ## Citation
 
