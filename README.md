@@ -1,5 +1,5 @@
-BrainSeq Phase 2 analysis
-=========================
+BrainSeq Phase II analysis
+==========================
 
 This repository contains analysis code for the BrainSeq Phase II project from the BrainSeq Consortium carried out by researchers at the [Lieber Institute for Brain Development](https://www.libd.org/).
 
