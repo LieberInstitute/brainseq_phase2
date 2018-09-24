@@ -39,8 +39,7 @@ Collado-Torres L, Burke EE, Peterson A, Shin JH, Straub RE, Rajpurohit A, Semick
 | [`supp_tabs`](supp_tabs/) | Code for creating the supplementary tables. |
 | [`wgcna`](wgcna/) | Un-used WGCNA code for DLPFC and HIPPO. |
 | [`wgcna_combined`](wgcna_combined/) | Un-used WGCNA code for a combined analysis using DLPFC and HIPPO. |
-
-This repository also contains other legacy code outside the previously mentioned directories that was used in early exploration phases of this project including the code for resolving some sample swaps and initial quality control checks.
+| [`misc`](misc/) | Files from early explorations including checking for some sample swaps and quality checks. |
 
 ## LIBD internal:
 
