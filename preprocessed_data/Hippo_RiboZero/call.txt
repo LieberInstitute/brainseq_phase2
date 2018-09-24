@@ -1,0 +1,1 @@
+bash /dcl01/lieber/ajaffe/Emily/RNAseq-pipeline/sh/rnaseq-run-all.sh --experiment "HIPPO_RiboZero_BrainSeq_Phase2" --prefix "LIBD" --reference "hg38" --stranded "reverse" --ercc "TRUE" --large "TRUE"

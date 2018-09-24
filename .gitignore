@@ -11,8 +11,6 @@ degradation/*/rawCounts*
 count_data/
 degradation/*sum.tsv
 degradation/*bed
-rdas
-eqtl_tables
 qcChecks
 caseControl/*.rda
 genotype_data
@@ -21,5 +19,17 @@ jxns
 .Rproj.user
 degradation_strand*/*sum.tsv
 psychENCODE
+eQTL_full_GTEx/rdas
+eQTL_GWAS_riskSNPs/eqtl_tables
 ## For Carrie's circular RNA project
 genotype_data_carrie_n410
+
+## Left-over files
+degradation
+degradation_strand_*
+
+## Un-used analyses
+eQTL_DNAm_mediation
+cellComp
+wgcna
+wgcna_combined

@@ -17,17 +17,12 @@ Collado-Torres L, Burke EE, Peterson A, Shin JH, Straub RE, Rajpurohit A, Semick
 | --------- | -------- |
 | [`brainspan`](brainspan/) | Code for processing the BrainSpan data. |
 | [`browser`](browser/) | Code for creating the files for the eQTL browser. Contains a detailed README file. |
-| [`caseControl`](caseControl/) | Initial code for the SCZD case-control analysis. Final code is at the [`qsva_brain`](https://github.com/LieberInstitute/qsva_brain) repository. |
+| [`caseControl`](caseControl/) | Initial (un-used) exploratory code for the SCZD case-control analysis. Final code is at the [`qsva_brain`](https://github.com/LieberInstitute/qsva_brain) repository. |
 | [`caseControl_HIPPO_checks`](caseControl_HIPPO_checks/) | Code for checking the SCZD case-control HIPPO results. Final code at [`qsva_brain`](https://github.com/LieberInstitute/qsva_brain) repo. |
 | [`casecontrolint`](casecontrolint/) | Code for the brain region and SCZD diagnosis status interaction DE analysis. |
-| [`cellComp`](cellComp/) | Un-used cell composition code. |
 | [`correlation`](correlation/) | DLPFC and HIPPO expression correlation analyses. |
-| [`degradation`](degradation/) | Un-used degradation files. Final degradation code at [`qsva_brain`](https://github.com/LieberInstitute/qsva_brain) repo. |
-| [`degradation_strand_minus`](degradation_strand_minus/) | Un-used degradation files. Final degradation code at [`qsva_brain`](https://github.com/LieberInstitute/qsva_brain) repo. |
-| [`degradation_strand_positive`](degradation_strand_positive/) | Un-used degradation files. Final degradation code at [`qsva_brain`](https://github.com/LieberInstitute/qsva_brain) repo. |
 | [`demographics`](demographics/) | Code for exploring demographic variables such as RIN. |
 | [`development`](development/) | Code for the DE analysis across age using a linear spline model. |
-| [`eQTL_DNAm_mediation`](eQTL_DNAm_mediation/) | Un-used DNA mediation files. |
 | [`eQTL_GWAS_riskSNPs`](eQTL_GWAS_riskSNPs/) | eQTL analysis using PGC2 GWAS risk SNPs and neighboring SNPs. |
 | [`eQTL_full`](eQTL_full/) | Genome wide eQTL analyses. |
 | [`eQTL_full_GTEx`](eQTL_full_GTEx/) | Replication eQTL analyses using GTEx data. |
@@ -35,10 +30,9 @@ Collado-Torres L, Burke EE, Peterson A, Shin JH, Straub RE, Rajpurohit A, Semick
 | [`gtex`](gtex/) | Code for processing the HIPPO GTEx data and preparing the genotype data for the eQTL analysis. |
 | [`gtex_both`](gtex_both/) | Code for merging the DLPFC and HIPPO GTEx data. |
 | [`gtex_dlpfc`](gtex_dlpfc/) | Code for processing the HIPPO GTEx data. |
+| [`preprocessed_data`](preprocessed_data/) | Code for processing the RNA-seq reads. Uses the LIBD RNA-seq pipeline developed by EE Burke, L Collado-Torres, and AE Jaffe. |
 | [`region_specific`](region_specific/) | Code for the DE analyses between HIPPO and DLPFC for prenatal and adult controls. |
 | [`supp_tabs`](supp_tabs/) | Code for creating the supplementary tables. |
-| [`wgcna`](wgcna/) | Un-used WGCNA code for DLPFC and HIPPO. |
-| [`wgcna_combined`](wgcna_combined/) | Un-used WGCNA code for a combined analysis using DLPFC and HIPPO. |
 | [`misc`](misc/) | Files from early explorations including checking for some sample swaps and quality checks. |
 
 ## LIBD internal:
