@@ -5,6 +5,16 @@ This repository contains analysis code for the BrainSeq Phase II project from th
 
 If you wish to visualize the eQTL results described in this project, please use the [LIBD eQTL browser](http://eqtl.brainseq.org/).
 
+## License
+
+<img src="https://licensebuttons.net/l/by-nc-sa/3.0/88x31.png" alt width="88" height="31" scale="0">
+Attribution-NonCommercial-ShareAlike 
+CC BY-NC-SA
+
+This license lets others remix, tweak, and build upon your work non-commercially, as long as they credit you and license their new creations under the identical terms.
+
+[View License Deed](https://creativecommons.org/licenses/by-nc-sa/4.0) | [View Legal Code](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)
+
 ## Citation
 
 If you use anything in this repository please cite the following publication:
