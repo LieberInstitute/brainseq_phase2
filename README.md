@@ -7,13 +7,12 @@ If you wish to visualize the eQTL results described in this project, please use 
 
 ## License
 
-<img src="https://licensebuttons.net/l/by-nc-sa/3.0/88x31.png" alt width="88" height="31" scale="0">
-Attribution-NonCommercial-ShareAlike 
-CC BY-NC-SA
+<img src="https://licensebuttons.net/l/by-nc/3.0/88x31.png" alt width="88" height="31" scale="0">
+Attribution-NonCommercial: CC BY-NC
 
-This license lets others remix, tweak, and build upon your work non-commercially, as long as they credit you and license their new creations under the identical terms.
+This license lets others remix, tweak, and build upon our work non-commercially.
 
-[View License Deed](https://creativecommons.org/licenses/by-nc-sa/4.0) | [View Legal Code](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)
+[View License Deed](https://creativecommons.org/licenses/by-nc/4.0) | [View Legal Code](https://creativecommons.org/licenses/by-nc/4.0/legalcode)
 
 ## Citation
 
