@@ -230,7 +230,7 @@ Can be visualized as 2 boxplots, one per brain region. [R colors](http://bxhorn.
  92733 BrainSeqPhaseII_clean_expression_regionspecific_prenatal_tx.txt
 ```
 
-Note that the analysis was done using limma-voom with log2(CPM + 0.5) instead of log2(RPKM + 0.5) for genes/exons or log2(RP10M + 0.5) for jxns.
+Note that the analysis was done using limma-voom with log2(CPM + 0.5) instead of log2(RPKM + 1) for genes/exons or log2(RP10M + 1) for jxns.
 
 #### Development differential expression
 
@@ -248,7 +248,7 @@ Can be visualized as a scatterplot of expression versus time split by the age li
  92733 BrainSeqPhaseII_clean_expression_development_tx.txt
 ```
 
-Note that the analysis was done using limma-voom with log2(CPM + 0.5) instead of log2(RPKM + 0.5) for genes/exons or log2(RP10M + 0.5) for jxns.
+Note that the analysis was done using limma-voom with log2(CPM + 0.5) instead of log2(RPKM + 1) for genes/exons or log2(RP10M + 1) for jxns.
 
 #### SCZD vs control differential expression (DLPFC, HIPPO)
 
@@ -270,7 +270,7 @@ Can be visualized as 2 boxplots, one for SCZD cases and one for controls. [R col
  92733 BrainSeqPhaseII_clean_expression_sczd_casecontrol_hippo_tx.txt
 ```
 
-Note that the analysis was done using limma-voom with log2(CPM + 0.5) instead of log2(RPKM + 0.5) for genes/exons or log2(RP10M + 0.5) for jxns.
+Note that the analysis was done using limma-voom with log2(CPM + 0.5) instead of log2(RPKM + 1) for genes/exons or log2(RP10M + 1) for jxns.
 
 #### SCZD vs control and brain region interaction differential expression
 
@@ -290,7 +290,7 @@ Can be visualized as 4 boxplots, one for SCZD cases and one for controls for eac
  92733 BrainSeqPhaseII_clean_expression_sczd_casecontrol_interaction_tx.txt
 ```
 
-Note that the analysis was done using limma-voom with log2(CPM + 0.5) instead of log2(RPKM + 0.5) for genes/exons or log2(RP10M + 0.5) for jxns.
+Note that the analysis was done using limma-voom with log2(CPM + 0.5) instead of log2(RPKM + 1) for genes/exons or log2(RP10M + 1) for jxns.
 
 ### Correlation
 
