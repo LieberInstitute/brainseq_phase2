@@ -1,0 +1,316 @@
+**** Job starts ****
+Wed Sep 26 20:47:36 EDT 2018
+**** JHPCE info ****
+User: ajaffe
+Job id: 5533282
+Job name: extract_data
+Hostname: compute-053
+Task id: 
+n*** Successfully loaded .Rprofile ***n
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colMeans,
+    colnames, colSums, dirname, do.call, duplicated, eval, evalq,
+    Filter, Find, get, grep, grepl, intersect, is.unsorted, lapply,
+    lengths, Map, mapply, match, mget, order, paste, pmax, pmax.int,
+    pmin, pmin.int, Position, rank, rbind, Reduce, rowMeans, rownames,
+    rowSums, sapply, setdiff, sort, table, tapply, union, unique,
+    unsplit, which, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:base’:
+
+    expand.grid
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: DelayedArray
+Loading required package: matrixStats
+
+Attaching package: ‘matrixStats’
+
+The following objects are masked from ‘package:Biobase’:
+
+    anyMissing, rowMedians
+
+Loading required package: BiocParallel
+
+Attaching package: ‘DelayedArray’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+
+The following objects are masked from ‘package:base’:
+
+    aperm, apply
+
+
+Attaching package: ‘data.table’
+
+The following object is masked from ‘package:SummarizedExperiment’:
+
+    shift
+
+The following object is masked from ‘package:GenomicRanges’:
+
+    shift
+
+The following object is masked from ‘package:IRanges’:
+
+    shift
+
+The following objects are masked from ‘package:S4Vectors’:
+
+    first, second
+
+Loading required package: rafalib
+
+Attaching package: ‘devtools’
+
+The following object is masked from ‘package:rafalib’:
+
+    install_bioc
+
+Loading objects:
+  rse_gene
+Loading objects:
+  rse_exon
+Loading objects:
+  rse_jxn
+Loading objects:
+  rse_tx
+Loading objects:
+  rse_gtex_exon
+[1] 396581
+[1] 396581
+[1] FALSE
+       libd_bsp2 gencode libd_gtex
+171891   e514496    <NA>      <NA>
+290930   e862727    <NA>      <NA>
+GRanges object with 2 ranges and 11 metadata columns:
+          seqnames              ranges strand |    Length         gencodeID       ensemblID      gene_type      Symbol  EntrezID       Class         meanExprs     NumTx         gencodeTx passExprsCut
+             <Rle>           <IRanges>  <Rle> | <integer>       <character>     <character>    <character> <character> <integer> <character>         <numeric> <integer>   <CharacterList>    <logical>
+  e514496     chr8 123348034-123348130      - |        97 ENSG00000283172.1 ENSG00000283172          miRNA                  <NA>       InGen 0.453936954830773         1 ENST00000636914.1         TRUE
+  e862727    chr16     3384459-3384941      + |       483 ENSG00000262621.4 ENSG00000262621 protein_coding                  <NA>       InGen 0.301426795813603         1 ENST00000618352.1         TRUE
+  -------
+  seqinfo: 25 sequences from an unspecified genome; no seqlengths
+Loading objects:
+  indv_expr
+  indv_cleaned
+Loading objects:
+  expr
+  cleaned
+                                                                     
+analysis_regionspecific_adult         FALSE:440       TRUE :460      
+analysis_regionspecific_prenatal      FALSE:844       TRUE :56       
+analysis_development                  FALSE:286       TRUE :614      
+analysis_sczd_casecontrol_dlpfc       FALSE:521       TRUE :379      
+analysis_sczd_casecontrol_hippo       FALSE:567       TRUE :333      
+analysis_sczd_casecontrol_interaction FALSE:188       TRUE :712      
+analysis_eqtl_dlpfc                   FALSE:503       TRUE :397      
+analysis_eqtl_hippo                   FALSE:505       TRUE :395      
+analysis_eqtl_interaction             FALSE:108       TRUE :792      
+[1] 900  78
+902 BrainSeqPhaseII_sample_metadata.txt
+Loading objects:
+  mds
+  snp
+  snpMap
+[1] 7023860      13
+7023861 BrainSeqPhaseII_snp_annotation.txt
+snp	chr_hg38	pos_hg38	chr_hg19	pos_hg19	cm	counted	alt	type	newref	newcount	name	rsnumguess
+rs9988021:866319:G:A	chr1	930939	chr1	866319	0	G	A	SNV	A	G	rs9988021	rs9988021
+rs111819742:868861:C:T	chr1	933481	chr1	868861	0	T	C	SNV	C	T	rs111819742	rs111819742
+GA018352	chr1	944307	chr1	879687	0	T	C	SNV	C	T	rs2839	rs2839
+rs3748592	chr1	944858	chr1	880238	0	A	G	SNV	G	A	rs3748592	rs3748592
+rs2340582	chr1	947423	chr1	882803	0	A	G	SNV	G	A	rs2340582	rs2340582
+rs4246503	chr1	949435	chr1	884815	0	A	G	SNV	G	A	rs4246503	rs4246503
+rs4970376:885699:A:G	chr1	950319	chr1	885699	0	A	G	SNV	G	A	rs4970376	rs4970376
+rs4970375:886006:T:C	chr1	950626	chr1	886006	0	T	C	SNV	C	T	rs4970375	rs4970375
+rs35678314:886182:TG:T	chr1	950802	chr1	886182	0	TG	T	Insertion	-	G	rs35678314	
+[1] 7023860     551
+                       Br5168 Br5073 Br5217 Br5234 Br5372 Br5005
+rs9988021:866319:G:A        0      0      0      0      1      0
+rs111819742:868861:C:T      0      0      0      0      0      0
+GA018352                    1      0      0      0      1      0
+rs3748592                   0      0      0      0      1      0
+rs2340582                   0      0      0      0      1      0
+rs4246503                   0      0      0      0      1      0
+2018-09-26 21:15:03 processing hippo
+Loading objects:
+  genePCs
+  exonPCs
+  jxnPCs
+  txPCs
+2018-09-26 21:17:59 processing dlpfc
+Loading objects:
+  genePCs
+  exonPCs
+  jxnPCs
+  txPCs
+2018-09-26 21:20:34 processing interaction
+Loading objects:
+  genePCs
+  exonPCs
+  jxnPCs
+  txPCs
+2018-09-26 21:25:00 processing hippo
+2018-09-26 21:25:00 processing gene
+2018-09-26 21:25:01 processing exon
+2018-09-26 21:25:24 processing jxn
+2018-09-26 21:25:41 processing tx
+2018-09-26 21:25:47 processing dlpfc
+2018-09-26 21:25:47 processing gene
+2018-09-26 21:25:49 processing exon
+2018-09-26 21:26:12 processing jxn
+2018-09-26 21:26:29 processing tx
+2018-09-26 21:26:34 processing interaction
+2018-09-26 21:26:34 processing gene
+2018-09-26 21:26:38 processing exon
+2018-09-26 21:27:24 processing jxn
+2018-09-26 21:27:59 processing tx
+$hippo
+NULL
+
+$dlpfc
+NULL
+
+$interaction
+NULL
+
+2018-09-26 21:28:10 saving clean_expr_eqtl.Rdata
+2018-09-26 21:56:35 processing development
+2018-09-26 21:59:27 processing sczd_casecontrol_interaction
+Loading objects:
+  qsvBonf
+  qSVs
+  mod
+  modQsva
+  keepIndex
+2018-09-26 22:04:16 processing sczd_casecontrol_hippo
+Loading objects:
+  qsvBonf
+  qSVs
+  mod
+  modQsva
+  keepIndex
+2018-09-26 22:06:52 processing sczd_casecontrol_dlpfc
+Loading objects:
+  qsvBonf
+  qSVs
+  mod
+  modQsva
+  keepIndex
+2018-09-26 22:09:19 processing regionspecific_adult
+2018-09-26 22:11:46 processing regionspecific_prenatal
+2018-09-26 22:12:13 processing development
+2018-09-26 22:12:13 processing gene
+2018-09-26 22:12:16 processing exon
+2018-09-26 22:12:51 processing jxn
+2018-09-26 22:13:19 processing tx
+2018-09-26 22:13:27 processing sczd_casecontrol_interaction
+2018-09-26 22:13:27 processing gene
+2018-09-26 22:13:30 processing exon
+2018-09-26 22:14:12 processing jxn
+2018-09-26 22:14:43 processing tx
+2018-09-26 22:14:54 processing sczd_casecontrol_hippo
+2018-09-26 22:14:54 processing gene
+2018-09-26 22:14:55 processing exon
+2018-09-26 22:15:15 processing jxn
+2018-09-26 22:15:30 processing tx
+2018-09-26 22:15:35 processing sczd_casecontrol_dlpfc
+2018-09-26 22:15:35 processing gene
+2018-09-26 22:15:36 processing exon
+2018-09-26 22:15:59 processing jxn
+2018-09-26 22:16:15 processing tx
+2018-09-26 22:16:21 processing regionspecific_adult
+2018-09-26 22:16:21 processing gene
+2018-09-26 22:16:22 processing exon
+2018-09-26 22:16:49 processing jxn
+2018-09-26 22:17:10 processing tx
+2018-09-26 22:17:16 processing regionspecific_prenatal
+2018-09-26 22:17:16 processing gene
+2018-09-26 22:17:17 processing exon
+2018-09-26 22:17:20 processing jxn
+2018-09-26 22:17:23 processing tx
+$development
+NULL
+
+$sczd_casecontrol_interaction
+NULL
+
+$sczd_casecontrol_hippo
+NULL
+
+$sczd_casecontrol_dlpfc
+NULL
+
+$regionspecific_adult
+NULL
+
+$regionspecific_prenatal
+NULL
+
+2018-09-26 22:17:24 saving clean_expr_de_analysis.Rdata
+2018-09-26 23:10:34 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full/eqtl_tables/mergedEqtl_output_hippo_4features.rda
+Loading objects:
+  allEqtl
+2018-09-26 23:14:53 fixing exon ids
+2018-09-26 23:15:13 writing BrainSeqPhaseII_eQTL_hippo_full.txt
+2018-09-26 23:15:36 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full/eqtl_tables/mergedEqtl_output_dlpfc_4features.rda
+Loading objects:
+  allEqtl
+2018-09-26 23:21:17 fixing exon ids
+2018-09-26 23:21:42 writing BrainSeqPhaseII_eQTL_dlpfc_full.txt
+2018-09-26 23:22:14 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full/eqtl_tables/mergedEqtl_output_hippo_4features.rda
+Loading objects:
+  allEqtl
+2018-09-26 23:26:33 fixing exon ids
+2018-09-26 23:27:16 writing BrainSeqPhaseII_eQTL_interaction_full.txt
+2018-09-26 23:27:53 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/eqtl_tables/mergedEqtl_output_hippo_raggr_4features.rda
+Loading objects:
+  allEqtl
+2018-09-26 23:28:36 fixing exon ids
+2018-09-26 23:28:39 writing BrainSeqPhaseII_eQTL_hippo_raggr.txt
+2018-09-26 23:28:47 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/eqtl_tables/mergedEqtl_output_dlpfc_raggr_4features.rda
+Loading objects:
+  allEqtl
+2018-09-26 23:29:34 fixing exon ids
+2018-09-26 23:29:38 writing BrainSeqPhaseII_eQTL_dlpfc_raggr.txt
+2018-09-26 23:29:45 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/eqtl_tables/mergedEqtl_output_hippo_4features.rda
+Loading objects:
+  allEqtl
+2018-09-27 01:35:24 fixing exon ids
+2018-09-27 02:25:45 writing BrainSeqPhaseII_eQTL_hippo_replication_GTEx.txt
+2018-09-27 02:38:24 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/eqtl_tables/mergedEqtl_output_dlpfc_4features.rda
+Loading objects:
+  allEqtl
+2018-09-27 04:32:31 fixing exon ids

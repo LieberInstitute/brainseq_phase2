@@ -63,13 +63,13 @@ rowRanges(rse_exon)$exon_libdID_gtex <- exon_name_map$libd_gtex
 exon_name_map <- data.table(exon_name_map)
 save(exon_name_map, file = 'rda/exon_name_map.Rdata')
 ## Don't really need it as a separate file, since it's part of the rse_exon (see below)
-fwrite(exon_name_map, row.names = FALSE, sep = '\t', file = 'rda/BrainSeqPhaseII_exon_name_map.txt')
+fwrite(exon_name_map, row.names = TRUE, sep = '\t', file = 'rda/BrainSeqPhaseII_exon_name_map.txt')
 
 ## Export expr annotation
 export_ann <- function(x, f) {
     y <- as.data.frame(rowRanges(x))
     y$feature_id <- rownames(y)
-    fwrite(y, row.names = FALSE, sep = '\t', file = f)
+    fwrite(y, row.names = TRUE, sep = '\t', file = f)
 }
 export_ann(rse_gene, 'BrainSeqPhaseII_feature_annotation_gene.txt')
 export_ann(rse_exon, 'BrainSeqPhaseII_feature_annotation_exon.txt')
@@ -136,7 +136,7 @@ rm(fetal, birth, infant, child, teen, adult)
 
 ## Add prep protocol
 pd$protocol <- 'RiboZeroGold'
-hipxl <- read_excel('/dcl01/lieber/ajaffe/lab/brainseq_phase2/LIBD_PhaseII_HIPPO_RiboZero_sample_list_01_28_2015.xlsx')
+hipxl <- read_excel('/dcl01/lieber/ajaffe/lab/brainseq_phase2/misc/LIBD_PhaseII_HIPPO_RiboZero_sample_list_01_28_2015.xlsx')
 hipHMR <- as.integer(gsub('R', '', rownames(pd))) %in% hipxl$RNum[hipxl$Protocol == 'RiboZeroHMR']
 pd$protocol[hipHMR] <- 'RiboZeroHMR'
 rm(hipHMR, hipxl)
@@ -214,7 +214,7 @@ snpAnnoOut <- snpAnnoOut[, c('snp', 'chr_hg38', 'pos_hg38', 'chr_hg19', 'pos_hg1
 ## Export
 dim(snpAnnoOut)
 # [1] 7023860      13
-fwrite(snpAnnoOut, row.names=FALSE, sep = "\t",	file = "BrainSeqPhaseII_snp_annotation.txt")
+fwrite(snpAnnoOut, row.names=TRUE, na = "NA", sep = "\t",	file = "BrainSeqPhaseII_snp_annotation.txt")
 system('wc -l BrainSeqPhaseII_snp_annotation.txt')
 system('head BrainSeqPhaseII_snp_annotation.txt')
 rm(snpAnnoOut, snpMap)
@@ -229,7 +229,7 @@ corner(snp)
 # rs3748592                   0      0      0      0      1      0
 # rs2340582                   0      0      0      0      1      0
 # rs4246503                   0      0      0      0      1      0
-fwrite(as.data.frame(snp), row.names = FALSE, sep = '\t', file = 'BrainSeqPhaseII_snp_genotype.txt')
+fwrite(as.data.frame(snp), row.names = TRUE, na = "NA", sep = '\t', file = 'BrainSeqPhaseII_snp_genotype.txt')
 
 ## Cleaned eQTL expression
 cleaned <- lapply(c('hippo', 'dlpfc', 'interaction'), function(modtype) {
@@ -253,7 +253,7 @@ cleaned <- lapply(c('hippo', 'dlpfc', 'interaction'), function(modtype) {
         'jxn' = assays(rse_jxn)$rp10m[,keepInd],
         'tx' = assays(rse_tx)$tpm[,keepInd]
     )
-    exprs <- lapply(exprs, function(x) { log2(x + 0.5) })
+    exprs <- lapply(exprs, function(x) { log2(x + 1) })
 
     if(modtype == 'interaction') {
         mod = model.matrix(~Dx + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + Region,
@@ -280,7 +280,7 @@ mapply(function(exprs, type) {
     message(paste(Sys.time(), 'processing', type))
     mapply(function(expr, exprtype) {
         message(paste(Sys.time(), 'processing', exprtype))
-        fwrite(expr, sep = '\t', row.names = FALSE, file = paste0('BrainSeqPhaseII_clean_expression_eqtl_', type, '_', exprtype, '.txt'))
+        fwrite(expr, sep = '\t', row.names = TRUE, file = paste0('BrainSeqPhaseII_clean_expression_eqtl_', type, '_', exprtype, '.txt'))
     }, exprs, names(exprs))
     return(NULL)
 }, cleaned, names(cleaned))
@@ -320,7 +320,7 @@ cleaned <- lapply(de_analyses, function(modtype) {
         'jxn' = assays(rse_jxn)$rp10m[,keepInd],
         'tx' = assays(rse_tx)$tpm[,keepInd]
     )
-    exprs <- lapply(exprs, function(x) { log2(x + 0.5) })
+    exprs <- lapply(exprs, function(x) { log2(x + 1) })
     
     if(modtype == 'development') {
         design = model.matrix(~Age *Region + agespline_fetal * Region + agespline_birth *Region + agespline_infant *Region + agespline_child * Region + agespline_teen * Region + agespline_adult * Region + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN,
@@ -353,7 +353,7 @@ mapply(function(exprs, type) {
     message(paste(Sys.time(), 'processing', type))
     mapply(function(expr, exprtype) {
         message(paste(Sys.time(), 'processing', exprtype))
-        fwrite(expr, sep = '\t', row.names = FALSE, file = paste0('BrainSeqPhaseII_clean_expression_', type, '_', exprtype, '.txt'))
+        fwrite(expr, sep = '\t', row.names = TRUE, file = paste0('BrainSeqPhaseII_clean_expression_', type, '_', exprtype, '.txt'))
     }, exprs, names(exprs))
     return(NULL)
 }, cleaned, names(cleaned))
