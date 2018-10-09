@@ -23,6 +23,7 @@ eQTL_full_GTEx/rdas
 eQTL_GWAS_riskSNPs/eqtl_tables
 ## For Carrie's circular RNA project
 genotype_data_carrie_n410
+genotype_data_carrie
 
 ## Left-over files
 degradation
