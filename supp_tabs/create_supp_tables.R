@@ -106,6 +106,22 @@ sapply(deres_sig, lapply, nrow)
 # tx   1715        1742   21
 save(deres_sig, file = 'deres_sig.Rdata')
 
+## Change commas to semi-colons before writing as a csv file
+fix_csv <- function(df) {
+    for(i in seq_len(ncol(df))) {
+        if(any(grepl(',', df[, i]))) {
+            message(paste(Sys.time(), 'fixing column', colnames(df)[i]))
+            df[, i] <- gsub(',', ';', df[, i])
+        }
+    }
+    return(df)
+}
+for(i in 1:3) {
+    message(paste(Sys.time(), 'processing', names(deres_sig)[i]))
+    deres_sig[[i]] <- lapply(deres_sig[[i]], fix_csv)
+}
+
+
 ## Export to Excel TableS2
 # load('deres_sig.Rdata', verbose = TRUE)
 # system('rm SupplementaryTable2.xlsx')
