@@ -74,6 +74,11 @@ outFeat <- lapply(c('/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/
     return(list('gene' = outGene, 'exon' = outExon, 'jxn' = outJxn, 'tx' = outTx))
 })
 names(outFeat) <- c('DLPFC', 'HIPPO')
+
+## Add region to each table
+outFeat$DLPFC <- lapply(outFeat$DLPFC, function(x) { x$region <- 'DLPFC'; return(x) })
+outFeat$HIPPO <- lapply(outFeat$HIPPO, function(x) { x$region <- 'HIPPO'; return(x) })
+
 info <- mapply(rbind, outFeat[[1]], outFeat[[2]])
 
 for(i in 1:4) {
@@ -107,10 +112,11 @@ save(deres_sig, file = 'deres_sig.Rdata')
 for(i in 1:3) {
     for(j in 1:4) {
         message(paste(Sys.time(), 'processing', names(deres_sig)[i], 'at the', names(deres_sig[[i]])[j], 'level'))
-        write.csv(deres_sig[[i]][[j]], file = paste0('SupplementaryTable2_' names(deres_sig)[i], '_', names(deres_sig[[i]])[j], '.csv'))
+        write.csv(deres_sig[[i]][[j]], file = paste0('SupplementaryTable2_', names(deres_sig)[i], '_', names(deres_sig[[i]])[j], '.csv'))
     }
 }
 
+system('tar -cvzf SupplementaryTable2.tar.gz SupplementaryTable2*csv')
 
 
 ## Reproducibility information
