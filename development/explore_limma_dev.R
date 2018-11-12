@@ -1064,6 +1064,225 @@ if(!file.exists('rda/pcas.Rdata')) {
     load('rda/pcas.Rdata', verbose = TRUE)
 }
 
+if(FALSE) {
+    ## Check PCs and sex chrs
+    load('rda/pcas.Rdata', verbose = TRUE)
+    source('load_funs.R')
+    library('SummarizedExperiment')
+    rse_gene <- load_foo('gene')
+    rse_exon <- load_foo('exon')
+    
+    tapply(pcas$gene$u[, 7], seqnames(rse_gene), summary)
+    
+    # $chr1
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0137080 -0.0022928 -0.0003403 -0.0005273  0.0012507  0.0208097
+    #
+    # $chr2
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -1.209e-02 -1.996e-03 -3.299e-05 -2.229e-04  1.538e-03  2.820e-02
+    #
+    # $chr3
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0163721 -0.0020139 -0.0002685 -0.0004326  0.0014694  0.0159849
+    #
+    # $chr4
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -1.136e-02 -1.845e-03  2.400e-04  1.145e-05  1.880e-03  1.597e-02
+    #
+    # $chr5
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -1.499e-02 -2.043e-03  3.624e-05 -2.097e-04  1.665e-03  1.612e-02
+    #
+    # $chr6
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0124551 -0.0019655 -0.0001863 -0.0002823  0.0014483  0.0183057
+    #
+    # $chr7
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0162665 -0.0023595 -0.0003755 -0.0004568  0.0012753  0.0282686
+    #
+    # $chr8
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -1.079e-02 -1.751e-03  1.908e-04 -3.222e-05  1.730e-03  1.241e-02
+    #
+    # $chr9
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0134702 -0.0024986 -0.0005146 -0.0007157  0.0011238  0.0128030
+    #
+    # $chr10
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -1.418e-02 -2.132e-03  2.646e-06 -3.565e-04  1.470e-03  1.682e-02
+    #
+    # $chr11
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0155661 -0.0026353 -0.0006692 -0.0008716  0.0009299  0.0137021
+    #
+    # $chr12
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0121895 -0.0022321 -0.0001950 -0.0004622  0.0013628  0.0109990
+    #
+    # $chr13
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0148956 -0.0015537  0.0004171  0.0003582  0.0021570  0.0237661
+    #
+    # $chr14
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -1.050e-02 -1.817e-03  1.712e-04 -4.305e-05  1.801e-03  1.291e-02
+    #
+    # $chr15
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0180643 -0.0024705 -0.0002243 -0.0004981  0.0017077  0.0108856
+    #
+    # $chr16
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0102932 -0.0030572 -0.0013213 -0.0013450  0.0004023  0.0167246
+    #
+    # $chr17
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0176315 -0.0028449 -0.0010630 -0.0011587  0.0006508  0.0185407
+    #
+    # $chr18
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0173907 -0.0020566 -0.0003483 -0.0003282  0.0014831  0.0182248
+    #
+    # $chr19
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0149466 -0.0027946 -0.0010850 -0.0012304  0.0002332  0.0213610
+    #
+    # $chr20
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0325424 -0.0028331 -0.0006072 -0.0011224  0.0009100  0.0115885
+    #
+    # $chr21
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0151642 -0.0025810 -0.0005833 -0.0007184  0.0015340  0.0166101
+    #
+    # $chr22
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0197491 -0.0030777 -0.0011081 -0.0012165  0.0005894  0.0161412
+    #
+    # $chrX
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0324965 -0.0012971  0.0003904  0.0006222  0.0021764  0.2072613
+    #
+    # $chrY
+    #      Min.   1st Qu.    Median      Mean   3rd Qu.      Max.
+    # -0.210573 -0.176114 -0.113417 -0.111009 -0.039595  0.004763
+    #
+    # $chrM
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0107657 -0.0034202 -0.0013154 -0.0013057  0.0006736  0.0069107
+    
+    tapply(pcas$exon$u[, 7], seqnames(rse_exon), summary)
+    
+    # $chr1
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -5.889e-03 -2.716e-04  9.943e-05  1.685e-04  5.710e-04  4.681e-03
+    #
+    # $chr2
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0057058 -0.0002929  0.0001193  0.0001816  0.0005987  0.0041749
+    #
+    # $chr3
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0041222 -0.0002659  0.0001338  0.0001971  0.0006194  0.0047684
+    #
+    # $chr4
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -3.307e-03 -3.367e-04  5.573e-05  1.272e-04  5.242e-04  4.049e-03
+    #
+    # $chr5
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -4.280e-03 -3.333e-04  4.305e-05  1.196e-04  5.035e-04  3.989e-03
+    #
+    # $chr6
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0037068 -0.0002799  0.0001164  0.0001589  0.0005683  0.0037027
+    #
+    # $chr7
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -7.324e-03 -3.209e-04  8.862e-05  1.609e-04  5.767e-04  4.301e-03
+    #
+    # $chr8
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -3.278e-03 -3.622e-04 -4.507e-06  6.340e-05  4.467e-04  3.906e-03
+    #
+    # $chr9
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0036043 -0.0002298  0.0001718  0.0002335  0.0006404  0.0049567
+    #
+    # $chr10
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -3.911e-03 -3.293e-04  6.528e-05  1.405e-04  5.506e-04  3.577e-03
+    #
+    # $chr11
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0040893 -0.0002630  0.0001036  0.0001687  0.0005671  0.0044779
+    #
+    # $chr12
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -2.880e-03 -2.882e-04  9.691e-05  1.601e-04  5.591e-04  3.542e-03
+    #
+    # $chr13
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -5.766e-03 -3.183e-04  4.286e-05  7.250e-05  4.493e-04  3.347e-03
+    #
+    # $chr14
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -3.739e-03 -2.990e-04  7.764e-05  1.275e-04  5.177e-04  3.353e-03
+    #
+    # $chr15
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0027215 -0.0002474  0.0001430  0.0002163  0.0006188  0.0056051
+    #
+    # $chr16
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0038058 -0.0002275  0.0001547  0.0002158  0.0006137  0.0061025
+    #
+    # $chr17
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0049125 -0.0002455  0.0001423  0.0002115  0.0006143  0.0048135
+    #
+    # $chr18
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0025112 -0.0003131  0.0000906  0.0001373  0.0005266  0.0037207
+    #
+    # $chr19
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0062974 -0.0002367  0.0001496  0.0001981  0.0006164  0.0043090
+    #
+    # $chr20
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -3.737e-03 -2.774e-04  9.633e-05  1.803e-04  5.643e-04  8.490e-03
+    #
+    # $chr21
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -4.745e-03 -3.348e-04  3.195e-05  1.076e-04  4.958e-04  4.030e-03
+    #
+    # $chr22
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -0.0036130 -0.0002998  0.0001396  0.0001733  0.0006049  0.0038809
+    #
+    # $chrX
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -6.349e-02 -4.177e-04 -4.118e-05 -1.800e-04  4.215e-04  6.926e-03
+    #
+    # $chrY
+    #      Min.   1st Qu.    Median      Mean   3rd Qu.      Max.
+    # -0.001691  0.024516  0.040186  0.033494  0.046594  0.057698
+    #
+    # $chrM
+    #       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
+    # -1.558e-03 -3.314e-04  2.297e-04  9.497e-05  5.931e-04  1.813e-03
+    
+    pdf('pdf/pca_check_sex.pdf', useDingbats = FALSE)
+    boxplot(pcas$gene$u[, 7] ~ as.factor(seqnames(rse_gene)), las = 2, main = 'BrainSeq Phase 2, PC7, gene')
+    boxplot(pcas$exon$u[, 7] ~ as.factor(seqnames(rse_exon)), las = 2, main = 'BrainSeq Phase 2, PC7, exon')
+    dev.off()
+}
+
+
 
 main_lab <- function(type) {
     res <- paste0('PC (', type, '): ')
