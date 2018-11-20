@@ -24,6 +24,18 @@ scz2_rep_gr_hg19 <- GRanges(
 mcols(scz2_rep_gr_hg19) <- scz2_rep[, - c('hg19chrc', 'six1', 'six2', 'chr')]
 save(scz2_rep_gr_hg19, file = 'scz2_rep_gr_hg19.Rdata')
 
+## hm....
+## I don't get 108 with overlap = 1 here...
+# > table(countOverlaps(resize(scz2_rep_gr_hg19, width(scz2_rep_gr_hg19) + 250000, fix = 'center')))
+#
+#  1  2  3  4
+# 97 19  5  7
+## 'x' was the gr objet when using 'bp' with width = 1 to build it
+# > table(countOverlaps(resize(x, width(x) + 250000, fix = 'center')))
+#
+#   1   2   3   4
+# 104  19   4   1
+
 ## Read in the "anneal" file
 ## then use the snp file to build a GRanges
 scz2_anneal <- fread('scz2.anneal.108.txt')
