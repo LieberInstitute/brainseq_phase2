@@ -49,6 +49,14 @@ save(scz2_anneal_gr_hg19, file = 'scz2_anneal_gr_hg19.Rdata')
 ## Save them all together just in case
 save(scz2_gr_hg19, scz2_rep_gr_hg19, scz2_anneal_gr_hg19, file = 'scz2_all.Rdata')
 
+setwd('..')
+for(reg in c('DLPFC', 'HIPPO')) {
+    dir.create(reg, showWarnings = FALSE)
+    for(feat in c('gene', 'exon', 'jxn', 'tx')) {
+        dir.create(paste0(reg, '/', feat), showWarnings = FALSE)
+    }
+}
+
 ## Reproducibility information
 print('Reproducibility information:')
 Sys.time()
