@@ -30,7 +30,7 @@ save(scz2_rep_gr_hg19, file = 'scz2_rep_gr_hg19.Rdata')
 #
 #  1  2  3  4
 # 97 19  5  7
-## 'x' was the gr objet when using 'bp' with width = 1 to build it
+## 'x' was the gr object when using 'bp' with width = 1 to build it
 # > table(countOverlaps(resize(x, width(x) + 250000, fix = 'center')))
 #
 #   1   2   3   4
