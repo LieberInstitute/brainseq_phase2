@@ -149,14 +149,14 @@ deres_sig <- deres
 #deres_sig[[3]] <- lapply(deres_sig[[3]], function(x) { x[x$adj.P.Val < 0.2, ] })
 
 ## Fix csv columns
-for(i in 3) {
+for(i in c(1, 3)) {
     message(paste(Sys.time(), 'processing', names(deres_sig)[i]))
     deres_sig[[i]] <- lapply(deres_sig[[i]], fix_csv)
 }
 
 
-for(i in 3) {
-    for(j in 1:4) {
+for(i in c(1, 3)) {
+    for(j in 1) {
         message(paste(Sys.time(), 'processing', names(deres_sig)[i], 'at the', names(deres_sig[[i]])[j], 'level'))
         write.csv(deres_sig[[i]][[j]], file = paste0('versionForRB_SupplementaryTable2_', names(deres_sig)[i], '_', names(deres_sig[[i]])[j], '.csv'))
     }
