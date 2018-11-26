@@ -147,6 +147,14 @@ session_info()
 load('deres.Rdata', verbose = TRUE)
 deres_sig <- deres
 #deres_sig[[3]] <- lapply(deres_sig[[3]], function(x) { x[x$adj.P.Val < 0.2, ] })
+
+## Fix csv columns
+for(i in 3) {
+    message(paste(Sys.time(), 'processing', names(deres_sig)[i]))
+    deres_sig[[i]] <- lapply(deres_sig[[i]], fix_csv)
+}
+
+
 for(i in 3) {
     for(j in 1:4) {
         message(paste(Sys.time(), 'processing', names(deres_sig)[i], 'at the', names(deres_sig[[i]])[j], 'level'))
