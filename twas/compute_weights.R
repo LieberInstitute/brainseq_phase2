@@ -219,6 +219,7 @@ output_status <- sapply(seq_len(nrow(rse)), function(i) {
     return(file.exists(out_file))
 })
 
+message(paste(Sys.time(), 'saving the output_status.Rdata file'))
 save(output_status, file = 'output_status.Rdata')
 
 
