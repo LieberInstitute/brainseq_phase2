@@ -157,8 +157,12 @@ print(dim(rse))
 setwd(file.path(opt$region, opt$feature))
 dir.create('snp_files', showWarnings = FALSE)
 dir.create('bim_files', showWarnings = FALSE)
-if(FALSE) i <- 1
-lapply(seq_len(nrow(rse)), function(i) {
+dir.create('tmp_files', showWarnings = FALSE)
+dir.create('out_files', showWarnings = FALSE)
+
+if(FALSE) i <- 5
+
+output_status <- sapply(seq_len(nrow(rse)), function(i) {
     
     message(paste(Sys.time(), 'processing i =', i, 'corresponding to feature', rownames(rse)[i]))
     j <- subjectHits(findOverlaps(rse_window[i], bim_gr))
@@ -175,12 +179,41 @@ lapply(seq_len(nrow(rse)), function(i) {
     )
     message(paste(Sys.time(), 'running bfile extract'))
     system(paste("plink --bfile", bim_file, '--extract', filt_snp, 
-    	"--make-bed --out", filt_bim, " --memory 225000"))
+    	"--make-bed --out", filt_bim))
+    
+    ## Edit the "phenotype" column of the fam file
+    filt_fam <- fread(paste0(filt_bim, '.fam'),
+        col.names = c('famid', 'w_famid', 'w_famid_fa', 'w_famid_mo', 'sex_code', 'phenotype')
+    )
+    m <- match(filt_fam$famid, colData(rse)$BrNum)
+    filt_fam$phenotype <- assays(rse)$clean_expr[i, m]
+    fwrite(filt_fam, file = paste0(filt_bim, '.fam'), sep = ' ', col.names = FALSE)
+    
     
     ## Gotta edit the last column of the fam, I think.
     ## To be continued...
     ## system('head bim_files/LIBD_Brain_Illumina_h650_1M_Omni5M_Omni2pt5_Macrogen_imputed_run2_LDfiltered_HIPPO_gene_1.fam')
+    
+    tmp_file <- file.path(getwd(), 'tmp_files', paste0(opt$feature, '_', i))
+    out_file <- file.path(getwd(), 'out_files', paste0(opt$feature, '_', i))
+    
+    system(paste(
+        'Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.compute_weights.R --bfile',
+        filt_bim,
+        '--tmp', tmp_file,
+        '--out', out_file,
+        '--models top1,blump,lasso,enet'
+        # '--models top1,blump,lasso,enet --noclean TRUE --hsq_p 0.9'
+    ))
+    
+    ## The first five genes failed the hsq_p default of 0.01 https://github.com/gusevlab/fusion_twas/blob/master/FUSION.compute_weights.R#L26
+    ## Just tested the 5th one with hsq_p 0.9 and it works
+    # '--models top1,blump,lasso,enet --noclean TRUE --hsq_p 0.9'
+    
+    return(file.exists(out_file))
 })
+
+save(output_status, file = 'output_status.Rdata')
 
 
 ## Reproducibility information
