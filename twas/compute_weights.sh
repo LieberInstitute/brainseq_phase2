@@ -38,7 +38,7 @@ module load plink/1.90b6.6
 module load fusion_twas/github
 
 ## Compute weights for the given region/feature pair
-Rscript compute_weights.R -r ${region} -f ${feature} -c 1 -pgconly TRUE
+Rscript compute_weights.R -r ${region} -f ${feature} -c 1 -p TRUE
 
 echo "**** Job ends ****"
 date
