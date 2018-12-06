@@ -14,6 +14,7 @@ spec <- matrix(c(
     'region', 'r', 1, 'character', 'Either DLPFC or HIPPO',
 	'feature', 'f', 1, 'character', 'One of: gene, exon, jxn, tx',
     'cores', 'c', 1, 'integer', 'Number of cores to use. Use a small number',
+    'pgconly', 'p', 1, 'logical', 'Subset to only PGC loci?',
 	'help' , 'h', 0, 'logical', 'Display help'
 ), byrow=TRUE, ncol=5)
 opt <- getopt(spec)
@@ -125,7 +126,7 @@ mcols(bim_gr) <- bim[, - c('chr', 'basepair')]
 rse_window <- resize(rowRanges(rse), width(rowRanges(rse)) + 500000 * 2, fix = 'center')
 
 
-if(FALSE) {
+if(opt$pgconly) {
     load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/pgc_scz2/scz2_anneal_gr_hg19.Rdata', verbose = TRUE)
     
     ## Which of the best snps did we actually observe?
@@ -142,7 +143,7 @@ if(FALSE) {
 }
 
 ## Number of SNPs per feature window
-table(countOverlaps(rse_window, bim_gr))
+# table(countOverlaps(rse_window, bim_gr))
 
 ## Keep only those feature windows with some SNPs nearby
 keep_feat <- which(countOverlaps(rse_window, bim_gr) > 0)
@@ -160,6 +161,7 @@ dir.create('bim_files', showWarnings = FALSE)
 dir.create('tmp_files', showWarnings = FALSE)
 dir.create('out_files', showWarnings = FALSE)
 
+## For testing
 if(FALSE) i <- 5
 
 output_status <- sapply(seq_len(nrow(rse)), function(i) {
@@ -185,28 +187,32 @@ output_status <- sapply(seq_len(nrow(rse)), function(i) {
     filt_fam <- fread(paste0(filt_bim, '.fam'),
         col.names = c('famid', 'w_famid', 'w_famid_fa', 'w_famid_mo', 'sex_code', 'phenotype')
     )
+    
+    ## Note BrNums might be duplicated, hence the use of match()
     m <- match(filt_fam$famid, colData(rse)$BrNum)
+    
+    ## Use cleaned expression for now. Could be an argument for the code.
     filt_fam$phenotype <- assays(rse)$clean_expr[i, m]
+    
+    ## Ovewrite fam file (for the phenotype info)
     fwrite(filt_fam, file = paste0(filt_bim, '.fam'), sep = ' ', col.names = FALSE)
     
-    
-    ## Gotta edit the last column of the fam, I think.
-    ## To be continued...
-    ## system('head bim_files/LIBD_Brain_Illumina_h650_1M_Omni5M_Omni2pt5_Macrogen_imputed_run2_LDfiltered_HIPPO_gene_1.fam')
-    
+    ## Specify input/output files
     tmp_file <- file.path(getwd(), 'tmp_files', paste0(opt$feature, '_', i))
     out_file <- file.path(getwd(), 'out_files', paste0(opt$feature, '_', i))
     
+    ## Compute weights http://gusevlab.org/projects/fusion/#computing-your-own-functional-weights
     system(paste(
         'Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.compute_weights.R --bfile',
         filt_bim,
         '--tmp', tmp_file,
         '--out', out_file,
-        '--models top1,blump,lasso,enet'
+        '--models top1,blump,lasso,enet --noclean TRUE'
+        ## Using --noclean TRUE for testing right now
         # '--models top1,blump,lasso,enet --noclean TRUE --hsq_p 0.9'
     ))
     
-    ## The first five genes failed the hsq_p default of 0.01 https://github.com/gusevlab/fusion_twas/blob/master/FUSION.compute_weights.R#L26
+    ## The first five genes (pgconly = TRUE) failed the hsq_p default of 0.01 https://github.com/gusevlab/fusion_twas/blob/master/FUSION.compute_weights.R#L26
     ## Just tested the 5th one with hsq_p 0.9 and it works
     # '--models top1,blump,lasso,enet --noclean TRUE --hsq_p 0.9'
     
