@@ -28,8 +28,8 @@ if (!is.null(opt$help)) {
 
 ## For testing
 if(FALSE) {
-    opt <- list(region = 'HIPPO', feature = 'gene', cores = 1)
-    feat = opt$feature; reg = opt$reg
+    opt <- list(region = 'HIPPO', feature = 'gene', cores = 1, 'pgconly' = TRUE)
+    # feat = opt$feature; reg = opt$reg
 }
 
 stopifnot(opt$region %in% c('HIPPO', 'DLPFC'))
@@ -151,7 +151,7 @@ rse <- rse[keep_feat, ]
 rse_window <- rse_window[keep_feat, ]
 stopifnot(nrow(rse) == length(rse_window))
 
-print('Final feature dimensions:')
+print('Final RSE feature dimensions:')
 print(dim(rse))
 
 ## Subset to features
@@ -162,10 +162,11 @@ dir.create('tmp_files', showWarnings = FALSE)
 dir.create('out_files', showWarnings = FALSE)
 
 ## For testing
-if(FALSE) i <- 5
+if(FALSE) rse <- rse[1:5, ]
 
 output_status <- sapply(seq_len(nrow(rse)), function(i) {
     
+    message('*******************************************************************************')
     message(paste(Sys.time(), 'processing i =', i, 'corresponding to feature', rownames(rse)[i]))
     j <- subjectHits(findOverlaps(rse_window[i], bim_gr))
     
@@ -181,7 +182,7 @@ output_status <- sapply(seq_len(nrow(rse)), function(i) {
     )
     message(paste(Sys.time(), 'running bfile extract'))
     system(paste("plink --bfile", bim_file, '--extract', filt_snp, 
-    	"--make-bed --out", filt_bim))
+    	"--make-bed --out", filt_bim, '--memory 10000 --silent'))
     
     ## Edit the "phenotype" column of the fam file
     filt_fam <- fread(paste0(filt_bim, '.fam'),
@@ -219,6 +220,10 @@ output_status <- sapply(seq_len(nrow(rse)), function(i) {
     return(file.exists(out_file))
 })
 
+message('*******************************************************************************')
+message(paste(Sys.time(), 'summary output status (TRUE means that there is a file)'))
+table(output_status)
+
 message(paste(Sys.time(), 'saving the output_status.Rdata file'))
 save(output_status, file = 'output_status.Rdata')
 
@@ -230,4 +235,5 @@ proc.time()
 options(width = 120)
 session_info()
 
+message('-- plink version information --')
 system('plink --version')

@@ -10,7 +10,7 @@ do
     
     for feature in gene exon jxn tx
     do
-
+        
         SHORT="compute_weights_${region}_${feature}"
 
         # Construct shell file
@@ -36,6 +36,9 @@ echo "Task id: \${TASK_ID}"
 ## Load dependencies
 module load plink/1.90b6.6
 module load fusion_twas/github
+
+## List current modules
+module list
 
 ## Compute weights for the given region/feature pair
 Rscript compute_weights.R -r ${region} -f ${feature} -c 1 -p TRUE
