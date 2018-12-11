@@ -8,8 +8,8 @@ mkdir -p logs
 for region in HIPPO DLPFC
 do
     
-    for feature in gene exon jxn tx
-    #for feature in gene
+    # for feature in gene exon jxn tx
+    for feature in gene
     do
         
         SHORT="compute_weights_${region}_${feature}"
@@ -21,8 +21,8 @@ do
 #$ -cwd
 #$ -l bluejay,mem_free=50G,h_vmem=50G,h_fsize=100G
 #$ -N ${SHORT}
-#$ -o ./logs/${SHORT}_pgconly.txt
-#$ -e ./logs/${SHORT}_pcgonly.txt
+#$ -o ./logs/${SHORT}.txt
+#$ -e ./logs/${SHORT}.txt
 #$ -m e
 
 echo "**** Job starts ****"
@@ -42,8 +42,8 @@ module load fusion_twas/github
 module list
 
 ## Compute weights for the given region/feature pair
-Rscript compute_weights.R -r ${region} -f ${feature} -c 1 -p TRUE
-# Rscript compute_weights.R -r ${region} -f ${feature} -c 1 -p FALSE
+# Rscript compute_weights.R -r ${region} -f ${feature} -c 1 -p TRUE
+Rscript compute_weights.R -r ${region} -f ${feature} -c 1 -p FALSE
 
 echo "**** Job ends ****"
 date
