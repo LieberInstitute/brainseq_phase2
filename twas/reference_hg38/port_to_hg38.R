@@ -47,13 +47,15 @@ mapply(function(ref_bim, bim_file, chr) {
     new <- ref_bim[m, ]
     new$basepair <- our$basepair[m]
     
+    message(paste(Sys.time(), 'Write new filtered bim file for chr', chr))
+    fwrite(new,
+        file = bim_file,
+        sep = '\t', col.names = FALSE
+    )
+    return(file.exists(bim_file))
+    
 }, ldref_bim, their_bims, gsub('1000G.EUR.|.bim', '', names(their_bims)))
 
-message(paste(Sys.time(), 'Write new filtered bim file for chr'))
-fwrite(bsp2_bim_filt,
-    file = 'LIBD_Brain_Illumina_h650_1M_Omni5M_Omni2pt5_Macrogen_imputed_run2_LDfiltered.bim',
-    sep = '\t', col.names = FALSE
-)
 
 ## Reproducibility information
 print('Reproducibility information:')
