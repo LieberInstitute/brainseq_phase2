@@ -29,6 +29,8 @@ if (!is.null(opt$help)) {
 ## For testing
 if(FALSE) {
     opt <- list(region = 'HIPPO', feature = 'gene', cores = 1, 'pgconly' = TRUE)
+    opt <- list(region = 'HIPPO', feature = 'gene', cores = 1, 'pgconly' = FALSE)
+    opt <- list(region = 'DLPFC', feature = 'gene', cores = 1, 'pgconly' = FALSE)
     # feat = opt$feature; reg = opt$reg
 }
 
@@ -154,6 +156,9 @@ stopifnot(nrow(rse) == length(rse_window))
 print('Final RSE feature dimensions:')
 print(dim(rse))
 
+message(paste(Sys.time(), 'saving the subsetted rse file for later at', rse_file))
+save(rse, file = file.path(opt$region, opt$feature, 'subsetted_rse.Rdata'))
+
 ## Subset to features
 setwd(file.path(opt$region, opt$feature))
 dir.create('snp_files', showWarnings = FALSE)
@@ -217,7 +222,7 @@ output_status <- sapply(seq_len(nrow(rse)), function(i) {
     ## Just tested the 5th one with hsq_p 0.9 and it works
     # '--models top1,blump,lasso,enet --noclean TRUE --hsq_p 0.9'
     
-    return(file.exists(out_file))
+    return(file.exists(paste0(out_file, '.wgt.RDat')))
 })
 
 message('*******************************************************************************')
@@ -225,8 +230,31 @@ message(paste(Sys.time(), 'summary output status (TRUE means that there is a fil
 table(output_status)
 
 message(paste(Sys.time(), 'saving the output_status.Rdata file'))
+names(output_status) <- paste0(opt$feature, '_', seq_len(nrow(rse)))
 save(output_status, file = 'output_status.Rdata')
 
+message(paste(Sys.time(), 'creating the wgt profile files'))
+rdat_files <- dir('out_files', '.wgt.RDat', full.names = TRUE)
+stopifnot(length(rdat_files) == sum(output_status))
+
+wglist <- paste0(opt$region, '_', opt$feature, '.list')
+write.table(rdat_files, file = wglist, row.names = FALSE, col.names = FALSE, quote = FALSE)
+system(paste0('Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/utils/FUSION.profile_wgt.R ', wglist, ' > ', opt$region, '_', opt$feature, '.profile.err 2>&1'))
+## Rename the wglist_summary.txt file to keep the naming convention consistent
+system(paste0('mv wglist_summary.txt ', opt$region, '_', opt$feature, '.profile'))
+
+message(paste(Sys.time(), 'creating the .pos file'))
+pos_info <- data.frame(
+    'WGT' = rdat_files,
+    'ID' = rowRanges(rse)$Symbol[output_status],
+    'CHR' = seqnames(rowRanges(rse)[output_status]),
+    'P0' = start(rowRanges(rse[output_status])),
+    'P1' = end(rowRanges(rse[output_status])),
+    stringsAsFactors = FALSE
+)
+pos_info$ID[pos_info$ID == ''] <- NA
+write.table(pos_info, file = paste0(opt$region, '_', opt$feature, '.pos'), row.names = FALSE, col.names = TRUE, quote = FALSE)
+save(pos_info, file = 'pos_info.Rdata')
 
 ## Reproducibility information
 print('Reproducibility information:')
