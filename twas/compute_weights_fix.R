@@ -8,7 +8,7 @@ library('getopt')
 ## Fix previous files
 for(reg in c('DLPFC', 'HIPPO')) {
     for (feat in c('gene', 'exon', 'jxn', 'tx')) {
-        # for(feat in 'gene')
+        # for(feat in 'gene') {
         print(paste(reg, '-', feat))
         
         opt <- list(region = reg, feature = feat, cores = 1, 'pgconly' = TRUE)
