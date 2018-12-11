@@ -38,7 +38,7 @@ stopifnot(opt$region %in% c('HIPPO', 'DLPFC'))
 stopifnot(opt$feature %in% c('gene', 'exon', 'jxn', 'tx'))
 
 dir.create(opt$region, showWarnings = FALSE)
-dir.create(file.path(opt$region, opt$feature), showWarnings = FALSE)
+dir.create(file.path(opt$region, paste0(opt$feature, ifelse(opt$pgconly, '_pgconly', ''))), showWarnings = FALSE)
 
 load_rse <- function(feat, reg) {
     message(paste(Sys.time(), 'loading expression data'))
@@ -98,7 +98,7 @@ load_rse <- function(feat, reg) {
     return(rse)
 }
 
-rse_file <- file.path(opt$region, opt$feature, 'working_rse.Rdata')
+rse_file <- file.path(opt$region, paste0(opt$feature, ifelse(opt$pgconly, '_pgconly', '')), 'working_rse.Rdata')
 if(!file.exists(rse_file)) {
     rse <- load_rse(opt$feature, opt$region)
     message(paste(Sys.time(), 'saving the rse file for later at', rse_file))
@@ -156,8 +156,9 @@ stopifnot(nrow(rse) == length(rse_window))
 print('Final RSE feature dimensions:')
 print(dim(rse))
 
+rse_file <- file.path(opt$region, paste0(opt$feature, ifelse(opt$pgconly, '_pgconly', '')), 'subsetted_rse.Rdata')
 message(paste(Sys.time(), 'saving the subsetted rse file for later at', rse_file))
-save(rse, file = file.path(opt$region, opt$feature, 'subsetted_rse.Rdata'))
+save(rse, file = rse_file)
 
 ## Subset to features
 setwd(file.path(opt$region, paste0(opt$feature, ifelse(opt$pgconly, '_pgconly', ''))))
@@ -244,14 +245,26 @@ system(paste0('Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/u
 system(paste0('mv wglist_summary.txt ', opt$region, '_', opt$feature, '.profile'))
 
 message(paste(Sys.time(), 'creating the .pos file'))
+if(opt$feature %in% c('gene', 'exon')) {
+    var <- 'gencodeID'
+    # vars <- 'Symbol'
+} else if (opt$feature == 'jxn') {
+    var <- 'gencodeGeneID'
+    # vars <- 'Symbol'
+} else {
+    var <- 'gene_id'
+    # vars <- 'gene_name'
+}
+
 pos_info <- data.frame(
     'WGT' = rdat_files,
-    'ID' = rowRanges(rse)$Symbol[output_status],
-    'CHR' = seqnames(rowRanges(rse)[output_status]),
-    'P0' = start(rowRanges(rse[output_status])),
+    'ID' = mcols(rowRanges(rse))[, var][output_status],
+    'CHR' = gsub('chr', '', seqnames(rowRanges(rse)[output_status])),
+    'P0' = start(rowRanges(rse[output_status])), 
     'P1' = end(rowRanges(rse[output_status])),
     stringsAsFactors = FALSE
 )
+sapply(pos_info, function(x) sum(is.na(x)))
 pos_info$ID[pos_info$ID == ''] <- NA
 write.table(pos_info, file = paste0(opt$region, '_', opt$feature, '.pos'), row.names = FALSE, col.names = TRUE, quote = FALSE)
 save(pos_info, file = 'pos_info.Rdata')
@@ -265,3 +278,4 @@ session_info()
 
 message('-- plink version information --')
 system('plink --version')
+
