@@ -160,7 +160,7 @@ message(paste(Sys.time(), 'saving the subsetted rse file for later at', rse_file
 save(rse, file = file.path(opt$region, opt$feature, 'subsetted_rse.Rdata'))
 
 ## Subset to features
-setwd(file.path(opt$region, opt$feature))
+setwd(file.path(opt$region, paste0(opt$feature, ifelse(opt$pgconly, '_pgconly', ''))))
 dir.create('snp_files', showWarnings = FALSE)
 dir.create('bim_files', showWarnings = FALSE)
 dir.create('tmp_files', showWarnings = FALSE)
