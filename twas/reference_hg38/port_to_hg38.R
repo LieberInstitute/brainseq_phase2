@@ -50,6 +50,9 @@ newbims_exist <- mapply(function(ref_bim, bim_file, chr) {
     # length(m)
   #   table(is.na(m2))
   #   sum(m)
+  
+  x <- ref_bim$snp[m] %in% ref_bim$snp[m2]
+  all(x)
     
     ## Write the list of snps that do show up in our data
     filt_snps <- paste0('1000G.EUR.', chr, '.snps.txt')
