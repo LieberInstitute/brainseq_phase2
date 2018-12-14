@@ -40,23 +40,9 @@ newbims_exist <- mapply(function(ref_bim, bim_file, chr) {
     our <- snpMap[.(ref_bim$chr, ref_bim$basepair)]
     m <- !is.na(our$pos_hg38)
     
-    ## Might not be needed
-    ## since I was original doing ref_bim$snp[m]
-    ## Then I added m2
-    ## with (our, ...)
-    ## instead of (our[m, ])
-    ## anyhow, doesn't matter now
-    m2 <- match( with(our[m, ], paste0(chr, '-', basepair)), with(ref_bim, paste0(chr, '-', basepair)))
-    # length(m)
-  #   table(is.na(m2))
-  #   sum(m)
-  
-  x <- ref_bim$snp[m] %in% ref_bim$snp[m2]
-  all(x)
-    
     ## Write the list of snps that do show up in our data
     filt_snps <- paste0('1000G.EUR.', chr, '.snps.txt')
-    fwrite(as.data.frame(ref_bim$snp[m2]),
+    fwrite(as.data.frame(ref_bim$snp[m]),
         file = filt_snps,
         sep = '\t', col.names = FALSE
     )   
