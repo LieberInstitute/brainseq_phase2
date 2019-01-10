@@ -60,11 +60,15 @@ newbims_exist <- mapply(function(ref_bim, bim_file, chr) {
         col.names = c('chr', 'snp', 'position', 'basepair', 'allele1', 'allele2'),
         colClasses = c('character', 'character', 'numeric', 'integer', 'character', 'character')
     )
+    ## Keep a copy of the original one
+    system(paste0('mv ', newbfile_bim, ' ', newbfile_bim, '.original'))
     
     ## Complete matching code later
     m_final <- match(with(final_bim, paste0(chr, '-', basepair)), with(our, paste0(chr, '-', basepair)))
     stopifnot(!any(is.na(m_final)))
     final_bim$basepair <- our$pos_hg38[m_final]
+    ## Also use our snp names
+    final_bim$snp <- our$snp[m_final]
     
     message(paste(Sys.time(), 'Write new filtered bim file for chr', chr))
     fwrite(
@@ -80,8 +84,8 @@ newbims_exist <- mapply(function(ref_bim, bim_file, chr) {
 ## Last bit of the log:
 
 # *****************************************************
-# 2018-12-14 15:31:09 start processing chr 9
-# 2018-12-14 15:31:11 subsetting the original LDREF files with plink
+# 2019-01-10 16:29:16 start processing chr 9
+# 2019-01-10 16:29:17 subsetting the original LDREF files with plink
 # PLINK v1.90b6.6 64-bit (10 Oct 2018)           www.cog-genomics.org/plink/1.9/
 # (C) 2005-2018 Shaun Purcell, Christopher Chang   GNU General Public License v3
 # Logging to LDREF_hg38/1000G.EUR.9.log.
@@ -104,12 +108,55 @@ newbims_exist <- mapply(function(ref_bim, bim_file, chr) {
 # Note: No phenotypes present.
 # --make-bed to LDREF_hg38/1000G.EUR.9.bed + LDREF_hg38/1000G.EUR.9.bim +
 # LDREF_hg38/1000G.EUR.9.fam ... done.
-# 2018-12-14 15:31:12 read the new bim file
-# 2018-12-14 15:31:12 Write new filtered bim file for chr 9
+# 2019-01-10 16:29:17 read the new bim file
+# 2019-01-10 16:29:17 Write new filtered bim file for chr 9
 
 table(newbims_exist)
 # TRUE
 #   22
+
+## Read the original files to change the name of the PGC2 snps
+their_bims_hg38 <- dir('/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38', '.*bim.original$', full.names = TRUE)
+names(their_bims_hg38) <- dir('/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38', '.*bim.original$')
+
+ldref_bim_hg38 <- do.call(rbind, lapply(their_bims_hg38, function(input_bim) {
+    message(paste(Sys.time(), 'reading file', input_bim))
+    res <- fread(input_bim,
+        col.names = c('chr', 'snp', 'position', 'basepair', 'allele1', 'allele2'),
+        colClasses = c('character', 'character', 'numeric', 'integer', 'character', 'character')
+    )
+    #setkey(res, 'chr', 'basepair')
+    return(res)
+}))
+
+
+their_bims_hg38_ourname <- dir('/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38', '.*bim$', full.names = TRUE)
+names(their_bims_hg38_ourname) <- dir('/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38', '.*bim$')
+
+ldref_bim_hg38_ourname <- do.call(rbind, lapply(their_bims_hg38_ourname, function(input_bim) {
+    message(paste(Sys.time(), 'reading file', input_bim))
+    res <- fread(input_bim,
+        col.names = c('chr', 'snp', 'position', 'basepair', 'allele1', 'allele2'),
+        colClasses = c('character', 'character', 'numeric', 'integer', 'character', 'character')
+    )
+    #setkey(res, 'chr', 'basepair')
+    return(res)
+}))
+
+
+## Read PGC2 SNPs
+pgc2 <- fread('/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/pgc_scz2_sumstats/PGC2.SCZ.sumstats')
+m_in_hg38 <- match(pgc2$SNP, ldref_bim_hg38$snp)
+table(is.na(m_in_hg38))
+#  FALSE   TRUE
+# 967348 115666
+
+pgc2_filt <- pgc2[!is.na(m_in_hg38), ]
+pgc2_filt$SNP <- ldref_bim_hg38_ourname$snp[ m_in_hg38[ !is.na(m_in_hg38) ] ]
+
+## Save the PGC2 SNPs with hg38 positions and our SNP names
+fwrite(pgc2_filt, file = '/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/pgc_scz2_sumstats/PGC2.SCZ.sumstats_hg38_ourname', sep = '\t')
+
 
 ## Reproducibility information
 print('Reproducibility information:')
@@ -128,7 +175,7 @@ session_info()
 #  collate  en_US.UTF-8
 #  ctype    en_US.UTF-8
 #  tz       US/Eastern
-#  date     2018-12-14
+#  date     2019-01-10
 #
 # ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 #  package     * version date       lib source
@@ -147,13 +194,13 @@ session_info()
 #  gtable        0.2.0   2016-02-26 [2] CRAN (R 3.5.0)
 #  htmltools     0.3.6   2017-04-28 [2] CRAN (R 3.5.0)
 #  htmlwidgets   1.3     2018-09-30 [1] CRAN (R 3.5.1)
-#  httpuv        1.4.5   2018-07-19 [2] CRAN (R 3.5.1)
+#  httpuv        1.4.5.1 2018-12-18 [2] CRAN (R 3.5.1)
 #  later         0.7.5   2018-09-18 [2] CRAN (R 3.5.1)
 #  lattice       0.20-38 2018-11-04 [3] CRAN (R 3.5.1)
 #  lazyeval      0.2.1   2017-10-29 [2] CRAN (R 3.5.0)
 #  magrittr      1.5     2014-11-22 [1] CRAN (R 3.5.0)
 #  munsell       0.5.0   2018-06-12 [2] CRAN (R 3.5.0)
-#  pillar        1.3.0   2018-07-14 [1] CRAN (R 3.5.1)
+#  pillar        1.3.1   2018-12-15 [1] CRAN (R 3.5.1)
 #  pkgconfig     2.0.2   2018-08-16 [1] CRAN (R 3.5.1)
 #  plyr          1.8.4   2016-06-08 [2] CRAN (R 3.5.0)
 #  png           0.1-7   2013-12-03 [2] CRAN (R 3.5.0)
@@ -161,12 +208,12 @@ session_info()
 #  purrr         0.2.5   2018-05-29 [2] CRAN (R 3.5.0)
 #  R6            2.3.0   2018-10-04 [2] CRAN (R 3.5.1)
 #  Rcpp          1.0.0   2018-11-07 [1] CRAN (R 3.5.1)
-#  rlang         0.3.0.1 2018-10-25 [1] CRAN (R 3.5.1)
+#  rlang         0.3.1   2019-01-08 [1] CRAN (R 3.5.1)
 #  rmote       * 0.3.4   2018-05-02 [1] deltarho (R 3.5.0)
 #  scales        1.0.0   2018-08-09 [2] CRAN (R 3.5.1)
 #  servr         0.11    2018-10-23 [1] CRAN (R 3.5.1)
 #  sessioninfo * 1.1.1   2018-11-05 [1] CRAN (R 3.5.1)
-#  tibble        1.4.2   2018-01-22 [1] CRAN (R 3.5.0)
+#  tibble        2.0.0   2019-01-04 [1] CRAN (R 3.5.1)
 #  tidyselect    0.2.5   2018-10-11 [2] CRAN (R 3.5.1)
 #  withr         2.1.2   2018-03-15 [2] CRAN (R 3.5.0)
 #  xfun          0.4     2018-10-23 [1] CRAN (R 3.5.1)

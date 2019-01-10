@@ -1,5 +1,15 @@
 module load fusion_twas/github
 
+##
+Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.assoc_test.R \
+    --sumstats /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/pgc_scz2_sumstats/PGC2.SCZ.sumstats_hg38_ourname \
+    --weights /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/HIPPO/gene/HIPPO_gene.pos \
+    --weights_dir /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/HIPPO/gene \
+    --ref_ld_chr /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38/1000G.EUR. \
+    --chr 22 \
+    --out test_PGC2.SCZ.22.dat
+    
+
 ## Original goal
 Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.assoc_test.R \
     --sumstats /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/pgc_scz2_sumstats/PGC2.SCZ.sumstats \
