@@ -32,7 +32,7 @@ if(FALSE) {
     opt <- list(region = 'HIPPO', feature = 'gene', cores = 1, 'pgconly' = TRUE)
     opt <- list(region = 'HIPPO', feature = 'gene', cores = 1, 'pgconly' = FALSE)
     opt <- list(region = 'DLPFC', feature = 'gene', cores = 1, 'pgconly' = FALSE)
-    opt <- list(region = 'HIPPO', feature = 'gene', cores = 4, 'pgconly' = FALSE)
+    opt <- list(region = 'HIPPO', feature = 'gene', cores = 3, 'pgconly' = FALSE)
     # feat = opt$feature; reg = opt$reg
 }
 
