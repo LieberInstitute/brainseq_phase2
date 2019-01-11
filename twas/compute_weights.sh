@@ -19,8 +19,8 @@ do
         cat > .${SHORT}.sh <<EOF
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=50G,h_vmem=50G,h_fsize=100G
-#$ -pe local 4
+#$ -l mem_free=60G,h_vmem=60G,h_fsize=100G
+#$ -pe local 3
 #$ -N ${SHORT}
 #$ -o ./logs/${SHORT}.txt
 #$ -e ./logs/${SHORT}.txt
@@ -44,7 +44,7 @@ module list
 
 ## Compute weights for the given region/feature pair
 # Rscript compute_weights.R -r ${region} -f ${feature} -c 1 -p TRUE
-Rscript compute_weights.R -r ${region} -f ${feature} -c 4 -p FALSE
+Rscript compute_weights.R -r ${region} -f ${feature} -c 3 -p FALSE
 
 echo "**** Job ends ****"
 date
