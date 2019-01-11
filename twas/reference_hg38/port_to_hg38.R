@@ -157,7 +157,6 @@ pgc2_filt$SNP <- ldref_bim_hg38_ourname$snp[ m_in_hg38[ !is.na(m_in_hg38) ] ]
 ## Save the PGC2 SNPs with hg38 positions and our SNP names
 fwrite(pgc2_filt, file = '/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/pgc_scz2_sumstats/PGC2.SCZ.sumstats_hg38_ourname', sep = '\t')
 
-
 ## Reproducibility information
 print('Reproducibility information:')
 Sys.time()

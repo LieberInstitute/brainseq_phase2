@@ -7,24 +7,38 @@ library('data.table')
 library('SummarizedExperiment')
 library('sessioninfo')
 
+## get the snpMap that contains the hg38 positions
+message(paste(Sys.time(), 'loading BSP2 genotype data'))
+load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n551.rda', verbose = TRUE)
+
+colnames(snpMap) <- tolower(colnames(snpMap))
+colnames(snpMap)[colnames(snpMap) == 'pos'] <- 'basepair'
+snpMap <- data.table(snpMap)
+setkey(snpMap, 'chr', 'basepair')
+
 
 ## Get their LD reference data
 ## Following the instructions at http://gusevlab.org/projects/fusion/#computing-your-own-functional-weights
-message(paste(Sys.time(), 'Downloading LD reference data'))
-system('wget https://data.broadinstitute.org/alkesgroup/FUSION/LDREF.tar.bz2')
-# http://how-to.wikia.com/wiki/How_to_untar_a_tar_file_or_gzip-bz2_tar_file
-system('tar xvjf LDREF.tar.bz2')
+# message(paste(Sys.time(), 'Downloading LD reference data'))
+# system('wget https://data.broadinstitute.org/alkesgroup/FUSION/LDREF.tar.bz2')
+# # http://how-to.wikia.com/wiki/How_to_untar_a_tar_file_or_gzip-bz2_tar_file
+# system('tar xvjf LDREF.tar.bz2')
+#
+# ## There's 22 bim files
+# dir('LDREF', '.*bim$')
+# stopifnot(length(dir('LDREF', '.*bim$')) == 22)
+#
+# ## Looks like it's one per chromosome
+# system('head LDREF/1000G.EUR.1.bim')
+# system('head LDREF/1000G.EUR.2.bim')
+#
+# their_bims <- dir('LDREF', '.*bim$', full.names = TRUE)
+# names(their_bims) <- dir('LDREF', '.*bim$')
 
-## There's 22 bim files
-dir('LDREF', '.*bim$')
-stopifnot(length(dir('LDREF', '.*bim$')) == 22)
-
-## Looks like it's one per chromosome
-system('head LDREF/1000G.EUR.1.bim')
-system('head LDREF/1000G.EUR.2.bim')
-
-their_bims <- dir('LDREF', '.*bim$', full.names = TRUE)
-names(their_bims) <- dir('LDREF', '.*bim$')
+## Use their LD reference already ported to hg38 (well, hg19 coordinates but subsetted to those present in hg38)
+their_bims_hg38 <- dir('/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38', '.*bim.original$', full.names = TRUE)
+names(their_bims_hg38) <- dir('/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38', '.*bim.original$')
+their_bims <- their_bims_hg38
 
 ldref_bim <- do.call(rbind, lapply(their_bims, function(input_bim) {
     message(paste(Sys.time(), 'reading file', input_bim))
@@ -51,19 +65,36 @@ bsp2_bim_filt <- bsp2_bim[.(ldref_bim$chr, ldref_bim$basepair)]
 # This is where we realized that we need to drop the biallelic SNPs
 paste('Out of the original', nrow(ldref_bim), 'SNPs,', nrow(bsp2_bim_filt), 'are present in BSP2. That is,', round(nrow(bsp2_bim_filt) / nrow(ldref_bim) * 100, 2), 'percent.')
 
-pairs <- with(bsp2_bim_filt, paste0(chr, '-', basepair))
+pairs <- with(bsp2_bim_filt, paste(chr, basepair, sep = '_'))
 table(duplicated(pairs))
+#   FALSE    TRUE
+# 1022547      20
 options(width = 120)
 bsp2_bim_filt[pairs %in% pairs[which(duplicated(pairs))], ]
-# [1] 54  6
 dim(bsp2_bim_filt[pairs %in% pairs[which(duplicated(pairs))], ])
-# [1] 1190349       6
+# [1] 39  6 ### Originally (when using hg19 and their snp names): # [1] 54  6
+
 dim(bsp2_bim_filt)
+# [1] 1022567       6 ### Originally: # [1] 1190349       6
 
 ## Drop these duplicated ones
 bsp2_bim_filt <- bsp2_bim_filt[!pairs %in% pairs[which(duplicated(pairs))], ]
 dim(bsp2_bim_filt)
-# [1] 1190295       6
+# [1] 1022528       6 ### Originally: # [1] 1190295       6
+
+## Are they in our snpMap? Do they have hg38 positions?
+table(is.na(snpMap$pos_hg38))
+#   FALSE    TRUE
+# 7023286     574
+snpMap <- snpMap[!is.na(snpMap$pos_hg38), ]
+
+m_hg38 <- match(with(bsp2_bim_filt, paste(chr, basepair, sep = '-')), with(snpMap, paste(chr, basepair, sep = '-')))
+table(is.na(m_hg38))
+#   FALSE    TRUE
+# 1015243    7285
+bsp2_bim_filt <- bsp2_bim_filt[!is.na(m_hg38), ]
+dim(bsp2_bim_filt)
+# [1] 1015243       6
 
 message(paste(Sys.time(), 'Write new filtered bim & filtered SNP info files'))
 fwrite(bsp2_bim_filt,
@@ -90,6 +121,7 @@ rse_gene = rse_gene[,keepInd]
 
 ## Write a new fam file per brain region
 for(region in unique(colData(rse_gene)$Region)) {
+    # region <- 'HIPPO'
     message(paste(Sys.time(), 'processing', region))
     samp_file <- paste0('samples_to_extract_', region, '.txt')
     fwrite(
@@ -110,6 +142,30 @@ for(region in unique(colData(rse_gene)$Region)) {
     	"--keep", samp_file, "--make-bed --out", 
     	newbfile, " --memory 225000 --biallelic-only"))
     
+    ## Change to hg38 positions
+    
+    ## Read the new file
+    message(paste(Sys.time(), 'read the new bim file'))
+    final_bim <- fread(paste0(newbfile, '.bim'),
+        col.names = c('chr', 'snp', 'position', 'basepair', 'allele1', 'allele2'),
+        colClasses = c('character', 'character', 'numeric', 'integer', 'character', 'character')
+    )
+    ## Keep a copy of the original one
+    system(paste0('mv ', newbfile, '.bim ', newbfile, '.bim.original'))
+    
+    ## Complete matching code later
+    m_final <- match(with(final_bim, paste(chr, basepair, sep = '-')), with(snpMap, paste(chr, basepair, sep = '-')))
+    stopifnot(!any(is.na(m_final)))
+    final_bim$basepair <- snpMap$pos_hg38[m_final]
+    ## Also use our snp names
+    final_bim$snp <- snpMap$snp[m_final]
+    
+    message(paste(Sys.time(), 'Write new filtered bim file for region', region))
+    fwrite(
+        final_bim,
+        file = paste0(newbfile, '.bim'),
+        sep = '\t', col.names = FALSE
+    )
 }
 
 
@@ -117,7 +173,7 @@ for(region in unique(colData(rse_gene)$Region)) {
 ## file since --biallelic-only was taking second priority to the
 ## --extract list
 hippo_bim <- fread(
-    paste0(newbfile, '.bim'),
+    paste0(newbfile, '.bim.original'),
     col.names = c('chr', 'snp', 'position', 'basepair', 'allele1', 'allele2')
 )
 setkey(hippo_bim, 'chr', 'basepair')
@@ -126,15 +182,19 @@ dim(hippo_bim)
 dim(ldref_bim)
 dim(hippo_bim[.(ldref_bim$chr, ldref_bim$basepair)])
 dim(ldref_bim[.(hippo_bim$chr, hippo_bim$basepair)])
-pairs_hippo <- with(hippo_bim, paste0(chr, '-', basepair))
-pairs_ldref <- with(ldref_bim, paste0(chr, '-', basepair))
+pairs_hippo <- with(hippo_bim, paste(chr, basepair, sep = '-'))
+pairs_ldref <- with(ldref_bim, paste(chr, basepair, sep = '-'))
 length(unique(pairs_ldref))
 length(unique(pairs_hippo))
 
 m <- match(pairs_ldref, pairs_hippo)
 table(is.na(m))
+#   FALSE    TRUE
+# 1015243    7304
 m2 <- match(pairs_hippo, pairs_ldref)
 table(is.na(m2))
+#   FALSE
+# 1015243
 gr_ldref <- GRanges(seqnames = ldref_bim$chr, IRanges(start = ldref_bim$basepair, width = 1))
 gr_hippo <- GRanges(seqnames = hippo_bim$chr, IRanges(start = hippo_bim$basepair, width = 1))
 table(countOverlaps(gr_hippo, gr_ldref))
@@ -144,6 +204,9 @@ table(countOverlaps(gr_hippo, gr_ldref))
 ## Now after dropping duplicated snps:
 #       1
 # 1181974
+## After moving to hg38:
+#       1
+# 1015243
 table(countOverlaps(gr_ldref, gr_hippo))
 ## Originally:
 #    0       1       2       3
@@ -151,6 +214,9 @@ table(countOverlaps(gr_ldref, gr_hippo))
 ## Now after dropping duplicated snps:
 #    0       1
 # 8347 1181974
+## After moving to hg38:
+#    0       1
+# 7304 1015243
 
 
 hippo_bim[subjectHits(findOverlaps(gr_ldref[countOverlaps(gr_ldref, gr_hippo) > 1], gr_hippo)), ]

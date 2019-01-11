@@ -8,6 +8,7 @@ library('jaffelab')
 library('data.table')
 library('sessioninfo')
 library('getopt')
+library('BiocParallel')
 
 ## Specify parameters
 spec <- matrix(c(
@@ -31,6 +32,7 @@ if(FALSE) {
     opt <- list(region = 'HIPPO', feature = 'gene', cores = 1, 'pgconly' = TRUE)
     opt <- list(region = 'HIPPO', feature = 'gene', cores = 1, 'pgconly' = FALSE)
     opt <- list(region = 'DLPFC', feature = 'gene', cores = 1, 'pgconly' = FALSE)
+    opt <- list(region = 'HIPPO', feature = 'gene', cores = 6, 'pgconly' = FALSE)
     # feat = opt$feature; reg = opt$reg
 }
 
@@ -130,12 +132,24 @@ rse_window <- resize(rowRanges(rse), width(rowRanges(rse)) + 500000 * 2, fix = '
 
 if(opt$pgconly) {
     load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/pgc_scz2/scz2_anneal_gr_hg19.Rdata', verbose = TRUE)
+
+    bim_hg19 <- fread(
+        paste0(bim_file, '.bim.original'),
+        col.names = c('chr', 'snp', 'position', 'basepair', 'allele1', 'allele2')
+    )
+    bim_gr_hg19 <- GRanges(
+        paste0('chr', bim_hg19$chr),
+        IRanges(bim_hg19$basepair, width = 1)
+    )
+    mcols(bim_gr_hg19) <- bim_hg19[, - c('chr', 'basepair')]
     
     ## Which of the best snps did we actually observe?
-    table(countOverlaps(scz2_anneal_gr_hg19, bim_gr))
+    table(countOverlaps(scz2_anneal_gr_hg19, bim_gr_hg19))
     #  0  1
     # 77 31
-    scz2_anneal_gr_hg19 <- scz2_anneal_gr_hg19[countOverlaps(scz2_anneal_gr_hg19, bim_gr) > 0]
+    scz2_anneal_gr_hg19 <- scz2_anneal_gr_hg19[countOverlaps(scz2_anneal_gr_hg19, bim_gr_hg19) > 0]
+    
+    ## Would need to fix this part for this to work (since the rse coordinates are in hg38...)
     
     ## Keep just the feature windows that include the PCG SNPs that we observed
     keep_feat <- unique(subjectHits(findOverlaps(scz2_anneal_gr_hg19, rse_window)))
@@ -149,6 +163,7 @@ if(opt$pgconly) {
 
 ## Keep only those feature windows with some SNPs nearby
 keep_feat <- which(countOverlaps(rse_window, bim_gr) > 0)
+message(paste(Sys.time(), 'number of features kept:', length(keep_feat)))
 rse <- rse[keep_feat, ]
 rse_window <- rse_window[keep_feat, ]
 stopifnot(nrow(rse) == length(rse_window))
@@ -168,9 +183,9 @@ dir.create('tmp_files', showWarnings = FALSE)
 dir.create('out_files', showWarnings = FALSE)
 
 ## For testing
-if(FALSE) rse <- rse[1:5, ]
+if(FALSE) rse <- rse[1:20, ]
 
-output_status <- sapply(seq_len(nrow(rse)), function(i) {
+output_status <- bplapply(seq_len(nrow(rse)), function(i) {
     
     message('*******************************************************************************')
     message(paste(Sys.time(), 'processing i =', i, 'corresponding to feature', rownames(rse)[i]))
@@ -224,7 +239,8 @@ output_status <- sapply(seq_len(nrow(rse)), function(i) {
     # '--models top1,blump,lasso,enet --noclean TRUE --hsq_p 0.9'
     
     return(file.exists(paste0(out_file, '.wgt.RDat')))
-})
+}, BPPARAM = MulticoreParam(workers = opt$cores))
+output_status <- unlist(output_status)
 
 message('*******************************************************************************')
 message(paste(Sys.time(), 'summary output status (TRUE means that there is a file)'))
