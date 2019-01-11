@@ -19,7 +19,7 @@ do
         cat > .${SHORT}.sh <<EOF
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=60G,h_vmem=60G,h_fsize=100G
+#$ -l mem_free=70G,h_vmem=70G,h_fsize=100G
 #$ -pe local 3
 #$ -N ${SHORT}
 #$ -o ./logs/${SHORT}.txt
