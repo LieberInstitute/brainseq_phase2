@@ -272,12 +272,18 @@ if(opt$feature %in% c('gene', 'exon')) {
     # vars <- 'gene_name'
 }
 
+pos_match <- match(gsub('out_files/|\\.wgt\\.RDat', '', rdat_files), names(output_status))
+stopifnot(all(!is.na(pos_match)))
+
+stopifnot(identical(gsub('out_files/|\\.wgt\\.RDat', '', rdat_files), names(output_status)[pos_match]))
+
+
 pos_info <- data.frame(
     'WGT' = rdat_files,
-    'ID' = mcols(rowRanges(rse))[, var][output_status],
-    'CHR' = gsub('chr', '', seqnames(rowRanges(rse)[output_status])),
-    'P0' = start(rowRanges(rse[output_status])), 
-    'P1' = end(rowRanges(rse[output_status])),
+    'ID' = mcols(rowRanges(rse))[, var][pos_match],
+    'CHR' = gsub('chr', '', seqnames(rowRanges(rse)[pos_match])),
+    'P0' = start(rowRanges(rse[pos_match])), 
+    'P1' = end(rowRanges(rse[pos_match])),
     stringsAsFactors = FALSE
 )
 sapply(pos_info, function(x) sum(is.na(x)))
