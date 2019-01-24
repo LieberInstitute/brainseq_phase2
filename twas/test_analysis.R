@@ -1,5 +1,55 @@
 module load fusion_twas/github
 
+
+## Using summary stats from http://walters.psycm.cf.ac.uk/
+
+## Choose chr
+chr="22"
+mkdir -p test_psycm
+
+## gotta debug chr 3
+
+for chr in {1..22}
+do
+    echo "*************************"
+    echo ""
+    echo "processing chromosome ${chr}"
+    date
+    echo ""
+
+## Create summarized analysis
+Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.assoc_test.R \
+    --sumstats /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/psycm/clozuk_pgc2.meta.reformatted.sumstats_hg38_ourname \
+    --weights /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/HIPPO/gene/HIPPO_gene.pos \
+    --weights_dir /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/HIPPO/gene \
+    --ref_ld_chr /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38/1000G.EUR. \
+    --chr ${chr} \
+    --out test_psycm/test_psycm.${chr}.dat
+    
+    echo ""
+    echo "making plots for chromosome ${chr}"
+    date
+    echo ""
+
+## companion plotting step
+Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.post_process.R \
+    --sumstats /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/psycm/clozuk_pgc2.meta.reformatted.sumstats_hg38_ourname \
+    --input test_psycm/test_psycm.${chr}.dat \
+    --out test_psycm/test_psycm.${chr}.analysis \
+    --ref_ld_chr /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38/1000G.EUR. \
+    --chr ${chr} \
+    --plot --locus_win 100000 --verbose 2 --plot_individual --plot_eqtl --plot_corr
+
+done
+
+
+
+
+
+
+
+
+
 ## Choose chr
 chr="21"
 

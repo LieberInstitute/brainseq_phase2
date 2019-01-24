@@ -3,4 +3,5 @@ hg19_*
 test_PGC2
 DLPFC
 HIPPO
-
+ldsc
+test_psycm

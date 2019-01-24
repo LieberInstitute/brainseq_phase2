@@ -286,7 +286,7 @@ print('Reproducibility information:')
 Sys.time()
 proc.time()
 options(width = 120)
-# session_info()
+session_info()
 # ─ Session info ───────────────────────────────────────────────────────────────────────────────────────────────────────
 #  setting  value
 #  version  R version 3.5.0 Patched (2018-04-30 r74679)
