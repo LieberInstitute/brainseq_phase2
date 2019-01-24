@@ -1,3 +1,6 @@
 .compute*sh
 hg19_*
+test_PGC2
+DLPFC
+HIPPO
 
