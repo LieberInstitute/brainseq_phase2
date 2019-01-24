@@ -1,0 +1,44 @@
+*********************************************************************
+* LD Score Regression (LDSC)
+* Version 1.0.0
+* (C) 2014-2015 Brendan Bulik-Sullivan and Hilary Finucane
+* Broad Institute of MIT and Harvard / MIT Department of Mathematics
+* GNU General Public License v3
+*********************************************************************
+Call: 
+./munge_sumstats.py \
+--out clozuk_pgc2.meta.reformatted \
+--frq Freq.A1 \
+--N-con 64643.0 \
+--maf-min -0.1 \
+--N-cas 40675.0 \
+--sumstats clozuk_pgc2.meta.sumstats.txt 
+
+Interpreting column names as follows:
+Freq.A1:	Allele frequency
+A1:	Allele 1, interpreted as ref allele for signed sumstat.
+P:	p-Value
+A2:	Allele 2, interpreted as non-ref allele for signed sumstat.
+SNP:	Variant ID (e.g., rs number)
+OR:	Odds ratio (1 --> no effect; above 1 --> A1 is risk increasing)
+
+Reading sumstats from clozuk_pgc2.meta.sumstats.txt into memory 5000000 SNPs at a time.
+Read 8171061 SNPs from --sumstats file.
+Removed 0 SNPs with missing values.
+Removed 0 SNPs with INFO <= 0.9.
+Removed 0 SNPs with MAF <= -0.1.
+Removed 0 SNPs with out-of-bounds p-values.
+Removed 1670587 variants that were not SNPs or were strand-ambiguous.
+6500474 SNPs remain.
+Removed 0 SNPs with duplicated rs numbers (6500474 SNPs remain).
+Median value of OR was 0.99957, which seems sensible.
+Writing summary statistics for 6500474 SNPs (6500474 with nonmissing beta) to clozuk_pgc2.meta.reformatted.sumstats.gz.
+
+Metadata:
+Mean chi^2 = 1.867
+Lambda GC = 1.582
+Max chi^2 = 194.697
+15178 Genome-wide significant SNPs (some may have been removed by filtering).
+
+Conversion finished at Thu Jan 24 10:58:27 2019
+Total time elapsed: 3.0m:7.52s
