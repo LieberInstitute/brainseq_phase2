@@ -192,7 +192,7 @@ dir.create('out_files', showWarnings = FALSE)
 
 ## For testing
 if(FALSE) rse <- rse[1:20, ]
-    rse <- rse[1:20, ]
+    rse <- rse[1:1000, ]
 
 ## Work in parallel
 output_status <- bpmapply(function(i, feat_id) {

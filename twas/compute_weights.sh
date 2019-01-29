@@ -14,12 +14,15 @@ do
     for feature in gene exon jxn tx
     do
         echo "$feature"
-        if [ "${feature}" == "exon" ] 
+        if [ "${feature}" == "gene" ] 
+        then
+            COREMEM=4
+        elif [ "${feature}" == "exon" ] 
         then
             COREMEM=25
         elif [ "$feature" == 'jxn' ]
         then
-            COREMEM=21
+            COREMEM=19
         else
             COREMEM=5
         fi
