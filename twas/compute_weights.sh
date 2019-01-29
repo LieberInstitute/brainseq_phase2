@@ -5,7 +5,7 @@
 
 mkdir -p logs
 
-CORES=5
+CORES=10
 
 for region in HIPPO #DLPFC
 do
@@ -13,15 +13,25 @@ do
     # for feature in gene exon jxn tx
     for feature in gene exon jxn tx
     do
+        echo "$feature"
+        if [ "${feature}" == "exon" ] 
+        then
+            COREMEM=25
+        elif [ "$feature" == 'jxn' ]
+        then
+            COREMEM=21
+        else
+            COREMEM=4
+        fi
         
         SHORT="compute_weights_${region}_${feature}"
 
         # Construct shell file
-        echo "Creating script for chromosome ${region} at the ${feature} level"
+        echo "Creating script for chromosome ${region} at the ${feature} level for ${CORES} cores with ${COREMEM}G of mem per core"
         cat > .${SHORT}.sh <<EOF
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=20G,h_vmem=20G,h_fsize=100G
+#$ -l mem_free=${COREMEM}G,h_vmem=${COREMEM}G,h_fsize=100G
 #$ -pe local ${CORES}
 #$ -N ${SHORT}
 #$ -o ./logs/${SHORT}.txt
