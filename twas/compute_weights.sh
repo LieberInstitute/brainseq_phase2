@@ -5,13 +5,13 @@
 
 mkdir -p logs
 
-CORES=6
+CORES=10
 
 for region in HIPPO #DLPFC
 do
     
     # for feature in gene exon jxn tx
-    for feature in gene #exon jxn tx
+    for feature in gene exon jxn tx
     do
         
         SHORT="compute_weights_${region}_${feature}"
@@ -21,7 +21,7 @@ do
         cat > .${SHORT}.sh <<EOF
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=25G,h_vmem=25G,h_fsize=100G
+#$ -l mem_free=4G,h_vmem=4G,h_fsize=100G
 #$ -pe local ${CORES}
 #$ -N ${SHORT}
 #$ -o ./logs/${SHORT}.txt
@@ -47,8 +47,6 @@ module list
 ## Compute weights for the given region/feature pair
 # Rscript compute_weights.R -r ${region} -f ${feature} -c 1 -p TRUE
 Rscript compute_weights.R -r ${region} -f ${feature} -c ${CORES} -p FALSE
-
-#Rscript compute_weights_part2.R -r ${region} -f ${feature} -c ${CORES} -p FALSE
 
 echo "**** Job ends ****"
 date
