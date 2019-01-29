@@ -10,6 +10,8 @@ library('sessioninfo')
 library('getopt')
 library('BiocParallel')
 
+## Without this, the memory use blows up
+## getDTthreads() will detect 64 threads ins ome cases here
 getDTthreads()
 setDTthreads(threads = 1)
 getDTthreads()
@@ -123,8 +125,7 @@ bim_file <- paste0(
 )
 bim <- fread(
     paste0(bim_file, '.bim'),
-    col.names = c('chr', 'snp', 'position', 'basepair', 'allele1', 'allele2'),
-    nThread = 1
+    col.names = c('chr', 'snp', 'position', 'basepair', 'allele1', 'allele2')
 )
 bim_gr <- GRanges(
     paste0('chr', bim$chr),
@@ -142,8 +143,7 @@ if(opt$pgconly) {
 
     bim_hg19 <- fread(
         paste0(bim_file, '.bim.original'),
-        col.names = c('chr', 'snp', 'position', 'basepair', 'allele1', 'allele2'),
-        nThread = 1
+        col.names = c('chr', 'snp', 'position', 'basepair', 'allele1', 'allele2')
     )
     bim_gr_hg19 <- GRanges(
         paste0('chr', bim_hg19$chr),
@@ -212,8 +212,7 @@ output_status <- bpmapply(function(i, feat_id) {
     fwrite(
         bim[j, 'snp'],
         file = filt_snp,
-        sep = '\t', col.names = FALSE,
-        nThread = 1
+        sep = '\t', col.names = FALSE
     )
     
     system(paste("plink --bfile", bim_file, '--extract', filt_snp, 
@@ -231,7 +230,7 @@ output_status <- bpmapply(function(i, feat_id) {
     filt_fam$phenotype <- assays(rse)$clean_expr[i, m]
     
     ## Ovewrite fam file (for the phenotype info)
-    fwrite(filt_fam, file = paste0(filt_bim, '.fam'), sep = ' ', col.names = FALSE, nThread = 1)    
+    fwrite(filt_fam, file = paste0(filt_bim, '.fam'), sep = ' ', col.names = FALSE)    
     
     
     ## Specify input/output files
