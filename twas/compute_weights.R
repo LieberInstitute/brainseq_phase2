@@ -194,8 +194,8 @@ dir.create('out_files', showWarnings = FALSE)
 if(FALSE) rse <- rse[1:20, ]
     rse <- rse[1:20, ]
 
-## Create the small files first
-output_small <- bpmapply(function(i, feat_id) {
+## Work in parallel
+output_status <- bpmapply(function(i, feat_id) {
     
     if(i == 1 || i %% 1000 == 0) {
         message('*******************************************************************************')
@@ -233,17 +233,88 @@ output_small <- bpmapply(function(i, feat_id) {
     ## Ovewrite fam file (for the phenotype info)
     fwrite(filt_fam, file = paste0(filt_bim, '.fam'), sep = ' ', col.names = FALSE, nThread = 1)    
     
-    file.exists(paste0(filt_bim, '.fam'))
+    
+    ## Specify input/output files
+    tmp_file <- file.path(getwd(), 'tmp_files', paste0(opt$feature, '_', i))
+    out_file <- file.path(getwd(), 'out_files', paste0(opt$feature, '_', i))
+    
+    system(paste(
+        'Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.compute_weights.R --bfile',
+        filt_bim,
+        '--tmp', tmp_file,
+        '--out', out_file,
+        '--models top1,blump,lasso,enet'
+        ## Using --noclean TRUE for testing right now
+        # '--models top1,blump,lasso,enet --noclean TRUE --hsq_p 0.9'
+    ))   
+    
+    ## Clean up
+    unlink(filt_snp)
+    system(paste0('rm ', filt_bim, '.*'))
+    
+    ## The first five genes (pgconly = TRUE) failed the hsq_p default of 0.01 https://github.com/gusevlab/fusion_twas/blob/master/FUSION.compute_weights.R#L26
+    ## Just tested the 5th one with hsq_p 0.9 and it works
+    # '--models top1,blump,lasso,enet --noclean TRUE --hsq_p 0.9'
+    
+    return(file.exists(paste0(out_file, '.wgt.RDat')))
     
 }, seq_len(nrow(rse)), rownames(rse), BPPARAM = MulticoreParam(workers = opt$cores), SIMPLIFY = FALSE)
-output_small <- unlist(output_small)
-table(output_small)
+output_status <- unlist(output_status)
 
-save(output_small, file = 'output_small.Rdata')
+message('*******************************************************************************')
+message(paste(Sys.time(), 'summary output status (TRUE means that there is a file)'))
+table(output_status)
 
-## Free memory up
-rse_row <- rowRanges(rse)
-save(rse_row, file = 'rse_row.Rdata')
+message(paste(Sys.time(), 'saving the output_status.Rdata file'))
+names(output_status) <- paste0(opt$feature, '_', seq_len(length(rowRanges(rse))))
+save(output_status, file = 'output_status.Rdata')
+
+message(paste(Sys.time(), 'creating the wgt profile files'))
+rdat_files <- dir('out_files', '.wgt.RDat', full.names = TRUE)
+stopifnot(length(rdat_files) == sum(output_status))
+
+wglist <- paste0(opt$region, '_', opt$feature, '.list')
+write.table(rdat_files, file = wglist, row.names = FALSE, col.names = FALSE, quote = FALSE)
+system(paste0('Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/utils/FUSION.profile_wgt.R ', wglist, ' > ', opt$region, '_', opt$feature, '.profile.err 2>&1'))
+## Rename the wglist_summary.txt file to keep the naming convention consistent
+system(paste0('mv wglist_summary.txt ', opt$region, '_', opt$feature, '.profile'))
+
+message(paste(Sys.time(), 'creating the .pos file'))
+if(opt$feature %in% c('gene', 'exon')) {
+    var <- 'gencodeID'
+    # vars <- 'Symbol'
+} else if (opt$feature == 'jxn') {
+    var <- 'gencodeGeneID'
+    # vars <- 'Symbol'
+} else {
+    var <- 'gene_id'
+    # vars <- 'gene_name'
+}
+
+pos_match <- match(gsub('out_files/|\\.wgt\\.RDat', '', rdat_files), names(output_status))
+stopifnot(all(!is.na(pos_match)))
+
+stopifnot(identical(gsub('out_files/|\\.wgt\\.RDat', '', rdat_files), names(output_status)[pos_match]))
+
+
+pos_info <- data.frame(
+    'WGT' = rdat_files,
+    ## use the feature id
+    'ID' = names(rowRanges(rse))[pos_match],
+    'CHR' = gsub('chr', '', seqnames(rowRanges(rse)[pos_match])),
+    'P0' = start(rowRanges(rse)[pos_match]), 
+    'P1' = end(rowRanges(rse)[pos_match]),
+    'geneID' = mcols(rowRanges(rse))[, var][pos_match],
+    stringsAsFactors = FALSE
+)
+sapply(pos_info, function(x) sum(is.na(x)))
+pos_info$ID[pos_info$ID == ''] <- NA
+pos_info$geneID[pos_info$geneID == ''] <- NA
+write.table(pos_info[, -which(colnames(pos_info) == 'geneID')],
+    file = paste0(opt$region, '_', opt$feature, '.pos'),
+    row.names = FALSE, col.names = TRUE, quote = FALSE
+)
+save(pos_info, file = 'pos_info.Rdata')
 
 ## Reproducibility information
 print('Reproducibility information:')

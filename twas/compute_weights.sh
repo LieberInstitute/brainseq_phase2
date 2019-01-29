@@ -11,7 +11,7 @@ for region in HIPPO #DLPFC
 do
     
     # for feature in gene exon jxn tx
-    for feature in gene exon jxn tx
+    for feature in gene #exon jxn tx
     do
         
         SHORT="compute_weights_${region}_${feature}"
@@ -48,7 +48,7 @@ module list
 # Rscript compute_weights.R -r ${region} -f ${feature} -c 1 -p TRUE
 Rscript compute_weights.R -r ${region} -f ${feature} -c ${CORES} -p FALSE
 
-Rscript compute_weights_part2.R -r ${region} -f ${feature} -c ${CORES} -p FALSE
+#Rscript compute_weights_part2.R -r ${region} -f ${feature} -c ${CORES} -p FALSE
 
 echo "**** Job ends ****"
 date
