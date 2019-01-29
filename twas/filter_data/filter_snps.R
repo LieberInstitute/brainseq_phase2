@@ -62,6 +62,11 @@ setkey(bsp2_bim, 'chr', 'basepair')
 message(paste(Sys.time(), 'Filtering our bim file'))
 bsp2_bim_filt <- bsp2_bim[.(ldref_bim$chr, ldref_bim$basepair)]
 
+table(is.na(bsp2_bim_filt$snp))
+#
+#   FALSE
+# 1022566
+
 # This is where we realized that we need to drop the biallelic SNPs
 paste('Out of the original', nrow(ldref_bim), 'SNPs,', nrow(bsp2_bim_filt), 'are present in BSP2. That is,', round(nrow(bsp2_bim_filt) / nrow(ldref_bim) * 100, 2), 'percent.')
 
@@ -90,11 +95,11 @@ snpMap <- snpMap[!is.na(snpMap$pos_hg38), ]
 
 m_hg38 <- match(with(bsp2_bim_filt, paste(chr, basepair, sep = '-')), with(snpMap, paste(chr, basepair, sep = '-')))
 table(is.na(m_hg38))
-#   FALSE    TRUE
-# 1015243    7285
+#   FALSE
+# 1022527
 bsp2_bim_filt <- bsp2_bim_filt[!is.na(m_hg38), ]
 dim(bsp2_bim_filt)
-# [1] 1015243       6
+# [1] 1022527       6
 
 message(paste(Sys.time(), 'Write new filtered bim & filtered SNP info files'))
 fwrite(bsp2_bim_filt,
@@ -190,11 +195,11 @@ length(unique(pairs_hippo))
 m <- match(pairs_ldref, pairs_hippo)
 table(is.na(m))
 #   FALSE    TRUE
-# 1015243    7304
+# 1022527      19
 m2 <- match(pairs_hippo, pairs_ldref)
 table(is.na(m2))
 #   FALSE
-# 1015243
+# 1022527
 gr_ldref <- GRanges(seqnames = ldref_bim$chr, IRanges(start = ldref_bim$basepair, width = 1))
 gr_hippo <- GRanges(seqnames = hippo_bim$chr, IRanges(start = hippo_bim$basepair, width = 1))
 table(countOverlaps(gr_hippo, gr_ldref))
@@ -206,7 +211,7 @@ table(countOverlaps(gr_hippo, gr_ldref))
 # 1181974
 ## After moving to hg38:
 #       1
-# 1015243
+# 1022527
 table(countOverlaps(gr_ldref, gr_hippo))
 ## Originally:
 #    0       1       2       3
@@ -215,8 +220,8 @@ table(countOverlaps(gr_ldref, gr_hippo))
 #    0       1
 # 8347 1181974
 ## After moving to hg38:
-#    0       1
-# 7304 1015243
+#  0       1
+# 19 1022527
 
 
 hippo_bim[subjectHits(findOverlaps(gr_ldref[countOverlaps(gr_ldref, gr_hippo) > 1], gr_hippo)), ]
@@ -287,73 +292,79 @@ Sys.time()
 proc.time()
 options(width = 120)
 session_info()
+
 # ─ Session info ───────────────────────────────────────────────────────────────────────────────────────────────────────
 #  setting  value
-#  version  R version 3.5.0 Patched (2018-04-30 r74679)
+#  version  R version 3.5.1 Patched (2018-10-29 r75535)
 #  os       Red Hat Enterprise Linux Server release 6.9 (Santiago)
 #  system   x86_64, linux-gnu
 #  ui       X11
 #  language (EN)
 #  collate  en_US.UTF-8
+#  ctype    en_US.UTF-8
 #  tz       US/Eastern
-#  date     2018-11-20
+#  date     2019-01-28
 #
 # ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
-#  package              * version   date       source
-#  assertthat             0.2.0     2017-04-11 CRAN (R 3.5.0)
-#  bindr                  0.1.1     2018-03-13 CRAN (R 3.5.0)
-#  bindrcpp               0.2.2     2018-03-29 CRAN (R 3.5.0)
-#  Biobase              * 2.40.0    2018-05-02 Bioconductor
-#  BiocGenerics         * 0.26.0    2018-05-03 Bioconductor
-#  BiocParallel         * 1.14.2    2018-07-08 Bioconductor
-#  bitops                 1.0-6     2013-08-17 CRAN (R 3.5.0)
-#  clisymbols             1.2.0     2017-05-21 cran (@1.2.0)
-#  colorout             * 1.2-0     2018-05-02 Github (jalvesaq/colorout@c42088d)
-#  colorspace             1.3-2     2016-12-14 CRAN (R 3.5.0)
-#  crayon                 1.3.4     2017-09-16 CRAN (R 3.5.0)
-#  data.table           * 1.11.6    2018-09-19 CRAN (R 3.5.0)
-#  DelayedArray         * 0.6.6     2018-09-11 Bioconductor
-#  digest                 0.6.17    2018-09-12 CRAN (R 3.5.0)
-#  dplyr                  0.7.6     2018-06-29 CRAN (R 3.5.0)
-#  GenomeInfoDb         * 1.16.0    2018-05-03 Bioconductor
-#  GenomeInfoDbData       1.1.0     2018-04-17 Bioconductor
-#  GenomicRanges        * 1.32.7    2018-09-20 Bioconductor
-#  ggplot2                3.0.0     2018-07-03 CRAN (R 3.5.0)
-#  glue                   1.3.0     2018-07-17 CRAN (R 3.5.0)
-#  gtable                 0.2.0     2016-02-26 CRAN (R 3.5.0)
-#  htmltools              0.3.6     2017-04-28 CRAN (R 3.5.0)
-#  htmlwidgets            1.2       2018-04-19 CRAN (R 3.5.0)
-#  httpuv                 1.4.5     2018-07-19 CRAN (R 3.5.0)
-#  IRanges              * 2.14.12   2018-09-20 Bioconductor
-#  later                  0.7.5     2018-09-18 CRAN (R 3.5.0)
-#  lattice                0.20-35   2017-03-25 CRAN (R 3.5.0)
-#  lazyeval               0.2.1     2017-10-29 CRAN (R 3.5.0)
-#  magrittr               1.5       2014-11-22 CRAN (R 3.5.0)
-#  Matrix                 1.2-14    2018-04-13 CRAN (R 3.5.0)
-#  matrixStats          * 0.54.0    2018-07-23 CRAN (R 3.5.0)
-#  munsell                0.5.0     2018-06-12 CRAN (R 3.5.0)
-#  pillar                 1.3.0     2018-07-14 CRAN (R 3.5.0)
-#  pkgconfig              2.0.2     2018-08-16 CRAN (R 3.5.0)
-#  plyr                   1.8.4     2016-06-08 CRAN (R 3.5.0)
-#  png                    0.1-7     2013-12-03 CRAN (R 3.5.0)
-#  promises               1.0.1     2018-04-13 CRAN (R 3.5.0)
-#  purrr                  0.2.5     2018-05-29 CRAN (R 3.5.0)
-#  R6                     2.2.2     2017-06-17 CRAN (R 3.5.0)
-#  Rcpp                   0.12.18   2018-07-23 CRAN (R 3.5.0)
-#  RCurl                  1.95-4.11 2018-07-15 CRAN (R 3.5.0)
-#  rlang                  0.2.2     2018-08-16 CRAN (R 3.5.0)
-#  rmote                * 0.3.4     2018-05-02 deltarho (R 3.5.0)
-#  S4Vectors            * 0.18.3    2018-06-13 Bioconductor
-#  scales                 1.0.0     2018-08-09 CRAN (R 3.5.0)
-#  servr                  0.10      2018-05-30 CRAN (R 3.5.0)
-#  sessioninfo          * 1.0.0     2017-06-21 CRAN (R 3.5.0)
-#  SummarizedExperiment * 1.10.1    2018-05-17 Bioconductor
-#  tibble                 1.4.2     2018-01-22 CRAN (R 3.5.0)
-#  tidyselect             0.2.4     2018-02-26 CRAN (R 3.5.0)
-#  withr                  2.1.2     2018-03-15 CRAN (R 3.5.0)
-#  xfun                   0.3       2018-07-06 CRAN (R 3.5.0)
-#  XVector                0.20.0    2018-05-03 Bioconductor
-#  zlibbioc               1.26.0    2018-05-02 Bioconductor
- 
+#  package              * version   date       lib source
+#  assertthat             0.2.0     2017-04-11 [2] CRAN (R 3.5.0)
+#  bindr                  0.1.1     2018-03-13 [1] CRAN (R 3.5.0)
+#  bindrcpp               0.2.2     2018-03-29 [1] CRAN (R 3.5.0)
+#  Biobase              * 2.42.0    2018-10-30 [2] Bioconductor
+#  BiocGenerics         * 0.28.0    2018-10-30 [1] Bioconductor
+#  BiocParallel         * 1.16.5    2019-01-04 [1] Bioconductor
+#  bitops                 1.0-6     2013-08-17 [2] CRAN (R 3.5.0)
+#  cli                    1.0.1     2018-09-25 [1] CRAN (R 3.5.1)
+#  colorout             * 1.2-0     2018-05-02 [1] Github (jalvesaq/colorout@c42088d)
+#  colorspace             1.4-0     2019-01-13 [2] CRAN (R 3.5.1)
+#  crayon                 1.3.4     2017-09-16 [1] CRAN (R 3.5.0)
+#  data.table           * 1.12.0    2019-01-13 [1] CRAN (R 3.5.1)
+#  DelayedArray         * 0.8.0     2018-10-30 [2] Bioconductor
+#  digest                 0.6.18    2018-10-10 [1] CRAN (R 3.5.1)
+#  dplyr                  0.7.8     2018-11-10 [1] CRAN (R 3.5.1)
+#  GenomeInfoDb         * 1.18.1    2018-11-12 [1] Bioconductor
+#  GenomeInfoDbData       1.2.0     2018-11-02 [2] Bioconductor
+#  GenomicRanges        * 1.34.0    2018-10-30 [1] Bioconductor
+#  ggplot2                3.1.0     2018-10-25 [1] CRAN (R 3.5.1)
+#  glue                   1.3.0     2018-07-17 [1] CRAN (R 3.5.1)
+#  gtable                 0.2.0     2016-02-26 [2] CRAN (R 3.5.0)
+#  htmltools              0.3.6     2017-04-28 [2] CRAN (R 3.5.0)
+#  htmlwidgets            1.3       2018-09-30 [1] CRAN (R 3.5.1)
+#  httpuv                 1.4.5.1   2018-12-18 [2] CRAN (R 3.5.1)
+#  IRanges              * 2.16.0    2018-10-30 [1] Bioconductor
+#  later                  0.7.5     2018-09-18 [2] CRAN (R 3.5.1)
+#  lattice                0.20-38   2018-11-04 [3] CRAN (R 3.5.1)
+#  lazyeval               0.2.1     2017-10-29 [2] CRAN (R 3.5.0)
+#  magrittr               1.5       2014-11-22 [1] CRAN (R 3.5.0)
+#  Matrix                 1.2-15    2018-11-01 [3] CRAN (R 3.5.1)
+#  matrixStats          * 0.54.0    2018-07-23 [1] CRAN (R 3.5.1)
+#  munsell                0.5.0     2018-06-12 [2] CRAN (R 3.5.0)
+#  pillar                 1.3.1     2018-12-15 [1] CRAN (R 3.5.1)
+#  pkgconfig              2.0.2     2018-08-16 [1] CRAN (R 3.5.1)
+#  plyr                   1.8.4     2016-06-08 [2] CRAN (R 3.5.0)
+#  png                    0.1-7     2013-12-03 [2] CRAN (R 3.5.0)
+#  promises               1.0.1     2018-04-13 [2] CRAN (R 3.5.0)
+#  purrr                  0.2.5     2018-05-29 [2] CRAN (R 3.5.0)
+#  R6                     2.3.0     2018-10-04 [2] CRAN (R 3.5.1)
+#  Rcpp                   1.0.0     2018-11-07 [1] CRAN (R 3.5.1)
+#  RCurl                  1.95-4.11 2018-07-15 [2] CRAN (R 3.5.1)
+#  rlang                  0.3.1     2019-01-08 [1] CRAN (R 3.5.1)
+#  rmote                * 0.3.4     2018-05-02 [1] deltarho (R 3.5.0)
+#  S4Vectors            * 0.20.1    2018-11-09 [1] Bioconductor
+#  scales                 1.0.0     2018-08-09 [2] CRAN (R 3.5.1)
+#  servr                  0.11      2018-10-23 [1] CRAN (R 3.5.1)
+#  sessioninfo          * 1.1.1     2018-11-05 [1] CRAN (R 3.5.1)
+#  SummarizedExperiment * 1.12.0    2018-10-30 [1] Bioconductor
+#  tibble                 2.0.1     2019-01-12 [1] CRAN (R 3.5.1)
+#  tidyselect             0.2.5     2018-10-11 [2] CRAN (R 3.5.1)
+#  withr                  2.1.2     2018-03-15 [2] CRAN (R 3.5.0)
+#  xfun                   0.4       2018-10-23 [1] CRAN (R 3.5.1)
+#  XVector                0.22.0    2018-10-30 [1] Bioconductor
+#  zlibbioc               1.28.0    2018-10-30 [2] Bioconductor
+#
+# [1] /users/lcollado/R/x86_64-pc-linux-gnu-library/3.5.x
+# [2] /jhpce/shared/jhpce/core/conda/miniconda-3/envs/svnR-3.5.x/R/3.5.x/lib64/R/site-library
+# [3] /jhpce/shared/jhpce/core/conda/miniconda-3/envs/svnR-3.5.x/R/3.5.x/lib64/R/library
+#
 system('plink --version')
 # PLINK v1.90b6.6 64-bit (10 Oct 2018)
