@@ -33,6 +33,7 @@ snpMap <- data.table(snpMap)
 setkey(snpMap, 'chr', 'basepair')
 
 # ref_bim <- ldref_bim[['1000G.EUR.22.bim']]; bim_file <- their_bims['1000G.EUR.22.bim']; chr <- '22'
+# ref_bim <- ldref_bim[['1000G.EUR.3.bim']]; bim_file <- their_bims['1000G.EUR.3.bim']; chr <- '3'
 newbims_exist <- mapply(function(ref_bim, bim_file, chr) {
     message('*****************************************************')
     message(paste(Sys.time(), 'start processing chr', chr))
@@ -40,9 +41,16 @@ newbims_exist <- mapply(function(ref_bim, bim_file, chr) {
     our <- snpMap[.(ref_bim$chr, ref_bim$basepair)]
     m <- !is.na(our$pos_hg38)
     
+    ## Drop NA positions
+    our <- our[m, ]
+    
+    ## Note that the subset doesn't keep things in the same order (and also adds NAs for missing matches)
+    m_initial <- match(with(ref_bim, paste0(chr, '-', basepair)), with(our, paste0(chr, '-', basepair)))
+    print(table(is.na(m_initial)))
+        
     ## Write the list of snps that do show up in our data
     filt_snps <- paste0('1000G.EUR.', chr, '.snps.txt')
-    fwrite(as.data.frame(ref_bim$snp[m]),
+    fwrite(as.data.frame(ref_bim$snp[!is.na(m_initial)]),
         file = filt_snps,
         sep = '\t', col.names = FALSE
     )   
@@ -63,7 +71,7 @@ newbims_exist <- mapply(function(ref_bim, bim_file, chr) {
     ## Keep a copy of the original one
     system(paste0('mv ', newbfile_bim, ' ', newbfile_bim, '.original'))
     
-    ## Complete matching code later
+    ## Now match
     m_final <- match(with(final_bim, paste0(chr, '-', basepair)), with(our, paste0(chr, '-', basepair)))
     stopifnot(!any(is.na(m_final)))
     final_bim$basepair <- our$pos_hg38[m_final]
@@ -84,8 +92,11 @@ newbims_exist <- mapply(function(ref_bim, bim_file, chr) {
 ## Last bit of the log:
 
 # *****************************************************
-# 2019-01-10 16:29:16 start processing chr 9
-# 2019-01-10 16:29:17 subsetting the original LDREF files with plink
+# 2019-01-28 11:08:24 start processing chr 9
+#
+# FALSE  TRUE
+# 47883  7581
+# 2019-01-28 11:08:27 subsetting the original LDREF files with plink
 # PLINK v1.90b6.6 64-bit (10 Oct 2018)           www.cog-genomics.org/plink/1.9/
 # (C) 2005-2018 Shaun Purcell, Christopher Chang   GNU General Public License v3
 # Logging to LDREF_hg38/1000G.EUR.9.log.
@@ -108,8 +119,8 @@ newbims_exist <- mapply(function(ref_bim, bim_file, chr) {
 # Note: No phenotypes present.
 # --make-bed to LDREF_hg38/1000G.EUR.9.bed + LDREF_hg38/1000G.EUR.9.bim +
 # LDREF_hg38/1000G.EUR.9.fam ... done.
-# 2019-01-10 16:29:17 read the new bim file
-# 2019-01-10 16:29:17 Write new filtered bim file for chr 9
+# 2019-01-28 11:08:27 read the new bim file
+# 2019-01-28 11:08:28 Write new filtered bim file for chr 9
 
 table(newbims_exist)
 # TRUE
@@ -149,7 +160,7 @@ pgc2 <- fread('/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/pgc_scz2_sumstats/P
 m_in_hg38 <- match(pgc2$SNP, ldref_bim_hg38$snp)
 table(is.na(m_in_hg38))
 #  FALSE   TRUE
-# 967348 115666
+# 968909 114105
 
 pgc2_filt <- pgc2[!is.na(m_in_hg38), ]
 pgc2_filt$SNP <- ldref_bim_hg38_ourname$snp[ m_in_hg38[ !is.na(m_in_hg38) ] ]
@@ -174,7 +185,7 @@ session_info()
 #  collate  en_US.UTF-8
 #  ctype    en_US.UTF-8
 #  tz       US/Eastern
-#  date     2019-01-10
+#  date     2019-01-28
 #
 # ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 #  package     * version date       lib source
@@ -183,9 +194,9 @@ session_info()
 #  bindrcpp      0.2.2   2018-03-29 [1] CRAN (R 3.5.0)
 #  cli           1.0.1   2018-09-25 [1] CRAN (R 3.5.1)
 #  colorout    * 1.2-0   2018-05-02 [1] Github (jalvesaq/colorout@c42088d)
-#  colorspace    1.3-2   2016-12-14 [2] CRAN (R 3.5.0)
+#  colorspace    1.4-0   2019-01-13 [2] CRAN (R 3.5.1)
 #  crayon        1.3.4   2017-09-16 [1] CRAN (R 3.5.0)
-#  data.table  * 1.11.8  2018-09-30 [1] CRAN (R 3.5.1)
+#  data.table  * 1.12.0  2019-01-13 [1] CRAN (R 3.5.1)
 #  digest        0.6.18  2018-10-10 [1] CRAN (R 3.5.1)
 #  dplyr         0.7.8   2018-11-10 [1] CRAN (R 3.5.1)
 #  ggplot2       3.1.0   2018-10-25 [1] CRAN (R 3.5.1)
@@ -212,7 +223,7 @@ session_info()
 #  scales        1.0.0   2018-08-09 [2] CRAN (R 3.5.1)
 #  servr         0.11    2018-10-23 [1] CRAN (R 3.5.1)
 #  sessioninfo * 1.1.1   2018-11-05 [1] CRAN (R 3.5.1)
-#  tibble        2.0.0   2019-01-04 [1] CRAN (R 3.5.1)
+#  tibble        2.0.1   2019-01-12 [1] CRAN (R 3.5.1)
 #  tidyselect    0.2.5   2018-10-11 [2] CRAN (R 3.5.1)
 #  withr         2.1.2   2018-03-15 [2] CRAN (R 3.5.0)
 #  xfun          0.4     2018-10-23 [1] CRAN (R 3.5.1)
