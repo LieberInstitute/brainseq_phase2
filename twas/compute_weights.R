@@ -10,6 +10,10 @@ library('sessioninfo')
 library('getopt')
 library('BiocParallel')
 
+getDTthreads()
+setDTthreads(threads = 1)
+getDTthreads()
+
 ## Specify parameters
 spec <- matrix(c(
     'region', 'r', 1, 'character', 'Either DLPFC or HIPPO',
