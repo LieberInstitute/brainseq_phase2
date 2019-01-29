@@ -34,6 +34,8 @@ if(FALSE) {
     opt <- list(region = 'DLPFC', feature = 'gene', cores = 1, 'pgconly' = FALSE)
     opt <- list(region = 'HIPPO', feature = 'gene', cores = 3, 'pgconly' = FALSE)
     # feat = opt$feature; reg = opt$reg
+    
+    opt <- list(region = 'HIPPO', feature = 'exon', cores = 3, 'pgconly' = FALSE)
 }
 
 stopifnot(opt$region %in% c('HIPPO', 'DLPFC'))
@@ -117,7 +119,8 @@ bim_file <- paste0(
 )
 bim <- fread(
     paste0(bim_file, '.bim'),
-    col.names = c('chr', 'snp', 'position', 'basepair', 'allele1', 'allele2')
+    col.names = c('chr', 'snp', 'position', 'basepair', 'allele1', 'allele2'),
+    nThread = 1
 )
 bim_gr <- GRanges(
     paste0('chr', bim$chr),
@@ -135,7 +138,8 @@ if(opt$pgconly) {
 
     bim_hg19 <- fread(
         paste0(bim_file, '.bim.original'),
-        col.names = c('chr', 'snp', 'position', 'basepair', 'allele1', 'allele2')
+        col.names = c('chr', 'snp', 'position', 'basepair', 'allele1', 'allele2'),
+        nThread = 1
     )
     bim_gr_hg19 <- GRanges(
         paste0('chr', bim_hg19$chr),
@@ -184,11 +188,16 @@ dir.create('out_files', showWarnings = FALSE)
 
 ## For testing
 if(FALSE) rse <- rse[1:20, ]
+    rse <- rse[1:20, ]
 
-output_status <- bplapply(seq_len(nrow(rse)), function(i) {
+## Create the small files first
+output_small <- mapply(function(i, feat_id) {
     
-    message('*******************************************************************************')
-    message(paste(Sys.time(), 'processing i =', i, 'corresponding to feature', rownames(rse)[i]))
+    if(i == 1 || i %% 1000 == 0) {
+        message('*******************************************************************************')
+        message(paste(Sys.time(), 'pre-processing i =', i, 'corresponding to feature', feat_id))
+    }
+    
     j <- subjectHits(findOverlaps(rse_window[i], bim_gr))
     
     filt_snp <- paste0('LIBD_Brain_Illumina_h650_1M_Omni5M_Omni2pt5_Macrogen_imputed_run2_LDfiltered_', opt$region, '_', opt$feature, '_', i, '.txt')
@@ -199,11 +208,12 @@ output_status <- bplapply(seq_len(nrow(rse)), function(i) {
     fwrite(
         bim[j, 'snp'],
         file = filt_snp,
-        sep = '\t', col.names = FALSE
+        sep = '\t', col.names = FALSE,
+        nThread = 1
     )
-    message(paste(Sys.time(), 'running bfile extract'))
+    
     system(paste("plink --bfile", bim_file, '--extract', filt_snp, 
-    	"--make-bed --out", filt_bim, '--memory 10000 --silent'))
+    	"--make-bed --out", filt_bim, '--memory 2000 --threads 1 --silent'))
     
     ## Edit the "phenotype" column of the fam file
     filt_fam <- fread(paste0(filt_bim, '.fam'),
@@ -217,79 +227,19 @@ output_status <- bplapply(seq_len(nrow(rse)), function(i) {
     filt_fam$phenotype <- assays(rse)$clean_expr[i, m]
     
     ## Ovewrite fam file (for the phenotype info)
-    fwrite(filt_fam, file = paste0(filt_bim, '.fam'), sep = ' ', col.names = FALSE)
+    fwrite(filt_fam, file = paste0(filt_bim, '.fam'), sep = ' ', col.names = FALSE, nThread = 1)    
     
-    ## Specify input/output files
-    tmp_file <- file.path(getwd(), 'tmp_files', paste0(opt$feature, '_', i))
-    out_file <- file.path(getwd(), 'out_files', paste0(opt$feature, '_', i))
+    file.exists(paste0(filt_bim, '.fam'))
     
-    ## Compute weights http://gusevlab.org/projects/fusion/#computing-your-own-functional-weights
-    system(paste(
-        'Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.compute_weights.R --bfile',
-        filt_bim,
-        '--tmp', tmp_file,
-        '--out', out_file,
-        '--models top1,blump,lasso,enet --noclean TRUE'
-        ## Using --noclean TRUE for testing right now
-        # '--models top1,blump,lasso,enet --noclean TRUE --hsq_p 0.9'
-    ))
-    
-    ## The first five genes (pgconly = TRUE) failed the hsq_p default of 0.01 https://github.com/gusevlab/fusion_twas/blob/master/FUSION.compute_weights.R#L26
-    ## Just tested the 5th one with hsq_p 0.9 and it works
-    # '--models top1,blump,lasso,enet --noclean TRUE --hsq_p 0.9'
-    
-    return(file.exists(paste0(out_file, '.wgt.RDat')))
-}, BPPARAM = MulticoreParam(workers = opt$cores))
-output_status <- unlist(output_status)
+}, seq_len(nrow(rse)), rownames(rse), SIMPLIFY = FALSE)
+output_small <- unlist(output_small)
+table(output_small)
 
-message('*******************************************************************************')
-message(paste(Sys.time(), 'summary output status (TRUE means that there is a file)'))
-table(output_status)
+save(output_small, file = 'output_small.Rdata')
 
-message(paste(Sys.time(), 'saving the output_status.Rdata file'))
-names(output_status) <- paste0(opt$feature, '_', seq_len(nrow(rse)))
-save(output_status, file = 'output_status.Rdata')
-
-message(paste(Sys.time(), 'creating the wgt profile files'))
-rdat_files <- dir('out_files', '.wgt.RDat', full.names = TRUE)
-stopifnot(length(rdat_files) == sum(output_status))
-
-wglist <- paste0(opt$region, '_', opt$feature, '.list')
-write.table(rdat_files, file = wglist, row.names = FALSE, col.names = FALSE, quote = FALSE)
-system(paste0('Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/utils/FUSION.profile_wgt.R ', wglist, ' > ', opt$region, '_', opt$feature, '.profile.err 2>&1'))
-## Rename the wglist_summary.txt file to keep the naming convention consistent
-system(paste0('mv wglist_summary.txt ', opt$region, '_', opt$feature, '.profile'))
-
-message(paste(Sys.time(), 'creating the .pos file'))
-if(opt$feature %in% c('gene', 'exon')) {
-    var <- 'gencodeID'
-    # vars <- 'Symbol'
-} else if (opt$feature == 'jxn') {
-    var <- 'gencodeGeneID'
-    # vars <- 'Symbol'
-} else {
-    var <- 'gene_id'
-    # vars <- 'gene_name'
-}
-
-pos_match <- match(gsub('out_files/|\\.wgt\\.RDat', '', rdat_files), names(output_status))
-stopifnot(all(!is.na(pos_match)))
-
-stopifnot(identical(gsub('out_files/|\\.wgt\\.RDat', '', rdat_files), names(output_status)[pos_match]))
-
-
-pos_info <- data.frame(
-    'WGT' = rdat_files,
-    'ID' = mcols(rowRanges(rse))[, var][pos_match],
-    'CHR' = gsub('chr', '', seqnames(rowRanges(rse)[pos_match])),
-    'P0' = start(rowRanges(rse[pos_match])), 
-    'P1' = end(rowRanges(rse[pos_match])),
-    stringsAsFactors = FALSE
-)
-sapply(pos_info, function(x) sum(is.na(x)))
-pos_info$ID[pos_info$ID == ''] <- NA
-write.table(pos_info, file = paste0(opt$region, '_', opt$feature, '.pos'), row.names = FALSE, col.names = TRUE, quote = FALSE)
-save(pos_info, file = 'pos_info.Rdata')
+## Free memory up
+rse_row <- rowRanges(rse)
+save(rse_row, file = 'rse_row.Rdata')
 
 ## Reproducibility information
 print('Reproducibility information:')
