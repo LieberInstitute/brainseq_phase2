@@ -4,7 +4,7 @@ module load fusion_twas/github
 ## Using summary stats from http://walters.psycm.cf.ac.uk/
 
 ## Choose chr
-chr="22"
+chr="3"
 mkdir -p test_psycm
 
 ## gotta debug chr 3
@@ -86,19 +86,26 @@ Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.post_proc
 
 done
 
+
+cd test_psycm
+R
 library('readr')
+
+# start_patt <- 'test_PGC2.SCZ.'
+start_patt <- 'test_psycm.'
 
 ## Weird issue with chr 6
 info_all <- lapply(c(1:5, 7:22), function(chr) {
     message(paste(Sys.time(), 'reading chromosome', chr))
-    patt <- paste0('test_PGC2.SCZ.', chr, '\\..*dat')
+
+    patt <- paste0(start_patt, chr, '\\..*dat')
     files <- dir(pattern = patt)
     if(length(files) == 0) {
         warning(paste('no files for chromosome', chr))
         return(NULL)
     }
     info <- lapply(files, read_tsv)
-    names(info) <- gsub(paste0('test_PGC2.SCZ.', chr, '.|analysis.'), '', dir(pattern = patt))
+    names(info) <- gsub(paste0(start_patt, chr, '.|analysis.'), '', dir(pattern = patt))
 
     # table(is.na(info[['dat']]$EQTL.ID))
     # sapply(info, dim)
@@ -129,18 +136,31 @@ load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/eqtl_tables/me
 
 dim(allEqtl)
 summary(allEqtl$FDR)
+ # 0.0000  0.6892  0.8731  0.7734  0.9528  1.0000
 
 eGene <- subset(allEqtl, Type == 'Gene' & FDR < 0.01)
 length(unique(eGene$gene))
+# [1] 123
 
 table(info_all[['joint_dropped.dat']]$ID %in% unique(eGene$gene))
+# FALSE  TRUE
+#  3658    52
 table(info_all[['joint_included.dat']]$ID %in% unique(eGene$gene))
+# FALSE  TRUE
+#    61    18
 table(info_all[['dat']]$ID %in% unique(eGene$gene))
-
+# FALSE  TRUE
+#  5422   100
 
 table(info_all[['joint_dropped.dat']]$ID %in% unique(allEqtl$gene))
+# FALSE  TRUE
+#  3494   216
 table(info_all[['joint_included.dat']]$ID %in% unique(allEqtl$gene))
+# FALSE  TRUE
+#    52    27
 table(info_all[['dat']]$ID %in% unique(allEqtl$gene))
+# FALSE  TRUE
+#  5167   355
 
 
 summary(info_all[['joint_included.dat']])
