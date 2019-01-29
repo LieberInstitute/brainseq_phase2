@@ -21,7 +21,7 @@ do
         then
             COREMEM=21
         else
-            COREMEM=4
+            COREMEM=5
         fi
         
         SHORT="compute_weights_${region}_${feature}"
