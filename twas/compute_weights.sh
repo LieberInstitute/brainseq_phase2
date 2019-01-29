@@ -7,7 +7,7 @@ mkdir -p logs
 
 CORES=10
 
-for region in HIPPO #DLPFC
+for region in HIPPO DLPFC
 do
     
     # for feature in gene exon jxn tx
