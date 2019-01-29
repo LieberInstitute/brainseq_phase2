@@ -195,7 +195,7 @@ if(FALSE) rse <- rse[1:20, ]
     rse <- rse[1:20, ]
 
 ## Create the small files first
-output_small <- mapply(function(i, feat_id) {
+output_small <- bpmapply(function(i, feat_id) {
     
     if(i == 1 || i %% 1000 == 0) {
         message('*******************************************************************************')
@@ -235,7 +235,7 @@ output_small <- mapply(function(i, feat_id) {
     
     file.exists(paste0(filt_bim, '.fam'))
     
-}, seq_len(nrow(rse)), rownames(rse), SIMPLIFY = FALSE)
+}, seq_len(nrow(rse)), rownames(rse), BPPARAM = MulticoreParam(workers = opt$cores), SIMPLIFY = FALSE)
 output_small <- unlist(output_small)
 table(output_small)
 
