@@ -5,7 +5,7 @@
 
 mkdir -p logs
 
-CORES=10
+CORES=5
 
 for region in HIPPO #DLPFC
 do
@@ -21,7 +21,7 @@ do
         cat > .${SHORT}.sh <<EOF
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=4G,h_vmem=4G,h_fsize=100G
+#$ -l mem_free=20G,h_vmem=20G,h_fsize=100G
 #$ -pe local ${CORES}
 #$ -N ${SHORT}
 #$ -o ./logs/${SHORT}.txt
