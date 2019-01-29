@@ -1,6 +1,6 @@
 ## Load plink before starting R
-module load plink/1.90b6.6
-R
+# module load plink/1.90b6.6
+# R
 
 ## Now run R code
 library('data.table')
