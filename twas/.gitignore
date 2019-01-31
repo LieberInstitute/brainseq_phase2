@@ -1,4 +1,5 @@
 .compute*sh
+.apply*sh
 hg19_*
 test_PGC2
 DLPFC

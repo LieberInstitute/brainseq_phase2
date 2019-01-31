@@ -76,7 +76,7 @@ The original `fusion_twas` scripts are located at [gusevlab/fusion_twas](https:/
 
 * Some debugging code
 * A set of hg38 genes with Gencode IDs and the ability to specify the input gene file.
-* Some workarounds bugs(?) that we encountered that are described in [issue number 4](https://github.com/gusevlab/fusion_twas/issues/4).
+* Resolved together with the TWAS-fusion maintainer some issues/bugs(?) reported in [issue number 4](https://github.com/gusevlab/fusion_twas/issues/4).
 * Changed the name of the summary file to `wglist_summary.txt`, so we can then rename it as needed.
 
 
