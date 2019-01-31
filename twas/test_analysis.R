@@ -93,19 +93,24 @@ library('readr')
 
 # start_patt <- 'test_PGC2.SCZ.'
 start_patt <- 'test_psycm.'
+dir_path <- gsub('\\.$', '', start_patt)
 
 ## Weird issue with chr 6
 info_all <- lapply(c(1:5, 7:22), function(chr) {
     message(paste(Sys.time(), 'reading chromosome', chr))
 
     patt <- paste0(start_patt, chr, '\\..*dat')
-    files <- dir(pattern = patt)
+    files <- dir(dir_path, pattern = patt, full.names = TRUE)
     if(length(files) == 0) {
         warning(paste('no files for chromosome', chr))
         return(NULL)
     }
+    if(length(files) < 3) {
+        warning(paste('not all files for chromosome', chr, 'are present'))
+        return(NULL)
+    }
     info <- lapply(files, read_tsv)
-    names(info) <- gsub(paste0(start_patt, chr, '.|analysis.'), '', dir(pattern = patt))
+    names(info) <- gsub(paste0(start_patt, chr, '.|analysis.'), '', dir(dir_path, pattern = patt))
 
     # table(is.na(info[['dat']]$EQTL.ID))
     # sapply(info, dim)
@@ -127,8 +132,9 @@ info_all <- info_all[!sapply(info_all, is.null)]
 library('purrr')
 
 info_all <- purrr::map(purrr::transpose(info_all), function(x) do.call(rbind, x))
-## Missing chrs: 3, 6 and 13
+## Missing chrs:
 which(!1:22 %in% unique(info_all[['dat']]$CHR))
+# [1]  6 18
 
 library('GenomicRanges')
 load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/eqtl_tables/mergedEqtl_output_hippo_raggr_4features.rda', verbose = TRUE)
@@ -141,27 +147,43 @@ summary(allEqtl$FDR)
 eGene <- subset(allEqtl, Type == 'Gene' & FDR < 0.01)
 length(unique(eGene$gene))
 # [1] 123
+length(unique(allEqtl$gene[allEqtl$Type == 'Gene']))
+# [1] 1678
 
 table(info_all[['joint_dropped.dat']]$ID %in% unique(eGene$gene))
 # FALSE  TRUE
-#  3658    52
+#  3589    52
 table(info_all[['joint_included.dat']]$ID %in% unique(eGene$gene))
 # FALSE  TRUE
-#    61    18
+#    59    18
 table(info_all[['dat']]$ID %in% unique(eGene$gene))
 # FALSE  TRUE
-#  5422   100
+#  5317   100
 
-table(info_all[['joint_dropped.dat']]$ID %in% unique(allEqtl$gene))
+table(info_all[['joint_dropped.dat']]$ID %in% unique(allEqtl$gene[allEqtl$Type == 'Gene']))
 # FALSE  TRUE
-#  3494   216
-table(info_all[['joint_included.dat']]$ID %in% unique(allEqtl$gene))
+#  3430   211
+table(info_all[['joint_included.dat']]$ID %in% unique(allEqtl$gene[allEqtl$Type == 'Gene']))
 # FALSE  TRUE
-#    52    27
+#    51    26
 table(info_all[['dat']]$ID %in% unique(allEqtl$gene))
 # FALSE  TRUE
-#  5167   355
+#  5070   347
 
+addmargins(table(
+    'in eGene' = info_all[['joint_included.dat']]$ID %in% unique(eGene$gene),
+    'in tested gene set' = info_all[['joint_included.dat']]$ID %in% unique(allEqtl$gene[allEqtl$Type == 'Gene'])
+))
+#         in tested gene set
+# in eGene FALSE TRUE Sum
+#    FALSE    51    8  59
+#    TRUE      0   18  18
+#    Sum      51   26  77
+
+# > 18/26
+# [1] 0.6923077
+
+#info_all[['joint_included.dat']]$ID[which(!info_all[['joint_included.dat']]$ID %in% unique(allEqtl$gene))]
 
 summary(info_all[['joint_included.dat']])
 summary(subset(info_all[['joint_included.dat']], ID %in% unique(eGene$gene)))
