@@ -5,11 +5,11 @@
 
 mkdir -p logs
 
-for region in HIPPO DLPFC
+for region in HIPPO #DLPFC
 do
     
     # for feature in gene exon jxn tx
-    for feature in gene
+    for feature in gene tx
     do
         
         # set of summary stats
@@ -24,7 +24,7 @@ do
 
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=30G,h_vmem=30G,h_fsize=100G
+#$ -l mem_free=4G,h_vmem=4G,h_fsize=100G
 #$ -N ${SHORT}
 #$ -o ./logs/${SHORT}.txt
 #$ -e ./logs/${SHORT}.txt
@@ -57,9 +57,7 @@ else
 fi
 
 ## Apply weights for the given region/feature pair and the given GWAS summary statistics
-cd ${region}/${feature}
-mkdir -p ${summstats}
-cd ${summstats}
+mkdir -p ${region}/${feature}/${summstats}
 
 
 for chr in {1..22}
@@ -76,23 +74,34 @@ Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.assoc_tes
     --weights /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/${region}/${feature}/${region}_${feature}.pos \
     --weights_dir /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/${region}/${feature} \
     --ref_ld_chr /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38/1000G.EUR. \
-    --chr ${chr} \
-    --out ${summstats}.\${chr}.dat
+    --chr \${chr} \
+    --out ${region}/${feature}/${summstats}/${summstats}.\${chr}.dat
     
     echo ""
     echo "making plots for chromosome \${chr}"
     date
     echo ""
 
-## companion plotting step
-Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.post_process.R \
-    --sumstats /\${summstatsfile} \
-    --input ${summstats}.\${chr}.dat \
-    --out ${summstats}.\${chr}.analysis \
-    --ref_ld_chr /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38/1000G.EUR. \
-    --chr ${chr} \
-    --plot --locus_win 100000 --verbose 2 --plot_individual --plot_eqtl --plot_corr \
-    --glist_path "/jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/glist-hg38"
+## companion post-processing step (plots only for genes)
+if [ "$feature" == "gene" ]
+then
+    Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.post_process.R \
+        --sumstats /\${summstatsfile} \
+        --input ${region}/${feature}/${summstats}/${summstats}.\${chr}.dat \
+        --out ${region}/${feature}/${summstats}/${summstats}.\${chr}.analysis \
+        --ref_ld_chr /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38/1000G.EUR. \
+        --chr \${chr} \
+        --plot --locus_win 100000 --verbose 2 --plot_individual --plot_eqtl --plot_corr \
+        --glist_path "/jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/glist-hg38"
+else
+    Rscript /jhpce/shared/jhpce/libd/fusion_twas/github/fusion_twas/FUSION.post_process.R \
+        --sumstats /\${summstatsfile} \
+        --input ${region}/${feature}/${summstats}/${summstats}.\${chr}.dat \
+        --out ${region}/${feature}/${summstats}/${summstats}.\${chr}.analysis \
+        --ref_ld_chr /dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/reference_hg38/LDREF_hg38/1000G.EUR. \
+        --chr \${chr} \
+        --locus_win 100000 --verbose 2 --plot_corr
+fi
 
 done
 
