@@ -9,7 +9,8 @@ for region in HIPPO #DLPFC
 do
     
     # for feature in gene exon jxn tx
-    for feature in gene tx
+    # for feature in gene tx
+    for feature in exon jxn
     do
         
         # set of summary stats
