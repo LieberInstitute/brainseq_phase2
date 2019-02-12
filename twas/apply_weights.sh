@@ -5,12 +5,12 @@
 
 mkdir -p logs
 
-for region in HIPPO #DLPFC
+#for region in HIPPO #DLPFC
+for region in DLPFC
 do
     
-    # for feature in gene exon jxn tx
     # for feature in gene tx
-    for feature in exon jxn
+    for feature in gene exon jxn tx
     do
         
         # set of summary stats
