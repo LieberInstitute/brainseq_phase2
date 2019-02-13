@@ -25,7 +25,7 @@ do
 
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=4G,h_vmem=4G,h_fsize=100G
+#$ -l mem_free=5G,h_vmem=5G,h_fsize=100G
 #$ -N ${SHORT}
 #$ -o ./logs/${SHORT}.txt
 #$ -e ./logs/${SHORT}.txt
