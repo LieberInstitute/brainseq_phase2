@@ -5,15 +5,16 @@ library(SummarizedExperiment)
 library(jaffelab)
 library(MatrixEQTL)
 library(sva)
+library('sessioninfo')
 
 ######################
 ### load data ####
 ######################
 
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_gene.Rdata")
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_exon.Rdata")
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_jxn.Rdata")
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_tx.Rdata")
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1_gene.Rdata", verbose = TRUE)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1_exon.Rdata", verbose = TRUE)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1_jxn.Rdata", verbose = TRUE)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1_tx.Rdata", verbose = TRUE)
 
 # # fix junction row names
 # rownames(rse_jxn) = paste0(seqnames(rse_jxn),":",start(rse_jxn),"-",end(rse_jxn),"(",strand(rse_jxn),")")
@@ -25,11 +26,15 @@ load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_tx.Rdata")
 	# colData(rse_gene)$totalMapped  = sapply(colData(rse_gene)$totalMapped, sum)
 
 ## keep adult samples & correct region
-keepInd = which(colData(rse_gene)$Age > 13 & colData(rse_gene)$Region == "DLPFC")
-rse_gene = rse_gene[,keepInd]
-rse_exon = rse_exon[,keepInd]
-rse_jxn = rse_jxn[,keepInd]
-rse_tx = rse_tx[,keepInd]
+keepInd = which(colData(bsp1_gene)$Age > 13 & colData(bsp1_gene)$Region == "DLPFC")
+rse_gene = bsp1_gene[,keepInd]
+rse_exon = bsp1_exon[,keepInd]
+rse_jxn = bsp1_jxn[,keepInd]
+rse_tx = bsp1_tx[,keepInd]
+
+## Drop unused objects and print some info
+rm(bsp1_gene, bsp1_exon, bsp1_jxn, bsp1_tx)
+table(rse_gene$Dx)
 
 ## extract pd and rpkms
 pd = colData(rse_gene)
@@ -44,7 +49,7 @@ txTpm = assays(rse_tx)$tpm
 ######################
 
 ## load SNP data
-load("genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n551.rda")
+load('/dcl01/ajaffe/data/lab/brainseq_phase1/genotype_data/brainseq_phase1_Genotypes_n732.rda', verbose = TRUE)
 
 ### make mds and snp dimensions equal to N
 ###(repeat rows or columns for BrNum replicates)
@@ -276,3 +281,9 @@ save(allEqtl, file="eqtl_tables/mergedEqtl_output_dlpfc_4features.rda",compress=
 # sapply(sigEqtlList, function(x) table(x$Class[!duplicated(x$gene)]))
 # sapply(sigEqtlList, function(x) prop.table(table(x$Class)))
 
+## Reproducibility information
+print('Reproducibility information:')
+Sys.time()
+proc.time()
+options(width = 120)
+session_info()

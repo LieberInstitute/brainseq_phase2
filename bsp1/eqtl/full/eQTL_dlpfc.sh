@@ -1,14 +1,25 @@
 #!/bin/bash
 #$ -cwd
 #$ -l bluejay,mem_free=160G,h_vmem=160G,h_fsize=200G
-#$ -N bsII_dlpfc_eQTL
+#$ -N bsI_dlpfc_eQTL
 #$ -o ./eqtl_tables/logs/eQTL_dlpfc_4_features.txt
 #$ -e ./eqtl_tables/logs/eQTL_dlpfc_4_features.txt
 #$ -m a
 echo "**** Job starts ****"
 date
 
-Rscript /dcl01/lieber/ajaffe/lab/brainseq_phase2/run_eqtls_dlpfc.R
+echo "**** JHPCE info ****"
+echo "User: ${USER}"
+echo "Job id: ${JOB_ID}"
+echo "Job name: ${JOB_NAME}"
+echo "Hostname: ${HOSTNAME}"
+echo "Task id: ${TASK_ID}"
+
+## Pre-reqs:
+# mkdir -p eqtl_tables
+# mkdir -p eqtl_tables/logs
+
+Rscript run_eqtls_dlpfc.R
 
 echo "**** Job ends ****"
 date
