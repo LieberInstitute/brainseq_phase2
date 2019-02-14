@@ -3,27 +3,32 @@ library(SummarizedExperiment)
 library(jaffelab)
 library(MatrixEQTL)
 library(sva)
+library('sessioninfo')
 
 ######################
 ### load data ####
 ######################
 
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_gene.Rdata")
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_exon.Rdata")
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_jxn.Rdata")
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_tx.Rdata")
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1_gene.Rdata", verbose = TRUE)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1_exon.Rdata", verbose = TRUE)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1_jxn.Rdata", verbose = TRUE)
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1_tx.Rdata", verbose = TRUE)
 
 ## keep adult samples & correct region
-keepInd = which(colData(rse_gene)$Age > 13 & colData(rse_gene)$Region == "DLPFC")
-rse_gene = rse_gene[,keepInd]
-rse_exon = rse_exon[,keepInd]
-rse_jxn = rse_jxn[,keepInd]
-rse_tx = rse_tx[,keepInd]
+keepInd = which(colData(bsp1_gene)$Age > 13 & colData(bsp1_gene)$Region == "DLPFC")
+rse_gene = bsp1_gene[,keepInd]
+rse_exon = bsp1_exon[,keepInd]
+rse_jxn = bsp1_jxn[,keepInd]
+rse_tx = bsp1_tx[,keepInd]
+
+## Drop unused objects and print some info
+rm(bsp1_gene, bsp1_exon, bsp1_jxn, bsp1_tx)
+table(rse_gene$Dx)
 
 pd = colData(rse_gene)
 
 ## load SNP data
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n551.rda")
+load('/dcl01/ajaffe/data/lab/brainseq_phase1/genotype_data/brainseq_phase1_Genotypes_n732.rda', verbose = TRUE)
 snpMap$pos_hg19 = paste0(snpMap$CHR, ":", snpMap$POS)
 
 ## drop rs10708380:150158001:TG:T (missing info in snpMap (and dbSNP))
@@ -40,7 +45,7 @@ snp = snp[,pd$BrNum]
 rownames(mds) = colnames(snp) = pd$RNum
 
 ## risk loci from PGC paper + rAggr proxy markers
-riskLoci = read.csv("rAggr_results_179.csv", stringsAsFactors=FALSE)	# 10,981 snps
+riskLoci = read.csv("/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/rAggr_results_179.csv", stringsAsFactors=FALSE)	# 10,981 snps
 colnames(riskLoci) = gsub("\\.", "_", colnames(riskLoci))
 riskLoci$hg19POS = paste0(riskLoci$SNP2_Chr, ":", riskLoci$SNP2_Pos) 
 
@@ -82,25 +87,25 @@ exonRpkm = assays(rse_exon)$rpkm
 jxnRp10m = assays(rse_jxn)$rp10m
 txTpm = assays(rse_tx)$tpm
 
-# pcaGene = prcomp(t(log2(geneRpkm+1)))
-# kGene = num.sv(log2(geneRpkm+1), mod)
-# genePCs = pcaGene$x[,1:kGene]
+pcaGene = prcomp(t(log2(geneRpkm+1)))
+kGene = num.sv(log2(geneRpkm+1), mod)
+genePCs = pcaGene$x[,1:kGene]
 
-# pcaExon = prcomp(t(log2(exonRpkm+1)))
-# kExon = num.sv(log2(exonRpkm+1), mod, vfilter=50000)
-# exonPCs = pcaExon$x[,1:kExon]
+pcaExon = prcomp(t(log2(exonRpkm+1)))
+kExon = num.sv(log2(exonRpkm+1), mod, vfilter=50000)
+exonPCs = pcaExon$x[,1:kExon]
 
-# pcaJxn = prcomp(t(log2(jxnRp10m+1)))
-# kJxn = num.sv(log2(jxnRp10m+1), mod, vfilter=50000)
-# jxnPCs = pcaJxn$x[,1:kJxn]
+pcaJxn = prcomp(t(log2(jxnRp10m+1)))
+kJxn = num.sv(log2(jxnRp10m+1), mod, vfilter=50000)
+jxnPCs = pcaJxn$x[,1:kJxn]
 
-# pcaTx = prcomp(t(log2(txTpm+1)))
-# kTx = num.sv(log2(txTpm+1), mod, vfilter=50000)
-# txPCs = pcaTx$x[,1:kTx]
+pcaTx = prcomp(t(log2(txTpm+1)))
+kTx = num.sv(log2(txTpm+1), mod, vfilter=50000)
+txPCs = pcaTx$x[,1:kTx]
 
-# save(genePCs, exonPCs, jxnPCs, txPCs, 
-	# file="eqtl_tables/rdas/pcs_4features_dlpfc.rda")
-load("eqtl_tables/rdas/pcs_4features_dlpfc.rda")
+save(genePCs, exonPCs, jxnPCs, txPCs,
+    file="eqtl_tables/rdas/pcs_4features_dlpfc.rda")
+# load("eqtl_tables/rdas/pcs_4features_dlpfc.rda")
 
 covsGene = SlicedData$new(t(cbind(mod[,-1],genePCs)))
 covsExon = SlicedData$new(t(cbind(mod[,-1],exonPCs)))
@@ -247,11 +252,9 @@ allEqtl$gencodeTx = CharacterList(c(as.list(rowRanges(rse_gene)$gencodeTx[match(
 	as.list(txEqtl$gene)))
 save(allEqtl, file="eqtl_tables/mergedEqtl_output_dlpfc_raggr_4features.rda",compress=TRUE)
 
-
-
-
-
-
-
-
-
+## Reproducibility information
+print('Reproducibility information:')
+Sys.time()
+proc.time()
+options(width = 120)
+session_info()
