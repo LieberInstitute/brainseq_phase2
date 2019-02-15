@@ -163,28 +163,28 @@ print("Begin eQTL analysis")
 
 meGene = Matrix_eQTL_main(snps=theSnps, gene = geneSlice, 
 	cvrt = covsGene, output_file_name.cis =  ".ctxt" ,
-	pvOutputThreshold.cis = 0.001,  pvOutputThreshold=0,
+	pvOutputThreshold.cis = 1,  pvOutputThreshold=0,
 	snpspos = snpspos, genepos = posGene, 
 	useModel = modelLINEAR,	cisDist=5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
 
 meExon = Matrix_eQTL_main(snps=theSnps, gene = exonSlice, 
 	cvrt = covsExon, output_file_name.cis =  ".ctxt" ,
-	pvOutputThreshold.cis = 0.001,  pvOutputThreshold=0,
+	pvOutputThreshold.cis = 1,  pvOutputThreshold=0,
 	snpspos = snpspos, genepos = posExon, 
 	useModel = modelLINEAR,	cisDist=5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
 
 meJxn = Matrix_eQTL_main(snps=theSnps, gene = jxnSlice, 
 	cvrt = covsJxn, output_file_name.cis =  ".ctxt" ,
-	pvOutputThreshold.cis = 0.001,  pvOutputThreshold=0,
+	pvOutputThreshold.cis = 1,  pvOutputThreshold=0,
 	snpspos = snpspos, genepos = posJxn, 
 	useModel = modelLINEAR,	cisDist=5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
 	
 meTx = Matrix_eQTL_main(snps=theSnps, gene = txSlice, 
 	cvrt = covsTx, output_file_name.cis =  ".ctxt" ,
-	pvOutputThreshold.cis = 0.001,  pvOutputThreshold=0,
+	pvOutputThreshold.cis = 1,  pvOutputThreshold=0,
 	snpspos = snpspos, genepos = posTx, 
 	useModel = modelLINEAR,	cisDist=5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
@@ -223,6 +223,7 @@ txEqtl$snps = as.character(txEqtl$snps)
 # add gene annotation info #####
 ################################
 
+rm(meGene, meExon, meJxn, meTx)
 geneEqtl$Symbol = rowRanges(rse_gene)$Symbol[match(geneEqtl$gene, rownames(rse_gene))]
 geneEqtl$EnsemblGeneID = rowRanges(rse_gene)$ensemblID[match(geneEqtl$gene, rownames(rse_gene))]
 geneEqtl$Type = "Gene"
