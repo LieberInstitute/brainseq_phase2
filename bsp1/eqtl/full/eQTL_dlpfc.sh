@@ -1,6 +1,6 @@
 #!/bin/bash
 #$ -cwd
-#$ -l bluejay,mem_free=160G,h_vmem=160G,h_fsize=200G
+#$ -l mem_free=160G,h_vmem=160G,h_fsize=200G
 #$ -N bsI_dlpfc_eQTL
 #$ -o ./eqtl_tables/logs/eQTL_dlpfc_4_features.txt
 #$ -e ./eqtl_tables/logs/eQTL_dlpfc_4_features.txt
