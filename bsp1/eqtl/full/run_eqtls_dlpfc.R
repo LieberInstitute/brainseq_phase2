@@ -69,11 +69,11 @@ snp = snp[keepIndex,]
 ######################
 
 pd$Dx = factor(pd$Dx,
-	levels = c("Control", "Schizo"))
+	levels = c("Control", "Schizo", "MDD", "Bipolar"))
 
 mod = model.matrix(~Dx + Sex + as.matrix(mds[,1:5]),
 	data = pd)
-colnames(mod)[4:8] = colnames(mds)[1:5]
+colnames(mod)[grep('mds', colnames(mod))] = colnames(mds)[1:5]
 
 
 ######################

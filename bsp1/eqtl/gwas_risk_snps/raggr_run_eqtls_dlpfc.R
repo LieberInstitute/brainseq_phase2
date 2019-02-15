@@ -50,7 +50,9 @@ colnames(riskLoci) = gsub("\\.", "_", colnames(riskLoci))
 riskLoci$hg19POS = paste0(riskLoci$SNP2_Chr, ":", riskLoci$SNP2_Pos) 
 
 ## keep SNPs from list
-keepIndex = which(snpMap$pos_hg19 %in% riskLoci$hg19POS)	# keep 9,736 snps
+keepIndex = which(snpMap$pos_hg19 %in% riskLoci$hg19POS)	# keep 9,703 snps
+length(keepIndex)
+# [1] 9703
 snpMap = snpMap[keepIndex,]
 snp = snp[keepIndex,]
 
@@ -61,10 +63,10 @@ snpMap$maf = rowSums(snp, na.rm=TRUE)/(2*rowSums(!is.na(snp)))
 # statistical model ##
 ######################
 pd$Dx = factor(pd$Dx,
-	levels = c("Control", "Schizo"))
+	levels = c("Control", "Schizo", "MDD", "Bipolar"))
 
 mod = model.matrix(~Dx + Sex + as.matrix(mds[,1:5]), data = pd)
-colnames(mod)[4:8] = colnames(mds)[1:5]
+colnames(mod)[grep('mds', colnames(mod))] = colnames(mds)[1:5]
 
 
 ######################
