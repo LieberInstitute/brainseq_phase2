@@ -108,8 +108,8 @@ kTx = num.sv(log2(txTpm+1), mod, vfilter=50000)
 txPCs = pcaTx$x[,1:kTx]
 
 save(genePCs, exonPCs, jxnPCs, txPCs, 
-	file="rdas/pcs_dlpfc_4features_filtered_over13.rda")
-# load("rdas/pcs_dlpfc_4features_filtered_over13.rda")
+	file="eqtl_tables/rdas/pcs_dlpfc_4features_filtered_over13.rda")
+# load("eqtl_tables/rdas/pcs_dlpfc_4features_filtered_over13.rda")
 
 covsGene = SlicedData$new(t(cbind(mod[,-1],genePCs)))
 covsExon = SlicedData$new(t(cbind(mod[,-1],exonPCs)))
