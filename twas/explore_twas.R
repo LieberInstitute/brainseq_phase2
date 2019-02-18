@@ -227,9 +227,171 @@ walk(twas_exp, print, width = 120)
 
 
 
+## load eQTL raggr results
+raggr_files <- c(
+    'hippo_raggr' = '/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/eqtl_tables/mergedEqtl_output_hippo_raggr_4features.rda',
+    'dlpfc_raggr' = '/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/eqtl_tables/mergedEqtl_output_dlpfc_raggr_4features.rda'
+)
+raggr <- map(raggr_files, function(x) {
+    load(x, verbose = TRUE)
+    return(allEqtl)
+})
+names(raggr) <- c('HIPPO', 'DLPFC')
+
+
+map_dbl(raggr, ~ sum(.x$FDR < 0.01 ))
+# HIPPO  DLPFC
+# 66923 106438
+
+# riskLoci <- read.csv("/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/pgc_riskLoci.csv", stringsAsFactors=FALSE)
+
+
+## Read in the files that Emily cleaned up at
+## https://github.com/LieberInstitute/brainseq_phase2/blob/master/eQTL_GWAS_riskSNPs/create_eqtl_table_indexInfo.R
+raggr_clean_files <- c(
+    'HIPPO' = '/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/raggr_179_snps_hippo_eqtls_fdr01.csv',
+    'DLPFC' = '/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/raggr_179_snps_dlp_eqtls_fdr01.csv'
+)
+raggr_clean <- map(raggr_clean_files, read.csv, stringsAsFactors = FALSE)
+names(raggr_clean) <- names(raggr_clean_files)
+
+
+## Start looking into how to match tables by SNP id..
+hmm <- twas_exp$all$BEST.GWAS.ID
+length(hmm)
+# [1] 408043
+length(unique(hmm))
+# [1] 7976
+hmm <- hmm[!is.na(hmm)]
+length(hmm)
+# [1] 260187
+length(unique(hmm))
+# [1] 7975
+
+h <- unique(hmm)
+table(grepl(':', h))
+# FALSE  TRUE
+ # 6037  1938
+head(h[grepl(':', h)])
 
 
 
+table(raggr_clean$HIPPO$SNP %in% h)
+# FALSE  TRUE
+# 64971  1952
+table(raggr_clean$DLPFC$SNP %in% h)
+#  FALSE   TRUE
+# 103381   3057
+
+table(unique(raggr_clean$HIPPO$SNP) %in% h)
+# FALSE  TRUE
+#  5353   157
+table(unique(raggr_clean$DLPFC$SNP) %in% h)
+# FALSE  TRUE
+#  6600   180
+
+table(unique(raggr_clean$HIPPO$IndexSNP) %in% h)
+# FALSE  TRUE
+#   100     3
+table(unique(raggr_clean$DLPFC$IndexSNP) %in% h)
+# FALSE  TRUE
+#   112     4
+
+
+## Read in the BIM files used for computing the weights (one per region)
+## https://github.com/LieberInstitute/brainseq_phase2/blob/master/twas/filter_data/filter_snps.R#L128-L174
+library('data.table')
+bims <- map(c('DLPFC', 'HIPPO'), function(region) {
+    bimfile <- paste0(
+       '/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/filter_data/LIBD_Brain_Illumina_h650_1M_Omni5M_Omni2pt5_Macrogen_imputed_run2_LDfiltered_',
+       region,
+       '.bim'
+   )
+   fread(bimfile,
+       col.names = c('chr', 'snp', 'position', 'basepair', 'allele1', 'allele2'),
+       colClasses = c('character', 'character', 'numeric', 'integer', 'character', 'character')
+   )
+})
+names(bims) <- c('DLPFC', 'HIPPO')
+
+
+## Check matches by SNP name
+table(unique(raggr_clean$HIPPO$SNP) %in% bims$HIPPO$snp)
+# FALSE  TRUE
+#  4483  1027
+table(unique(raggr_clean$DLPFC$SNP) %in% bims$DLPFC$snp)
+# FALSE  TRUE
+#  5586  1194
+
+
+table(unique(raggr_clean$HIPPO$IndexSNP) %in% bims$HIPPO$snp)
+# FALSE  TRUE
+#   100     3
+table(unique(raggr_clean$DLPFC$IndexSNP) %in% bims$DLPFC$snp)
+# FALSE  TRUE
+#   112     4
+
+## Check with pairs of chr:position
+## instead of SNP names
+make_pairs <- function(rag, bim) {
+    pairs_rag <- paste(
+        gsub('chr', '', rag$chr_hg38),
+        ':',
+        rag$pos_hg38,
+        sep = ''
+    )
+    pairs_bim <- paste(
+        bim$chr,
+        ':',
+        bim$basepair,
+        sep = ''
+    )
+    return(list(rag = pairs_rag, bim = pairs_bim))
+}
+pairs <- map2(raggr_clean, bims, make_pairs)
+
+## Values of "trues" match the searches by SNP name...
+with(pairs$HIPPO, table(unique(rag) %in% unique(bim)))
+# FALSE  TRUE
+#  4470  1027
+with(pairs$DLPFC, table(unique(rag) %in% unique(bim)))
+# FALSE  TRUE
+#  5564  1194
+
+
+
+## Read in the original BSP2 bim file with hg19 coordinates
+bfile <- '/dcl01/lieber/ajaffe/Brain/Imputation/Merged/LIBD_Brain_Illumina_h650_1M_Omni5M_Omni2pt5_Macrogen_imputed_run2.bim'
+bsp2_bim <- fread(
+    bfile,
+    col.names = c('chr', 'snp', 'position', 'basepair', 'allele1', 'allele2')
+)
+
+## Check by SNP name...
+table(unique(raggr_clean$HIPPO$SNP) %in% bsp2_bim$snp)
+# TRUE
+# 5510
+table(unique(raggr_clean$DLPFC$SNP) %in% bsp2_bim$snp)
+# TRUE
+# 6780
+
+## Ok, not all index snps were in our data to begin with
+## which is why we did the raggr analysis in the
+## first place
+table(unique(raggr_clean$HIPPO$IndexSNP) %in% bsp2_bim$snp)
+# FALSE  TRUE
+#    30    73
+table(unique(raggr_clean$DLPFC$IndexSNP) %in% bsp2_bim$snp)
+# FALSE  TRUE
+#    31    85
+
+
+table(bims$HIPPO$snp %in% bsp2_bim$snp)
+#    TRUE
+# 1022527
+table(bims$DLPFC$snp %in% bsp2_bim$snp)
+#    TRUE
+# 1022527
 
 
 
