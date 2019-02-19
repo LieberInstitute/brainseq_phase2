@@ -226,6 +226,13 @@ walk(twas_exp, print, width = 120)
 # # … with 254,171 more rows
 
 
+# > summary(twas_exp$included$TWAS.P)
+#      Min.   1st Qu.    Median      Mean   3rd Qu.      Max.
+# 0.000e+00 2.775e-07 5.300e-06 2.687e-05 2.600e-05 1.100e-03
+# > summary(twas_exp$all$TWAS.P)
+#    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's
+#    0.00    0.09    0.33    0.39    0.66    1.00  147856
+
 
 ## load eQTL raggr results
 raggr_files <- c(
@@ -274,6 +281,9 @@ table(grepl(':', h))
  # 6037  1938
 head(h[grepl(':', h)])
 
+h_eqtl <- unique(twas_exp$all$EQTL.ID)
+h_eqtl <- h_eqtl[!is.na(h_eqtl)]
+
 
 
 table(raggr_clean$HIPPO$SNP %in% h)
@@ -283,12 +293,28 @@ table(raggr_clean$DLPFC$SNP %in% h)
 #  FALSE   TRUE
 # 103381   3057
 
+table(raggr_clean$HIPPO$SNP %in% h_eqtl)
+# FALSE  TRUE
+# 62369  4554
+table(raggr_clean$DLPFC$SNP %in% h_eqtl)
+# FALSE  TRUE
+# 99802  6636
+
+
 table(unique(raggr_clean$HIPPO$SNP) %in% h)
 # FALSE  TRUE
 #  5353   157
 table(unique(raggr_clean$DLPFC$SNP) %in% h)
 # FALSE  TRUE
 #  6600   180
+
+table(unique(raggr_clean$HIPPO$SNP) %in% h_eqtl)
+# FALSE  TRUE
+#  5302   208
+table(unique(raggr_clean$DLPFC$SNP) %in% h_eqtl)
+# FALSE  TRUE
+#  6555   225
+
 
 table(unique(raggr_clean$HIPPO$IndexSNP) %in% h)
 # FALSE  TRUE
@@ -297,6 +323,12 @@ table(unique(raggr_clean$DLPFC$IndexSNP) %in% h)
 # FALSE  TRUE
 #   112     4
 
+table(unique(raggr_clean$HIPPO$IndexSNP) %in% h_eqtl)
+# FALSE
+  # 103
+table(unique(raggr_clean$DLPFC$IndexSNP) %in% h_eqtl)
+# FALSE
+#   116
 
 ## Read in the BIM files used for computing the weights (one per region)
 ## https://github.com/LieberInstitute/brainseq_phase2/blob/master/twas/filter_data/filter_snps.R#L128-L174
@@ -359,7 +391,6 @@ with(pairs$DLPFC, table(unique(rag) %in% unique(bim)))
 #  5564  1194
 
 
-
 ## Read in the original BSP2 bim file with hg19 coordinates
 bfile <- '/dcl01/lieber/ajaffe/Brain/Imputation/Merged/LIBD_Brain_Illumina_h650_1M_Omni5M_Omni2pt5_Macrogen_imputed_run2.bim'
 bsp2_bim <- fread(
@@ -394,6 +425,452 @@ table(bims$DLPFC$snp %in% bsp2_bim$snp)
 # 1022527
 
 
+
+check_by_locus <- function(rag, ref) {
+    by_loc <- split(rag$SNP, rag$IndexSNP)
+    map_dbl(by_loc, ~ sum(.x %in% ref))
+}
+
+by_locus <- map(raggr_clean, check_by_locus, ref = h)
+map(by_locus, ~ table(.x > 0))
+# $HIPPO
+#
+# FALSE  TRUE
+#    40    63
+#
+# $DLPFC
+#
+# FALSE  TRUE
+#    48    68
+
+by_locus_considered <- map2(
+    raggr_clean,
+    list(HIPPO = bims$HIPPO$snp, DLPFC = bims$DLPFC$snp),
+    check_by_locus
+)
+map(by_locus_considered, ~ table(.x > 0))
+# $HIPPO
+#
+# FALSE  TRUE
+#    16    87
+#
+# $DLPFC
+#
+# FALSE  TRUE
+#    17    99
+
+map2(
+    by_locus,
+    by_locus_considered,
+    ~ addmargins(table(
+        'among TWAS-all best' = .x > 0,
+        'among SNPs for TWAS weights' = .y > 0
+    ))
+)
+# $HIPPO
+#                    among SNPs for TWAS weights
+# among TWAS-all best FALSE TRUE Sum
+#               FALSE    16   24  40
+#               TRUE      0   63  63
+#               Sum      16   87 103
+#
+# $DLPFC
+#                    among SNPs for TWAS weights
+# among TWAS-all best FALSE TRUE Sum
+#               FALSE    17   31  48
+#               TRUE      0   68  68
+#               Sum      17   99 116
+
+
+by_locus_eqtl <- map(raggr_clean, check_by_locus, ref = h_eqtl)
+map(by_locus_eqtl, ~ table(.x > 0))
+# $HIPPO
+#
+# FALSE  TRUE
+#    57    46
+#
+# $DLPFC
+#
+# FALSE  TRUE
+#    67    49
+
+map2(
+    by_locus_eqtl,
+    by_locus_considered,
+    ~ addmargins(table(
+        'among TWAS-all best' = .x > 0,
+        'among SNPs for TWAS weights' = .y > 0
+    ))
+)
+# $HIPPO
+#                    among SNPs for TWAS weights
+# among TWAS-all best FALSE TRUE Sum
+#               FALSE    16   41  57
+#               TRUE      0   46  46
+#               Sum      16   87 103
+#
+# $DLPFC
+#                    among SNPs for TWAS weights
+# among TWAS-all best FALSE TRUE Sum
+#               FALSE    17   50  67
+#               TRUE      0   49  49
+#               Sum      17   99 116
+
+
+
+gene_by_locus <- function(rag, ref) {
+    by_loc <- split(rag$gene, rag$IndexSNP)
+    map_dbl(by_loc, ~ sum(.x %in% ref))
+}
+
+
+g_by_locus <- map(names(rse), function(feature) {
+    map(
+        map(raggr_clean, ~ subset(.x, tolower(Type) == feature)),
+        gene_by_locus,
+        ref = twas_exp$all$ID[twas_exp$all$feature == feature]
+    )
+})
+names(g_by_locus) <- names(rse)
+map(g_by_locus, function(x) {
+    r <- map_dfr(x, ~ table(.x > 0))
+    r$state <- c(FALSE, TRUE)
+    return(r)
+})
+# $gene
+# # A tibble: 2 x 3
+#   HIPPO DLPFC state
+#   <int> <int> <lgl>
+# 1     5    11 FALSE
+# 2    45    56 TRUE
+#
+# $exon
+# # A tibble: 2 x 3
+#   HIPPO DLPFC state
+#   <int> <int> <lgl>
+# 1     9    12 FALSE
+# 2    68    75 TRUE
+#
+# $jxn
+# # A tibble: 2 x 3
+#   HIPPO DLPFC state
+#   <int> <int> <lgl>
+# 1    12    19 FALSE
+# 2    76    79 TRUE
+#
+# $tx
+# # A tibble: 2 x 3
+#   HIPPO DLPFC state
+#   <int> <int> <lgl>
+# 1     9     9 FALSE
+# 2    56    67 TRUE
+
+
+### Ehem.... matching gene ids vs snp ids... ehem... T_T
+# g_by_locus_considered <- map(names(rse), function(feature) {
+#     map2(
+#         map(raggr_clean, ~ subset(.x, tolower(Type) == feature)),
+#         list(HIPPO = bims$HIPPO$snp, DLPFC = bims$DLPFC$snp),
+#         gene_by_locus
+#     )
+# })
+# names(g_by_locus_considered) <- names(rse)
+# map(g_by_locus_considered, function(x) {
+#     r <- map_dfr(x, ~ table(factor(.x > 0, levels = c('FALSE', 'TRUE'))))
+#     r$state <- c(FALSE, TRUE)
+#     return(r)
+# })
+#
+
+clean_tabs <- function(l) {
+    map2_dfr(l, names(l), function(x, y) {
+        x$feature <- y
+        return(x)
+    })
+}
+
+g_by_locus_reg <- map(names(rse), function(feature) {
+    map2(
+        map(raggr_clean, ~ subset(.x, tolower(Type) == feature)),
+        map(names(raggr_clean), ~ twas_exp$all$ID[twas_exp$all$feature == feature & twas_exp$all$region == .x]),
+        gene_by_locus
+    )
+})
+names(g_by_locus_reg) <- names(rse)
+clean_tabs(map(g_by_locus_reg, function(x) {
+    r <- map_dfr(x, ~ table(.x > 0))
+    r$state <- c(FALSE, TRUE)
+    return(r)
+}))
+# # A tibble: 8 x 4
+#   HIPPO DLPFC state feature
+#   <int> <int> <lgl> <chr>
+# 1     6    11 FALSE gene
+# 2    44    56 TRUE  gene
+# 3    11    13 FALSE exon
+# 4    66    74 TRUE  exon
+# 5    13    19 FALSE jxn
+# 6    75    79 TRUE  jxn
+# 7    12     9 FALSE tx
+# 8    53    67 TRUE  tx
+
+clean_tabs_type <- function(l) {
+    map2_dfr(l, names(l), function(x, y) {
+        x$type <- y
+        return(x)
+    })
+}
+
+
+g_by_type <- map(c('psycm', 'pgc2'), function(type) {
+    g_reg <- map(names(rse), function(feature) {
+        map2(
+            map(raggr_clean, ~ subset(.x, tolower(Type) == feature)),
+            map(names(raggr_clean), ~ twas_exp$all$ID[twas_exp$all$feature == feature & twas_exp$all$region == .x & twas_exp$all$type == type]),
+            gene_by_locus
+        )
+    })
+    names(g_reg) <- names(rse)
+    map(g_reg, function(x) {
+        r <- map_dfr(x, ~ table(.x > 0))
+        r$state <- c(FALSE, TRUE)
+        return(r)
+    })
+})
+names(g_by_type) <- c('psycm', 'pgc2')
+clean_tabs_type(map(g_by_type, clean_tabs))
+# # A tibble: 16 x 5
+#    HIPPO DLPFC state feature type
+#    <int> <int> <lgl> <chr>   <chr>
+#  1     6    11 FALSE gene    psycm
+#  2    44    56 TRUE  gene    psycm
+#  3    17    13 FALSE exon    psycm
+#  4    60    74 TRUE  exon    psycm
+#  5    13    19 FALSE jxn     psycm
+#  6    75    79 TRUE  jxn     psycm
+#  7    12     9 FALSE tx      psycm
+#  8    53    67 TRUE  tx      psycm
+#  9     6    11 FALSE gene    pgc2
+# 10    44    56 TRUE  gene    pgc2
+# 11    11    13 FALSE exon    pgc2
+# 12    66    74 TRUE  exon    pgc2
+# 13    13    19 FALSE jxn     pgc2
+# 14    75    79 TRUE  jxn     pgc2
+# 15    12     9 FALSE tx      pgc2
+# 16    53    67 TRUE  tx      pgc2
+
+
+g_by_type_inc <- map(c('psycm', 'pgc2'), function(type) {
+    g_reg <- map(names(rse), function(feature) {
+        map2(
+            map(raggr_clean, ~ subset(.x, tolower(Type) == feature)),
+            map(names(raggr_clean), ~ twas_exp$included$ID[twas_exp$included$feature == feature & twas_exp$included$region == .x & twas_exp$included$type == type]),
+            gene_by_locus
+        )
+    })
+    names(g_reg) <- names(rse)
+    map(g_reg, function(x) {
+        r <- map_dfr(x, ~ table(.x > 0))
+        r$state <- c(FALSE, TRUE)
+        return(r)
+    })
+})
+names(g_by_type_inc) <- c('psycm', 'pgc2')
+clean_tabs_type(map(g_by_type_inc, clean_tabs))
+# # A tibble: 16 x 5
+#    HIPPO DLPFC state feature type
+#    <int> <int> <lgl> <chr>   <chr>
+#  1    30    38 FALSE gene    psycm
+#  2    20    29 TRUE  gene    psycm
+#  3    46    45 FALSE exon    psycm
+#  4    31    42 TRUE  exon    psycm
+#  5    48    48 FALSE jxn     psycm
+#  6    40    50 TRUE  jxn     psycm
+#  7    39    41 FALSE tx      psycm
+#  8    26    35 TRUE  tx      psycm
+#  9    32    42 FALSE gene    pgc2
+# 10    18    25 TRUE  gene    pgc2
+# 11    51    58 FALSE exon    pgc2
+# 12    26    29 TRUE  exon    pgc2
+# 13    61    57 FALSE jxn     pgc2
+# 14    27    41 TRUE  jxn     pgc2
+# 15    43    44 FALSE tx      pgc2
+# 16    22    32 TRUE  tx      pgc2
+
+
+
+
+check_by_feature <- function(tw, cut) {
+    res <- map(c('psycm', 'pgc2'), function(type) {
+        g_reg <- map(names(rse), function(feature) {
+            map2(
+                map(raggr_clean, ~ subset(.x, tolower(Type) == feature)),
+                map(names(raggr_clean), ~ tw$ID[tw$feature == feature & tw$region == .x & tw$type == type & tw$TWAS.P < cut]),
+                ~ match(unique(.x$gene), .y)
+            )
+        })
+        names(g_reg) <- names(rse)
+        map(g_reg, function(x) {
+            # r <- map_dfr(x, ~ table(factor(!is.na(.x), levels = c('FALSE', 'TRUE'))))
+            r <- map_dfr(x, ~ table(!is.na(.x)))
+            r$state <- c(FALSE, TRUE)
+            return(r)
+        })
+    })
+    names(res) <- c('psycm', 'pgc2')
+    
+    clean_tabs_type(map(res, clean_tabs))
+}
+
+check_by_feature(twas_exp$all, cut = 1.01)
+# # A tibble: 16 x 5
+#    HIPPO DLPFC state feature type
+#    <int> <int> <lgl> <chr>   <chr>
+#  1    53    66 FALSE gene    psycm
+#  2    70   105 TRUE  gene    psycm
+#  3   408   669 FALSE exon    psycm
+#  4   449   694 TRUE  exon    psycm
+#  5   232   295 FALSE jxn     psycm
+#  6   275   364 TRUE  jxn     psycm
+#  7   104   161 FALSE tx      psycm
+#  8   140   171 TRUE  tx      psycm
+#  9    53    66 FALSE gene    pgc2
+# 10    70   105 TRUE  gene    pgc2
+# 11   395   669 FALSE exon    pgc2
+# 12   462   694 TRUE  exon    pgc2
+# 13   232   295 FALSE jxn     pgc2
+# 14   275   364 TRUE  jxn     pgc2
+# 15   104   161 FALSE tx      pgc2
+# 16   140   171 TRUE  tx      pgc2
+
+check_by_feature(twas_exp$all, cut = 0.01)
+# # A tibble: 16 x 5
+#    HIPPO DLPFC state feature type
+#    <int> <int> <lgl> <chr>   <chr>
+#  1    75    98 FALSE gene    psycm
+#  2    48    73 TRUE  gene    psycm
+#  3   511   841 FALSE exon    psycm
+#  4   346   522 TRUE  exon    psycm
+#  5   307   386 FALSE jxn     psycm
+#  6   200   273 TRUE  jxn     psycm
+#  7   140   210 FALSE tx      psycm
+#  8   104   122 TRUE  tx      psycm
+#  9    83   106 FALSE gene    pgc2
+# 10    40    65 TRUE  gene    pgc2
+# 11   520   907 FALSE exon    pgc2
+# 12   337   456 TRUE  exon    pgc2
+# 13   331   419 FALSE jxn     pgc2
+# 14   176   240 TRUE  jxn     pgc2
+# 15   148   225 FALSE tx      pgc2
+# 16    96   107 TRUE  tx      pgc2
+
+check_by_feature(twas_exp$included, cut = 0.01)
+# # A tibble: 16 x 5
+#    HIPPO DLPFC state feature type
+#    <int> <int> <lgl> <chr>   <chr>
+#  1   105   141 FALSE gene    psycm
+#  2    18    30 TRUE  gene    psycm
+#  3   827  1321 FALSE exon    psycm
+#  4    30    42 TRUE  exon    psycm
+#  5   467   610 FALSE jxn     psycm
+#  6    40    49 TRUE  jxn     psycm
+#  7   220   300 FALSE tx      psycm
+#  8    24    32 TRUE  tx      psycm
+#  9   107   145 FALSE gene    pgc2
+# 10    16    26 TRUE  gene    pgc2
+# 11   833  1335 FALSE exon    pgc2
+# 12    24    28 TRUE  exon    pgc2
+# 13   480   619 FALSE jxn     pgc2
+# 14    27    40 TRUE  jxn     pgc2
+# 15   224   302 FALSE tx      pgc2
+# 16    20    30 TRUE  tx      pgc2
+
+
+
+check_by_feature_rev <- function(tw, cut) {
+    res <- map(c('psycm', 'pgc2'), function(type) {
+        g_reg <- map(names(rse), function(feature) {
+            map2(
+                map(raggr_clean, ~ subset(.x, tolower(Type) == feature)),
+                map(names(raggr_clean), ~ tw$ID[tw$feature == feature & tw$region == .x & tw$type == type & tw$TWAS.P < cut]),
+                ~ match(unique(.y[!is.na(.y)]), .x$gene)
+            )
+        })
+        names(g_reg) <- names(rse)
+        map(g_reg, function(x) {
+            # r <- map_dfr(x, ~ table(factor(!is.na(.x), levels = c('FALSE', 'TRUE'))))
+            r <- map_dfr(x, ~ table(!is.na(.x)))
+            r$state <- c(FALSE, TRUE)
+            return(r)
+        })
+    })
+    names(res) <- c('psycm', 'pgc2')
+    
+    clean_tabs_type(map(res, clean_tabs))
+}
+
+check_by_feature_rev(twas_exp$all, cut = 1.01)
+# # A tibble: 16 x 5
+#    HIPPO DLPFC state feature type
+#    <int> <int> <lgl> <chr>   <chr>
+#  1  3907  5377 FALSE gene    psycm
+#  2    70   105 TRUE  gene    psycm
+#  3 25237 38437 FALSE exon    psycm
+#  4   449   694 TRUE  exon    psycm
+#  5 15832 20289 FALSE jxn     psycm
+#  6   275   364 TRUE  jxn     psycm
+#  7  7014  8890 FALSE tx      psycm
+#  8   140   171 TRUE  tx      psycm
+#  9  3960  5450 FALSE gene    pgc2
+# 10    70   105 TRUE  gene    pgc2
+# 11 29404 39031 FALSE exon    pgc2
+# 12   462   694 TRUE  exon    pgc2
+# 13 16087 20556 FALSE jxn     pgc2
+# 14   275   364 TRUE  jxn     pgc2
+# 15  7132  9035 FALSE tx      pgc2
+# 16   140   171 TRUE  tx      pgc2
+
+check_by_feature_rev(twas_exp$all, cut = 0.01)
+# # A tibble: 16 x 5
+#    HIPPO DLPFC state feature type
+#    <int> <int> <lgl> <chr>   <chr>
+#  1   354   514 FALSE gene    psycm
+#  2    48    73 TRUE  gene    psycm
+#  3  2389  3689 FALSE exon    psycm
+#  4   346   522 TRUE  exon    psycm
+#  5  1533  1913 FALSE jxn     psycm
+#  6   200   273 TRUE  jxn     psycm
+#  7   720   897 FALSE tx      psycm
+#  8   104   122 TRUE  tx      psycm
+#  9   264   391 FALSE gene    pgc2
+# 10    40    65 TRUE  gene    pgc2
+# 11  2142  2904 FALSE exon    pgc2
+# 12   337   456 TRUE  exon    pgc2
+# 13  1235  1519 FALSE jxn     pgc2
+# 14   176   240 TRUE  jxn     pgc2
+# 15   608   691 FALSE tx      pgc2
+# 16    96   107 TRUE  tx      pgc2
+
+check_by_feature_rev(twas_exp$included, cut = 0.01)
+# # A tibble: 16 x 5
+#    HIPPO DLPFC state feature type
+#    <int> <int> <lgl> <chr>   <chr>
+#  1    60    96 FALSE gene    psycm
+#  2    18    30 TRUE  gene    psycm
+#  3    62    74 FALSE exon    psycm
+#  4    30    42 TRUE  exon    psycm
+#  5    95    93 FALSE jxn     psycm
+#  6    40    49 TRUE  jxn     psycm
+#  7    89    98 FALSE tx      psycm
+#  8    24    32 TRUE  tx      psycm
+#  9    40    55 FALSE gene    pgc2
+# 10    16    26 TRUE  gene    pgc2
+# 11    45    57 FALSE exon    pgc2
+# 12    24    28 TRUE  exon    pgc2
+# 13    67    53 FALSE jxn     pgc2
+# 14    27    40 TRUE  jxn     pgc2
+# 15    58    54 FALSE tx      pgc2
+# 16    20    30 TRUE  tx      pgc2
 
 
 
