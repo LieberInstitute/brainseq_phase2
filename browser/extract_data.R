@@ -367,7 +367,7 @@ rm(cleaned_de_analyses, cleaned)
 eQTLfiles <- c(
     'hippo_full' = '/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full/eqtl_tables/mergedEqtl_output_hippo_4features.rda',
     'dlpfc_full' = '/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full/eqtl_tables/mergedEqtl_output_dlpfc_4features.rda',
-    'interaction_full' = '/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full/eqtl_tables/mergedEqtl_output_hippo_4features.rda',
+    'interaction_full' = '/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full/eqtl_tables/mergedEqtl_output_interaction_4features.rda',
     'hippo_raggr' = '/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/eqtl_tables/mergedEqtl_output_hippo_raggr_4features.rda',
     'dlpfc_raggr' = '/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/eqtl_tables/mergedEqtl_output_dlpfc_raggr_4features.rda',
     'hippo_replication_GTEx' = '/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/eqtl_tables/mergedEqtl_output_hippo_4features.rda',

@@ -1,11 +1,12 @@
 Loading git
+Adding LIBD modules
 **** Job starts ****
-Thu Sep 20 10:40:14 EDT 2018
+Tue Feb 19 15:44:31 EST 2019
 **** JHPCE info ****
 User: lcollado
-Job id: 5515923
+Job id: 6645587
 Job name: extract_data
-Hostname: compute-054
+Hostname: compute-053
 Task id: 
 Loading required package: GenomicRanges
 Loading required package: stats4
@@ -92,13 +93,6 @@ The following objects are masked from ‘package:S4Vectors’:
     first, second
 
 Loading required package: rafalib
-
-Attaching package: ‘devtools’
-
-The following object is masked from ‘package:rafalib’:
-
-    install_bioc
-
 Loading objects:
   rse_gene
 Loading objects:
@@ -146,49 +140,57 @@ Loading objects:
   snpMap
 [1] 7023860      13
 7023861 BrainSeqPhaseII_snp_annotation.txt
-snp	chr_hg38	pos_hg38	chr_hg19	pos_hg19	cm	counted	alt	type	newref	newcount	name	rsnumguess
-rs9988021:866319:G:A	chr1	930939	chr1	866319	0	G	A	SNV	A	G	rs9988021	rs9988021
-rs111819742:868861:C:T	chr1	933481	chr1	868861	0	T	C	SNV	C	T	rs111819742	rs111819742
-GA018352	chr1	944307	chr1	879687	0	T	C	SNV	C	T	rs2839	rs2839
-rs3748592	chr1	944858	chr1	880238	0	A	G	SNV	G	A	rs3748592	rs3748592
-rs2340582	chr1	947423	chr1	882803	0	A	G	SNV	G	A	rs2340582	rs2340582
-rs4246503	chr1	949435	chr1	884815	0	A	G	SNV	G	A	rs4246503	rs4246503
-rs4970376:885699:A:G	chr1	950319	chr1	885699	0	A	G	SNV	G	A	rs4970376	rs4970376
-rs4970375:886006:T:C	chr1	950626	chr1	886006	0	T	C	SNV	C	T	rs4970375	rs4970375
-rs35678314:886182:TG:T	chr1	950802	chr1	886182	0	TG	T	Insertion	-	G	rs35678314	
-2018-09-20 10:55:39 processing hippo
+""	"snp"	"chr_hg38"	"pos_hg38"	"chr_hg19"	"pos_hg19"	"cm"	"counted"	"alt"	"type"	"newref"	"newcount"	"name"	"rsnumguess"
+"rs9988021:866319:G:A"	"rs9988021:866319:G:A"	"chr1"	930939	"chr1"	866319	0	"G"	"A"	"SNV"	"A"	"G"	"rs9988021"	"rs9988021"
+"rs111819742:868861:C:T"	"rs111819742:868861:C:T"	"chr1"	933481	"chr1"	868861	0	"T"	"C"	"SNV"	"C"	"T"	"rs111819742"	"rs111819742"
+"GA018352"	"GA018352"	"chr1"	944307	"chr1"	879687	0	"T"	"C"	"SNV"	"C"	"T"	"rs2839"	"rs2839"
+"rs3748592"	"rs3748592"	"chr1"	944858	"chr1"	880238	0	"A"	"G"	"SNV"	"G"	"A"	"rs3748592"	"rs3748592"
+"rs2340582"	"rs2340582"	"chr1"	947423	"chr1"	882803	0	"A"	"G"	"SNV"	"G"	"A"	"rs2340582"	"rs2340582"
+"rs4246503"	"rs4246503"	"chr1"	949435	"chr1"	884815	0	"A"	"G"	"SNV"	"G"	"A"	"rs4246503"	"rs4246503"
+"rs4970376:885699:A:G"	"rs4970376:885699:A:G"	"chr1"	950319	"chr1"	885699	0	"A"	"G"	"SNV"	"G"	"A"	"rs4970376"	"rs4970376"
+"rs4970375:886006:T:C"	"rs4970375:886006:T:C"	"chr1"	950626	"chr1"	886006	0	"T"	"C"	"SNV"	"C"	"T"	"rs4970375"	"rs4970375"
+"rs35678314:886182:TG:T"	"rs35678314:886182:TG:T"	"chr1"	950802	"chr1"	886182	0	"TG"	"T"	"Insertion"	"-"	"G"	"rs35678314"	NA
+[1] 7023860     551
+                       Br5168 Br5073 Br5217 Br5234 Br5372 Br5005
+rs9988021:866319:G:A        0      0      0      0      1      0
+rs111819742:868861:C:T      0      0      0      0      0      0
+GA018352                    1      0      0      0      1      0
+rs3748592                   0      0      0      0      1      0
+rs2340582                   0      0      0      0      1      0
+rs4246503                   0      0      0      0      1      0
+2019-02-19 16:09:24 processing hippo
 Loading objects:
   genePCs
   exonPCs
   jxnPCs
   txPCs
-2018-09-20 10:56:57 processing dlpfc
+2019-02-19 16:11:43 processing dlpfc
 Loading objects:
   genePCs
   exonPCs
   jxnPCs
   txPCs
-2018-09-20 10:58:19 processing interaction
+2019-02-19 16:13:52 processing interaction
 Loading objects:
   genePCs
   exonPCs
   jxnPCs
   txPCs
-2018-09-20 11:00:49 processing hippo
-2018-09-20 11:00:49 processing gene
-2018-09-20 11:00:51 processing exon
-2018-09-20 11:01:13 processing jxn
-2018-09-20 11:01:30 processing tx
-2018-09-20 11:01:36 processing dlpfc
-2018-09-20 11:01:36 processing gene
-2018-09-20 11:01:37 processing exon
-2018-09-20 11:02:00 processing jxn
-2018-09-20 11:02:17 processing tx
-2018-09-20 11:02:22 processing interaction
-2018-09-20 11:02:22 processing gene
-2018-09-20 11:02:25 processing exon
-2018-09-20 11:03:11 processing jxn
-2018-09-20 11:03:45 processing tx
+2019-02-19 16:18:07 processing hippo
+2019-02-19 16:18:07 processing gene
+2019-02-19 16:18:09 processing exon
+2019-02-19 16:18:32 processing jxn
+2019-02-19 16:18:49 processing tx
+2019-02-19 16:18:55 processing dlpfc
+2019-02-19 16:18:55 processing gene
+2019-02-19 16:18:56 processing exon
+2019-02-19 16:19:19 processing jxn
+2019-02-19 16:19:36 processing tx
+2019-02-19 16:19:42 processing interaction
+2019-02-19 16:19:42 processing gene
+2019-02-19 16:19:45 processing exon
+2019-02-19 16:20:31 processing jxn
+2019-02-19 16:21:06 processing tx
 $hippo
 NULL
 
@@ -198,61 +200,61 @@ NULL
 $interaction
 NULL
 
-2018-09-20 11:03:56 saving clean_expr_eqtl.Rdata
-2018-09-20 11:27:17 processing development
-2018-09-20 11:28:47 processing sczd_casecontrol_interaction
+2019-02-19 16:21:17 saving clean_expr_eqtl.Rdata
+2019-02-19 16:55:07 processing development
+2019-02-19 16:58:18 processing sczd_casecontrol_interaction
 Loading objects:
   qsvBonf
   qSVs
   mod
   modQsva
   keepIndex
-2018-09-20 11:30:48 processing sczd_casecontrol_hippo
+2019-02-19 17:02:29 processing sczd_casecontrol_hippo
 Loading objects:
   qsvBonf
   qSVs
   mod
   modQsva
   keepIndex
-2018-09-20 11:31:41 processing sczd_casecontrol_dlpfc
+2019-02-19 17:04:22 processing sczd_casecontrol_dlpfc
 Loading objects:
   qsvBonf
   qSVs
   mod
   modQsva
   keepIndex
-2018-09-20 11:32:41 processing regionspecific_adult
-2018-09-20 11:33:37 processing regionspecific_prenatal
-2018-09-20 11:33:51 processing development
-2018-09-20 11:33:51 processing gene
-2018-09-20 11:33:54 processing exon
-2018-09-20 11:34:29 processing jxn
-2018-09-20 11:34:56 processing tx
-2018-09-20 11:35:04 processing sczd_casecontrol_interaction
-2018-09-20 11:35:04 processing gene
-2018-09-20 11:35:07 processing exon
-2018-09-20 11:35:47 processing jxn
-2018-09-20 11:36:18 processing tx
-2018-09-20 11:36:28 processing sczd_casecontrol_hippo
-2018-09-20 11:36:28 processing gene
-2018-09-20 11:36:30 processing exon
-2018-09-20 11:36:49 processing jxn
-2018-09-20 11:37:03 processing tx
-2018-09-20 11:37:08 processing sczd_casecontrol_dlpfc
-2018-09-20 11:37:08 processing gene
-2018-09-20 11:37:09 processing exon
-2018-09-20 11:37:31 processing jxn
-2018-09-20 11:37:47 processing tx
-2018-09-20 11:37:52 processing regionspecific_adult
-2018-09-20 11:37:52 processing gene
-2018-09-20 11:37:54 processing exon
-2018-09-20 11:38:20 processing jxn
-2018-09-20 11:38:40 processing tx
-2018-09-20 11:38:47 processing regionspecific_prenatal
-2018-09-20 11:38:47 processing gene
-2018-09-20 11:38:47 processing exon
-2018-09-20 11:38:50 processing jxn
-2018-09-20 11:38:52 processing tx
+2019-02-19 17:06:21 processing regionspecific_adult
+2019-02-19 17:08:35 processing regionspecific_prenatal
+2019-02-19 17:09:07 processing development
+2019-02-19 17:09:07 processing gene
+2019-02-19 17:09:11 processing exon
+2019-02-19 17:10:16 processing jxn
+2019-02-19 17:11:06 processing tx
+2019-02-19 17:11:21 processing sczd_casecontrol_interaction
+2019-02-19 17:11:21 processing gene
+2019-02-19 17:11:26 processing exon
+2019-02-19 17:12:41 processing jxn
+2019-02-19 17:13:38 processing tx
+2019-02-19 17:13:56 processing sczd_casecontrol_hippo
+2019-02-19 17:13:56 processing gene
+2019-02-19 17:13:59 processing exon
+2019-02-19 17:14:35 processing jxn
+2019-02-19 17:15:02 processing tx
+2019-02-19 17:15:11 processing sczd_casecontrol_dlpfc
+2019-02-19 17:15:11 processing gene
+2019-02-19 17:15:13 processing exon
+2019-02-19 17:15:54 processing jxn
+2019-02-19 17:16:23 processing tx
+2019-02-19 17:16:34 processing regionspecific_adult
+2019-02-19 17:16:34 processing gene
+2019-02-19 17:16:37 processing exon
+2019-02-19 17:17:23 processing jxn
+2019-02-19 17:17:57 processing tx
+2019-02-19 17:18:08 processing regionspecific_prenatal
+2019-02-19 17:18:08 processing gene
+2019-02-19 17:18:09 processing exon
+2019-02-19 17:18:14 processing jxn
+2019-02-19 17:18:18 processing tx
 $development
 NULL
 
@@ -271,48 +273,48 @@ NULL
 $regionspecific_prenatal
 NULL
 
-2018-09-20 11:38:53 saving clean_expr_de_analysis.Rdata
-2018-09-20 12:22:29 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full/eqtl_tables/mergedEqtl_output_hippo_4features.rda
+2019-02-19 17:18:20 saving clean_expr_de_analysis.Rdata
+2019-02-19 18:15:08 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full/eqtl_tables/mergedEqtl_output_hippo_4features.rda
 Loading objects:
   allEqtl
-2018-09-20 12:26:33 fixing exon ids
-2018-09-20 12:26:54 writing BrainSeqPhaseII_eQTL_hippo_full.txt
-2018-09-20 12:27:18 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full/eqtl_tables/mergedEqtl_output_dlpfc_4features.rda
+2019-02-19 18:21:12 fixing exon ids
+2019-02-19 18:22:11 writing BrainSeqPhaseII_eQTL_hippo_full.txt
+2019-02-19 18:22:39 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full/eqtl_tables/mergedEqtl_output_dlpfc_4features.rda
 Loading objects:
   allEqtl
-2018-09-20 12:33:09 fixing exon ids
-2018-09-20 12:33:47 writing BrainSeqPhaseII_eQTL_dlpfc_full.txt
-2018-09-20 12:34:18 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full/eqtl_tables/mergedEqtl_output_hippo_4features.rda
+2019-02-19 18:31:43 fixing exon ids
+2019-02-19 18:34:18 writing BrainSeqPhaseII_eQTL_dlpfc_full.txt
+2019-02-19 18:35:04 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full/eqtl_tables/mergedEqtl_output_interaction_4features.rda
 Loading objects:
   allEqtl
-2018-09-20 12:38:46 fixing exon ids
-2018-09-20 12:39:10 writing BrainSeqPhaseII_eQTL_interaction_full.txt
-2018-09-20 12:39:34 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/eqtl_tables/mergedEqtl_output_hippo_raggr_4features.rda
+2019-02-19 18:35:52 fixing exon ids
+2019-02-19 18:35:56 writing BrainSeqPhaseII_eQTL_interaction_full.txt
+2019-02-19 18:35:59 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/eqtl_tables/mergedEqtl_output_hippo_raggr_4features.rda
 Loading objects:
   allEqtl
-2018-09-20 12:40:20 fixing exon ids
-2018-09-20 12:40:24 writing BrainSeqPhaseII_eQTL_hippo_raggr.txt
-2018-09-20 12:40:28 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/eqtl_tables/mergedEqtl_output_dlpfc_raggr_4features.rda
+2019-02-19 18:37:59 fixing exon ids
+2019-02-19 18:38:11 writing BrainSeqPhaseII_eQTL_hippo_raggr.txt
+2019-02-19 18:38:18 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/eqtl_tables/mergedEqtl_output_dlpfc_raggr_4features.rda
 Loading objects:
   allEqtl
-2018-09-20 12:41:10 fixing exon ids
-2018-09-20 12:41:15 writing BrainSeqPhaseII_eQTL_dlpfc_raggr.txt
-2018-09-20 12:41:19 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/eqtl_tables/mergedEqtl_output_hippo_4features.rda
+2019-02-19 18:39:49 fixing exon ids
+2019-02-19 18:40:06 writing BrainSeqPhaseII_eQTL_dlpfc_raggr.txt
+2019-02-19 18:40:14 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/eqtl_tables/mergedEqtl_output_hippo_4features.rda
 Loading objects:
   allEqtl
-2018-09-20 14:47:18 fixing exon ids
-2018-09-20 15:37:37 writing BrainSeqPhaseII_eQTL_hippo_replication_GTEx.txt
-2018-09-20 15:49:37 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/eqtl_tables/mergedEqtl_output_dlpfc_4features.rda
+2019-02-20 00:53:12 fixing exon ids
+2019-02-20 02:08:40 writing BrainSeqPhaseII_eQTL_hippo_replication_GTEx.txt
+2019-02-20 02:23:45 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/eqtl_tables/mergedEqtl_output_dlpfc_4features.rda
 Loading objects:
   allEqtl
-2018-09-20 17:52:54 fixing exon ids
-2018-09-20 18:28:58 writing BrainSeqPhaseII_eQTL_dlpfc_replication_GTEx.txt
-2018-09-20 18:41:11 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/eqtl_tables/mergedEqtl_output_interaction_4features.rda
+2019-02-20 04:08:04 fixing exon ids
+2019-02-20 04:39:56 writing BrainSeqPhaseII_eQTL_dlpfc_replication_GTEx.txt
+2019-02-20 04:52:05 loading /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/eqtl_tables/mergedEqtl_output_interaction_4features.rda
 Loading objects:
   allEqtl
-2018-09-20 19:50:10 fixing exon ids
-2018-09-20 19:59:51 writing BrainSeqPhaseII_eQTL_interaction_replication_GTEx.txt
-2018-09-20 20:05:41 lines for each file
+2019-02-20 05:44:40 fixing exon ids
+2019-02-20 05:53:22 writing BrainSeqPhaseII_eQTL_interaction_replication_GTEx.txt
+2019-02-20 05:59:09 lines for each file
       396584 BrainSeqPhaseII_clean_expression_development_exon.txt
        24653 BrainSeqPhaseII_clean_expression_development_gene.txt
       297182 BrainSeqPhaseII_clean_expression_development_jxn.txt
@@ -355,7 +357,7 @@ Loading objects:
     22603132 BrainSeqPhaseII_eQTL_hippo_full.txt
      3698269 BrainSeqPhaseII_eQTL_hippo_raggr.txt
    758634578 BrainSeqPhaseII_eQTL_hippo_replication_GTEx.txt
-    22603132 BrainSeqPhaseII_eQTL_interaction_full.txt
+     1776812 BrainSeqPhaseII_eQTL_interaction_full.txt
    398556091 BrainSeqPhaseII_eQTL_interaction_replication_GTEx.txt
       396584 BrainSeqPhaseII_feature_annotation_exon.txt
        24653 BrainSeqPhaseII_feature_annotation_gene.txt
@@ -364,68 +366,82 @@ Loading objects:
          902 BrainSeqPhaseII_sample_metadata.txt
      7023861 BrainSeqPhaseII_snp_annotation.txt
      7023861 BrainSeqPhaseII_snp_genotype.txt
-  2019451733 total
+  1998625413 total
 [1] "Reproducibility information:"
-[1] "2018-09-20 20:47:55 EDT"
+[1] "2019-02-20 06:40:26 EST"
      user    system   elapsed 
-35664.444  2996.894 36460.998 
-Session info ----------------------------------------------------------------------------------------------------------
- setting  value                                      
- version  R version 3.5.0 Patched (2018-04-30 r74679)
- system   x86_64, linux-gnu                          
- ui       X11                                        
- language (EN)                                       
- collate  en_US.UTF-8                                
- tz       US/Eastern                                 
- date     2018-09-20                                 
+35188.690  2181.096 53754.851 
+─ Session info ───────────────────────────────────────────────────────────────────────────────────────────────────────
+ setting  value                                                 
+ version  R version 3.5.1 Patched (2018-10-29 r75535)           
+ os       Red Hat Enterprise Linux Server release 6.9 (Santiago)
+ system   x86_64, linux-gnu                                     
+ ui       X11                                                   
+ language (EN)                                                  
+ collate  en_US.UTF-8                                           
+ ctype    en_US.UTF-8                                           
+ tz       US/Eastern                                            
+ date     2019-02-20                                            
 
-Packages --------------------------------------------------------------------------------------------------------------
- package              * version   date       source                                   
- base                 * 3.5.0     2018-05-02 local                                    
- Biobase              * 2.40.0    2018-05-02 Bioconductor                             
- BiocGenerics         * 0.26.0    2018-05-03 Bioconductor                             
- BiocParallel         * 1.14.2    2018-07-08 Bioconductor                             
- bitops                 1.0-6     2013-08-17 CRAN (R 3.5.0)                           
- cellranger             1.1.0     2016-07-27 CRAN (R 3.5.0)                           
- compiler               3.5.0     2018-05-02 local                                    
- crayon                 1.3.4     2017-09-16 CRAN (R 3.5.0)                           
- data.table           * 1.11.4    2018-05-27 cran (@1.11.4)                           
- datasets             * 3.5.0     2018-05-02 local                                    
- DelayedArray         * 0.6.5     2018-08-15 Bioconductor                             
- devtools             * 1.13.6    2018-06-27 CRAN (R 3.5.0)                           
- digest                 0.6.15    2018-01-28 CRAN (R 3.5.0)                           
- GenomeInfoDb         * 1.16.0    2018-05-03 Bioconductor                             
- GenomeInfoDbData       1.1.0     2018-04-17 Bioconductor                             
- GenomicRanges        * 1.32.6    2018-07-20 Bioconductor                             
- graphics             * 3.5.0     2018-05-02 local                                    
- grDevices            * 3.5.0     2018-05-02 local                                    
- grid                   3.5.0     2018-05-02 local                                    
- IRanges              * 2.14.10   2018-05-17 Bioconductor                             
- jaffelab             * 0.99.21   2018-05-03 Github (LieberInstitute/jaffelab@7ed0ab7)
- lattice                0.20-35   2017-03-25 CRAN (R 3.5.0)                           
- limma                  3.36.2    2018-06-21 Bioconductor                             
- Matrix                 1.2-14    2018-04-13 CRAN (R 3.5.0)                           
- matrixStats          * 0.54.0    2018-07-23 CRAN (R 3.5.0)                           
- memoise                1.1.0     2017-04-21 CRAN (R 3.5.0)                           
- methods              * 3.5.0     2018-05-02 local                                    
- parallel             * 3.5.0     2018-05-02 local                                    
- pillar                 1.3.0     2018-07-14 CRAN (R 3.5.0)                           
- rafalib              * 1.0.0     2015-08-09 CRAN (R 3.5.0)                           
- RColorBrewer           1.1-2     2014-12-07 CRAN (R 3.5.0)                           
- Rcpp                   0.12.18   2018-07-23 CRAN (R 3.5.0)                           
- RCurl                  1.95-4.11 2018-07-15 CRAN (R 3.5.0)                           
- readxl               * 1.1.0     2018-04-20 CRAN (R 3.5.0)                           
- rlang                  0.2.1     2018-05-30 cran (@0.2.1)                            
- S4Vectors            * 0.18.3    2018-06-13 Bioconductor                             
- segmented              0.5-3.0   2017-11-30 CRAN (R 3.5.0)                           
- stats                * 3.5.0     2018-05-02 local                                    
- stats4               * 3.5.0     2018-05-02 local                                    
- SummarizedExperiment * 1.10.1    2018-05-17 Bioconductor                             
- tibble                 1.4.2     2018-01-22 CRAN (R 3.5.0)                           
- tools                  3.5.0     2018-05-02 local                                    
- utils                * 3.5.0     2018-05-02 local                                    
- withr                  2.1.2     2018-03-15 CRAN (R 3.5.0)                           
- XVector                0.20.0    2018-05-03 Bioconductor                             
- zlibbioc               1.26.0    2018-05-02 Bioconductor                             
+─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
+ package              * version   date       lib source                                   
+ assertthat             0.2.0     2017-04-11 [2] CRAN (R 3.5.0)                           
+ backports              1.1.3     2018-12-14 [2] CRAN (R 3.5.1)                           
+ Biobase              * 2.42.0    2018-10-30 [2] Bioconductor                             
+ BiocGenerics         * 0.28.0    2018-10-30 [1] Bioconductor                             
+ BiocParallel         * 1.16.5    2019-01-04 [1] Bioconductor                             
+ bitops                 1.0-6     2013-08-17 [2] CRAN (R 3.5.0)                           
+ callr                  3.1.1     2018-12-21 [2] CRAN (R 3.5.1)                           
+ cellranger             1.1.0     2016-07-27 [1] CRAN (R 3.5.0)                           
+ cli                    1.0.1     2018-09-25 [1] CRAN (R 3.5.1)                           
+ crayon                 1.3.4     2017-09-16 [1] CRAN (R 3.5.0)                           
+ data.table           * 1.12.0    2019-01-13 [1] CRAN (R 3.5.1)                           
+ DelayedArray         * 0.8.0     2018-10-30 [2] Bioconductor                             
+ desc                   1.2.0     2018-05-01 [2] CRAN (R 3.5.1)                           
+ devtools             * 2.0.1     2018-10-26 [1] CRAN (R 3.5.1)                           
+ digest                 0.6.18    2018-10-10 [1] CRAN (R 3.5.1)                           
+ fs                     1.2.6     2018-08-23 [2] CRAN (R 3.5.1)                           
+ GenomeInfoDb         * 1.18.1    2018-11-12 [1] Bioconductor                             
+ GenomeInfoDbData       1.2.0     2018-11-02 [2] Bioconductor                             
+ GenomicRanges        * 1.34.0    2018-10-30 [1] Bioconductor                             
+ glue                   1.3.0     2018-07-17 [1] CRAN (R 3.5.1)                           
+ IRanges              * 2.16.0    2018-10-30 [1] Bioconductor                             
+ jaffelab             * 0.99.21   2018-05-03 [1] Github (LieberInstitute/jaffelab@7ed0ab7)
+ lattice                0.20-38   2018-11-04 [3] CRAN (R 3.5.1)                           
+ limma                  3.38.3    2018-12-02 [1] Bioconductor                             
+ magrittr               1.5       2014-11-22 [1] CRAN (R 3.5.0)                           
+ Matrix                 1.2-15    2018-11-01 [3] CRAN (R 3.5.1)                           
+ matrixStats          * 0.54.0    2018-07-23 [1] CRAN (R 3.5.1)                           
+ memoise                1.1.0     2017-04-21 [2] CRAN (R 3.5.0)                           
+ pillar                 1.3.1     2018-12-15 [1] CRAN (R 3.5.1)                           
+ pkgbuild               1.0.2     2018-10-16 [2] CRAN (R 3.5.1)                           
+ pkgconfig              2.0.2     2018-08-16 [1] CRAN (R 3.5.1)                           
+ pkgload                1.0.2     2018-10-29 [2] CRAN (R 3.5.1)                           
+ prettyunits            1.0.2     2015-07-13 [1] CRAN (R 3.5.0)                           
+ processx               3.2.1     2018-12-05 [1] CRAN (R 3.5.1)                           
+ ps                     1.3.0     2018-12-21 [2] CRAN (R 3.5.1)                           
+ R6                     2.3.0     2018-10-04 [2] CRAN (R 3.5.1)                           
+ rafalib              * 1.0.0     2015-08-09 [1] CRAN (R 3.5.0)                           
+ RColorBrewer           1.1-2     2014-12-07 [2] CRAN (R 3.5.0)                           
+ Rcpp                   1.0.0     2018-11-07 [1] CRAN (R 3.5.1)                           
+ RCurl                  1.95-4.11 2018-07-15 [2] CRAN (R 3.5.1)                           
+ readxl               * 1.2.0     2018-12-19 [2] CRAN (R 3.5.1)                           
+ remotes                2.0.2     2018-10-30 [1] CRAN (R 3.5.1)                           
+ rlang                  0.3.1     2019-01-08 [1] CRAN (R 3.5.1)                           
+ rprojroot              1.3-2     2018-01-03 [2] CRAN (R 3.5.0)                           
+ S4Vectors            * 0.20.1    2018-11-09 [1] Bioconductor                             
+ segmented              0.5-3.0   2017-11-30 [2] CRAN (R 3.5.0)                           
+ sessioninfo            1.1.1     2018-11-05 [1] CRAN (R 3.5.1)                           
+ SummarizedExperiment * 1.12.0    2018-10-30 [1] Bioconductor                             
+ testthat               2.0.1     2018-10-13 [1] CRAN (R 3.5.1)                           
+ tibble                 2.0.1     2019-01-12 [1] CRAN (R 3.5.1)                           
+ usethis              * 1.4.0     2018-08-14 [2] CRAN (R 3.5.1)                           
+ withr                  2.1.2     2018-03-15 [2] CRAN (R 3.5.0)                           
+ XVector                0.22.0    2018-10-30 [1] Bioconductor                             
+ zlibbioc               1.28.0    2018-10-30 [2] Bioconductor                             
+
+[1] /users/lcollado/R/x86_64-pc-linux-gnu-library/3.5.x
+[2] /jhpce/shared/jhpce/core/conda/miniconda-3/envs/svnR-3.5.x/R/3.5.x/lib64/R/site-library
+[3] /jhpce/shared/jhpce/core/conda/miniconda-3/envs/svnR-3.5.x/R/3.5.x/lib64/R/library
 **** Job ends ****
-Thu Sep 20 20:48:34 EDT 2018
+Wed Feb 20 06:40:47 EST 2019
