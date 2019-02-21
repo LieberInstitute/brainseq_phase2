@@ -48,7 +48,7 @@ This directory has all the files for creating the eQTL browser. As stated in the
     22603132 BrainSeqPhaseII_eQTL_hippo_full.txt
      3698269 BrainSeqPhaseII_eQTL_hippo_raggr.txt
    758634578 BrainSeqPhaseII_eQTL_hippo_replication_GTEx.txt
-    22603132 BrainSeqPhaseII_eQTL_interaction_full.txt
+     1776812 BrainSeqPhaseII_eQTL_interaction_full.txt
    398556091 BrainSeqPhaseII_eQTL_interaction_replication_GTEx.txt
       396584 BrainSeqPhaseII_feature_annotation_exon.txt
        24653 BrainSeqPhaseII_feature_annotation_gene.txt
