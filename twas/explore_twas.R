@@ -285,6 +285,8 @@ h_eqtl <- unique(twas_exp$all$EQTL.ID)
 h_eqtl <- h_eqtl[!is.na(h_eqtl)]
 
 
+h_psycm <- unique(twas_exp$all$EQTL.ID[twas_exp$all$type == 'psycm'])
+h_psycm <- h_psycm[!is.na(h_psycm)]
 
 table(raggr_clean$HIPPO$SNP %in% h)
 # FALSE  TRUE
@@ -299,6 +301,14 @@ table(raggr_clean$HIPPO$SNP %in% h_eqtl)
 table(raggr_clean$DLPFC$SNP %in% h_eqtl)
 # FALSE  TRUE
 # 99802  6636
+
+table(raggr_clean$HIPPO$SNP %in% h_psycm)
+# FALSE  TRUE
+# 62419  4504
+table(raggr_clean$DLPFC$SNP %in% h_psycm)
+# FALSE  TRUE
+# 99869  6569
+
 
 
 table(unique(raggr_clean$HIPPO$SNP) %in% h)
@@ -315,6 +325,13 @@ table(unique(raggr_clean$DLPFC$SNP) %in% h_eqtl)
 # FALSE  TRUE
 #  6555   225
 
+table(unique(raggr_clean$HIPPO$SNP) %in% h_psycm)
+# FALSE  TRUE
+#  5305   205
+table(unique(raggr_clean$DLPFC$SNP) %in% h_psycm)
+# FALSE  TRUE
+#  6558   222
+
 
 table(unique(raggr_clean$HIPPO$IndexSNP) %in% h)
 # FALSE  TRUE
@@ -327,6 +344,13 @@ table(unique(raggr_clean$HIPPO$IndexSNP) %in% h_eqtl)
 # FALSE
   # 103
 table(unique(raggr_clean$DLPFC$IndexSNP) %in% h_eqtl)
+# FALSE
+#   116
+
+table(unique(raggr_clean$HIPPO$IndexSNP) %in% h_psycm)
+# FALSE
+#   103
+table(unique(raggr_clean$DLPFC$IndexSNP) %in% h_psycm)
 # FALSE
 #   116
 
@@ -516,6 +540,114 @@ map2(
 #               TRUE      0   49  49
 #               Sum      17   99 116
 
+
+by_locus_psycm <- map(raggr_clean, check_by_locus, ref = h_psycm)
+map(by_locus_psycm, ~ table(.x > 0))
+# $HIPPO
+#
+# FALSE  TRUE
+#    58    45
+#
+# $DLPFC
+#
+# FALSE  TRUE
+#    68    48
+map2(
+    by_locus_psycm,
+    by_locus_considered,
+    ~ addmargins(table(
+        'among TWAS-all best' = .x > 0,
+        'among SNPs for TWAS weights' = .y > 0
+    ))
+)
+# $HIPPO
+#                    among SNPs for TWAS weights
+# among TWAS-all best FALSE TRUE Sum
+#               FALSE    16   42  58
+#               TRUE      0   45  45
+#               Sum      16   87 103
+#
+# $DLPFC
+#                    among SNPs for TWAS weights
+# among TWAS-all best FALSE TRUE Sum
+#               FALSE    17   51  68
+#               TRUE      0   48  48
+#               Sum      17   99 116
+
+
+check_with_p <- function(threshold = 0.05) {
+    h_psycm_p5 <- unique(twas_exp$all$EQTL.ID[twas_exp$all$type == 'psycm' & twas_exp$all$TWAS.P < threshold])
+    h_psycm_p5 <- h_psycm_p5[!is.na(h_psycm_p5)]
+    by_locus_psycm_p5 <- map(raggr_clean, check_by_locus, ref = h_psycm_p5)
+    map2(
+        by_locus_psycm_p5,
+        by_locus_considered,
+        ~ addmargins(table(
+            'among TWAS-all best' = .x > 0,
+            'among SNPs for TWAS weights' = .y > 0
+        ))
+    )
+}
+check_with_p()
+# $HIPPO
+#                    among SNPs for TWAS weights
+# among TWAS-all best FALSE TRUE Sum
+#               FALSE    16   43  59
+#               TRUE      0   44  44
+#               Sum      16   87 103
+#
+# $DLPFC
+#                    among SNPs for TWAS weights
+# among TWAS-all best FALSE TRUE Sum
+#               FALSE    17   53  70
+#               TRUE      0   46  46
+#               Sum      17   99 116
+
+
+check_with_p(1e-4)
+# $HIPPO
+#                    among SNPs for TWAS weights
+# among TWAS-all best FALSE TRUE Sum
+#               FALSE    16   45  61
+#               TRUE      0   42  42
+#               Sum      16   87 103
+#
+# $DLPFC
+#                    among SNPs for TWAS weights
+# among TWAS-all best FALSE TRUE Sum
+#               FALSE    17   55  72
+#               TRUE      0   44  44
+#               Sum      17   99 116
+
+check_with_p(1e-6)
+# $HIPPO
+#                    among SNPs for TWAS weights
+# among TWAS-all best FALSE TRUE Sum
+#               FALSE    16   50  66
+#               TRUE      0   37  37
+#               Sum      16   87 103
+#
+# $DLPFC
+#                    among SNPs for TWAS weights
+# among TWAS-all best FALSE TRUE Sum
+#               FALSE    17   61  78
+#               TRUE      0   38  38
+#               Sum      17   99 116
+
+check_with_p(1e-8)
+# $HIPPO
+#                    among SNPs for TWAS weights
+# among TWAS-all best FALSE TRUE Sum
+#               FALSE    16   62  78
+#               TRUE      0   25  25
+#               Sum      16   87 103
+#
+# $DLPFC
+#                    among SNPs for TWAS weights
+# among TWAS-all best FALSE TRUE Sum
+#               FALSE    17   73  90
+#               TRUE      0   26  26
+#               Sum      17   99 116
 
 
 gene_by_locus <- function(rag, ref) {
