@@ -202,73 +202,79 @@ if(!file.exists('eqtl_tables/matrixEqtl_output_dlpfc_4features.rda')) {
 ######################
 ###### annotate ######
 
-# extract
-geneEqtl = meGene$cis$eqtls
-geneEqtl$gene = as.character(geneEqtl$gene)
-geneEqtl$snps = as.character(geneEqtl$snps)
+if(!file.exists('eqtl_tables/mergedEqtl_output_dlpfc_4features_in_progress.rda')) {
+    # extract
+    geneEqtl = meGene$cis$eqtls
+    geneEqtl$gene = as.character(geneEqtl$gene)
+    geneEqtl$snps = as.character(geneEqtl$snps)
 
-exonEqtl = meExon$cis$eqtls
-exonEqtl$gene = as.character(exonEqtl$gene)
-exonEqtl$snps = as.character(exonEqtl$snps)
+    exonEqtl = meExon$cis$eqtls
+    exonEqtl$gene = as.character(exonEqtl$gene)
+    exonEqtl$snps = as.character(exonEqtl$snps)
 
-jxnEqtl = meJxn$cis$eqtls
-jxnEqtl$gene = as.character(jxnEqtl$gene)
-jxnEqtl$snps = as.character(jxnEqtl$snps)
+    jxnEqtl = meJxn$cis$eqtls
+    jxnEqtl$gene = as.character(jxnEqtl$gene)
+    jxnEqtl$snps = as.character(jxnEqtl$snps)
 
-txEqtl = meTx$cis$eqtls
-txEqtl$gene = as.character(txEqtl$gene)
-txEqtl$snps = as.character(txEqtl$snps)
+    txEqtl = meTx$cis$eqtls
+    txEqtl$gene = as.character(txEqtl$gene)
+    txEqtl$snps = as.character(txEqtl$snps)
 
-################################
-# add gene annotation info #####
-################################
+    ################################
+    # add gene annotation info #####
+    ################################
 
-rm(meGene, meExon, meJxn, meTx)
-geneEqtl$Symbol = rowRanges(rse_gene)$Symbol[match(geneEqtl$gene, rownames(rse_gene))]
-geneEqtl$EnsemblGeneID = rowRanges(rse_gene)$ensemblID[match(geneEqtl$gene, rownames(rse_gene))]
-geneEqtl$Type = "Gene"
-geneEqtl$Class = "InGen"
-geneEqtl = DataFrame(geneEqtl)
-# geneEqtl$gene_type = rowRanges(rse_gene)$gene_type[match(geneEqtl$gene, rownames(rse_gene))]
+    rm(meGene, meExon, meJxn, meTx)
+    geneEqtl$Symbol = rowRanges(rse_gene)$Symbol[match(geneEqtl$gene, rownames(rse_gene))]
+    geneEqtl$EnsemblGeneID = rowRanges(rse_gene)$ensemblID[match(geneEqtl$gene, rownames(rse_gene))]
+    geneEqtl$Type = "Gene"
+    geneEqtl$Class = "InGen"
+    geneEqtl = DataFrame(geneEqtl)
+    # geneEqtl$gene_type = rowRanges(rse_gene)$gene_type[match(geneEqtl$gene, rownames(rse_gene))]
 
-exonEqtl$Symbol = rowRanges(rse_exon)$Symbol[match(exonEqtl$gene, rownames(rse_exon))]
-exonEqtl$EnsemblGeneID = rowRanges(rse_exon)$ensemblID[match(exonEqtl$gene, rownames(rse_exon))]
-exonEqtl$Type = "Exon"
-exonEqtl$Class = "InGen"
-exonEqtl = DataFrame(exonEqtl)
-# exonEqtl$gene_type = rowRanges(rse_exon)$gene_type[match(exonEqtl$gene, rownames(rse_exon))]
+    exonEqtl$Symbol = rowRanges(rse_exon)$Symbol[match(exonEqtl$gene, rownames(rse_exon))]
+    exonEqtl$EnsemblGeneID = rowRanges(rse_exon)$ensemblID[match(exonEqtl$gene, rownames(rse_exon))]
+    exonEqtl$Type = "Exon"
+    exonEqtl$Class = "InGen"
+    exonEqtl = DataFrame(exonEqtl)
+    # exonEqtl$gene_type = rowRanges(rse_exon)$gene_type[match(exonEqtl$gene, rownames(rse_exon))]
 
-jxnEqtl$Symbol = rowRanges(rse_jxn)$newGeneSymbol[match(jxnEqtl$gene, rownames(rse_jxn))]
-jxnEqtl$EnsemblGeneID = rowRanges(rse_jxn)$newGeneID[match(jxnEqtl$gene, rownames(rse_jxn))]
-jxnEqtl$Type = "Jxn"
-jxnEqtl$Class = rowRanges(rse_jxn)$Class[match(jxnEqtl$gene, rownames(rse_jxn))]
-jxnEqtl = DataFrame(jxnEqtl)
-# jxnEqtl$gene_type = rowRanges(rse_jxn)$gene_type[match(jxnEqtl$gene, rownames(rse_jxn))]
+    jxnEqtl$Symbol = rowRanges(rse_jxn)$newGeneSymbol[match(jxnEqtl$gene, rownames(rse_jxn))]
+    jxnEqtl$EnsemblGeneID = rowRanges(rse_jxn)$newGeneID[match(jxnEqtl$gene, rownames(rse_jxn))]
+    jxnEqtl$Type = "Jxn"
+    jxnEqtl$Class = rowRanges(rse_jxn)$Class[match(jxnEqtl$gene, rownames(rse_jxn))]
+    jxnEqtl = DataFrame(jxnEqtl)
+    # jxnEqtl$gene_type = rowRanges(rse_jxn)$gene_type[match(jxnEqtl$gene, rownames(rse_jxn))]
 
-txEqtl$Symbol = rowRanges(rse_tx)$gene_name[match(txEqtl$gene, rownames(rse_tx))]
-txEqtl$EnsemblGeneID = ss(rowRanges(rse_tx)$gene_id[match(txEqtl$gene, rownames(rse_tx))],"\\.",1)
-txEqtl$Type = "Tx"
-txEqtl$Class = "InGen"
-txEqtl = DataFrame(txEqtl)
-# txEqtl$gene_type = rowRanges(rse_tx)$gene_type[match(txEqtl$gene, rownames(rse_tx))]
+    txEqtl$Symbol = rowRanges(rse_tx)$gene_name[match(txEqtl$gene, rownames(rse_tx))]
+    txEqtl$EnsemblGeneID = ss(rowRanges(rse_tx)$gene_id[match(txEqtl$gene, rownames(rse_tx))],"\\.",1)
+    txEqtl$Type = "Tx"
+    txEqtl$Class = "InGen"
+    txEqtl = DataFrame(txEqtl)
+    # txEqtl$gene_type = rowRanges(rse_tx)$gene_type[match(txEqtl$gene, rownames(rse_tx))]
 
-## Process each one individually to reduce the memory blow up
-rm(rse_tx)
-geneEqtl$gencodeTx <- CharacterList(
-    as.list(rowRanges(rse_gene)$gencodeTx[match(geneEqtl$gene, rownames(rse_gene))])
-)
-rm(rse_gene)
-exonEqtl$gencodeTx <- CharacterList(
-    as.list(rowRanges(rse_exon)$gencodeTx[match(exonEqtl$gene, rownames(rse_exon))])
-)
-rm(rse_exon)
-jxnEqtl$gencodeTx <- CharacterList(
-    as.list(rowRanges(rse_jxn)$gencodeTx[match(jxnEqtl$gene, rownames(rse_jxn))])
-)
-rm(rse_jxn)
-txEqtl$gencodeTx <- CharacterList(
-    as.list(txEqtl$gene))
-)
+    ## Process each one individually to reduce the memory blow up
+    rm(rse_tx)
+    geneEqtl$gencodeTx <- CharacterList(
+        as.list(rowRanges(rse_gene)$gencodeTx[match(geneEqtl$gene, rownames(rse_gene))])
+    )
+    rm(rse_gene)
+    exonEqtl$gencodeTx <- CharacterList(
+        as.list(rowRanges(rse_exon)$gencodeTx[match(exonEqtl$gene, rownames(rse_exon))])
+    )
+    rm(rse_exon)
+    jxnEqtl$gencodeTx <- CharacterList(
+        as.list(rowRanges(rse_jxn)$gencodeTx[match(jxnEqtl$gene, rownames(rse_jxn))])
+    )
+    rm(rse_jxn)
+    txEqtl$gencodeTx <- CharacterList(
+        as.list(txEqtl$gene))
+    )
+
+    save(geneEqtl, exonEqtl, jxnEqtl, txEqtl, file = 'eqtl_tables/mergedEqtl_output_dlpfc_4features_in_progress.rda')
+} else {
+    load('eqtl_tables/mergedEqtl_output_dlpfc_4features_in_progress.rda', verbose = TRUE)
+}
 
 # merge
 allEqtl = rbind(geneEqtl, exonEqtl, jxnEqtl, txEqtl)
