@@ -196,11 +196,23 @@ save(meGene, meExon, meJxn, meTx,
 ######################
 ###### annotate ######
 
-# load("eqtl_tables/matrixEqtl_output_dlpfc_4features.rda")
-# load("count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseTx_merged_n449.rda")
-# load("count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseJxn_merged_n449.rda")
-# load("count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseExon_merged_n449.rda")
-# load("count_data/dlpfc_ribozero_brainseq_phase2_hg38_rseGene_merged_n449.rda")
+## Resume manually after memory crash...
+if(FALSE) {
+    load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1_gene.Rdata", verbose = TRUE)
+    load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1_exon.Rdata", verbose = TRUE)
+    load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1_jxn.Rdata", verbose = TRUE)
+    load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1_tx.Rdata", verbose = TRUE)
+
+    keepInd = which(colData(bsp1_gene)$Age > 13 & colData(bsp1_gene)$Region == "DLPFC")
+    rse_gene = bsp1_gene[,keepInd]
+    rse_exon = bsp1_exon[,keepInd]
+    rse_jxn = bsp1_jxn[,keepInd]
+    rse_tx = bsp1_tx[,keepInd]
+    rm(bsp1_gene, bsp1_exon, bsp1_jxn, bsp1_tx, keepInd)
+
+    load("eqtl_tables/matrixEqtl_output_dlpfc_4features.rda", verbose = TRUE)
+    
+}
 
 # extract
 geneEqtl = meGene$cis$eqtls
@@ -252,14 +264,26 @@ txEqtl$Class = "InGen"
 txEqtl = DataFrame(txEqtl)
 # txEqtl$gene_type = rowRanges(rse_tx)$gene_type[match(txEqtl$gene, rownames(rse_tx))]
 
+## Process each one individually to reduce the memory blow up
+rm(rse_tx)
+geneEqtl$gencodeTx <- CharacterList(
+    as.list(rowRanges(rse_gene)$gencodeTx[match(geneEqtl$gene, rownames(rse_gene))])
+)
+rm(rse_gene)
+exonEqtl$gencodeTx <- CharacterList(
+    as.list(rowRanges(rse_exon)$gencodeTx[match(exonEqtl$gene, rownames(rse_exon))])
+)
+rm(rse_exon)
+jxnEqtl$gencodeTx <- CharacterList(
+    as.list(rowRanges(rse_jxn)$gencodeTx[match(jxnEqtl$gene, rownames(rse_jxn))])
+)
+rm(rse_jxn)
+txEqtl$gencodeTx <- CharacterList(
+    as.list(txEqtl$gene))
+)
 
 # merge
 allEqtl = rbind(geneEqtl, exonEqtl, jxnEqtl, txEqtl)
-allEqtl$gencodeTx = CharacterList(c(as.list(rowRanges(rse_gene)$gencodeTx[match(geneEqtl$gene, 
-	rownames(rse_gene))]),
-	as.list(rowRanges(rse_exon)$gencodeTx[match(exonEqtl$gene, rownames(rse_exon))]),
-	as.list(rowRanges(rse_jxn)$gencodeTx[match(jxnEqtl$gene, rownames(rse_jxn))]),
-	as.list(txEqtl$gene)))
 save(allEqtl, file="eqtl_tables/mergedEqtl_output_dlpfc_4features.rda",compress=TRUE)
 
 
