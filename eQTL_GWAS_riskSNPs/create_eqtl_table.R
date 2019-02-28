@@ -77,22 +77,33 @@ venn.diagram(list(Hippo = unique(sigEqtlHippo_sub$snps[which(sigEqtlHippo_sub$sn
 	fill = pal[1:2], main="", main.pos = c(.5, .05), cat.cex = 1.9, cex=3,
 	margin = .1, imagetype="png",  filename = "venn_unique_IndexSNP.png")
 
-venn.diagram(list(Hippo = unique(sigEqtlHippo_sub$gene[which(sigEqtlHippo_sub$Type=="Gene")]), 
+pal = c('skyblue3','dark orange')
+g = venn.diagram(list(Hippo = unique(sigEqtlHippo_sub$gene[which(sigEqtlHippo_sub$Type=="Gene")]), 
 				DLPFC = unique(sigEqtlDlpfc_sub$gene[which(sigEqtlDlpfc_sub$Type=="Gene")])), 
-	fill = pal[1:2], main="", main.pos = c(.5, .05), cat.cex = 1.9, cex=3,
-	margin = .1, imagetype="png",  filename = "venn_unique_feats_Gene.png")	
-venn.diagram(list(Hippo = unique(sigEqtlHippo_sub$gene[which(sigEqtlHippo_sub$Type=="Exon")]), 
+	fill = pal[1:2], main="Genes", main.pos = c(.5, .15), main.cex=2, cat.cex = 1.9, cex=3,
+	margin = .1, imagetype="png", filename = NULL)	
+e = venn.diagram(list(Hippo = unique(sigEqtlHippo_sub$gene[which(sigEqtlHippo_sub$Type=="Exon")]), 
 				DLPFC = unique(sigEqtlDlpfc_sub$gene[which(sigEqtlDlpfc_sub$Type=="Exon")])), 
-	fill = pal[1:2], main="", main.pos = c(.5, .05), cat.cex = 1.9, cex=3,
-	margin = .1, imagetype="png",  filename = "venn_unique_feats_Exon.png")	
-venn.diagram(list(Hippo = unique(sigEqtlHippo_sub$gene[which(sigEqtlHippo_sub$Type=="Jxn")]), 
+	fill = pal[1:2], main="Exons", main.pos = c(.5, .15), main.cex=2, cat.cex = 1.9, cex=3,
+	margin = .1, imagetype="png", filename = NULL)		
+j = venn.diagram(list(Hippo = unique(sigEqtlHippo_sub$gene[which(sigEqtlHippo_sub$Type=="Jxn")]), 
 				DLPFC = unique(sigEqtlDlpfc_sub$gene[which(sigEqtlDlpfc_sub$Type=="Jxn")])), 
-	fill = pal[1:2], main="", main.pos = c(.5, .05), cat.cex = 1.9, cex=3,
-	margin = .1, imagetype="png",  filename = "venn_unique_feats_Jxn.png")	
-venn.diagram(list(Hippo = unique(sigEqtlHippo_sub$gene[which(sigEqtlHippo_sub$Type=="Tx")]), 
+	fill = pal[1:2], main="Junctions", main.pos = c(.5, .15), main.cex=2, cat.cex = 1.9, cex=3,
+	margin = .1, imagetype="png", filename = NULL)	
+t = venn.diagram(list(Hippo = unique(sigEqtlHippo_sub$gene[which(sigEqtlHippo_sub$Type=="Tx")]), 
 				DLPFC = unique(sigEqtlDlpfc_sub$gene[which(sigEqtlDlpfc_sub$Type=="Tx")])), 
-	fill = pal[1:2], main="", main.pos = c(.5, .05), cat.cex = 1.9, cex=3,
-	margin = .1, imagetype="png",  filename = "venn_unique_feats_Tx.png")	
+	fill = pal[1:2], main="Transcripts", main.pos = c(.5, .15), main.cex=2, cat.cex = 1.9, cex=3,
+	margin = .1, imagetype="png", filename = NULL)	
+	
+pdf('venn_unique_feats_4_types.pdf', useDingbats = FALSE)
+    grid.draw(g)
+	grid.newpage()
+	grid.draw(e)
+	grid.newpage()
+	grid.draw(j)
+	grid.newpage()
+	grid.draw(t)
+dev.off()	
 	
 ##############################
 ## PDF version, Leo's colors	
