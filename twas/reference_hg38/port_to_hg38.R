@@ -163,6 +163,14 @@ table(is.na(m_in_hg38))
 # 968909 114105
 
 pgc2_filt <- pgc2[!is.na(m_in_hg38), ]
+
+if(FALSE) {
+    m2 <- match(pgc2_filt$SNP, ldref_bim_hg38$snp)
+    stopifnot(identical(m2, m_in_hg38[ !is.na(m_in_hg38) ]))
+    stopifnot(identical(ldref_bim_hg38$position, ldref_bim_hg38_ourname$position))
+    
+    stopifnot(identical(ldref_bim_hg38$chr, ldref_bim_hg38_ourname$chr))
+}
 pgc2_filt$SNP <- ldref_bim_hg38_ourname$snp[ m_in_hg38[ !is.na(m_in_hg38) ] ]
 
 ## Save the PGC2 SNPs with hg38 positions and our SNP names
