@@ -38,6 +38,16 @@ map_int(ttSig, ~ length(unique(.x$geneid)))
 
 ## Continue
 
+## Add GWAS p-value and OR from the original sumstats file
+
+## Venn diagrams of features by region, then joint (grouped by gene id)
+
+## Compare TWAS Z-scores across DLPFC and HIPPO
+
+## Read in the 179 CLOZUK+PGC2 snps
+
+## Use the raggr output to find the proxy snps
+
 
 ## Reproducibility information
 print('Reproducibility information:')
