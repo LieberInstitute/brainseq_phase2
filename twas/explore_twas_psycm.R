@@ -14,25 +14,27 @@ tt <- tt[!is.na(tt$TWAS.P), ]
 ## Focus on CLOZUK+PGC2 (psycm) GWAS
 tt <- tt[which(tt$type == "psycm"),]
 
-## Compute FDR by region across all 4 features
+## Compute FDR by region for each feature 4 features
 tt <- map_dfr(split(tt, tt$region), function(reg) {
-    reg$TWAS.FDR <- p.adjust(reg$TWAS.P, 'fdr')
-    reg <- reg[order(reg$TWAS.P), ]
-    return(reg)
+    map_dfr(split(reg, reg$feature), function(reg_feat) {
+        reg_feat$TWAS.FDR <- p.adjust(reg_feat$TWAS.P, 'fdr')
+        reg_feat <- reg_feat[order(reg_feat$TWAS.P), ]
+        return(reg_feat)
+    })
 })
 print(tt, width = 200)
 
 ttSig <- map(split(tt, tt$region), ~ .x[.x$TWAS.FDR < 0.05, ])
 map(ttSig, dim)
 # $DLPFC
-# [1] 5762   27
+# [1] 5760   27
 #
 # $HIPPO
-# [1] 4090   27
+# [1] 4081   27
 
 map_int(ttSig, ~ length(unique(.x$geneid)))
 # DLPFC HIPPO
-#  1519  1256
+ # 1514  1255
 
 ## Continue
 
