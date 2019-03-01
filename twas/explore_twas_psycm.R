@@ -8,7 +8,10 @@ library('sessioninfo')
 load('rda/twas_exp.Rdata', verbose = TRUE)
 
 ## Andrew's exploration code that focuses on the 'all' part
-tt = as.data.frame(twas_exp$all)
+# tt = as.data.frame(twas_exp$all)
+tt <- twas_exp$all
+## Drop TWAS NA p-values
+tt <- tt[!is.na(tt$TWAS.P), ]
 tt = tt[which(tt$type == "psycm"),]
 
 ttHip = tt[tt$region == "HIPPO",]
@@ -23,7 +26,9 @@ ttSig_dlp = ttDLPFC[which(ttDLPFC$FDR < 0.05),]
 ttSig_dlp = ttSig_dlp[order(ttSig_dlp$TWAS.P),]
 
 dim(ttSig_dlp)
+# [1] 5762   27
 dim(ttSig_hip)
+# [1] 4090   27
 
 length(unique(ttSig_dlp$geneid)) #  1519
 length(unique(ttSig_hip$geneid)) #  1256
