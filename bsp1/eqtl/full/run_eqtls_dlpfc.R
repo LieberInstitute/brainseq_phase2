@@ -268,7 +268,7 @@ if(!file.exists('eqtl_tables/mergedEqtl_output_dlpfc_4features_in_progress.rda')
     )
     rm(rse_jxn)
     txEqtl$gencodeTx <- CharacterList(
-        as.list(txEqtl$gene))
+        as.list(txEqtl$gene)
     )
 
     save(geneEqtl, exonEqtl, jxnEqtl, txEqtl, file = 'eqtl_tables/mergedEqtl_output_dlpfc_4features_in_progress.rda')
