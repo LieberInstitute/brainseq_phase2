@@ -514,6 +514,8 @@ save(tt, ttSig, get_variable_by_region, ttReg_map, region_twas_z, file = 'rda/tt
 
 
 
+
+
 ## Continue
 
 
@@ -534,6 +536,13 @@ map_dbl(ttSig, ~ with(.x, check_cor(TWAS.FDR, EQTL.FDR.computed)))
 #     DLPFC     HIPPO
 # 0.7460110 0.7498989
 
+
+map_dbl(split(tt, tt$BEST.GWAS.status), ~ with(.x, check_cor(TWAS.FDR, BEST.GWAS.FDR.computed)))
+#     Index     Other     Proxy
+# 0.1169518 0.3485689 0.2396344
+map_dbl(split(tt, tt$BEST.GWAS.status), ~ with(.x, check_cor(TWAS.FDR, EQTL.FDR.computed)))
+#     Index     Other     Proxy
+# 0.7901372 0.8054720 0.8109420
 
 tt_sigonly <- tt[tt$TWAS.FDR < 0.05, ]
 ggplot(tt_sigonly, aes(
