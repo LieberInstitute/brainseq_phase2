@@ -1,0 +1,12 @@
+Loading git
+Adding LIBD modules
+**** Job starts ****
+Mon Mar  4 11:18:05 EST 2019
+**** JHPCE info ****
+User: lcollado
+Job id: 6697285
+Job name: chmod
+Hostname: compute-093
+Task id: 
+**** Job ends ****
+Mon Mar  4 15:03:38 EST 2019
