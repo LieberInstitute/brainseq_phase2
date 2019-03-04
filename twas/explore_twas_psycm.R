@@ -128,6 +128,111 @@ map_int(ttSig, ~ length(unique(.x$geneid[.x$TWAS.P < 5e-08])))
 map_int(split(tt, tt$region), ~ length(unique(.x$geneid[.x$TWAS.P < 5e-08])))
 # DLPFC HIPPO
 #   115    84
+
+
+## Add raggr data
+## Code based on https://github.com/LieberInstitute/brainseq_phase2/blob/master/eQTL_GWAS_riskSNPs/create_eqtl_table_indexInfo.R
+load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n551.rda", verbose = TRUE)
+snpMap$pos_hg19 = paste0(snpMap$CHR, ":", snpMap$POS)
+## drop rs10708380:150158001:TG:T (missing info in snpMap (and dbSNP))
+snpInd = which(rownames(snpMap) == "rs10708380:150158001:TG:T")
+snpMap = snpMap[-snpInd,]
+
+m_to_fullMap <- match(tt$BEST.GWAS.ID, snpMap$SNP)
+stopifnot(!any(is.na(m_to_fullMap)))
+
+
+original$CHR[original$CHR == 23] <- 'X'
+original$hg19_pos <- with(original, paste0(CHR, ':', BP))
+
+
+table(snpMap$pos_hg19[m_to_fullMap[which(is.na(m_to_map))]] %in% original$hg19_pos)
+# FALSE  TRUE
+#    13  1081
+x <- match(snpMap$pos_hg19[m_to_fullMap[which(is.na(m_to_map))]], original$hg19_pos)
+table(original$CHR[x])
+
+
+## risk loci from PGC paper
+indexLoci <- read.csv("/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/pgc_riskLoci.csv", stringsAsFactors=FALSE)
+indexLoci$hg19POS = paste0(indexLoci$Chromosome, ":", indexLoci$snp_pos_hg19)
+
+## risk loci from PGC paper + rAggr proxy markers
+riskLoci <- read.csv("/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/rAggr_results_179.csv", stringsAsFactors=FALSE)
+length(unique(riskLoci$SNP2_Name))
+# [1] 10981
+riskLoci_full = riskLoci
+colnames(riskLoci) = colnames(riskLoci_full) = gsub("\\.", "_", colnames(riskLoci))
+riskLoci$hg19POS1 = paste0(riskLoci$SNP1_Chr, ":", riskLoci$SNP1_Pos) 
+riskLoci$hg19POS2 = paste0(riskLoci$SNP2_Chr, ":", riskLoci$SNP2_Pos)
+length(unique(riskLoci$hg19POS2))
+# [1] 10975
+
+
+addmargins(table(
+    'proxy' = snpMap$pos_hg19 %in% riskLoci$hg19POS2,
+    'index' = snpMap$pos_hg19 %in% indexLoci$hg19POS
+))
+#        index
+# proxy     FALSE    TRUE     Sum
+#   FALSE 7014124       0 7014124
+#   TRUE     9600     135    9735
+#   Sum   7023724     135 7023859
+
+
+snpMap$Status <- 'Other'
+snpMap$Status[snpMap$pos_hg19 %in% riskLoci$hg19POS2] <- 'Proxy'
+snpMap$Status[snpMap$pos_hg19 %in% indexLoci$hg19POS] <- 'Index'
+table(snpMap$Status)
+# Index   Other   Proxy
+#   135 7014124    9600
+
+m_to_risk <- match(snpMap$pos_hg19, riskLoci$hg19POS2)
+table(!is.na(m_to_risk))
+#   FALSE    TRUE
+# 7014124    9735
+
+length(unique(riskLoci$hg19POS1[m_to_risk[!is.na(m_to_risk)]]))
+# [1] 163
+
+snpMap$indexSNP_hg19_pos <- NA
+snpMap$indexSNP_hg19_pos[!is.na(m_to_risk)] <- riskLoci$hg19POS1[m_to_risk[!is.na(m_to_risk)]]
+
+x <- match(snpMap$indexSNP_hg19_pos[!is.na(snpMap$indexSNP_hg19_pos)], snpMap$pos_hg19)
+
+
+
+
+
+
+
+snpMap$Status = ifelse(snpMap$pos_hg19 %in% indexLoci$hg19POS, "Index","Proxy")
+riskLoci$Status1 = ifelse(riskLoci$hg19POS1 %in% indexLoci$hg19POS, "Index","Proxy")
+riskLoci$Status2 = ifelse(riskLoci$hg19POS2 %in% indexLoci$hg19POS, "Index","Proxy")
+table(snpMap$Status)
+  #
+  # Index   Proxy
+  #   135 7023724
+table(riskLoci$Status1)
+# Index Proxy
+# 21669   762
+table(riskLoci$Status2)
+# Index Proxy
+#   672 21759
+
+## keep SNPs from list
+keepIndex = which(snpMap$pos_hg19 %in% riskLoci$hg19POS2)	# keep 9735 snps from snpMap
+snpMap = snpMap[keepIndex,]
+keepIndex = which(riskLoci$hg19POS2 %in% snpMap$pos_hg19)	# keep 9698 snps from riskLoci
+riskLoci = riskLoci[keepIndex,]
+
+
+
+## Sort riskLoci by R2 so highest linked are chosen (i.e. index matches with itself)
+riskLoci = riskLoci[order(riskLoci$Status2, decreasing=FALSE),]
+riskLoci = riskLoci[order(riskLoci$R_squared, decreasing=TRUE),]
+
+
  
 ## save for later
 save(tt, ttSig, file = 'rda/tt_objects.Rdata')
