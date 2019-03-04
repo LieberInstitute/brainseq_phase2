@@ -544,6 +544,13 @@ map_dbl(split(tt, tt$BEST.GWAS.status), ~ with(.x, check_cor(TWAS.FDR, EQTL.FDR.
 #     Index     Other     Proxy
 # 0.7901372 0.8054720 0.8109420
 
+map_dbl(split(tt, tt$BEST.GWAS.status), ~ with(.x, check_cor(TWAS.P, BEST.GWAS.P.computed)))
+#     Index     Other     Proxy
+# 0.1046549 0.3369664 0.2392657
+map_dbl(split(tt, tt$BEST.GWAS.status), ~ with(.x, check_cor(TWAS.P, EQTL.P.computed)))
+#     Index     Other     Proxy
+# 0.7951933 0.7947084 0.8124684
+
 tt_sigonly <- tt[tt$TWAS.FDR < 0.05, ]
 ggplot(tt_sigonly, aes(
     x = -log10(TWAS.FDR),
