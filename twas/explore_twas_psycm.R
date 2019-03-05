@@ -663,6 +663,37 @@ ggplot(tt_sigonly, aes(
 dev.off()
 
 
+
+pdf('pdf/twas_fdr5perc_by_status.pdf', useDingbats = FALSE, width = 28, height = 14)
+ggplot(tt_sigonly, aes(
+    y = -log10(TWAS.P),
+    x = ifelse(EQTL.status == 'Other', 'Other', 'Risk Locus'),
+    fill = BEST.GWAS.P.computed < 5e-08
+)) + geom_boxplot(alpha = 0.7, outlier.shape = NA) +
+    geom_point(aes(fill = BEST.GWAS.P.computed < 5e-08), shape = 21, position = position_jitterdodge(jitter.width = 0.2)) +
+    facet_grid(region ~ factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
+    ) +
+    theme_bw(base_size = 30) +
+    ggtitle('TWAS (FDR <5%) by locus') +
+    xlab('Risk Loci assignment by EQTL SNP') +
+    ylim(c(0, max(-log10(tt_sigonly$TWAS.P))))
+
+ggplot(tt_sigonly, aes(
+    y = -log10(TWAS.P),
+    x = ifelse(BEST.GWAS.status == 'Other', 'Other', 'Risk Locus'),
+    fill = BEST.GWAS.P.computed < 5e-08
+)) + geom_boxplot(alpha = 0.7, outlier.shape = NA) +
+    geom_point(aes(fill = BEST.GWAS.P.computed < 5e-08), shape = 21, position = position_jitterdodge(jitter.width = 0.2)) +
+    facet_grid(region ~ factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
+    ) +
+    theme_bw(base_size = 30) +
+    ggtitle('TWAS (FDR <5%) by locus') +
+    xlab('Risk Loci assignment by BEST GWAS SNP') +
+    ylim(c(0, max(-log10(tt_sigonly$TWAS.P))))
+dev.off()
+
+
+
 map(ttSig, ~ addmargins(table(
     'TWAS P < 5e-08' = .x$TWAS.P < 5e-08,
     'BEST GWAS P < 5e-08' = .x$BEST.GWAS.P.computed < 5e-08
