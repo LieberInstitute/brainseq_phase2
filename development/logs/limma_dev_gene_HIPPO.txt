@@ -1,0 +1,172 @@
+Loading git
+Adding LIBD modules
+**** Job starts ****
+Mon Mar  4 16:30:00 EST 2019
+**** JHPCE info ****
+User: ajaffe
+Job id: 6698156
+Job name: limma_dev_gene_HIPPO
+Hostname: compute-075
+Task id: 
+Unloading conda_R/3.5.x
+Loading conda_R/3.4.x
+Loading required package: methods
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, cbind, colMeans, colnames,
+    colSums, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+    grepl, intersect, is.unsorted, lapply, lengths, Map, mapply, match,
+    mget, order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rowMeans, rownames, rowSums, sapply, setdiff, sort,
+    table, tapply, union, unique, unsplit, which, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:base’:
+
+    expand.grid
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: DelayedArray
+Loading required package: matrixStats
+
+Attaching package: ‘matrixStats’
+
+The following objects are masked from ‘package:Biobase’:
+
+    anyMissing, rowMedians
+
+
+Attaching package: ‘DelayedArray’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+
+The following object is masked from ‘package:base’:
+
+    apply
+
+
+Attaching package: ‘limma’
+
+The following object is masked from ‘package:BiocGenerics’:
+
+    plotMA
+
+Loading required package: rafalib
+
+Attaching package: ‘rafalib’
+
+The following object is masked from ‘package:devtools’:
+
+    install_bioc
+
+[1] "Number of missing brains in the MDS data"
+
+FALSE 
+  314 
+$mod
+ [1] "(Intercept)"            "Age"                    "fetal"                 
+ [4] "birth"                  "infant"                 "child"                 
+ [7] "teen"                   "adult"                  "SexM"                  
+[10] "snpPC1"                 "snpPC2"                 "snpPC3"                
+[13] "snpPC4"                 "snpPC5"                 "mean_mitoRate"         
+[16] "mean_totalAssignedGene" "mean_RIN"              
+
+$mod0
+ [1] "(Intercept)"            "SexM"                   "snpPC1"                
+ [4] "snpPC2"                 "snpPC3"                 "snpPC4"                
+ [7] "snpPC5"                 "mean_mitoRate"          "mean_totalAssignedGene"
+[10] "mean_RIN"              
+
+   user  system elapsed 
+  0.549   0.000   0.550 
+   user  system elapsed 
+  0.763   0.000   0.763 
+[1] "Reproducibility information:"
+[1] "2019-03-04 16:31:44 EST"
+   user  system elapsed 
+ 98.208   1.759 100.301 
+Session info ----------------------------------------------------------------------------------------------------------
+ setting  value                                      
+ version  R version 3.4.3 Patched (2018-01-20 r74142)
+ system   x86_64, linux-gnu                          
+ ui       X11                                        
+ language (EN)                                       
+ collate  en_US.UTF-8                                
+ tz       US/Eastern                                 
+ date     2019-03-04                                 
+
+Packages --------------------------------------------------------------------------------------------------------------
+ package              * version   date       source                                   
+ base                 * 3.4.3     2018-01-20 local                                    
+ Biobase              * 2.38.0    2017-11-07 Bioconductor                             
+ BiocGenerics         * 0.24.0    2017-11-07 Bioconductor                             
+ bitops                 1.0-6     2013-08-17 CRAN (R 3.4.1)                           
+ compiler               3.4.3     2018-01-20 local                                    
+ datasets             * 3.4.3     2018-01-20 local                                    
+ DelayedArray         * 0.4.1     2017-11-07 Bioconductor                             
+ devtools             * 1.13.5    2018-02-18 CRAN (R 3.4.3)                           
+ digest                 0.6.15    2018-01-28 cran (@0.6.15)                           
+ edgeR                * 3.20.9    2018-03-06 Bioconductor                             
+ GenomeInfoDb         * 1.14.0    2017-11-07 Bioconductor                             
+ GenomeInfoDbData       1.0.0     2018-01-09 Bioconductor                             
+ GenomicRanges        * 1.30.3    2018-03-06 Bioconductor                             
+ getopt               * 1.20.2    2018-02-16 CRAN (R 3.4.3)                           
+ graphics             * 3.4.3     2018-01-20 local                                    
+ grDevices            * 3.4.3     2018-01-20 local                                    
+ grid                   3.4.3     2018-01-20 local                                    
+ IRanges              * 2.12.0    2017-11-07 Bioconductor                             
+ jaffelab             * 0.99.21   2018-04-20 Github (LieberInstitute/jaffelab@7ed0ab7)
+ lattice                0.20-35   2017-03-25 CRAN (R 3.4.3)                           
+ limma                * 3.34.9    2018-03-06 Bioconductor                             
+ locfit                 1.5-9.1   2013-04-20 CRAN (R 3.4.1)                           
+ Matrix                 1.2-12    2017-11-30 CRAN (R 3.4.3)                           
+ matrixStats          * 0.53.1    2018-02-11 CRAN (R 3.4.3)                           
+ memoise                1.1.0     2017-04-21 CRAN (R 3.4.1)                           
+ methods              * 3.4.3     2018-01-20 local                                    
+ parallel             * 3.4.3     2018-01-20 local                                    
+ rafalib              * 1.0.0     2015-08-09 cran (@1.0.0)                            
+ RColorBrewer           1.1-2     2014-12-07 CRAN (R 3.4.1)                           
+ Rcpp                   0.12.15   2018-01-20 cran (@0.12.15)                          
+ RCurl                  1.95-4.11 2018-07-15 CRAN (R 3.4.3)                           
+ S4Vectors            * 0.16.0    2017-11-07 Bioconductor                             
+ segmented              0.5-3.0   2017-11-30 CRAN (R 3.4.2)                           
+ stats                * 3.4.3     2018-01-20 local                                    
+ stats4               * 3.4.3     2018-01-20 local                                    
+ SummarizedExperiment * 1.8.1     2018-01-09 Bioconductor                             
+ tools                  3.4.3     2018-01-20 local                                    
+ utils                * 3.4.3     2018-01-20 local                                    
+ withr                  2.1.2     2018-03-15 CRAN (R 3.4.3)                           
+ XVector                0.18.0    2017-11-07 Bioconductor                             
+ zlibbioc               1.24.0    2017-11-07 Bioconductor                             
+**** Job ends ****
+Mon Mar  4 16:31:45 EST 2019
