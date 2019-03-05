@@ -693,169 +693,140 @@ ggplot(tt_sigonly, aes(
 dev.off()
 
 
-
-map(ttSig, ~ addmargins(table(
-    'TWAS P < 5e-08' = .x$TWAS.P < 5e-08,
-    'BEST GWAS P < 5e-08' = .x$BEST.GWAS.P.computed < 5e-08
-)))
-# $DLPFC
-#               BEST GWAS P < 5e-08
-# TWAS P < 5e-08 FALSE TRUE  Sum
-#          FALSE  4067 1327 5394
-#          TRUE      9  357  366
-#          Sum    4076 1684 5760
-#
-# $HIPPO
-#               BEST GWAS P < 5e-08
-# TWAS P < 5e-08 FALSE TRUE  Sum
-#          FALSE  2933  909 3842
-#          TRUE      3  236  239
-#          Sum    2936 1145 4081
-
-map(ttSig, ~ addmargins(table(
-    'TWAS P < 5e-08' = .x$TWAS.P < 5e-08,
-    'EQTL GWAS P < 5e-08' = .x$EQTL.P.computed < 5e-08
-)))
-# $DLPFC
-#               EQTL GWAS P < 5e-08
-# TWAS P < 5e-08 FALSE TRUE  Sum
-#          FALSE  5218  176 5394
-#          TRUE    128  238  366
-#          Sum    5346  414 5760
-#
-# $HIPPO
-#               EQTL GWAS P < 5e-08
-# TWAS P < 5e-08 FALSE TRUE  Sum
-#          FALSE  3707  135 3842
-#          TRUE     62  177  239
-#          Sum    3769  312 4081
-
-map(ttSig, ~ map(split(.x, .x$feature), ~ addmargins(table(
-    'TWAS P < 5e-08' = .x$TWAS.P < 5e-08,
-    'BEST GWAS P < 5e-08' = .x$BEST.GWAS.P.computed < 5e-08
-))))
+map(ttSig, ~ map(split(.x, .x$feature), ~
+    addmargins(table(
+        'BEST GWAS P < 5e-08' = .x$BEST.GWAS.P.computed < 5e-08,
+        'Risk Locus (by BEST GWAS)' =  .x$BEST.GWAS.status != 'Other',
+        useNA = 'ifany'
+    ))
+))
 # $DLPFC
 # $DLPFC$exon
-#               BEST GWAS P < 5e-08
-# TWAS P < 5e-08 FALSE TRUE  Sum
-#          FALSE  2117  735 2852
-#          TRUE      5  200  205
-#          Sum    2122  935 3057
+#                    Risk Locus (by BEST GWAS)
+# BEST GWAS P < 5e-08 FALSE TRUE  Sum
+#               FALSE  2100   22 2122
+#               TRUE    167  768  935
+#               Sum    2267  790 3057
 #
 # $DLPFC$gene
-#               BEST GWAS P < 5e-08
-# TWAS P < 5e-08 FALSE TRUE Sum
-#          FALSE   285   97 382
-#          TRUE      1   23  24
-#          Sum     286  120 406
+#                    Risk Locus (by BEST GWAS)
+# BEST GWAS P < 5e-08 FALSE TRUE Sum
+#               FALSE   281    5 286
+#               TRUE     20  100 120
+#               Sum     301  105 406
 #
 # $DLPFC$jxn
-#               BEST GWAS P < 5e-08
-# TWAS P < 5e-08 FALSE TRUE  Sum
-#          FALSE  1122  340 1462
-#          TRUE      3   87   90
-#          Sum    1125  427 1552
+#                    Risk Locus (by BEST GWAS)
+# BEST GWAS P < 5e-08 FALSE TRUE  Sum
+#               FALSE  1106   19 1125
+#               TRUE     61  366  427
+#               Sum    1167  385 1552
 #
 # $DLPFC$tx
-#               BEST GWAS P < 5e-08
-# TWAS P < 5e-08 FALSE TRUE Sum
-#          FALSE   543  155 698
-#          TRUE      0   47  47
-#          Sum     543  202 745
+#                    Risk Locus (by BEST GWAS)
+# BEST GWAS P < 5e-08 FALSE TRUE Sum
+#               FALSE   536    7 543
+#               TRUE     35  167 202
+#               Sum     571  174 745
 #
 #
 # $HIPPO
 # $HIPPO$exon
-#               BEST GWAS P < 5e-08
-# TWAS P < 5e-08 FALSE TRUE  Sum
-#          FALSE  1377  450 1827
-#          TRUE      1  127  128
-#          Sum    1378  577 1955
+#                    Risk Locus (by BEST GWAS)
+# BEST GWAS P < 5e-08 FALSE TRUE  Sum
+#               FALSE  1354   24 1378
+#               TRUE     95  482  577
+#               Sum    1449  506 1955
 #
 # $HIPPO$gene
-#               BEST GWAS P < 5e-08
-# TWAS P < 5e-08 FALSE TRUE Sum
-#          FALSE   206   43 249
-#          TRUE      0   21  21
-#          Sum     206   64 270
+#                    Risk Locus (by BEST GWAS)
+# BEST GWAS P < 5e-08 FALSE TRUE Sum
+#               FALSE   203    3 206
+#               TRUE     12   52  64
+#               Sum     215   55 270
 #
 # $HIPPO$jxn
-#               BEST GWAS P < 5e-08
-# TWAS P < 5e-08 FALSE TRUE  Sum
-#          FALSE   906  290 1196
-#          TRUE      2   51   53
-#          Sum     908  341 1249
+#                    Risk Locus (by BEST GWAS)
+# BEST GWAS P < 5e-08 FALSE TRUE  Sum
+#               FALSE   895   13  908
+#               TRUE     43  298  341
+#               Sum     938  311 1249
 #
 # $HIPPO$tx
-#               BEST GWAS P < 5e-08
-# TWAS P < 5e-08 FALSE TRUE Sum
-#          FALSE   444  126 570
-#          TRUE      0   37  37
-#          Sum     444  163 607
+#                    Risk Locus (by BEST GWAS)
+# BEST GWAS P < 5e-08 FALSE TRUE Sum
+#               FALSE   437    7 444
+#               TRUE     31  132 163
+#               Sum     468  139 607
 
 
-map(ttSig, ~ map(split(.x, .x$feature), ~ addmargins(table(
-    'TWAS P < 5e-08' = .x$TWAS.P < 5e-08,
-    'EQTL GWAS P < 5e-08' = .x$EQTL.P.computed < 5e-08
-))))
+map(ttSig, ~ map(split(.x, .x$feature), ~
+    addmargins(table(
+        'BEST GWAS P < 5e-08' = .x$BEST.GWAS.P.computed < 5e-08,
+        'Risk Locus (by EQTL)' =  .x$EQTL.status != 'Other',
+        useNA = 'ifany'
+    ))
+))
 # $DLPFC
 # $DLPFC$exon
-#               EQTL GWAS P < 5e-08
-# TWAS P < 5e-08 FALSE TRUE  Sum
-#          FALSE  2763   89 2852
-#          TRUE     87  118  205
-#          Sum    2850  207 3057
+#                    Risk Locus (by EQTL)
+# BEST GWAS P < 5e-08 FALSE TRUE  Sum
+#               FALSE  2115    7 2122
+#               TRUE    769  166  935
+#               Sum    2884  173 3057
 #
 # $DLPFC$gene
-#               EQTL GWAS P < 5e-08
-# TWAS P < 5e-08 FALSE TRUE Sum
-#          FALSE   371   11 382
-#          TRUE      9   15  24
-#          Sum     380   26 406
+#                    Risk Locus (by EQTL)
+# BEST GWAS P < 5e-08 FALSE TRUE Sum
+#               FALSE   285    1 286
+#               TRUE     99   21 120
+#               Sum     384   22 406
 #
 # $DLPFC$jxn
-#               EQTL GWAS P < 5e-08
-# TWAS P < 5e-08 FALSE TRUE  Sum
-#          FALSE  1409   53 1462
-#          TRUE     20   70   90
-#          Sum    1429  123 1552
+#                    Risk Locus (by EQTL)
+# BEST GWAS P < 5e-08 FALSE TRUE  Sum
+#               FALSE  1124    1 1125
+#               TRUE    364   63  427
+#               Sum    1488   64 1552
 #
 # $DLPFC$tx
-#               EQTL GWAS P < 5e-08
-# TWAS P < 5e-08 FALSE TRUE Sum
-#          FALSE   675   23 698
-#          TRUE     12   35  47
-#          Sum     687   58 745
+#                    Risk Locus (by EQTL)
+# BEST GWAS P < 5e-08 FALSE TRUE Sum
+#               FALSE   542    1 543
+#               TRUE    164   38 202
+#               Sum     706   39 745
 #
 #
 # $HIPPO
 # $HIPPO$exon
-#               EQTL GWAS P < 5e-08
-# TWAS P < 5e-08 FALSE TRUE  Sum
-#          FALSE  1751   76 1827
-#          TRUE     36   92  128
-#          Sum    1787  168 1955
+#                    Risk Locus (by EQTL)
+# BEST GWAS P < 5e-08 FALSE TRUE  Sum
+#               FALSE  1377    1 1378
+#               TRUE    485   92  577
+#               Sum    1862   93 1955
 #
 # $HIPPO$gene
-#               EQTL GWAS P < 5e-08
-# TWAS P < 5e-08 FALSE TRUE Sum
-#          FALSE   244    5 249
-#          TRUE      8   13  21
-#          Sum     252   18 270
+#                    Risk Locus (by EQTL)
+# BEST GWAS P < 5e-08 FALSE TRUE Sum
+#               FALSE   206    0 206
+#               TRUE     54   10  64
+#               Sum     260   10 270
 #
 # $HIPPO$jxn
-#               EQTL GWAS P < 5e-08
-# TWAS P < 5e-08 FALSE TRUE  Sum
-#          FALSE  1160   36 1196
-#          TRUE     12   41   53
-#          Sum    1172   77 1249
+#                    Risk Locus (by EQTL)
+# BEST GWAS P < 5e-08 FALSE TRUE  Sum
+#               FALSE   907    1  908
+#               TRUE    294   47  341
+#               Sum    1201   48 1249
 #
 # $HIPPO$tx
-#               EQTL GWAS P < 5e-08
-# TWAS P < 5e-08 FALSE TRUE Sum
-#          FALSE   552   18 570
-#          TRUE      6   31  37
-#          Sum     558   49 607
+#                    Risk Locus (by EQTL)
+# BEST GWAS P < 5e-08 FALSE TRUE Sum
+#               FALSE   444    0 444
+#               TRUE    130   33 163
+#               Sum     574   33 607
+
+
 
 ## Venn diagrams of features by region, then joint (grouped by gene id)
 
