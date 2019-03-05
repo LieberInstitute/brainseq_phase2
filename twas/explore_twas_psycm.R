@@ -945,7 +945,7 @@ make_pretty_venn <- function(cut, title = '') {
     grid.draw(v)
 }
 
-pdf('pdf/venn_by_locus.pdf')
+pdf('pdf/venn_by_locus.pdf', useDingbats = FALSE)
 make_pretty_venn(1.1, 'rAggr loci considered in TWAS')
 make_pretty_venn(0.05, 'rAggr loci with TWAS FDR<5%')
 dev.off()
@@ -1145,7 +1145,7 @@ make_pretty_venn_by_feature <- function(cut, title = '') {
     )
 }
 
-pdf('pdf/venn_by_locus_by_feature.pdf')
+pdf('pdf/venn_by_locus_by_feature.pdf', useDingbats = FALSE)
 make_pretty_venn_by_feature(1.1, 'rAggr loci considered in TWAS')
 make_pretty_venn_by_feature(0.05, 'rAggr loci with TWAS FDR<5%')
 dev.off()
@@ -1154,6 +1154,300 @@ system('rm VennDiagram*')
 
 
 ## Venn diagrams of features by region, then joint (grouped by gene id)
+
+## Number of features that have TWAS weights
+n_feat_considered <- cbind(map_dfr(split(tt, tt$region), ~ 
+    map_dbl(
+        split(.x, factor(.x$feature, levels = features)),
+        ~ nrow(.x)
+    )
+), features)
+n_feat_considered
+#   DLPFC HIPPO features
+# 1  5482  3977     gene
+# 2 39131 25686     exon
+# 3 20653 16107      jxn
+# 4  9061  7154       tx
+
+## Percent from total number of features considered
+# $ grep -A 1 "Final RSE" logs/compute_weights_DLPFC_*
+# compute_weights_DLPFC_exon.txt:[1] "Final RSE feature dimensions:"
+# compute_weights_DLPFC_exon.txt-[1] 381196    397
+# --
+# compute_weights_DLPFC_gene.txt:[1] "Final RSE feature dimensions:"
+# compute_weights_DLPFC_gene.txt-[1] 23402   397
+# --
+# compute_weights_DLPFC_jxn.txt:[1] "Final RSE feature dimensions:"
+# compute_weights_DLPFC_jxn.txt-[1] 269261    397
+# --
+# compute_weights_DLPFC_tx.txt:[1] "Final RSE feature dimensions:"
+# compute_weights_DLPFC_tx.txt-[1] 88969   397
+
+## In percent of features passed to the weight computation step
+n_feat_total <- c('gene' = 23402, 'exon' = 381196, 'jxn' = 269261, 'tx' = 88969)
+cbind(map_dfr(n_feat_considered[, 1:2], ~ .x / n_feat_total * 100), features)
+#       DLPFC     HIPPO features
+# 1 23.425348 16.994274     gene
+# 2 10.265323  6.738266     exon
+# 3  7.670253  5.981928      jxn
+# 4 10.184446  8.041003       tx
+
+## Number of features with TWAS FDR<5%
+n_feat_twas5perc <- cbind(map_dfr(ttSig, ~ 
+    map_dbl(
+        split(.x, factor(.x$feature, levels = features)),
+        ~ nrow(.x)
+    )
+), features)
+#   DLPFC HIPPO features
+# 1   406   270     gene
+# 2  3057  1955     exon
+# 3  1552  1249      jxn
+# 4   745   607       tx
+
+cbind(n_feat_twas5perc[, 1:2] / n_feat_considered[, 1:2] * 100, features)
+#      DLPFC    HIPPO features
+# 1 7.406056 6.789037     gene
+# 2 7.812220 7.611150     exon
+# 3 7.514647 7.754393      jxn
+# 4 8.222051 8.484764       tx
+
+get_feat <- function(cut) {
+    x <- subset(tt, TWAS.FDR < cut)
+    map(
+        split(x, factor(x$feature, levels = features)),
+        ~ map(split(.x, .x$region), ~.x$ID)
+    )
+}
+
+shared_by_feature <- function(cut) {
+    map(
+        get_feat(cut),
+        ~ get_matrix(venn(.x, show.plot = FALSE))
+    )
+}
+
+shared_by_feature(1.1)
+# $gene
+#     num DLPFC HIPPO
+# 00    0     0     0
+# 01 1185     0     1
+# 10 2690     1     0
+# 11 2792     1     1
+#
+# $exon
+#      num DLPFC HIPPO
+# 00     0     0     0
+# 01 11906     0     1
+# 10 25351     1     0
+# 11 13780     1     1
+#
+# $jxn
+#      num DLPFC HIPPO
+# 00     0     0     0
+# 01  7669     0     1
+# 10 12215     1     0
+# 11  8438     1     1
+#
+# $tx
+#     num DLPFC HIPPO
+# 00    0     0     0
+# 01 3040     0     1
+# 10 4947     1     0
+# 11 4114     1     1
+
+shared_by_feature(0.05)
+# $gene
+#    num DLPFC HIPPO
+# 00   0     0     0
+# 01 132     0     1
+# 10 268     1     0
+# 11 138     1     1
+#
+# $exon
+#     num DLPFC HIPPO
+# 00    0     0     0
+# 01 1201     0     1
+# 10 2303     1     0
+# 11  754     1     1
+#
+# $jxn
+#     num DLPFC HIPPO
+# 00    0     0     0
+# 01  745     0     1
+# 10 1048     1     0
+# 11  504     1     1
+#
+# $tx
+#    num DLPFC HIPPO
+# 00   0     0     0
+# 01 347     0     1
+# 10 485     1     0
+# 11 260     1     1
+
+make_pretty_venn_shared_by_feature <- function(cut, title = '') {
+    info_all <- get_feat(cut)
+    cols <- c('DLPFC' = 'dark orange', 'HIPPO' = 'skyblue3')
+    map2(
+        info_all,
+        names(info_all),
+        function(info, feature) {
+        v <- venn.diagram(info, filename = NULL,
+            main = paste0(title, ' - ', feature),
+            col = 'transparent', fill = cols,
+            alpha = 0.5, margin = 0,
+            main.cex = 2, cex = 2, cat.fontcase = 'bold', cat.cex = 2,
+            cat.col = cols)
+        grid.newpage()
+        grid.draw(v)
+        }
+    )
+}
+
+pdf('pdf/venn_by_feature.pdf', useDingbats = FALSE)
+make_pretty_venn_shared_by_feature(1.1, 'Features with TWAS weights')
+make_pretty_venn_shared_by_feature(0.05, 'Features with TWAS FDR<5%')
+dev.off()
+
+system('rm VennDiagram*')
+
+
+## Now by gene id
+get_feat_geneid <- function(cut) {
+    x <- subset(tt, TWAS.FDR < cut)
+    map(
+        split(x, factor(x$feature, levels = features)),
+        ~ map(split(.x, .x$region), ~ .x$geneid[!is.na(.x$geneid)])
+    )
+}
+
+shared_by_geneid <- function(cut) {
+    map(
+        get_feat_geneid(cut),
+        ~ get_matrix(venn(.x, show.plot = FALSE))
+    )
+}
+
+shared_by_geneid(1.1)
+# $gene
+#     num DLPFC HIPPO
+# 00    0     0     0
+# 01 1185     0     1
+# 10 2690     1     0
+# 11 2792     1     1
+#
+# $exon
+#      num DLPFC HIPPO
+# 00     0     0     0
+# 01  2660     0     1
+# 10 10948     1     0
+# 11 28183     1     1
+#
+# $jxn
+#      num DLPFC HIPPO
+# 00     0     0     0
+# 01  1827     0     1
+# 10  3367     1     0
+# 11 13177     1     1
+#
+# $tx
+#     num DLPFC HIPPO
+# 00    0     0     0
+# 01 1662     0     1
+# 10 3076     1     0
+# 11 5985     1     1
+
+shared_by_geneid(0.05)
+# $gene
+#    num DLPFC HIPPO
+# 00   0     0     0
+# 01 132     0     1
+# 10 268     1     0
+# 11 138     1     1
+#
+# $exon
+#     num DLPFC HIPPO
+# 00    0     0     0
+# 01  497     0     1
+# 10 1317     1     0
+# 11 1740     1     1
+#
+# $jxn
+#    num DLPFC HIPPO
+# 00   0     0     0
+# 01 296     0     1
+# 10 463     1     0
+# 11 814     1     1
+#
+# $tx
+#    num DLPFC HIPPO
+# 00   0     0     0
+# 01 248     0     1
+# 10 368     1     0
+# 11 377     1     1
+
+make_pretty_venn_shared_by_geneid <- function(cut, title = '') {
+    info_all <- get_feat_geneid(cut)
+    cols <- c('DLPFC' = 'dark orange', 'HIPPO' = 'skyblue3')
+    map2(
+        info_all,
+        names(info_all),
+        function(info, feature) {
+        v <- venn.diagram(info, filename = NULL,
+            main = paste0(title, ' - ', feature),
+            col = 'transparent', fill = cols,
+            alpha = 0.5, margin = 0,
+            main.cex = 2, cex = 2, cat.fontcase = 'bold', cat.cex = 2,
+            cat.col = cols)
+        grid.newpage()
+        grid.draw(v)
+        }
+    )
+}
+
+pdf('pdf/venn_by_feature_using_geneid.pdf', useDingbats = FALSE)
+make_pretty_venn_shared_by_geneid(1.1, 'Features with TWAS weights (by gene ID)')
+make_pretty_venn_shared_by_geneid(0.05, 'Features with TWAS FDR<5% (by gene ID)')
+dev.off()
+
+system('rm VennDiagram*')
+
+
+get_feat_geneid2 <- function(cut) {
+    x <- subset(tt, TWAS.FDR < cut)
+    map(
+        split(x, x$region),
+        ~ map(split(.x, factor(.x$feature, levels = features)), ~ .x$geneid[!is.na(.x$geneid)])
+    )
+}
+
+library('RColorBrewer')
+make_pretty_venn_shared_by_geneid2 <- function(cut, title = '') {
+    info_all <- get_feat_geneid2(cut)
+    cols <- brewer.pal('Set1', n = 4)
+    map2(
+        info_all,
+        names(info_all),
+        function(info, feature) {
+        v <- venn.diagram(info, filename = NULL,
+            main = paste0(title, ' - ', feature),
+            col = 'transparent', fill = cols,
+            alpha = 0.5, margin = 0,
+            main.cex = 2, cex = 2, cat.fontcase = 'bold', cat.cex = 2,
+            cat.col = cols)
+        grid.newpage()
+        grid.draw(v)
+        }
+    )
+}
+
+pdf('pdf/venn_by_feature_using_geneid_across_features.pdf', useDingbats = FALSE)
+make_pretty_venn_shared_by_geneid2(1.1, 'Features with TWAS weights (by gene ID)')
+make_pretty_venn_shared_by_geneid2(0.05, 'Features with TWAS FDR<5% (by gene ID)')
+dev.off()
+
+system('rm VennDiagram*')
+
 
 ## Reproducibility information
 print('Reproducibility information:')
