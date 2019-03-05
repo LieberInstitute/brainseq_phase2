@@ -517,6 +517,7 @@ save(tt, ttSig, get_variable_by_region, ttReg_map, region_twas_z, file = 'rda/tt
 
 
 ## Continue
+load('rda/tt_objects.Rdata', verbose = TRUE)
 
 
 ## Check correlations among FDR corrected p-values between TWAS
@@ -524,25 +525,19 @@ save(tt, ttSig, get_variable_by_region, ttReg_map, region_twas_z, file = 'rda/tt
 check_cor <- function(x, y) {
     cor(-log10(x), -log10(y))
 }
-with(tt, check_cor(TWAS.FDR, BEST.GWAS.FDR.computed))
-# [1] 0.425936
-with(tt, check_cor(TWAS.FDR, EQTL.FDR.computed))
-# [1] 0.8243939
 
-map_dbl(ttSig, ~ with(.x, check_cor(TWAS.FDR, BEST.GWAS.FDR.computed)))
+
+with(tt, check_cor(TWAS.P, BEST.GWAS.P.computed))
+# [1] 0.4178535
+with(tt, check_cor(TWAS.P, EQTL.P.computed))
+# [1] 0.8177334
+
+map_dbl(ttSig, ~ with(.x, check_cor(TWAS.P, BEST.GWAS.P.computed)))
 #     DLPFC     HIPPO
-# 0.5629601 0.5427811
-map_dbl(ttSig, ~ with(.x, check_cor(TWAS.FDR, EQTL.FDR.computed)))
+# 0.5658657 0.5437862
+map_dbl(ttSig, ~ with(.x, check_cor(TWAS.P, EQTL.P.computed)))
 #     DLPFC     HIPPO
-# 0.7460110 0.7498989
-
-
-map_dbl(split(tt, tt$BEST.GWAS.status), ~ with(.x, check_cor(TWAS.FDR, BEST.GWAS.FDR.computed)))
-#     Index     Other     Proxy
-# 0.1169518 0.3485689 0.2396344
-map_dbl(split(tt, tt$BEST.GWAS.status), ~ with(.x, check_cor(TWAS.FDR, EQTL.FDR.computed)))
-#     Index     Other     Proxy
-# 0.7901372 0.8054720 0.8109420
+# 0.7324814 0.7362852
 
 map_dbl(split(tt, tt$BEST.GWAS.status), ~ with(.x, check_cor(TWAS.P, BEST.GWAS.P.computed)))
 #     Index     Other     Proxy
@@ -551,42 +546,122 @@ map_dbl(split(tt, tt$BEST.GWAS.status), ~ with(.x, check_cor(TWAS.P, EQTL.P.comp
 #     Index     Other     Proxy
 # 0.7951933 0.7947084 0.8124684
 
-tt_sigonly <- tt[tt$TWAS.FDR < 0.05, ]
-ggplot(tt_sigonly, aes(
-    x = -log10(TWAS.FDR),
-    y = -log10(BEST.GWAS.FDR.computed),
-    color = TWAS.P < 5e-08
-)) + geom_point() + facet_grid(region ~ feature)
 
+tt_sigonly <- tt[tt$TWAS.FDR < 0.05, ]
+with(tt_sigonly, addmargins(table(BEST.GWAS.status, EQTL.status, useNA = 'ifany')))
+#                 EQTL.status
+# BEST.GWAS.status Index Other Proxy  Sum
+#            Index     2   660   113  775
+#            Other     0  7354    22 7376
+#            Proxy     0  1345   345 1690
+#            Sum       2  9359   480 9841
+
+pdf('pdf/twas_fdr5perc_vs_gwas_or_eqtl.pdf', useDingbats = FALSE, width = 21, height = 14)
 ggplot(tt_sigonly, aes(
     x = -log10(TWAS.P),
-    y = -log10(BEST.GWAS.P.computed),
-    color = TWAS.P < 5e-08
-)) + geom_point() + facet_grid(region ~ feature)
-
-ggplot(tt_sigonly, aes(
-    x = TWAS.Z,
-    y = BEST.GWAS.Z,
-    color = TWAS.P < 5e-08
-)) + geom_point() + facet_grid(region ~ feature)
-
-ggplot(tt_sigonly, aes(
-    x = -log10(TWAS.FDR),
-    y = -log10(EQTL.FDR.computed),
-    color = TWAS.P < 5e-08
-)) + geom_point() + facet_grid(region ~ feature)
+    y = -log10(EQTL.P.computed),
+    color = BEST.GWAS.P.computed < 5e-08
+)) + geom_point() +
+    facet_grid(region * 
+        ifelse(EQTL.status == 'Other', 'Other', 'Risk Locus') ~
+        factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
+    ) +
+    theme_bw(base_size = 30) +
+    ggtitle('TWAS (FDR <5%) vs EQTL p-values') +
+    labs(caption = 'Risk Loci by EQTL')
 
 ggplot(tt_sigonly, aes(
     x = -log10(TWAS.P),
     y = -log10(EQTL.P.computed),
-    color = TWAS.P < 5e-08
-)) + geom_point() + facet_grid(region ~ feature)
+    color = BEST.GWAS.P.computed < 5e-08
+)) + geom_point() +
+    facet_grid(region * 
+        ifelse(BEST.GWAS.status == 'Other', 'Other', 'Risk Locus') ~
+        factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
+    ) +
+    theme_bw(base_size = 30) +
+    ggtitle('TWAS (FDR <5%) vs EQTL p-values') +
+    labs(caption = 'Risk Loci by BEST GWAS')
+    
+ggplot(tt_sigonly, aes(
+    x = -log10(TWAS.P),
+    y = -log10(BEST.GWAS.P.computed),
+    color = EQTL.P.computed < 5e-08
+)) + geom_point() +
+    facet_grid(region * 
+        ifelse(EQTL.status == 'Other', 'Other', 'Risk Locus') ~
+        factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
+    ) +
+    theme_bw(base_size = 30) +
+    ggtitle('TWAS (FDR <5%) vs BEST GWAS p-values') +
+    labs(caption = 'Risk Loci by EQTL')
+       
+ggplot(tt_sigonly, aes(
+    x = -log10(TWAS.P),
+    y = -log10(BEST.GWAS.P.computed),
+    color = EQTL.P.computed < 5e-08
+)) + geom_point() +
+    facet_grid(region * 
+        ifelse(BEST.GWAS.status == 'Other', 'Other', 'Risk Locus') ~
+        factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
+    ) +
+    theme_bw(base_size = 30) +
+    ggtitle('TWAS (FDR <5%) vs BEST GWAS p-values') +
+    labs(caption = 'Risk Loci by BEST GWAS')
+    
+ggplot(tt_sigonly, aes(
+    x = TWAS.Z,
+    y = EQTL.Z,
+    color = BEST.GWAS.P.computed < 5e-08
+)) + geom_point() +
+    facet_grid(region * 
+        ifelse(EQTL.status == 'Other', 'Other', 'Risk Locus') ~
+        factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
+    ) +
+    theme_bw(base_size = 30) +
+    ggtitle('TWAS (FDR <5%) vs EQTL z-scores') +
+    labs(caption = 'Risk Loci by EQTL')
 
 ggplot(tt_sigonly, aes(
     x = TWAS.Z,
-    y = EQTL.GWAS.Z,
-    color = TWAS.P < 5e-08
-)) + geom_point() + facet_grid(region ~ feature)
+    y = EQTL.Z,
+    color = BEST.GWAS.P.computed < 5e-08
+)) + geom_point() +
+    facet_grid(region * 
+        ifelse(BEST.GWAS.status == 'Other', 'Other', 'Risk Locus') ~
+        factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
+    ) +
+    theme_bw(base_size = 30) +
+    ggtitle('TWAS (FDR <5%) vs EQTL z-scores') +
+    labs(caption = 'Risk Loci by BEST GWAS')
+        
+ggplot(tt_sigonly, aes(
+    x = TWAS.Z,
+    y = BEST.GWAS.Z,
+    color = EQTL.P.computed < 5e-08
+)) + geom_point() +
+    facet_grid(region * 
+        ifelse(EQTL.status == 'Other', 'Other', 'Risk Locus') ~
+        factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
+    ) +
+    theme_bw(base_size = 30) +
+    ggtitle('TWAS (FDR <5%) vs BEST GWAS z-scores') +
+    labs(caption = 'Risk Loci by EQTL')
+
+ggplot(tt_sigonly, aes(
+    x = TWAS.Z,
+    y = BEST.GWAS.Z,
+    color = EQTL.P.computed < 5e-08
+)) + geom_point() +
+    facet_grid(region * 
+        ifelse(BEST.GWAS.status == 'Other', 'Other', 'Risk Locus') ~
+        factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
+    ) +
+    theme_bw(base_size = 30) +
+    ggtitle('TWAS (FDR <5%) vs BEST GWAS z-scores') +
+    labs(caption = 'Risk Loci by BEST GWAS')
+dev.off()
+
 
 map(ttSig, ~ addmargins(table(
     'TWAS P < 5e-08' = .x$TWAS.P < 5e-08,
@@ -752,13 +827,6 @@ map(ttSig, ~ map(split(.x, .x$feature), ~ addmargins(table(
 #          Sum     558   49 607
 
 ## Venn diagrams of features by region, then joint (grouped by gene id)
-
-## Compare TWAS Z-scores across DLPFC and HIPPO
-
-## Read in the 179 CLOZUK+PGC2 snps
-
-## Use the raggr output to find the proxy snps
-
 
 ## Reproducibility information
 print('Reproducibility information:')
