@@ -827,6 +827,331 @@ map(ttSig, ~ map(split(.x, .x$feature), ~
 #               Sum     574   33 607
 
 
+## Add locus considered section
+
+## Read in the files that Emily cleaned up at
+## https://github.com/LieberInstitute/brainseq_phase2/blob/master/eQTL_GWAS_riskSNPs/create_eqtl_table_indexInfo.R
+raggr_clean_files <- c(
+    'HIPPO' = '/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/raggr_179_snps_hippo_eqtls_fdr01.csv',
+    'DLPFC' = '/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/raggr_179_snps_dlp_eqtls_fdr01.csv'
+)
+raggr_clean <- map(raggr_clean_files, read.csv, stringsAsFactors = FALSE)
+names(raggr_clean) <- names(raggr_clean_files)
+
+check_by_locus <- function(rag, ref) {
+    by_loc <- split(rag$SNP, rag$IndexSNP)
+    map_dbl(by_loc, ~ sum(.x %in% ref))
+}
+
+
+clean_by_state <- function(x) {
+    r <- map_dfr(x, ~ .x)
+    r$state <- c(FALSE, TRUE)
+    return(r)
+}
+
+by_locus <- function(cut, list = FALSE) {
+    by_locus <- map2(
+        raggr_clean,
+        map(names(raggr_clean), ~ tt$BEST.GWAS.ID[tt$TWAS.FDR < cut & tt$region == .x]),
+        check_by_locus
+    )
+    if(list) return(by_locus)
+    clean_by_state(map(by_locus, ~ table(.x > 0)))
+}
+perc_locus <- function(cut) {
+    x <- by_locus(cut)
+    x[2, 1:2] / colSums(x[, 1:2]) * 100
+}
+
+## raggr eQTL locus considered in the TWAS analysis
+by_locus(1.1)
+# # A tibble: 2 x 3
+#   HIPPO DLPFC state
+#   <int> <int> <lgl>
+# 1    44    50 FALSE
+# 2    59    66 TRUE
+perc_locus(1.1)
+#      HIPPO    DLPFC
+# 1 57.28155 56.89655
+
+## raggr eQTL locus that have a TWAS FDR <5% result
+by_locus(0.05)
+# # A tibble: 2 x 3
+#   HIPPO DLPFC state
+#   <int> <int> <lgl>
+# 1    50    58 FALSE
+# 2    53    58 TRUE
+perc_locus(0.05)
+#      HIPPO DLPFC
+# 1 51.45631    50
+perc_locus(0.05) / perc_locus(1.1) * 100
+#      HIPPO    DLPFC
+# 1 89.83051 87.87879
+
+library('gplots')
+get_matrix <- function(x) {
+    matrix(x, ncol = ncol(x), dimnames = attr(x, 'dimnames'))
+}
+
+get_venn_info <- function(cut) {
+    map(
+        by_locus(cut, list = TRUE),
+        ~ names(which(.x > 0))
+    )
+}
+venn_by_locus <- function(cut) {
+    venn(
+        get_venn_info(cut),
+        show.plot = FALSE
+    )
+}
+
+shared_by_locus <- function(cut) {
+    get_matrix(
+        venn_by_locus(cut)
+    )
+}
+
+## Overlap by region of all loci considered
+shared_by_locus(1.1)
+#    num HIPPO DLPFC
+# 00   0     0     0
+# 01  13     0     1
+# 10   6     1     0
+# 11  53     1     1
+
+## Now with the ones that are TWAS FDR < 5%
+shared_by_locus(0.05)
+#    num HIPPO DLPFC
+# 00   0     0     0
+# 01  12     0     1
+# 10   7     1     0
+# 11  46     1     1
+
+
+library('VennDiagram')
+
+make_pretty_venn <- function(cut, title = '') {
+    info <- get_venn_info(cut)
+    cols <- c('DLPFC' = 'dark orange', 'HIPPO' = 'skyblue3')
+    v <- venn.diagram(info, filename = NULL,
+        main = title,
+        col = 'transparent', fill = rev(cols),
+        alpha = 0.5, margin = 0,
+        main.cex = 2, cex = 2, cat.fontcase = 'bold', cat.cex = 2,
+        cat.col = rev(cols))
+    grid.newpage()
+    grid.draw(v)
+}
+
+pdf('pdf/venn_by_locus.pdf')
+make_pretty_venn(1.1, 'rAggr loci considered in TWAS')
+make_pretty_venn(0.05, 'rAggr loci with TWAS FDR<5%')
+dev.off()
+
+system('rm VennDiagram*')
+
+
+gene_by_locus <- function(rag, ref) {
+    by_loc <- split(rag$gene, rag$IndexSNP)
+    map_dbl(by_loc, ~ sum(.x %in% ref))
+}
+
+features <- c('gene', 'exon', 'jxn', 'tx')
+
+by_feature <- function(cut, list = FALSE) {
+    g_by_locus <- map(features, function(feature) {
+        map2(
+            map(raggr_clean, ~ subset(.x, tolower(Type) == feature)),
+            map(names(raggr_clean), ~ tt$ID[tt$feature == feature & tt$region == .x & tt$TWAS.FDR < cut]),
+            gene_by_locus
+        )
+    })
+    names(g_by_locus) <- features
+    if(list) return(g_by_locus)
+    map(g_by_locus, function(x) {
+        r <- map_dfr(x, ~ table(.x > 0))
+        r$state <- c(FALSE, TRUE)
+        return(r)
+    })
+}
+
+clean_tabs <- function(l) {
+    map2_dfr(l, names(l), function(x, y) {
+        x$feature <- y
+        return(x)
+    })
+}
+
+## Features by locus that were considered in the TWAS analysis
+clean_tabs(by_feature(cut = 1.1))
+## Numbers differ from https://github.com/LieberInstitute/brainseq_phase2/blob/master/twas/explore_twas.R#L774-L784
+## because in this script we already dropped the results with NA TWAS.P values
+# # A tibble: 8 x 4
+#   HIPPO DLPFC state feature
+#   <int> <int> <lgl> <chr>
+# 1    16    16 FALSE gene
+# 2    34    51 TRUE  gene
+# 3    21    18 FALSE exon
+# 4    56    69 TRUE  exon
+# 5    22    24 FALSE jxn
+# 6    66    74 TRUE  jxn
+# 7    19    17 FALSE tx
+# 8    46    59 TRUE  tx
+
+perc_feature <- function(cut) {
+    y <- clean_tabs(by_feature(cut))
+    clean_tabs(
+        map(
+            split(y, factor(y$feature, levels = features)), 
+            ~ .x[2, 1:2] / colSums(.x[, 1:2]) * 100
+    ))
+}
+
+## Example: HIPPO gene
+# 34 / (34 + 16) * 100
+perc_feature(1.1)
+#      HIPPO    DLPFC feature
+# 1 68.00000 76.11940    gene
+# 2 72.72727 79.31034    exon
+# 3 75.00000 75.51020     jxn
+# 4 70.76923 77.63158      tx
+
+
+## Features by locus that have a TWAS FDR<5% result
+clean_tabs(by_feature(cut = 0.05))
+# # A tibble: 8 x 4
+#   HIPPO DLPFC state feature
+#   <int> <int> <lgl> <chr>
+# 1    25    28 FALSE gene
+# 2    25    39 TRUE  gene
+# 3    29    28 FALSE exon
+# 4    48    59 TRUE  exon
+# 5    34    35 FALSE jxn
+# 6    54    63 TRUE  jxn
+# 7    31    25 FALSE tx
+# 8    34    51 TRUE  tx
+
+perc_feature(0.05)
+#      HIPPO    DLPFC feature
+# 1 50.00000 58.20896    gene
+# 2 62.33766 67.81609    exon
+# 3 61.36364 64.28571     jxn
+# 4 52.30769 67.10526      tx
+
+## Compute the percent using as denominator the number of features considered
+cbind(perc_feature(0.05)[, 1:2] / perc_feature(1.1)[, 1:2] * 100, feature = features)
+#      HIPPO    DLPFC feature
+# 1 73.52941 76.47059    gene
+# 2 85.71429 85.50725    exon
+# 3 81.81818 85.13514     jxn
+# 4 73.91304 86.44068      tx
+
+get_venn_info_by_feature <- function(cut) {
+    map(
+        by_feature(cut, list = TRUE),
+        ~ map(.x, 
+            ~ names(which(.x > 0))
+        )
+    )
+}
+venn_by_locus_by_feature <- function(cut) {
+    map(get_venn_info_by_feature(cut), venn, show.plot = FALSE)
+}
+
+shared_by_locus_by_feature <- function(cut) {
+    map(venn_by_locus_by_feature(cut), get_matrix)
+}
+
+## Find the locus that have shared features
+## between rAggr and TWAS (given a FDR cut)
+## then find the locus overlap across regions.
+shared_by_locus_by_feature(1.1)
+# $gene
+#    num HIPPO DLPFC
+# 00   0     0     0
+# 01  22     0     1
+# 10   5     1     0
+# 11  29     1     1
+#
+# $exon
+#    num HIPPO DLPFC
+# 00   0     0     0
+# 01  20     0     1
+# 10   7     1     0
+# 11  49     1     1
+#
+# $jxn
+#    num HIPPO DLPFC
+# 00   0     0     0
+# 01  16     0     1
+# 10   8     1     0
+# 11  58     1     1
+#
+# $tx
+#    num HIPPO DLPFC
+# 00   0     0     0
+# 01  22     0     1
+# 10   9     1     0
+# 11  37     1     1
+
+shared_by_locus_by_feature(0.05)
+# $gene
+#    num HIPPO DLPFC
+# 00   0     0     0
+# 01  17     0     1
+# 10   3     1     0
+# 11  22     1     1
+#
+# $exon
+#    num HIPPO DLPFC
+# 00   0     0     0
+# 01  17     0     1
+# 10   6     1     0
+# 11  42     1     1
+#
+# $jxn
+#    num HIPPO DLPFC
+# 00   0     0     0
+# 01  17     0     1
+# 10   8     1     0
+# 11  46     1     1
+#
+# $tx
+#    num HIPPO DLPFC
+# 00   0     0     0
+# 01  21     0     1
+# 10   4     1     0
+# 11  30     1     1
+
+
+make_pretty_venn_by_feature <- function(cut, title = '') {
+    info_all <- get_venn_info_by_feature(cut)
+    cols <- c('DLPFC' = 'dark orange', 'HIPPO' = 'skyblue3')
+    map2(
+        info_all,
+        names(info_all),
+        function(info, feature) {
+        v <- venn.diagram(info, filename = NULL,
+            main = paste0(title, ' - ', feature),
+            col = 'transparent', fill = rev(cols),
+            alpha = 0.5, margin = 0,
+            main.cex = 2, cex = 2, cat.fontcase = 'bold', cat.cex = 2,
+            cat.col = rev(cols))
+        grid.newpage()
+        grid.draw(v)
+        }
+    )
+}
+
+pdf('pdf/venn_by_locus_by_feature.pdf')
+make_pretty_venn_by_feature(1.1, 'rAggr loci considered in TWAS')
+make_pretty_venn_by_feature(0.05, 'rAggr loci with TWAS FDR<5%')
+dev.off()
+
+system('rm VennDiagram*')
+
 
 ## Venn diagrams of features by region, then joint (grouped by gene id)
 
