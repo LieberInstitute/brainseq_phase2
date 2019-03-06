@@ -1,6 +1,6 @@
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=250G,h_vmem=250G,h_fsize=200G
+#$ -l mem_free=300G,h_vmem=300G,h_fsize=200G
 #$ -N dlpfc_subset
 #$ -o logs/dlpfc_subset.txt
 #$ -e logs/dlpfc_subset.txt
@@ -15,7 +15,7 @@ echo "Job name: ${JOB_NAME}"
 echo "Hostname: ${HOSTNAME}"
 echo "Task id: ${TASK_ID}"
 
-Rscript /dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full_GTEx/results_subset_dlpfc.R
+Rscript results_subset_dlpfc.R
 
 echo "**** Job ends ****"
 date
