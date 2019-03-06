@@ -5,6 +5,9 @@ library('sessioninfo')
 library('purrr')
 library('readr')
 library('ggplot2')
+library('gplots')
+library('VennDiagram')
+library('RColorBrewer')
 # library('dplyr')
 
 load('rda/twas_exp.Rdata', verbose = TRUE)
@@ -375,6 +378,16 @@ addmargins(table(
 #   TRUE  26148   707   613  1656 29124
 #   Sum   95151   707   613  1656 98127
 
+addmargins(table(
+    'in both' = region_twas_z$in_both,
+    'Bonf < 0.05' = region_twas_z$Bonf.5perc,
+    useNA = 'ifany'
+))
+# in both  None DLPFC HIPPO  Both   Sum
+#   FALSE 68314   436   253     0 69003
+#   TRUE  28673   126   119   206 29124
+#   Sum   96987   562   372   206 98127
+
 table(region_twas_z$BEST.GWAS.status)
 ## Initial version
 # Other DLPFC HIPPO  Both
@@ -388,6 +401,15 @@ table(region_twas_z$BEST.GWAS.status)
 pdf('pdf/twas_z.pdf', useDingbats = FALSE, width = 24, height = 14)
 ggplot(region_twas_z,
     aes(x = DLPFC, y = HIPPO, color = FDR.5perc, shape = in_both)) +
+    geom_point() +
+    facet_grid(BEST.GWAS.status ~ feature) +
+    coord_fixed() +
+    theme_bw(base_size = 30) +
+    ggtitle('TWAS Z by brain region') +
+    scale_color_manual(values = c('grey80', 'dark orange', 'skyblue3', 'purple'))
+    
+ggplot(region_twas_z,
+    aes(x = DLPFC, y = HIPPO, color = Bonf.5perc, shape = in_both)) +
     geom_point() +
     facet_grid(BEST.GWAS.status ~ feature) +
     coord_fixed() +
@@ -490,23 +512,120 @@ map(split(region_twas_z, region_twas_z$feature),
 #   HIPPO    71    8  79
 #   Both      0   60  60
 #   Sum     472  231 703
-  
+
+
+## Now for Bonf
+map(split(region_twas_z, region_twas_z$feature),
+    ~ map(split(.x, .x$BEST.GWAS.status), 
+        ~ addmargins(table('Bonf <5%' = .x$Bonf.5perc, 'In both' = .x$in_both))
+    )
+)
+# $gene
+# $gene$Other
+#         In both
+# Bonf <5% FALSE TRUE  Sum
+#    None   3634 2625 6259
+#    DLPFC    10    8   18
+#    HIPPO     8    8   16
+#    Both      0   11   11
+#    Sum    3652 2652 6304
+#
+# $gene$`Risk Locus`
+#         In both
+# Bonf <5% FALSE TRUE Sum
+#    None    185  113 298
+#    DLPFC    29    7  36
+#    HIPPO     9    4  13
+#    Both      0   16  16
+#    Sum     223  140 363
+#
+#
+# $exon
+# $exon$Other
+#         In both
+# Bonf <5% FALSE  TRUE   Sum
+#    None  34892 12913 47805
+#    DLPFC    54    19    73
+#    HIPPO    29    21    50
+#    Both      0    23    23
+#    Sum   34975 12976 47951
+#
+# $exon$`Risk Locus`
+#         In both
+# Bonf <5% FALSE TRUE  Sum
+#    None   2035  667 2702
+#    DLPFC   167   44  211
+#    HIPPO    80   29  109
+#    Both      0   64   64
+#    Sum    2282  804 3086
+#
+#
+# $jxn
+# $jxn$Other
+#         In both
+# Bonf <5% FALSE  TRUE   Sum
+#    None  18777  7882 26659
+#    DLPFC    31    12    43
+#    HIPPO    24    15    39
+#    Both      0     8     8
+#    Sum   18832  7917 26749
+#
+# $jxn$`Risk Locus`
+#         In both
+# Bonf <5% FALSE TRUE  Sum
+#    None    922  439 1361
+#    DLPFC    81   19  100
+#    HIPPO    49   20   69
+#    Both      0   43   43
+#    Sum    1052  521 1573
+#
+#
+# $tx
+# $tx$Other
+#         In both
+# Bonf <5% FALSE  TRUE   Sum
+#    None   7474  3853 11327
+#    DLPFC    22     7    29
+#    HIPPO    19     7    26
+#    Both      0    16    16
+#    Sum    7515  3883 11398
+#
+# $tx$`Risk Locus`
+#         In both
+# Bonf <5% FALSE TRUE Sum
+#    None    395  181 576
+#    DLPFC    42   10  52
+#    HIPPO    35   15  50
+#    Both      0   25  25
+#    Sum     472  231 703
+
+
 
 ## Subset by significant (TWAS FDR < 5%)
 ttSig <- map(split(tt, tt$region), ~ .x[.x$TWAS.FDR < 0.05, ])
-map(ttSig, dim)
-# $DLPFC
-# [1] 5760   27
-#
-# $HIPPO
-# [1] 4081   27
+map_dfr(ttSig, dim)
+# # A tibble: 2 x 2
+#   DLPFC HIPPO
+#   <int> <int>
+# 1  5760  4081
+# 2    48    48
 
 ttSig_bonf <- map(split(tt, tt$region), ~ .x[.x$TWAS.Bonf < 0.05, ])
-map(ttSig_bonf, dim)
+map_dfr(ttSig_bonf, dim)
+# # A tibble: 2 x 2
+#   DLPFC HIPPO
+#   <int> <int>
+# 1   768   578
+# 2    48    48
+
 
 map_int(ttSig, ~ length(unique(.x$geneid)))
 # DLPFC HIPPO
 #  1514  1255
+
+map_int(ttSig_bonf, ~ length(unique(.x$geneid)))
+# DLPFC HIPPO
+#   240   218
 
 ## Original numbers when computing FDR across all 4 features at the same time:
 # DLPFC HIPPO
@@ -521,7 +640,7 @@ map_int(split(tt, tt$region), ~ length(unique(.x$geneid[.x$TWAS.P < 5e-08])))
 #   115    84
 
 ## save for later
-save(tt, ttSig, get_variable_by_region, ttReg_map, region_twas_z, file = 'rda/tt_objects.Rdata')
+save(tt, ttSig, ttSig_bonf, get_variable_by_region, ttReg_map, region_twas_z, file = 'rda/tt_objects.Rdata')
 
 
 
@@ -552,6 +671,13 @@ map_dbl(ttSig, ~ with(.x, check_cor(TWAS.P, EQTL.P.computed)))
 #     DLPFC     HIPPO
 # 0.7324814 0.7362852
 
+map_dbl(ttSig_bonf, ~ with(.x, check_cor(TWAS.P, BEST.GWAS.P.computed)))
+#     DLPFC     HIPPO
+# 0.5388277 0.4828275
+map_dbl(ttSig_bonf, ~ with(.x, check_cor(TWAS.P, EQTL.P.computed)))
+#     DLPFC     HIPPO
+# 0.6384968 0.6563766
+
 map_dbl(split(tt, tt$BEST.GWAS.status), ~ with(.x, check_cor(TWAS.P, BEST.GWAS.P.computed)))
 #     Index     Other     Proxy
 # 0.1046549 0.3369664 0.2392657
@@ -569,141 +695,113 @@ with(tt_sigonly, addmargins(table(BEST.GWAS.status, EQTL.status, useNA = 'ifany'
 #            Proxy     0  1345   345 1690
 #            Sum       2  9359   480 9841
 
-pdf('pdf/twas_fdr5perc_vs_gwas_or_eqtl.pdf', useDingbats = FALSE, width = 21, height = 14)
-ggplot(tt_sigonly, aes(
-    x = -log10(TWAS.P),
-    y = -log10(EQTL.P.computed),
-    color = BEST.GWAS.P.computed < 5e-08
-)) + geom_point() +
-    facet_grid(region * 
-        ifelse(EQTL.status == 'Other', 'Other', 'Risk Locus') ~
-        factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
-    ) +
-    theme_bw(base_size = 30) +
-    ggtitle('TWAS (FDR <5%) vs EQTL p-values') +
-    labs(caption = 'Risk Loci by EQTL')
+tt_sigonly_bonf <- tt[tt$TWAS.Bonf < 0.05, ]
+with(tt_sigonly_bonf, addmargins(table(BEST.GWAS.status, EQTL.status, useNA = 'ifany')))
+#                 EQTL.status
+# BEST.GWAS.status Index Other Proxy  Sum
+#            Index     2   252    60  314
+#            Other     0   391    19  410
+#            Proxy     0   356   266  622
+#            Sum       2   999   345 1346
 
-ggplot(tt_sigonly, aes(
-    x = -log10(TWAS.P),
-    y = -log10(EQTL.P.computed),
-    color = BEST.GWAS.P.computed < 5e-08
-)) + geom_point() +
-    facet_grid(region * 
-        ifelse(BEST.GWAS.status == 'Other', 'Other', 'Risk Locus') ~
-        factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
-    ) +
-    theme_bw(base_size = 30) +
-    ggtitle('TWAS (FDR <5%) vs EQTL p-values') +
-    labs(caption = 'Risk Loci by BEST GWAS')
+create_gwas_or_eqtl <- function(tt_sigonly, filename = 'pdf/twas_fdr5perc_vs_gwas_or_eqtl.pdf', titleslug = 'FDR') {
+    pdf(filename, useDingbats = FALSE, width = 21, height = 14)
+    print(ggplot(tt_sigonly, aes(
+        x = -log10(TWAS.P),
+        y = -log10(EQTL.P.computed),
+        color = BEST.GWAS.P.computed < 5e-08
+    )) + geom_point() +
+        facet_grid(region * 
+            ifelse(EQTL.status == 'Other', 'Other', 'Risk Locus') ~
+            factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
+        ) +
+        theme_bw(base_size = 30) +
+        ggtitle(paste0('TWAS (', titleslug, '<5%) vs EQTL p-values')) +
+        labs(caption = 'Risk Loci by EQTL')
+    )
+
+    print(ggplot(tt_sigonly, aes(
+        x = -log10(TWAS.P),
+        y = -log10(EQTL.P.computed),
+        color = BEST.GWAS.P.computed < 5e-08
+    )) + geom_point() +
+        facet_grid(region * 
+            ifelse(BEST.GWAS.status == 'Other', 'Other', 'Risk Locus') ~
+            factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
+        ) +
+        theme_bw(base_size = 30) +
+        ggtitle(paste0('TWAS (', titleslug, '<5%) vs EQTL p-values')) +
+        labs(caption = 'Risk Loci by BEST GWAS')
+    )
     
-ggplot(tt_sigonly, aes(
-    x = -log10(TWAS.P),
-    y = -log10(BEST.GWAS.P.computed),
-    color = EQTL.P.computed < 5e-08
-)) + geom_point() +
-    facet_grid(region * 
-        ifelse(EQTL.status == 'Other', 'Other', 'Risk Locus') ~
-        factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
-    ) +
-    theme_bw(base_size = 30) +
-    ggtitle('TWAS (FDR <5%) vs BEST GWAS p-values') +
-    labs(caption = 'Risk Loci by EQTL')
-       
-ggplot(tt_sigonly, aes(
-    x = -log10(TWAS.P),
-    y = -log10(BEST.GWAS.P.computed),
-    color = EQTL.P.computed < 5e-08
-)) + geom_point() +
-    facet_grid(region * 
-        ifelse(BEST.GWAS.status == 'Other', 'Other', 'Risk Locus') ~
-        factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
-    ) +
-    theme_bw(base_size = 30) +
-    ggtitle('TWAS (FDR <5%) vs BEST GWAS p-values') +
-    labs(caption = 'Risk Loci by BEST GWAS')
+    print(ggplot(tt_sigonly, aes(
+        x = TWAS.Z,
+        y = EQTL.Z,
+        color = BEST.GWAS.P.computed < 5e-08
+    )) + geom_point() +
+        facet_grid(region * 
+            ifelse(EQTL.status == 'Other', 'Other', 'Risk Locus') ~
+            factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
+        ) +
+        theme_bw(base_size = 30) +
+        ggtitle(paste0('TWAS (', titleslug, '<5%) vs EQTL z-scores')) +
+        labs(caption = 'Risk Loci by EQTL')
+    )
+
+    print(ggplot(tt_sigonly, aes(
+        x = TWAS.Z,
+        y = EQTL.Z,
+        color = BEST.GWAS.P.computed < 5e-08
+    )) + geom_point() +
+        facet_grid(region * 
+            ifelse(BEST.GWAS.status == 'Other', 'Other', 'Risk Locus') ~
+            factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
+        ) +
+        theme_bw(base_size = 30) +
+        ggtitle(paste0('TWAS (', titleslug, '<5%) vs EQTL z-scores')) +
+        labs(caption = 'Risk Loci by BEST GWAS')
+    )
     
-ggplot(tt_sigonly, aes(
-    x = TWAS.Z,
-    y = EQTL.Z,
-    color = BEST.GWAS.P.computed < 5e-08
-)) + geom_point() +
-    facet_grid(region * 
-        ifelse(EQTL.status == 'Other', 'Other', 'Risk Locus') ~
-        factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
-    ) +
-    theme_bw(base_size = 30) +
-    ggtitle('TWAS (FDR <5%) vs EQTL z-scores') +
-    labs(caption = 'Risk Loci by EQTL')
-
-ggplot(tt_sigonly, aes(
-    x = TWAS.Z,
-    y = EQTL.Z,
-    color = BEST.GWAS.P.computed < 5e-08
-)) + geom_point() +
-    facet_grid(region * 
-        ifelse(BEST.GWAS.status == 'Other', 'Other', 'Risk Locus') ~
-        factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
-    ) +
-    theme_bw(base_size = 30) +
-    ggtitle('TWAS (FDR <5%) vs EQTL z-scores') +
-    labs(caption = 'Risk Loci by BEST GWAS')
-        
-ggplot(tt_sigonly, aes(
-    x = TWAS.Z,
-    y = BEST.GWAS.Z,
-    color = EQTL.P.computed < 5e-08
-)) + geom_point() +
-    facet_grid(region * 
-        ifelse(EQTL.status == 'Other', 'Other', 'Risk Locus') ~
-        factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
-    ) +
-    theme_bw(base_size = 30) +
-    ggtitle('TWAS (FDR <5%) vs BEST GWAS z-scores') +
-    labs(caption = 'Risk Loci by EQTL')
-
-ggplot(tt_sigonly, aes(
-    x = TWAS.Z,
-    y = BEST.GWAS.Z,
-    color = EQTL.P.computed < 5e-08
-)) + geom_point() +
-    facet_grid(region * 
-        ifelse(BEST.GWAS.status == 'Other', 'Other', 'Risk Locus') ~
-        factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
-    ) +
-    theme_bw(base_size = 30) +
-    ggtitle('TWAS (FDR <5%) vs BEST GWAS z-scores') +
-    labs(caption = 'Risk Loci by BEST GWAS')
-dev.off()
+    dev.off()
+}
+create_gwas_or_eqtl(tt_sigonly, 'pdf/twas_fdr5perc_vs_gwas_or_eqtl.pdf', 'FDR')
+create_gwas_or_eqtl(tt_sigonly_bonf, 'pdf/twas_bonf5perc_vs_gwas_or_eqtl.pdf', 'Bonf')
 
 
+create_by_status <- function(tt_sigonly, filename = 'pdf/twas_fdr5perc_by_status.pdf', titleslug = 'FDR') {
+    pdf(filename, useDingbats = FALSE, width = 28, height = 14)
+    print(ggplot(tt_sigonly, aes(
+        y = -log10(TWAS.P),
+        x = ifelse(EQTL.status == 'Other', 'Other', 'Risk Locus'),
+        fill = BEST.GWAS.P.computed < 5e-08
+    )) + geom_boxplot(alpha = 0.7, outlier.shape = NA) +
+        geom_point(aes(fill = BEST.GWAS.P.computed < 5e-08), shape = 21, position = position_jitterdodge(jitter.width = 0.2)) +
+        facet_grid(region ~ factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
+        ) +
+        theme_bw(base_size = 30) +
+        ggtitle(paste0('TWAS (', titleslug, '<5%) by locus')) +
+        xlab('Risk Loci assignment by EQTL SNP') +
+        ylim(c(0, max(-log10(tt_sigonly$TWAS.P))))
+    )
 
-pdf('pdf/twas_fdr5perc_by_status.pdf', useDingbats = FALSE, width = 28, height = 14)
-ggplot(tt_sigonly, aes(
-    y = -log10(TWAS.P),
-    x = ifelse(EQTL.status == 'Other', 'Other', 'Risk Locus'),
-    fill = BEST.GWAS.P.computed < 5e-08
-)) + geom_boxplot(alpha = 0.7, outlier.shape = NA) +
-    geom_point(aes(fill = BEST.GWAS.P.computed < 5e-08), shape = 21, position = position_jitterdodge(jitter.width = 0.2)) +
-    facet_grid(region ~ factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
-    ) +
-    theme_bw(base_size = 30) +
-    ggtitle('TWAS (FDR <5%) by locus') +
-    xlab('Risk Loci assignment by EQTL SNP') +
-    ylim(c(0, max(-log10(tt_sigonly$TWAS.P))))
-
-ggplot(tt_sigonly, aes(
-    y = -log10(TWAS.P),
-    x = ifelse(BEST.GWAS.status == 'Other', 'Other', 'Risk Locus'),
-    fill = BEST.GWAS.P.computed < 5e-08
-)) + geom_boxplot(alpha = 0.7, outlier.shape = NA) +
-    geom_point(aes(fill = BEST.GWAS.P.computed < 5e-08), shape = 21, position = position_jitterdodge(jitter.width = 0.2)) +
-    facet_grid(region ~ factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
-    ) +
-    theme_bw(base_size = 30) +
-    ggtitle('TWAS (FDR <5%) by locus') +
-    xlab('Risk Loci assignment by BEST GWAS SNP') +
-    ylim(c(0, max(-log10(tt_sigonly$TWAS.P))))
-dev.off()
+    print(ggplot(tt_sigonly, aes(
+        y = -log10(TWAS.P),
+        x = ifelse(BEST.GWAS.status == 'Other', 'Other', 'Risk Locus'),
+        fill = BEST.GWAS.P.computed < 5e-08
+    )) + geom_boxplot(alpha = 0.7, outlier.shape = NA) +
+        geom_point(aes(fill = BEST.GWAS.P.computed < 5e-08), shape = 21, position = position_jitterdodge(jitter.width = 0.2)) +
+        facet_grid(region ~ factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
+        ) +
+        theme_bw(base_size = 30) +
+        ggtitle(paste0('TWAS (', titleslug, '<5%) by locus')) +
+        xlab('Risk Loci assignment by BEST GWAS SNP') +
+        ylim(c(0, max(-log10(tt_sigonly$TWAS.P))))
+    )
+    dev.off()
+    
+}
+create_by_status(tt_sigonly, 'pdf/twas_fdr5perc_by_status.pdf', 'FDR')
+create_by_status(tt_sigonly_bonf, 'pdf/twas_bonf5perc_by_status.pdf', 'Bonf')
 
 
 map(ttSig, ~ map(split(.x, .x$feature), ~
@@ -772,72 +870,71 @@ map(ttSig, ~ map(split(.x, .x$feature), ~
 #               TRUE     31  132 163
 #               Sum     468  139 607
 
-
-map(ttSig, ~ map(split(.x, .x$feature), ~
+map(ttSig_bonf, ~ map(split(.x, .x$feature), ~
     addmargins(table(
         'BEST GWAS P < 5e-08' = .x$BEST.GWAS.P.computed < 5e-08,
-        'Risk Locus (by EQTL)' =  .x$EQTL.status != 'Other',
+        'Risk Locus (by BEST GWAS)' =  .x$BEST.GWAS.status != 'Other',
         useNA = 'ifany'
     ))
 ))
 # $DLPFC
 # $DLPFC$exon
-#                    Risk Locus (by EQTL)
-# BEST GWAS P < 5e-08 FALSE TRUE  Sum
-#               FALSE  2115    7 2122
-#               TRUE    769  166  935
-#               Sum    2884  173 3057
+#                    Risk Locus (by BEST GWAS)
+# BEST GWAS P < 5e-08 FALSE TRUE Sum
+#               FALSE    38    0  38
+#               TRUE     58  275 333
+#               Sum      96  275 371
 #
 # $DLPFC$gene
-#                    Risk Locus (by EQTL)
+#                    Risk Locus (by BEST GWAS)
 # BEST GWAS P < 5e-08 FALSE TRUE Sum
-#               FALSE   285    1 286
-#               TRUE     99   21 120
-#               Sum     384   22 406
+#               FALSE    21    2  23
+#               TRUE      8   50  58
+#               Sum      29   52  81
 #
 # $DLPFC$jxn
-#                    Risk Locus (by EQTL)
-# BEST GWAS P < 5e-08 FALSE TRUE  Sum
-#               FALSE  1124    1 1125
-#               TRUE    364   63  427
-#               Sum    1488   64 1552
+#                    Risk Locus (by BEST GWAS)
+# BEST GWAS P < 5e-08 FALSE TRUE Sum
+#               FALSE    27    3  30
+#               TRUE     24  140 164
+#               Sum      51  143 194
 #
 # $DLPFC$tx
-#                    Risk Locus (by EQTL)
+#                    Risk Locus (by BEST GWAS)
 # BEST GWAS P < 5e-08 FALSE TRUE Sum
-#               FALSE   542    1 543
-#               TRUE    164   38 202
-#               Sum     706   39 745
+#               FALSE    31    2  33
+#               TRUE     14   75  89
+#               Sum      45   77 122
 #
 #
 # $HIPPO
 # $HIPPO$exon
-#                    Risk Locus (by EQTL)
-# BEST GWAS P < 5e-08 FALSE TRUE  Sum
-#               FALSE  1377    1 1378
-#               TRUE    485   92  577
-#               Sum    1862   93 1955
+#                    Risk Locus (by BEST GWAS)
+# BEST GWAS P < 5e-08 FALSE TRUE Sum
+#               FALSE    38    4  42
+#               TRUE     35  169 204
+#               Sum      73  173 246
 #
 # $HIPPO$gene
-#                    Risk Locus (by EQTL)
+#                    Risk Locus (by BEST GWAS)
 # BEST GWAS P < 5e-08 FALSE TRUE Sum
-#               FALSE   206    0 206
-#               TRUE     54   10  64
-#               Sum     260   10 270
+#               FALSE    17    1  18
+#               TRUE     10   28  38
+#               Sum      27   29  56
 #
 # $HIPPO$jxn
-#                    Risk Locus (by EQTL)
-# BEST GWAS P < 5e-08 FALSE TRUE  Sum
-#               FALSE   907    1  908
-#               TRUE    294   47  341
-#               Sum    1201   48 1249
+#                    Risk Locus (by BEST GWAS)
+# BEST GWAS P < 5e-08 FALSE TRUE Sum
+#               FALSE    31    2  33
+#               TRUE     16  110 126
+#               Sum      47  112 159
 #
 # $HIPPO$tx
-#                    Risk Locus (by EQTL)
+#                    Risk Locus (by BEST GWAS)
 # BEST GWAS P < 5e-08 FALSE TRUE Sum
-#               FALSE   444    0 444
-#               TRUE    130   33 163
-#               Sum     574   33 607
+#               FALSE    27    1  28
+#               TRUE     15   74  89
+#               Sum      42   75 117
 
 
 ## Add locus considered section
@@ -863,19 +960,21 @@ clean_by_state <- function(x) {
     return(r)
 }
 
-by_locus <- function(cut, list = FALSE) {
+by_locus <- function(cut, list = FALSE, var = 'TWAS.FDR') {
     by_locus <- map2(
         raggr_clean,
-        map(names(raggr_clean), ~ tt$BEST.GWAS.ID[tt$TWAS.FDR < cut & tt$region == .x]),
+        map(names(raggr_clean), ~ tt$BEST.GWAS.ID[tt[, var, drop = TRUE] < cut & tt$region == .x]),
         check_by_locus
     )
     if(list) return(by_locus)
     clean_by_state(map(by_locus, ~ table(.x > 0)))
 }
-perc_locus <- function(cut) {
-    x <- by_locus(cut)
+perc_locus <- function(cut, var = 'TWAS.FDR') {
+    x <- by_locus(cut, var = var)
     x[2, 1:2] / colSums(x[, 1:2]) * 100
 }
+
+stopifnot(identical(by_locus(1.1), by_locus(1.1, var = 'TWAS.Bonf')))
 
 ## raggr eQTL locus considered in the TWAS analysis
 by_locus(1.1)
@@ -902,27 +1001,41 @@ perc_locus(0.05) / perc_locus(1.1) * 100
 #      HIPPO    DLPFC
 # 1 89.83051 87.87879
 
-library('gplots')
+## raggr eQTL locus that have a TWAS Bonf <5% result
+by_locus(0.05, var = 'TWAS.Bonf')
+# # A tibble: 2 x 3
+#   HIPPO DLPFC state
+#   <int> <int> <lgl>
+# 1    62    66 FALSE
+# 2    41    50 TRUE
+perc_locus(0.05, var = 'TWAS.Bonf')
+#      HIPPO    DLPFC
+# 1 39.80583 43.10345
+perc_locus(0.05, var = 'TWAS.Bonf') / perc_locus(1.1) * 100
+#      HIPPO    DLPFC
+# 1 69.49153 75.75758
+
+
 get_matrix <- function(x) {
     matrix(x, ncol = ncol(x), dimnames = attr(x, 'dimnames'))
 }
 
-get_venn_info <- function(cut) {
+get_venn_info <- function(cut, var = 'TWAS.FDR') {
     map(
-        by_locus(cut, list = TRUE),
+        by_locus(cut, list = TRUE, var = var),
         ~ names(which(.x > 0))
     )
 }
-venn_by_locus <- function(cut) {
+venn_by_locus <- function(cut, var = 'TWAS.FDR') {
     venn(
-        get_venn_info(cut),
+        get_venn_info(cut, var = var),
         show.plot = FALSE
     )
 }
 
-shared_by_locus <- function(cut) {
+shared_by_locus <- function(cut, var = 'TWAS.FDR') {
     get_matrix(
-        venn_by_locus(cut)
+        venn_by_locus(cut, var = var)
     )
 }
 
@@ -942,11 +1055,16 @@ shared_by_locus(0.05)
 # 10   7     1     0
 # 11  46     1     1
 
+## Now with the ones that are TWAS Bonf < 5%
+shared_by_locus(0.05, var = 'TWAS.Bonf')
+#    num HIPPO DLPFC
+# 00   0     0     0
+# 01  13     0     1
+# 10   4     1     0
+# 11  37     1     1
 
-library('VennDiagram')
-
-make_pretty_venn <- function(cut, title = '') {
-    info <- get_venn_info(cut)
+make_pretty_venn <- function(cut, title = '', var = 'TWAS.FDR') {
+    info <- get_venn_info(cut, var = var)
     cols <- c('DLPFC' = 'dark orange', 'HIPPO' = 'skyblue3')
     v <- venn.diagram(info, filename = NULL,
         main = title,
@@ -961,6 +1079,7 @@ make_pretty_venn <- function(cut, title = '') {
 pdf('pdf/venn_by_locus.pdf', useDingbats = FALSE)
 make_pretty_venn(1.1, 'rAggr loci considered in TWAS')
 make_pretty_venn(0.05, 'rAggr loci with TWAS FDR<5%')
+make_pretty_venn(0.05, 'rAggr loci with TWAS Bonf<5%', var = 'TWAS.Bonf')
 dev.off()
 
 system('rm VennDiagram*')
@@ -973,11 +1092,11 @@ gene_by_locus <- function(rag, ref) {
 
 features <- c('gene', 'exon', 'jxn', 'tx')
 
-by_feature <- function(cut, list = FALSE) {
+by_feature <- function(cut, list = FALSE, var = 'TWAS.FDR') {
     g_by_locus <- map(features, function(feature) {
         map2(
             map(raggr_clean, ~ subset(.x, tolower(Type) == feature)),
-            map(names(raggr_clean), ~ tt$ID[tt$feature == feature & tt$region == .x & tt$TWAS.FDR < cut]),
+            map(names(raggr_clean), ~ tt$ID[tt$feature == feature & tt$region == .x & tt[, var, drop = TRUE] < cut]),
             gene_by_locus
         )
     })
@@ -1013,8 +1132,8 @@ clean_tabs(by_feature(cut = 1.1))
 # 7    19    17 FALSE tx
 # 8    46    59 TRUE  tx
 
-perc_feature <- function(cut) {
-    y <- clean_tabs(by_feature(cut))
+perc_feature <- function(cut, var = 'TWAS.FDR') {
+    y <- clean_tabs(by_feature(cut, var = var))
     clean_tabs(
         map(
             split(y, factor(y$feature, levels = features)), 
@@ -1061,20 +1180,48 @@ cbind(perc_feature(0.05)[, 1:2] / perc_feature(1.1)[, 1:2] * 100, feature = feat
 # 3 81.81818 85.13514     jxn
 # 4 73.91304 86.44068      tx
 
-get_venn_info_by_feature <- function(cut) {
+## Now with Bonf < 5%
+clean_tabs(by_feature(cut = 0.05, var = 'TWAS.Bonf'))
+# # A tibble: 8 x 4
+#   HIPPO DLPFC state feature
+#   <int> <int> <lgl> <chr>
+# 1    32    38 FALSE gene
+# 2    18    29 TRUE  gene
+# 3    46    44 FALSE exon
+# 4    31    43 TRUE  exon
+# 5    51    54 FALSE jxn
+# 6    37    44 TRUE  jxn
+# 7    35    44 FALSE tx
+# 8    30    32 TRUE  tx
+
+perc_feature(0.05, var = 'TWAS.Bonf')
+#      HIPPO    DLPFC feature
+# 1 36.00000 43.28358    gene
+# 2 40.25974 49.42529    exon
+# 3 42.04545 44.89796     jxn
+# 4 46.15385 42.10526      tx
+
+cbind(perc_feature(0.05, var = 'TWAS.Bonf')[, 1:2] / perc_feature(1.1)[, 1:2] * 100, feature = features)
+#      HIPPO    DLPFC feature
+# 1 52.94118 56.86275    gene
+# 2 55.35714 62.31884    exon
+# 3 56.06061 59.45946     jxn
+# 4 65.21739 54.23729      tx
+
+get_venn_info_by_feature <- function(cut, var = 'TWAS.FDR') {
     map(
-        by_feature(cut, list = TRUE),
+        by_feature(cut, list = TRUE, var = var),
         ~ map(.x, 
             ~ names(which(.x > 0))
         )
     )
 }
-venn_by_locus_by_feature <- function(cut) {
-    map(get_venn_info_by_feature(cut), venn, show.plot = FALSE)
+venn_by_locus_by_feature <- function(cut, var = 'TWAS.FDR') {
+    map(get_venn_info_by_feature(cut, var = var), venn, show.plot = FALSE)
 }
 
-shared_by_locus_by_feature <- function(cut) {
-    map(venn_by_locus_by_feature(cut), get_matrix)
+shared_by_locus_by_feature <- function(cut, var = 'TWAS.FDR') {
+    map(venn_by_locus_by_feature(cut, var = var), get_matrix)
 }
 
 ## Find the locus that have shared features
@@ -1109,6 +1256,7 @@ shared_by_locus_by_feature(1.1)
 # 10   9     1     0
 # 11  37     1     1
 
+## TWAS FDR <5%
 shared_by_locus_by_feature(0.05)
 # $gene
 #    num HIPPO DLPFC
@@ -1138,9 +1286,39 @@ shared_by_locus_by_feature(0.05)
 # 10   4     1     0
 # 11  30     1     1
 
+## TWAS Bonf <5%
+shared_by_locus_by_feature(0.05, var = 'TWAS.Bonf')
+# $gene
+#    num HIPPO DLPFC
+# 00   0     0     0
+# 01  15     0     1
+# 10   4     1     0
+# 11  14     1     1
+#
+# $exon
+#    num HIPPO DLPFC
+# 00   0     0     0
+# 01  17     0     1
+# 10   5     1     0
+# 11  26     1     1
+#
+# $jxn
+#    num HIPPO DLPFC
+# 00   0     0     0
+# 01  15     0     1
+# 10   8     1     0
+# 11  29     1     1
+#
+# $tx
+#    num HIPPO DLPFC
+# 00   0     0     0
+# 01  11     0     1
+# 10   9     1     0
+# 11  21     1     1
 
-make_pretty_venn_by_feature <- function(cut, title = '') {
-    info_all <- get_venn_info_by_feature(cut)
+
+make_pretty_venn_by_feature <- function(cut, title = '', var = 'TWAS.FDR') {
+    info_all <- get_venn_info_by_feature(cut, var = var)
     cols <- c('DLPFC' = 'dark orange', 'HIPPO' = 'skyblue3')
     map2(
         info_all,
@@ -1161,6 +1339,7 @@ make_pretty_venn_by_feature <- function(cut, title = '') {
 pdf('pdf/venn_by_locus_by_feature.pdf', useDingbats = FALSE)
 make_pretty_venn_by_feature(1.1, 'rAggr loci considered in TWAS')
 make_pretty_venn_by_feature(0.05, 'rAggr loci with TWAS FDR<5%')
+make_pretty_venn_by_feature(0.05, 'rAggr loci with TWAS Bonf<5%', var = 'TWAS.Bonf')
 dev.off()
 
 system('rm VennDiagram*')
@@ -1212,6 +1391,7 @@ n_feat_twas5perc <- cbind(map_dfr(ttSig, ~
         ~ nrow(.x)
     )
 ), features)
+n_feat_twas5perc
 #   DLPFC HIPPO features
 # 1   406   270     gene
 # 2  3057  1955     exon
@@ -1225,17 +1405,39 @@ cbind(n_feat_twas5perc[, 1:2] / n_feat_considered[, 1:2] * 100, features)
 # 3 7.514647 7.754393      jxn
 # 4 8.222051 8.484764       tx
 
-get_feat <- function(cut) {
-    x <- subset(tt, TWAS.FDR < cut)
+## Now with TWAS Bonf <5%
+n_feat_twas5perc_bonf <- cbind(map_dfr(ttSig_bonf, ~ 
+    map_dbl(
+        split(.x, factor(.x$feature, levels = features)),
+        ~ nrow(.x)
+    )
+), features)
+n_feat_twas5perc_bonf
+#   DLPFC HIPPO features
+# 1    81    56     gene
+# 2   371   246     exon
+# 3   194   159      jxn
+# 4   122   117       tx
+
+cbind(n_feat_twas5perc_bonf[, 1:2] / n_feat_considered[, 1:2] * 100, features)
+#       DLPFC     HIPPO features
+# 1 1.4775629 1.4080966     gene
+# 2 0.9480974 0.9577202     exon
+# 3 0.9393308 0.9871484      jxn
+# 4 1.3464298 1.6354487       tx
+
+
+get_feat <- function(cut, var = 'TWAS.FDR') {
+    x <- tt[ tt[, var, drop = TRUE]< cut, ]
     map(
         split(x, factor(x$feature, levels = features)),
         ~ map(split(.x, .x$region), ~.x$ID)
     )
 }
 
-shared_by_feature <- function(cut) {
+shared_by_feature <- function(cut, var = 'TWAS.FDR') {
     map(
-        get_feat(cut),
+        get_feat(cut, var = var),
         ~ get_matrix(venn(.x, show.plot = FALSE))
     )
 }
@@ -1269,6 +1471,7 @@ shared_by_feature(1.1)
 # 10 4947     1     0
 # 11 4114     1     1
 
+## TWAS FDR <5%
 shared_by_feature(0.05)
 # $gene
 #    num DLPFC HIPPO
@@ -1298,8 +1501,38 @@ shared_by_feature(0.05)
 # 10 485     1     0
 # 11 260     1     1
 
-make_pretty_venn_shared_by_feature <- function(cut, title = '') {
-    info_all <- get_feat(cut)
+## TWAS Bonf <5%
+shared_by_feature(0.05, var = 'TWAS.Bonf')
+# $gene
+#    num DLPFC HIPPO
+# 00   0     0     0
+# 01  29     0     1
+# 10  54     1     0
+# 11  27     1     1
+#
+# $exon
+#    num DLPFC HIPPO
+# 00   0     0     0
+# 01 159     0     1
+# 10 284     1     0
+# 11  87     1     1
+#
+# $jxn
+#    num DLPFC HIPPO
+# 00   0     0     0
+# 01 108     0     1
+# 10 143     1     0
+# 11  51     1     1
+#
+# $tx
+#    num DLPFC HIPPO
+# 00   0     0     0
+# 01  76     0     1
+# 10  81     1     0
+# 11  41     1     1
+
+make_pretty_venn_shared_by_feature <- function(cut, title = '', var = 'TWAS.FDR') {
+    info_all <- get_feat(cut, var = var)
     cols <- c('DLPFC' = 'dark orange', 'HIPPO' = 'skyblue3')
     map2(
         info_all,
@@ -1320,23 +1553,24 @@ make_pretty_venn_shared_by_feature <- function(cut, title = '') {
 pdf('pdf/venn_by_feature.pdf', useDingbats = FALSE)
 make_pretty_venn_shared_by_feature(1.1, 'Features with TWAS weights')
 make_pretty_venn_shared_by_feature(0.05, 'Features with TWAS FDR<5%')
+make_pretty_venn_shared_by_feature(0.05, 'Features with TWAS Bonf<5%', var = 'TWAS.Bonf')
 dev.off()
 
 system('rm VennDiagram*')
 
 
 ## Now by gene id
-get_feat_geneid <- function(cut) {
-    x <- subset(tt, TWAS.FDR < cut)
+get_feat_geneid <- function(cut, var = 'TWAS.FDR') {
+    x <- tt[ tt[, var, drop = TRUE]< cut, ]
     map(
         split(x, factor(x$feature, levels = features)),
         ~ map(split(.x, .x$region), ~ .x$geneid[!is.na(.x$geneid)])
     )
 }
 
-shared_by_geneid <- function(cut) {
+shared_by_geneid <- function(cut, var = 'TWAS.FDR') {
     map(
-        get_feat_geneid(cut),
+        get_feat_geneid(cut, var = var),
         ~ get_matrix(venn(.x, show.plot = FALSE))
     )
 }
@@ -1370,6 +1604,7 @@ shared_by_geneid(1.1)
 # 10 3076     1     0
 # 11 5985     1     1
 
+## TWAS FDR <5%
 shared_by_geneid(0.05)
 # $gene
 #    num DLPFC HIPPO
@@ -1399,8 +1634,38 @@ shared_by_geneid(0.05)
 # 10 368     1     0
 # 11 377     1     1
 
-make_pretty_venn_shared_by_geneid <- function(cut, title = '') {
-    info_all <- get_feat_geneid(cut)
+## TWAS Bonf <5%
+shared_by_geneid(0.05, var = 'TWAS.Bonf')
+# $gene
+#    num DLPFC HIPPO
+# 00   0     0     0
+# 01  29     0     1
+# 10  54     1     0
+# 11  27     1     1
+#
+# $exon
+#    num DLPFC HIPPO
+# 00   0     0     0
+# 01  61     0     1
+# 10 138     1     0
+# 11 233     1     1
+#
+# $jxn
+#    num DLPFC HIPPO
+# 00   0     0     0
+# 01  45     0     1
+# 10  66     1     0
+# 11  97     1     1
+#
+# $tx
+#    num DLPFC HIPPO
+# 00   0     0     0
+# 01  60     0     1
+# 10  65     1     0
+# 11  57     1     1
+
+make_pretty_venn_shared_by_geneid <- function(cut, title = '', var = 'TWAS.FDR') {
+    info_all <- get_feat_geneid(cut, var = var)
     cols <- c('DLPFC' = 'dark orange', 'HIPPO' = 'skyblue3')
     map2(
         info_all,
@@ -1421,22 +1686,22 @@ make_pretty_venn_shared_by_geneid <- function(cut, title = '') {
 pdf('pdf/venn_by_feature_using_geneid.pdf', useDingbats = FALSE)
 make_pretty_venn_shared_by_geneid(1.1, 'Features with TWAS weights (by gene ID)')
 make_pretty_venn_shared_by_geneid(0.05, 'Features with TWAS FDR<5% (by gene ID)')
+make_pretty_venn_shared_by_geneid(0.05, 'Features with TWAS Bonf<5% (by gene ID)', var = 'TWAS.Bonf')
 dev.off()
 
 system('rm VennDiagram*')
 
 
-get_feat_geneid2 <- function(cut) {
-    x <- subset(tt, TWAS.FDR < cut)
+get_feat_geneid2 <- function(cut, var = 'TWAS.FDR') {
+    x <- tt[ tt[, var, drop = TRUE]< cut, ]
     map(
         split(x, x$region),
         ~ map(split(.x, factor(.x$feature, levels = features)), ~ .x$geneid[!is.na(.x$geneid)])
     )
 }
 
-library('RColorBrewer')
-make_pretty_venn_shared_by_geneid2 <- function(cut, title = '') {
-    info_all <- get_feat_geneid2(cut)
+make_pretty_venn_shared_by_geneid2 <- function(cut, title = '', var = 'TWAS.FDR') {
+    info_all <- get_feat_geneid2(cut, var = var)
     cols <- brewer.pal('Set1', n = 4)
     map2(
         info_all,
@@ -1457,6 +1722,7 @@ make_pretty_venn_shared_by_geneid2 <- function(cut, title = '') {
 pdf('pdf/venn_by_feature_using_geneid_across_features.pdf', useDingbats = FALSE)
 make_pretty_venn_shared_by_geneid2(1.1, 'Features with TWAS weights (by gene ID)')
 make_pretty_venn_shared_by_geneid2(0.05, 'Features with TWAS FDR<5% (by gene ID)')
+make_pretty_venn_shared_by_geneid2(0.05, 'Features with TWAS Bonf<5% (by gene ID)', var = 'TWAS.Bonf')
 dev.off()
 
 system('rm VennDiagram*')
