@@ -143,6 +143,7 @@ tt$EQTL.P.computed <- 2*(pnorm( abs(tt$EQTL.GWAS.Z ) , lower.tail=F ))
 tt <- map_dfr(split(tt, tt$region), function(reg) {
     res <- map_dfr(split(reg, reg$feature), function(reg_feat) {
         reg_feat$TWAS.FDR <- p.adjust(reg_feat$TWAS.P, 'fdr')
+        reg_feat$TWAS.Bonf <- p.adjust(reg_feat$TWAS.P, 'bonf')
         reg_feat$BEST.GWAS.FDR <- p.adjust(reg_feat$BEST.GWAS.P, 'fdr')
         reg_feat$BEST.GWAS.FDR.computed <- p.adjust(reg_feat$BEST.GWAS.P.computed, 'fdr')
         reg_feat$EQTL.FDR.computed <- p.adjust(reg_feat$EQTL.P.computed, 'fdr')
@@ -490,6 +491,9 @@ map(ttSig, dim)
 #
 # $HIPPO
 # [1] 4081   27
+
+ttSig_bonf <- map(split(tt, tt$region), ~ .x[.x$TWAS.Bonf < 0.05, ])
+map(ttSig_bonf, dim)
 
 map_int(ttSig, ~ length(unique(.x$geneid)))
 # DLPFC HIPPO
@@ -1447,6 +1451,22 @@ make_pretty_venn_shared_by_geneid2(0.05, 'Features with TWAS FDR<5% (by gene ID)
 dev.off()
 
 system('rm VennDiagram*')
+
+cbind(map_dfr(split(tt, tt$region), ~ map_dfr(split(.x, .x$feature), ~ sum(.x$TWAS.FDR < 0.05))), region = c('DLPFC', 'HIPPO'))
+#   exon gene  jxn  tx region
+# 1 3057  406 1552 745  DLPFC
+# 2 1955  270 1249 607  HIPPO
+
+cbind(map_dfr(split(tt, tt$region), ~ map_dfr(split(.x, .x$feature), ~ sum(.x$TWAS.P < 5e-08))), region = c('DLPFC', 'HIPPO'))
+#   exon gene jxn tx region
+# 1  205   24  90 47  DLPFC
+# 2  128   21  53 37  HIPPO
+
+cbind(map_dfr(split(tt, tt$region), ~ map_dfr(split(.x, .x$feature), ~ sum(p.adjust(.x$TWAS.P, 'bonf') < 0.05))), region = c('DLPFC', 'HIPPO'))
+#   exon gene jxn  tx region
+# 1  371   81 194 122  DLPFC
+# 2  246   56 159 117  HIPPO
+
 
 
 ## Reproducibility information
