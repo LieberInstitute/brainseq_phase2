@@ -8,7 +8,6 @@ library('ggplot2')
 library('gplots')
 library('VennDiagram')
 library('RColorBrewer')
-# library('dplyr')
 
 load('rda/twas_exp.Rdata', verbose = TRUE)
 

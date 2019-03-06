@@ -8,7 +8,7 @@ library('ggplot2')
 library('gplots')
 library('VennDiagram')
 library('RColorBrewer')
-# library('dplyr')
+library('readxl')
 
 load('rda/twas_exp.Rdata', verbose = TRUE)
 
@@ -1570,6 +1570,292 @@ cbind(map_dfr(split(tt, tt$region), ~ map_dfr(split(.x, .x$feature), ~ sum(p.adj
 
 
 
+## Compare against https://www.nature.com/articles/s41588-018-0092-1#Sec27
+gusev_twas <- read_xlsx('41588_2018_92_MOESM3_ESM.xlsx', sheet = 1)
+gusev_twas <- subset(gusev_twas, Expression %in% c('CMC', 'CMC-splicing'))
+dim(gusev_twas)
+# [1] 124  13
+
+length(unique(gusev_twas$Gene))
+# [1] 83
+
+gusev_twas_byset <- split(gusev_twas, gusev_twas$Expression)
+map_dbl(gusev_twas_byset, ~ length(unique(.x$Gene)))
+# CMC CMC-splicing
+#  44           46
+
+gusev_gene <- data.frame(
+    gene = unique(gusev_twas$Gene),
+    stringsAsFactors = FALSE
+)
+## Categorize the genes by whether they show up in both CMC and CMC-splicing or only one
+gusev_gene$set_evidence <- map_chr(gusev_gene$gene, function(g) {
+    res <- map_lgl(gusev_twas_byset, ~ g %in% .x$Gene)
+    if(all(res)) {
+        return('Both')
+    } else {
+        names(gusev_twas_byset)[res]
+    }
+})
+table(gusev_gene$set_evidence)
+# Both          CMC CMC-splicing
+#    7           37           39
+
+twas_ov <- function(sig, prefix) {
+    genes <- tolower(gusev_gene$gene)
+    res <- map2_dfc(sig, names(ttSig), function(tsub, region) {
+        res2 <- map_dfc(split(tsub, factor(tsub$feature, levels = features)), ~ genes %in% tolower(.x$genesymbol))
+        res2$any_feature <- pmap_lgl(res2, any)
+        colnames(res2) <- paste0(region, '_', colnames(res2))
+        return(res2)
+    })
+    colnames(res) <- paste0(prefix, colnames(res))
+    return(res)
+}
+
+## Load the CLOZUK+PGC2 TWAS results
+get_psycm <- function() {
+    e <- new.env()
+    load('rda/tt_objects.Rdata', verbose = TRUE, envir = e)
+    e
+}
+
+psycm <- get_psycm()
+stopifnot(!identical(ttSig, psycm$ttSig))
+stopifnot(!identical(ttSig_bonf, psycm$ttSig_bonf))
+
+
+## Find whether the Gusev et al TWAS genes show up in our data
+gusev_gene <- cbind(
+    gusev_gene,
+    twas_ov(ttSig, 'pgc2_FDR_'),
+    twas_ov(ttSig_bonf, 'pgc2_Bonf_'),
+    twas_ov(psycm$ttSig, 'psycm_FDR_'),
+    twas_ov(psycm$ttSig_bonf, 'psycm_Bonf_')
+)
+
+## Is the gene in any of our results?
+gusev_gene$in_any <- pmap_lgl(gusev_gene[, -(1:2)], any)
+gusev_gene$in_any_FDR <- pmap_lgl(gusev_gene[, grep('FDR', colnames(gusev_gene))], any)
+gusev_gene$in_any_Bonf <- pmap_lgl(gusev_gene[, grep('Bonf', colnames(gusev_gene))], any)
+
+dim(gusev_gene)
+# [1] 83 45
+
+## Run a quick check
+stopifnot(all(with(gusev_gene,
+    pgc2_FDR_DLPFC_gene | pgc2_FDR_DLPFC_exon | pgc2_FDR_DLPFC_jxn | pgc2_FDR_DLPFC_tx == pgc2_FDR_DLPFC_any_feature
+)))
+
+save(gusev_gene, file = 'rda/gusev_gene.Rdata')
+
+## Birds eye view across all features and all TWAS we did
+with(gusev_gene, addmargins(table(set_evidence, in_any)))
+#               in_any
+# set_evidence   FALSE TRUE Sum
+#   Both             0    7   7
+#   CMC             10   27  37
+#   CMC-splicing     3   36  39
+#   Sum             13   70  83
+
+## Now using TWAS FDR<5% only (exact same numbers as above)
+with(gusev_gene, addmargins(table(set_evidence, in_any_FDR)))
+#               in_any_FDR
+# set_evidence   FALSE TRUE Sum
+#   Both             0    7   7
+#   CMC             10   27  37
+#   CMC-splicing     3   36  39
+#   Sum             13   70  83
+
+## Or TWAS Bonf <5% only (more restrictive)
+with(gusev_gene, addmargins(table(set_evidence, in_any_Bonf)))
+#               in_any_Bonf
+# set_evidence   FALSE TRUE Sum
+#   Both             1    6   7
+#   CMC             16   21  37
+#   CMC-splicing     9   30  39
+#   Sum             26   57  83
+
+## Main motivation behind this comparison:
+## DLPFC with PGC2 GWAS vs Gusev et al
+## Either with TWAS FDR <5%
+with(gusev_gene, addmargins(table(set_evidence, pgc2_FDR_DLPFC_any_feature)))
+# set_evidence   FALSE TRUE Sum
+#   Both             1    6   7
+#   CMC             12   25  37
+#   CMC-splicing     6   33  39
+#   Sum             19   64  83
+
+## by feature
+map_int(gusev_gene[, grep('pgc2_FDR_DLPFC', colnames(gusev_gene))], ~ sum(.x))
+#        pgc2_FDR_DLPFC_gene        pgc2_FDR_DLPFC_exon
+#                         23                         45
+#         pgc2_FDR_DLPFC_jxn          pgc2_FDR_DLPFC_tx
+#                         41                         43
+# pgc2_FDR_DLPFC_any_feature
+#                         64
+
+## or detailed comparison by feature
+map(gusev_gene[, grep('pgc2_FDR_DLPFC', colnames(gusev_gene))], ~ addmargins(table(set_evidence = gusev_gene$set_evidence, 'present?' = .x)))
+# $pgc2_FDR_DLPFC_gene
+#               present?
+# set_evidence   FALSE TRUE Sum
+#   Both             6    1   7
+#   CMC             21   16  37
+#   CMC-splicing    33    6  39
+#   Sum             60   23  83
+#
+# $pgc2_FDR_DLPFC_exon
+#               present?
+# set_evidence   FALSE TRUE Sum
+#   Both             2    5   7
+#   CMC             16   21  37
+#   CMC-splicing    20   19  39
+#   Sum             38   45  83
+#
+# $pgc2_FDR_DLPFC_jxn
+#               present?
+# set_evidence   FALSE TRUE Sum
+#   Both             2    5   7
+#   CMC             26   11  37
+#   CMC-splicing    14   25  39
+#   Sum             42   41  83
+#
+# $pgc2_FDR_DLPFC_tx
+#               present?
+# set_evidence   FALSE TRUE Sum
+#   Both             1    6   7
+#   CMC             19   18  37
+#   CMC-splicing    20   19  39
+#   Sum             40   43  83
+#
+# $pgc2_FDR_DLPFC_any_feature
+#               present?
+# set_evidence   FALSE TRUE Sum
+#   Both             1    6   7
+#   CMC             12   25  37
+#   CMC-splicing     6   33  39
+#   Sum             19   64  83
+
+                         
+## or with TWAS Bonf <5%
+with(gusev_gene, addmargins(table(set_evidence, pgc2_Bonf_DLPFC_any_feature)))
+# set_evidence   FALSE TRUE Sum
+#   Both             3    4   7
+#   CMC             28    9  37
+#   CMC-splicing    21   18  39
+#   Sum             52   31  83
+
+## by feature
+map_int(gusev_gene[, grep('pgc2_Bonf_DLPFC', colnames(gusev_gene))], ~ sum(.x))
+#        pgc2_Bonf_DLPFC_gene        pgc2_Bonf_DLPFC_exon
+#                           9                          19
+#         pgc2_Bonf_DLPFC_jxn          pgc2_Bonf_DLPFC_tx
+#                          19                          18
+# pgc2_Bonf_DLPFC_any_feature
+#                          31
+
+## or detailed comparison by feature
+map(gusev_gene[, grep('pgc2_Bonf_DLPFC', colnames(gusev_gene))], ~ addmargins(table(set_evidence = gusev_gene$set_evidence, 'present?' = .x)))
+# $pgc2_Bonf_DLPFC_gene
+#               present?
+# set_evidence   FALSE TRUE Sum
+#   Both             6    1   7
+#   CMC             32    5  37
+#   CMC-splicing    36    3  39
+#   Sum             74    9  83
+#
+# $pgc2_Bonf_DLPFC_exon
+#               present?
+# set_evidence   FALSE TRUE Sum
+#   Both             4    3   7
+#   CMC             29    8  37
+#   CMC-splicing    31    8  39
+#   Sum             64   19  83
+#
+# $pgc2_Bonf_DLPFC_jxn
+#               present?
+# set_evidence   FALSE TRUE Sum
+#   Both             3    4   7
+#   CMC             33    4  37
+#   CMC-splicing    28   11  39
+#   Sum             64   19  83
+#
+# $pgc2_Bonf_DLPFC_tx
+#               present?
+# set_evidence   FALSE TRUE Sum
+#   Both             5    2   7
+#   CMC             30    7  37
+#   CMC-splicing    30    9  39
+#   Sum             65   18  83
+#
+# $pgc2_Bonf_DLPFC_any_feature
+#               present?
+# set_evidence   FALSE TRUE Sum
+#   Both             3    4   7
+#   CMC             28    9  37
+#   CMC-splicing    21   18  39
+#   Sum             52   31  83
+
+
+## Per each TWAS we made, what's the overlap across regions?
+## Start with PGC2
+## TWAS FDR <5%
+with(gusev_gene, addmargins(table(pgc2_FDR_DLPFC_any_feature, pgc2_FDR_HIPPO_any_feature)))
+#                           pgc2_FDR_HIPPO_any_feature
+# pgc2_FDR_DLPFC_any_feature FALSE TRUE Sum
+#                      FALSE    16    3  19
+#                      TRUE     16   48  64
+#                      Sum      32   51  83
+
+## TWAS Bonf <5%
+with(gusev_gene, addmargins(table(pgc2_Bonf_DLPFC_any_feature, pgc2_Bonf_HIPPO_any_feature)))
+#                            pgc2_Bonf_HIPPO_any_feature
+# pgc2_Bonf_DLPFC_any_feature FALSE TRUE Sum
+#                       FALSE    47    5  52
+#                       TRUE      9   22  31
+#                       Sum      56   27  83
+
+## Start with CLOZUK+PCG
+## TWAS FDR <5%
+with(gusev_gene, addmargins(table(psycm_FDR_DLPFC_any_feature, psycm_FDR_HIPPO_any_feature)))
+#                            psycm_FDR_HIPPO_any_feature
+# psycm_FDR_DLPFC_any_feature FALSE TRUE Sum
+#                       FALSE    13    4  17
+#                       TRUE     15   51  66
+#                       Sum      28   55  83
+                      
+with(gusev_gene, addmargins(table(psycm_Bonf_DLPFC_any_feature, psycm_Bonf_HIPPO_any_feature)))
+#                             psycm_Bonf_HIPPO_any_feature
+# psycm_Bonf_DLPFC_any_feature FALSE TRUE Sum
+#                        FALSE    27    5  32
+#                        TRUE     20   31  51
+#                        Sum      47   36  83
+
+## Compare by PGC2 and CLOZUK+PGC2 TWAS by merging both brain regions
+## TWAS FDR <5%
+with(gusev_gene, addmargins(table(
+    'PGC2' = pgc2_FDR_DLPFC_any_feature | pgc2_FDR_HIPPO_any_feature,
+    'CLOZUK+PGC2' = psycm_FDR_DLPFC_any_feature | psycm_FDR_HIPPO_any_feature
+)))
+#        CLOZUK+PGC2
+# PGC2    FALSE TRUE Sum
+#   FALSE    13    3  16
+#   TRUE      0   67  67
+#   Sum      13   70  83
+
+## TWAS Bonf <5%
+with(gusev_gene, addmargins(table(
+    'PGC2' = pgc2_Bonf_DLPFC_any_feature | pgc2_Bonf_HIPPO_any_feature,
+    'CLOZUK+PGC2' = psycm_Bonf_DLPFC_any_feature | psycm_Bonf_HIPPO_any_feature
+)))
+#        CLOZUK+PGC2
+# PGC2    FALSE TRUE Sum
+#   FALSE    26   21  47
+#   TRUE      1   35  36
+#   Sum      27   56  83
+
+
 ## Reproducibility information
 print('Reproducibility information:')
 Sys.time()
@@ -1577,3 +1863,78 @@ proc.time()
 options(width = 120)
 session_info()
 
+# ─ Session info ───────────────────────────────────────────────────────────────────────────────────────────────────────
+#  setting  value
+#  version  R version 3.5.1 Patched (2018-10-29 r75535)
+#  os       Red Hat Enterprise Linux Server release 6.9 (Santiago)
+#  system   x86_64, linux-gnu
+#  ui       X11
+#  language (EN)
+#  collate  en_US.UTF-8
+#  ctype    en_US.UTF-8
+#  tz       US/Eastern
+#  date     2019-03-06
+#
+# ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
+#  package        * version  date       lib source
+#  assertthat       0.2.0    2017-04-11 [2] CRAN (R 3.5.0)
+#  bindr            0.1.1    2018-03-13 [1] CRAN (R 3.5.0)
+#  bindrcpp         0.2.2    2018-03-29 [1] CRAN (R 3.5.0)
+#  bitops           1.0-6    2013-08-17 [2] CRAN (R 3.5.0)
+#  caTools          1.17.1.1 2018-07-20 [2] CRAN (R 3.5.1)
+#  cellranger       1.1.0    2016-07-27 [1] CRAN (R 3.5.0)
+#  cli              1.0.1    2018-09-25 [1] CRAN (R 3.5.1)
+#  colorout       * 1.2-0    2018-05-02 [1] Github (jalvesaq/colorout@c42088d)
+#  colorspace       1.4-0    2019-01-13 [2] CRAN (R 3.5.1)
+#  crayon           1.3.4    2017-09-16 [1] CRAN (R 3.5.0)
+#  digest           0.6.18   2018-10-10 [1] CRAN (R 3.5.1)
+#  dplyr            0.7.8    2018-11-10 [1] CRAN (R 3.5.1)
+#  fansi            0.4.0    2018-10-05 [1] CRAN (R 3.5.1)
+#  formatR          1.5      2017-04-25 [1] CRAN (R 3.5.0)
+#  futile.logger  * 1.4.3    2016-07-10 [1] CRAN (R 3.5.0)
+#  futile.options   1.0.1    2018-04-20 [2] CRAN (R 3.5.0)
+#  gdata            2.18.0   2017-06-06 [2] CRAN (R 3.5.0)
+#  ggplot2        * 3.1.0    2018-10-25 [1] CRAN (R 3.5.1)
+#  glue             1.3.0    2018-07-17 [1] CRAN (R 3.5.1)
+#  gplots         * 3.0.1    2016-03-30 [1] CRAN (R 3.5.0)
+#  gtable           0.2.0    2016-02-26 [2] CRAN (R 3.5.0)
+#  gtools           3.8.1    2018-06-26 [2] CRAN (R 3.5.1)
+#  htmltools        0.3.6    2017-04-28 [2] CRAN (R 3.5.0)
+#  htmlwidgets      1.3      2018-09-30 [1] CRAN (R 3.5.1)
+#  httpuv           1.4.5.1  2018-12-18 [2] CRAN (R 3.5.1)
+#  KernSmooth       2.23-15  2015-06-29 [3] CRAN (R 3.5.1)
+#  labeling         0.3      2014-08-23 [2] CRAN (R 3.5.0)
+#  lambda.r         1.2.3    2018-05-17 [1] CRAN (R 3.5.0)
+#  later            0.7.5    2018-09-18 [2] CRAN (R 3.5.1)
+#  lattice          0.20-38  2018-11-04 [3] CRAN (R 3.5.1)
+#  lazyeval         0.2.1    2017-10-29 [2] CRAN (R 3.5.0)
+#  magrittr         1.5      2014-11-22 [1] CRAN (R 3.5.0)
+#  munsell          0.5.0    2018-06-12 [2] CRAN (R 3.5.0)
+#  pillar           1.3.1    2018-12-15 [1] CRAN (R 3.5.1)
+#  pkgconfig        2.0.2    2018-08-16 [1] CRAN (R 3.5.1)
+#  plyr             1.8.4    2016-06-08 [2] CRAN (R 3.5.0)
+#  png              0.1-7    2013-12-03 [2] CRAN (R 3.5.0)
+#  promises         1.0.1    2018-04-13 [2] CRAN (R 3.5.0)
+#  purrr          * 0.2.5    2018-05-29 [2] CRAN (R 3.5.0)
+#  R6               2.3.0    2018-10-04 [2] CRAN (R 3.5.1)
+#  RColorBrewer   * 1.1-2    2014-12-07 [2] CRAN (R 3.5.0)
+#  Rcpp             1.0.0    2018-11-07 [1] CRAN (R 3.5.1)
+#  readxl         * 1.2.0    2018-12-19 [2] CRAN (R 3.5.1)
+#  reshape2         1.4.3    2017-12-11 [2] CRAN (R 3.5.0)
+#  rlang            0.3.1    2019-01-08 [1] CRAN (R 3.5.1)
+#  rmote          * 0.3.4    2018-05-02 [1] deltarho (R 3.5.0)
+#  scales           1.0.0    2018-08-09 [2] CRAN (R 3.5.1)
+#  servr            0.11     2018-10-23 [1] CRAN (R 3.5.1)
+#  sessioninfo    * 1.1.1    2018-11-05 [1] CRAN (R 3.5.1)
+#  stringi          1.2.4    2018-07-20 [2] CRAN (R 3.5.1)
+#  stringr          1.3.1    2018-05-10 [1] CRAN (R 3.5.0)
+#  tibble         * 2.0.1    2019-01-12 [1] CRAN (R 3.5.1)
+#  tidyselect       0.2.5    2018-10-11 [2] CRAN (R 3.5.1)
+#  utf8             1.1.4    2018-05-24 [1] CRAN (R 3.5.0)
+#  VennDiagram    * 1.6.20   2018-03-28 [1] CRAN (R 3.5.0)
+#  withr            2.1.2    2018-03-15 [2] CRAN (R 3.5.0)
+#  xfun             0.4      2018-10-23 [1] CRAN (R 3.5.1)
+#
+# [1] /users/lcollado/R/x86_64-pc-linux-gnu-library/3.5.x
+# [2] /jhpce/shared/jhpce/core/conda/miniconda-3/envs/svnR-3.5.x/R/3.5.x/lib64/R/site-library
+# [3] /jhpce/shared/jhpce/core/conda/miniconda-3/envs/svnR-3.5.x/R/3.5.x/lib64/R/library
