@@ -294,6 +294,8 @@ get_variable_by_region <- function(var, NAs_0 = FALSE) {
         in_both = !is.na(ttReg_map$i_DLPFC) & !is.na(ttReg_map$i_HIPPO),
         TWAS.FDR_DLPFC = tt$TWAS.FDR[ttReg_map$i_DLPFC],
         TWAS.FDR_HIPPO = tt$TWAS.FDR[ttReg_map$i_HIPPO],
+        TWAS.Bonf_DLPFC = tt$TWAS.Bonf[ttReg_map$i_DLPFC],
+        TWAS.Bonf_HIPPO = tt$TWAS.Bonf[ttReg_map$i_HIPPO],
         BEST.GWAS.status_DLPFC = tt$BEST.GWAS.status[ttReg_map$i_DLPFC],
         BEST.GWAS.status_HIPPO = tt$BEST.GWAS.status[ttReg_map$i_HIPPO],
         stringsAsFactors = FALSE
@@ -316,6 +318,11 @@ get_variable_by_region <- function(var, NAs_0 = FALSE) {
     res$FDR.5perc[res$TWAS.FDR_HIPPO < 0.05] <- 'HIPPO'
     res$FDR.5perc[res$TWAS.FDR_DLPFC < 0.05 & res$TWAS.FDR_HIPPO < 0.05] <- 'Both'
     
+    res$Bonf.5perc <- 'None'
+    res$Bonf.5perc[res$TWAS.Bonf_DLPFC < 0.05] <- 'DLPFC'
+    res$Bonf.5perc[res$TWAS.Bonf_HIPPO < 0.05] <- 'HIPPO'
+    res$Bonf.5perc[res$TWAS.Bonf_DLPFC < 0.05 & res$TWAS.Bonf_HIPPO < 0.05] <- 'Both'
+    
     # print(with(res, table(BEST.GWAS.status_DLPFC, BEST.GWAS.status_HIPPO, useNA = 'ifany')))
 #                       BEST.GWAS.status_HIPPO
 # BEST.GWAS.status_DLPFC Index Other Proxy  <NA>
@@ -323,7 +330,8 @@ get_variable_by_region <- function(var, NAs_0 = FALSE) {
 #                  Other     0 27428     0 42528
 #                  Proxy     0     0  1172  1952
 #                  <NA>    418 22446   936     0
-#
+#    
+
     res$BEST.GWAS.status <- 'Other'
     res$BEST.GWAS.status[c(which(res$BEST.GWAS.status_DLPFC != 'Other'),  which(res$BEST.GWAS.status_HIPPO != 'Other'))] <- 'Risk Locus'
     
@@ -335,6 +343,7 @@ get_variable_by_region <- function(var, NAs_0 = FALSE) {
     ## Make the features as factor, so its looks ok when plotting
     res$feature <- factor(res$feature, levels = c('gene', 'exon', 'jxn', 'tx'))
     res$FDR.5perc <- factor(res$FDR.5perc, levels = c('None', 'DLPFC', 'HIPPO', 'Both'))
+    res$Bonf.5perc <- factor(res$Bonf.5perc, levels = c('None', 'DLPFC', 'HIPPO', 'Both'))
     res$BEST.GWAS.status <- factor(res$BEST.GWAS.status, levels = c('Other', 'Risk Locus'))
     
     return(res)
