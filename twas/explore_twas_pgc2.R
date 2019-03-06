@@ -466,6 +466,11 @@ map_int(ttSig, ~ length(unique(.x$geneid[.x$TWAS.P < 5e-08])))
 # DLPFC HIPPO
 #    51    47
 
+dim(tt)
+# [1] 132936     44
+dim(region_twas_z)
+# [1] 101304     16
+
 ## save for later
 save(tt, ttSig, ttSig_bonf, get_variable_by_region, ttReg_map, region_twas_z, file = 'rda/pgc2_tt_objects.Rdata')
 
