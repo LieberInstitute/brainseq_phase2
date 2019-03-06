@@ -3,11 +3,11 @@
 library('tibble')
 library('sessioninfo')
 library('purrr')
-library('readr')
+# library('readr')
 library('ggplot2')
-library('gplots')
-library('VennDiagram')
-library('RColorBrewer')
+# library('gplots')
+# library('VennDiagram')
+# library('RColorBrewer')
 # library('dplyr')
 
 load('rda/twas_exp.Rdata', verbose = TRUE)
@@ -16,27 +16,8 @@ load('rda/twas_exp.Rdata', verbose = TRUE)
 tt <- twas_exp$all
 ## Drop TWAS NA p-values
 tt <- tt[!is.na(tt$TWAS.P), ]
-## Focus on CLOZUK+PGC2 (psycm) GWAS
-tt <- tt[which(tt$type == "psycm"),]
-
-## Add GWAS p-value and OR from the original sumstats file
-original <- read_tsv('psycm/clozuk_pgc2.meta.sumstats.txt')
-original$CHR[original$CHR == 23] <- 'X'
-original$hg19_pos <- with(original, paste0(CHR, ':', BP))
-
-snpmap <- read_tsv('psycm/clozuk_pgc2.meta.reformatted.sumstats_hg38_ourname',
-    col_types = cols(
-      SNP = col_character(),
-      A1 = col_character(),
-      A2 = col_character(),
-      Z = col_double(),
-      N = col_double(),
-      chr = col_character(),
-      basepair = col_double(),
-      basepairhg19 = col_double(),
-      originalSNP = col_character()
-    )
-)
+## Focus on PGC2 GWAS
+tt <- tt[which(tt$type == "pgc2"),]
 
 ## Load big snpMap table
 load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n551.rda", verbose = TRUE)
@@ -59,95 +40,15 @@ tt$BEST.GWAS.pos_hg38 <- snpMap$pos_hg38_info[m_to_fullMap]
 tt$EQTL.pos_hg19 <- snpMap$pos_hg19[m_to_fullMap_qtl]
 tt$EQTL.pos_hg38 <- snpMap$pos_hg38_info[m_to_fullMap_qtl]
 
-
-
-
-m_to_map <- match(tt$BEST.GWAS.ID, snpmap$SNP)
-table(is.na(tt$BEST.GWAS.ID))
-#  FALSE
-# 127251
-table(is.na(m_to_map))
-## Hm... I'm not sure why some are NAs
-#  FALSE   TRUE
-# 126157   1094
-print(tt[head(which(is.na(m_to_map))), ], width = 200)
-
-## Hm....
-m_to_map_qtl <- match(tt$EQTL.ID, snpmap$SNP)
-table(is.na(m_to_map_qtl))
-#  FALSE   TRUE
-# 125935   1316
-
-addmargins(table(
-    'By BEST.GWAS.ID' = is.na(m_to_map),
-    'By EQTL.ID' = is.na(m_to_map_qtl)
-))
-#                By EQTL.ID
-# By BEST.GWAS.ID  FALSE   TRUE    Sum
-#           FALSE 124876   1281 126157
-#           TRUE    1059     35   1094
-#           Sum   125935   1316 127251
-
-## Well, after that it all looks ok
-m_to_ori <- match(snpmap$originalSNP[m_to_map], original$SNP)
-table(is.na(m_to_ori))
-#  FALSE   TRUE
-# 126157   1094
-
-## Hm... it's odd that the same number don't match by either name or chr position
-m_to_ori2 <- match(tt$BEST.GWAS.pos_hg19, original$hg19_pos)
-table(is.na(m_to_ori), is.na(m_to_ori2))
-#        FALSE   TRUE
-# FALSE 125076   1081
-# TRUE    1081     13
-## Supplement m_to_ori (by name) with the matching by chr and position in hg19
-m_to_ori[is.na(m_to_ori)] <- m_to_ori2[is.na(m_to_ori)]
-table(is.na(m_to_ori))
-#  FALSE   TRUE
-# 127238     13
-
-m_to_map_qtl2 <- match(tt$EQTL.pos_hg19, original$hg19_pos)
-table(is.na(m_to_map_qtl), is.na(m_to_map_qtl2))
-#        FALSE   TRUE
-# FALSE 125935      0
-# TRUE       0   1316
-
-
-
-## Lets get the originally reported summarized p-values
-BEST.GWAS.P <- original$P[m_to_ori]
-## This is how the calculate the p-values displayed by FUSION-TWAS
-# https://github.com/gusevlab/fusion_twas/blob/master/FUSION.post_process.R#L641
-BEST.GWAS.P.computed <- 2*(pnorm( abs(tt$BEST.GWAS.Z ) , lower.tail=F ))
-
-
-x <- -log10(BEST.GWAS.P[!is.na(m_to_ori)])
-y <- -log10(BEST.GWAS.P.computed[!is.na(m_to_ori)])
-## The difference seems small, likely due to the number of decimals in the original table
-summary(x - y)
-#       Min.    1st Qu.     Median       Mean    3rd Qu.       Max.
-# -0.0183092 -0.0033636  0.0002139  0.0002255  0.0040540  0.0166786
-summary(abs(x - y))
-#      Min.   1st Qu.    Median      Mean   3rd Qu.      Max.
-# 4.611e-06 1.705e-03 3.736e-03 4.112e-03 6.098e-03 1.831e-02
-head(original$P)
-# [1] 8.120e-01 2.585e-01 9.777e-01 7.701e-01 5.431e-01 1.149e-05
-head(original$P) * 1e6
-# [1] 812000.00 258500.00 977700.00 770100.00 543100.00     11.49
-
-## Ok, assign them to our table
-tt$BEST.GWAS.P <- original$P[m_to_ori]
-tt$BEST.GWAS.OR <- original$OR[m_to_ori]
-tt$BEST.GWAS.SE <- original$SE[m_to_ori]
+## Add computed P-values for BEST GWAS and EQTL
 tt$BEST.GWAS.P.computed <- 2*(pnorm( abs(tt$BEST.GWAS.Z ) , lower.tail=F ))
 tt$EQTL.P.computed <- 2*(pnorm( abs(tt$EQTL.GWAS.Z ) , lower.tail=F ))
 
-## Compute FDR by region for each feature 4 features
+## Compute FDR/Bonf by region for each feature 4 features
 tt <- map_dfr(split(tt, tt$region), function(reg) {
     res <- map_dfr(split(reg, reg$feature), function(reg_feat) {
         reg_feat$TWAS.FDR <- p.adjust(reg_feat$TWAS.P, 'fdr')
         reg_feat$TWAS.Bonf <- p.adjust(reg_feat$TWAS.P, 'bonf')
-        reg_feat$BEST.GWAS.FDR <- p.adjust(reg_feat$BEST.GWAS.P, 'fdr')
         reg_feat$BEST.GWAS.FDR.computed <- p.adjust(reg_feat$BEST.GWAS.P.computed, 'fdr')
         reg_feat$EQTL.FDR.computed <- p.adjust(reg_feat$EQTL.P.computed, 'fdr')
         return(reg_feat)
@@ -165,43 +66,17 @@ indexLoci$hg19POS = paste0(indexLoci$Chromosome, ":", indexLoci$snp_pos_hg19)
 
 ## risk loci from PGC paper + rAggr proxy markers
 riskLoci <- read.csv("/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/rAggr_results_179.csv", stringsAsFactors=FALSE)
+colnames(riskLoci) = gsub("\\.", "_", colnames(riskLoci))
 length(unique(riskLoci$SNP2_Name))
 # [1] 10981
-colnames(riskLoci) = gsub("\\.", "_", colnames(riskLoci))
 riskLoci$hg19POS1 = paste0(riskLoci$SNP1_Chr, ":", riskLoci$SNP1_Pos) 
 riskLoci$hg19POS2 = paste0(riskLoci$SNP2_Chr, ":", riskLoci$SNP2_Pos)
 length(unique(riskLoci$hg19POS2))
 # [1] 10975
 
-
-addmargins(table(
-    'proxy' = snpMap$pos_hg19 %in% riskLoci$hg19POS2,
-    'index' = snpMap$pos_hg19 %in% indexLoci$hg19POS
-))
-#        index
-# proxy     FALSE    TRUE     Sum
-#   FALSE 7014124       0 7014124
-#   TRUE     9600     135    9735
-#   Sum   7023724     135 7023859
-
-
 snpMap$Status <- 'Other'
 snpMap$Status[snpMap$pos_hg19 %in% riskLoci$hg19POS2] <- 'Proxy'
 snpMap$Status[snpMap$pos_hg19 %in% indexLoci$hg19POS] <- 'Index'
-table(snpMap$Status)
-# Index   Other   Proxy
-#   135 7014124    9600
-
-## One of the index SNPs has 2 names
-length(unique(riskLoci$SNP1_Name))
-# [1] 180
-which(table(gsub(':.*', '', unique(riskLoci$SNP1_Name))) > 1)
-# rs1023497
-#         5
-## Turns out that it's multi-allelic
-unique(riskLoci$SNP1_Name)[grep('rs1023497', unique(riskLoci$SNP1_Name))]
-# [1] "rs1023497:42340508:C:G" "rs1023497:42340508:C:A"
-
 
 get_proxy_info <- function(pos_hg19, prefix) {
     status <- rep('Other', length(pos_hg19))
@@ -235,7 +110,6 @@ get_proxy_info <- function(pos_hg19, prefix) {
     colnames(res) <- paste0(prefix, colnames(res))
     return(res)
 }
-# hmm <- tt
 tt <- as_tibble(cbind(tt,
     get_proxy_info(tt$BEST.GWAS.pos_hg19, 'BEST.GWAS.'),
     get_proxy_info(tt$EQTL.pos_hg19, 'EQTL.')
@@ -243,17 +117,17 @@ tt <- as_tibble(cbind(tt,
 ## BEST.GWAS info
 # status
 #  Index  Other  Proxy
-#   2189 119830   5232
-# [1] 113
+#   1317 127039   4580
+# [1] 93
 #    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
-# -331128  -10256       0   -4290    4113  322056
+# -331128   -1922       0    4371   21445  322056
 ## EQTL info
 # status
 #  Index  Other  Proxy
-#      3 126738    510
-# [1] 50
+#      3 132415    518
+# [1] 51
 #    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
-# -339607  -73401  -16684  -17830   34305  437328
+# -339607  -72415  -14170  -16679   34378  437328
 
 print(tt, width = 600)
 head(as.data.frame(tt))
@@ -261,7 +135,7 @@ head(as.data.frame(tt))
 
 table(table(tt$ID))
 #     1     2
-# 69003 29124
+# 69672 31632
 
 ids <- unique(tt$ID)
 is_DLPFC <- tt$region == 'DLPFC'
@@ -304,18 +178,6 @@ get_variable_by_region <- function(var, NAs_0 = FALSE) {
         stringsAsFactors = FALSE
     )
 
-    # print(with(res, addmargins(table(
- #        'DLPFC' = res$TWAS.FDR_DLPFC < 0.05,
- #        'HIPPO' = res$TWAS.FDR_HIPPO < 0.05,
- #        useNA = 'ifany'
- #    ))))
-#        HIPPO
-# DLPFC   FALSE  TRUE  <NA>   Sum
-#   FALSE 26148   613 41806 68567
-#   TRUE    707  1656  3397  5760
-#   <NA>  21988  1812     0 23800
-#   Sum   48843  4081 45203 98127
-    
     res$FDR.5perc <- 'None'
     res$FDR.5perc[res$TWAS.FDR_DLPFC < 0.05] <- 'DLPFC'
     res$FDR.5perc[res$TWAS.FDR_HIPPO < 0.05] <- 'HIPPO'
@@ -325,15 +187,6 @@ get_variable_by_region <- function(var, NAs_0 = FALSE) {
     res$Bonf.5perc[res$TWAS.Bonf_DLPFC < 0.05] <- 'DLPFC'
     res$Bonf.5perc[res$TWAS.Bonf_HIPPO < 0.05] <- 'HIPPO'
     res$Bonf.5perc[res$TWAS.Bonf_DLPFC < 0.05 & res$TWAS.Bonf_HIPPO < 0.05] <- 'Both'
-    
-    # print(with(res, table(BEST.GWAS.status_DLPFC, BEST.GWAS.status_HIPPO, useNA = 'ifany')))
-#                       BEST.GWAS.status_HIPPO
-# BEST.GWAS.status_DLPFC Index Other Proxy  <NA>
-#                  Index   524     0     0   723
-#                  Other     0 27428     0 42528
-#                  Proxy     0     0  1172  1952
-#                  <NA>    418 22446   936     0
-#    
 
     res$BEST.GWAS.status <- 'Other'
     res$BEST.GWAS.status[c(which(res$BEST.GWAS.status_DLPFC != 'Other'),  which(res$BEST.GWAS.status_HIPPO != 'Other'))] <- 'Risk Locus'
@@ -355,50 +208,41 @@ get_variable_by_region <- function(var, NAs_0 = FALSE) {
 
 region_twas_z <- get_variable_by_region('TWAS.Z', NAs_0 = TRUE)
 
-## How I figured out something weird :P
-## Some values on the cross with low/high Zs were labeled as "None":
-## they were NAs on one of the two regions
-head(subset(region_twas_z, FDR.5perc == 'None' & DLPFC < -5))
-
-
 table(region_twas_z$in_both)
-#
 # FALSE  TRUE
-# 69003 29124
+# 69672 31632
 table(region_twas_z$in_both) / nrow(region_twas_z) * 100
-#   FALSE    TRUE
-# 70.3201 29.6799
+#    FALSE     TRUE
+# 68.77517 31.22483
 addmargins(table(
     'in both' = region_twas_z$in_both,
     'FDR < 0.05' = region_twas_z$FDR.5perc,
     useNA = 'ifany'
 ))
-# in both  None DLPFC HIPPO  Both   Sum
-#   FALSE 69003     0     0     0 69003
-#   TRUE  26148   707   613  1656 29124
-#   Sum   95151   707   613  1656 98127
+#        FDR < 0.05
+# in both   None  DLPFC  HIPPO   Both    Sum
+#   FALSE  66336   2112   1224      0  69672
+#   TRUE   29417    487    481   1247  31632
+#   Sum    95753   2599   1705   1247 101304
 
 addmargins(table(
     'in both' = region_twas_z$in_both,
     'Bonf < 0.05' = region_twas_z$Bonf.5perc,
     useNA = 'ifany'
 ))
-# in both  None DLPFC HIPPO  Both   Sum
-#   FALSE 68314   436   253     0 69003
-#   TRUE  28673   126   119   206 29124
-#   Sum   96987   562   372   206 98127
+#        Bonf < 0.05
+# in both   None  DLPFC  HIPPO   Both    Sum
+#   FALSE  69279    240    153      0  69672
+#   TRUE   31353     87     71    121  31632
+#   Sum   100632    327    224    121 101304
 
 table(region_twas_z$BEST.GWAS.status)
-## Initial version
-# Other DLPFC HIPPO  Both
-# 92402  2675  1354  1696
-## Latest
 # Other Risk Locus
-# 92402       5725
+# 96753       4551
 
 
 
-pdf('pdf/twas_z.pdf', useDingbats = FALSE, width = 24, height = 14)
+pdf('pdf/pgc2_twas_z.pdf', useDingbats = FALSE, width = 24, height = 14)
 ggplot(region_twas_z,
     aes(x = DLPFC, y = HIPPO, color = FDR.5perc, shape = in_both)) +
     geom_point() +
@@ -418,15 +262,6 @@ ggplot(region_twas_z,
     scale_color_manual(values = c('grey80', 'dark orange', 'skyblue3', 'purple'))
 dev.off()
 
-## Find the discordant ones
-options(width = 200)
-subset(region_twas_z, FDR.5perc == 'Both' & sign(DLPFC) != sign(HIPPO))
-#                     ID feature             geneid genesymbol    DLPFC    HIPPO in_both TWAS.FDR_DLPFC TWAS.FDR_HIPPO BEST.GWAS.status_DLPFC BEST.GWAS.status_HIPPO FDR.5perc BEST.GWAS.status
-# 5269 ENST00000422145.7      tx  ENSG00000236922.9  LINC01378 -2.96921 3.105439    TRUE     0.03937847     0.02796831                  Other                  Other      Both            Other
-# 5375           e938460    exon ENSG00000006042.11     TMEM98 -2.94795 3.409439    TRUE     0.04424707     0.01432869                  Other                  Other      Both            Other
-
-# https://www.genecards.org/cgi-bin/carddisp.pl?gene=LINC01378&keywords=ENSG00000236922
-# https://www.genecards.org/cgi-bin/carddisp.pl?gene=TMEM98&keywords=ENSG00000006042
 
 ## Get the numbers of points in the different parts of the plot
 map(split(region_twas_z, region_twas_z$feature),
@@ -438,80 +273,80 @@ map(split(region_twas_z, region_twas_z$feature),
 # $gene$Other
 #        In both
 # FDR <5% FALSE TRUE  Sum
-#   None   3453 2436 5889
-#   DLPFC   136   64  200
-#   HIPPO    63   51  114
-#   Both      0  101  101
-#   Sum    3652 2652 6304
+#   None   3633 2557 6190
+#   DLPFC    95   54  149
+#   HIPPO    31   33   64
+#   Both      0   70   70
+#   Sum    3759 2714 6473
 #
 # $gene$`Risk Locus`
 #        In both
 # FDR <5% FALSE TRUE Sum
-#   None    150   90 240
-#   DLPFC    60    8  68
-#   HIPPO    13    5  18
-#   Both      0   37  37
-#   Sum     223  140 363
+#   None    144   78 222
+#   DLPFC    28    7  35
+#   HIPPO     8    4  12
+#   Both      0   20  20
+#   Sum     180  109 289
 #
 #
 # $exon
 # $exon$Other
 #        In both
 # FDR <5% FALSE  TRUE   Sum
-#   None  32859 11911 44770
-#   DLPFC  1440   292  1732
-#   HIPPO   676   238   914
-#   Both      0   535   535
-#   Sum   34975 12976 47951
+#   None  34312 14515 48827
+#   DLPFC   846   221  1067
+#   HIPPO   488   216   704
+#   Both      0   431   431
+#   Sum   35646 15383 51029
 #
 # $exon$`Risk Locus`
 #        In both
 # FDR <5% FALSE TRUE  Sum
-#   None   1542  467 2009
-#   DLPFC   505   66  571
-#   HIPPO   235   52  287
-#   Both      0  219  219
-#   Sum    2282  804 3086
+#   None   1412  465 1877
+#   DLPFC   291   35  326
+#   HIPPO   122   30  152
+#   Both      0  147  147
+#   Sum    1825  677 2502
 #
 #
 # $jxn
 # $jxn$Other
 #        In both
 # FDR <5% FALSE  TRUE   Sum
-#   None  17741  7262 25003
-#   DLPFC   650   158   808
-#   HIPPO   441   138   579
-#   Both      0   359   359
-#   Sum   18832  7917 26749
+#   None  18572  7680 26252
+#   DLPFC   463    98   561
+#   HIPPO   314    94   408
+#   Both      0   308   308
+#   Sum   19349  8180 27529
 #
 # $jxn$`Risk Locus`
 #        In both
 # FDR <5% FALSE TRUE  Sum
-#   None    706  316 1022
-#   DLPFC   214   26  240
-#   HIPPO   132   34  166
-#   Both      0  145  145
-#   Sum    1052  521 1573
+#   None    607  266  873
+#   DLPFC   133   13  146
+#   HIPPO    73   22   95
+#   Both      0   79   79
+#   Sum     813  380 1193
 #
 #
 # $tx
 # $tx$Other
 #        In both
 # FDR <5% FALSE  TRUE   Sum
-#   None   7039  3520 10559
-#   DLPFC   295    76   371
-#   HIPPO   181    87   268
-#   Both      0   200   200
-#   Sum    7515  3883 11398
+#   None   7379  3727 11106
+#   DLPFC   188    53   241
+#   HIPPO   146    76   222
+#   Both      0   153   153
+#   Sum    7713  4009 11722
 #
 # $tx$`Risk Locus`
 #        In both
 # FDR <5% FALSE TRUE Sum
-#   None    304  146 450
-#   DLPFC    97   17 114
-#   HIPPO    71    8  79
-#   Both      0   60  60
-#   Sum     472  231 703
+#   None    277  129 406
+#   DLPFC    68    6  74
+#   HIPPO    42    6  48
+#   Both      0   39  39
+#   Sum     387  180 567
 
 
 ## Now for Bonf
@@ -524,80 +359,80 @@ map(split(region_twas_z, region_twas_z$feature),
 # $gene$Other
 #         In both
 # Bonf <5% FALSE TRUE  Sum
-#    None   3634 2625 6259
-#    DLPFC    10    8   18
-#    HIPPO     8    8   16
-#    Both      0   11   11
-#    Sum    3652 2652 6304
+#    None   3740 2699 6439
+#    DLPFC    14    7   21
+#    HIPPO     5    3    8
+#    Both      0    5    5
+#    Sum    3759 2714 6473
 #
 # $gene$`Risk Locus`
 #         In both
 # Bonf <5% FALSE TRUE Sum
-#    None    185  113 298
-#    DLPFC    29    7  36
-#    HIPPO     9    4  13
-#    Both      0   16  16
-#    Sum     223  140 363
+#    None    166   92 258
+#    DLPFC    10    3  13
+#    HIPPO     4    5   9
+#    Both      0    9   9
+#    Sum     180  109 289
 #
 #
 # $exon
 # $exon$Other
 #         In both
 # Bonf <5% FALSE  TRUE   Sum
-#    None  34892 12913 47805
-#    DLPFC    54    19    73
-#    HIPPO    29    21    50
-#    Both      0    23    23
-#    Sum   34975 12976 47951
+#    None  35552 15348 50900
+#    DLPFC    55     9    64
+#    HIPPO    39    16    55
+#    Both      0    10    10
+#    Sum   35646 15383 51029
 #
 # $exon$`Risk Locus`
 #         In both
 # Bonf <5% FALSE TRUE  Sum
-#    None   2035  667 2702
-#    DLPFC   167   44  211
-#    HIPPO    80   29  109
-#    Both      0   64   64
-#    Sum    2282  804 3086
+#    None   1721  602 2323
+#    DLPFC    68   24   92
+#    HIPPO    36   13   49
+#    Both      0   38   38
+#    Sum    1825  677 2502
 #
 #
 # $jxn
 # $jxn$Other
 #         In both
 # Bonf <5% FALSE  TRUE   Sum
-#    None  18777  7882 26659
-#    DLPFC    31    12    43
-#    HIPPO    24    15    39
-#    Both      0     8     8
-#    Sum   18832  7917 26749
+#    None  19297  8139 27436
+#    DLPFC    32    14    46
+#    HIPPO    20    14    34
+#    Both      0    13    13
+#    Sum   19349  8180 27529
 #
 # $jxn$`Risk Locus`
 #         In both
 # Bonf <5% FALSE TRUE  Sum
-#    None    922  439 1361
-#    DLPFC    81   19  100
-#    HIPPO    49   20   69
-#    Both      0   43   43
-#    Sum    1052  521 1573
+#    None    765  342 1107
+#    DLPFC    29   11   40
+#    HIPPO    19    8   27
+#    Both      0   19   19
+#    Sum     813  380 1193
 #
 #
 # $tx
 # $tx$Other
 #         In both
 # Bonf <5% FALSE  TRUE   Sum
-#    None   7474  3853 11327
-#    DLPFC    22     7    29
-#    HIPPO    19     7    26
-#    Both      0    16    16
-#    Sum    7515  3883 11398
+#    None   7689  3978 11667
+#    DLPFC    11    13    24
+#    HIPPO    13     5    18
+#    Both      0    13    13
+#    Sum    7713  4009 11722
 #
 # $tx$`Risk Locus`
 #         In both
 # Bonf <5% FALSE TRUE Sum
-#    None    395  181 576
-#    DLPFC    42   10  52
-#    HIPPO    35   15  50
-#    Both      0   25  25
-#    Sum     472  231 703
+#    None    349  153 502
+#    DLPFC    21    6  27
+#    HIPPO    17    7  24
+#    Both      0   14  14
+#    Sum     387  180 567
 
 
 
@@ -607,41 +442,36 @@ map_dfr(ttSig, dim)
 # # A tibble: 2 x 2
 #   DLPFC HIPPO
 #   <int> <int>
-# 1  5760  4081
-# 2    48    48
+# 1  3846  2952
+# 2    44    44
 
 ttSig_bonf <- map(split(tt, tt$region), ~ .x[.x$TWAS.Bonf < 0.05, ])
 map_dfr(ttSig_bonf, dim)
 # # A tibble: 2 x 2
 #   DLPFC HIPPO
 #   <int> <int>
-# 1   768   578
-# 2    48    48
+# 1   448   345
+# 2    44    44
 
 
 map_int(ttSig, ~ length(unique(.x$geneid)))
 # DLPFC HIPPO
-#  1514  1255
+#  1032   910
 
 map_int(ttSig_bonf, ~ length(unique(.x$geneid)))
 # DLPFC HIPPO
-#   240   218
-
-## Original numbers when computing FDR across all 4 features at the same time:
-# DLPFC HIPPO
-#  1519  1256
+#   146   130
 
 map_int(ttSig, ~ length(unique(.x$geneid[.x$TWAS.P < 5e-08])))
 # DLPFC HIPPO
-#   115    84
-## Just checking...
-map_int(split(tt, tt$region), ~ length(unique(.x$geneid[.x$TWAS.P < 5e-08])))
-# DLPFC HIPPO
-#   115    84
+#    51    47
 
 ## save for later
-save(tt, ttSig, ttSig_bonf, get_variable_by_region, ttReg_map, region_twas_z, file = 'rda/tt_objects.Rdata')
+save(tt, ttSig, ttSig_bonf, get_variable_by_region, ttReg_map, region_twas_z, file = 'rda/pgc2_tt_objects.Rdata')
 
+
+## Continue
+load('rda/pgc2_tt_objects.Rdata', verbose = TRUE)
 
 
 ## Reproducibility information

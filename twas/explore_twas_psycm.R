@@ -142,7 +142,7 @@ tt$BEST.GWAS.SE <- original$SE[m_to_ori]
 tt$BEST.GWAS.P.computed <- 2*(pnorm( abs(tt$BEST.GWAS.Z ) , lower.tail=F ))
 tt$EQTL.P.computed <- 2*(pnorm( abs(tt$EQTL.GWAS.Z ) , lower.tail=F ))
 
-## Compute FDR by region for each feature 4 features
+## Compute FDR/Bonf by region for each feature 4 features
 tt <- map_dfr(split(tt, tt$region), function(reg) {
     res <- map_dfr(split(reg, reg$feature), function(reg_feat) {
         reg_feat$TWAS.FDR <- p.adjust(reg_feat$TWAS.P, 'fdr')
@@ -165,9 +165,9 @@ indexLoci$hg19POS = paste0(indexLoci$Chromosome, ":", indexLoci$snp_pos_hg19)
 
 ## risk loci from PGC paper + rAggr proxy markers
 riskLoci <- read.csv("/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_GWAS_riskSNPs/rAggr_results_179.csv", stringsAsFactors=FALSE)
+colnames(riskLoci) = gsub("\\.", "_", colnames(riskLoci))
 length(unique(riskLoci$SNP2_Name))
 # [1] 10981
-colnames(riskLoci) = gsub("\\.", "_", colnames(riskLoci))
 riskLoci$hg19POS1 = paste0(riskLoci$SNP1_Chr, ":", riskLoci$SNP1_Pos) 
 riskLoci$hg19POS2 = paste0(riskLoci$SNP2_Chr, ":", riskLoci$SNP2_Pos)
 length(unique(riskLoci$hg19POS2))
@@ -623,13 +623,13 @@ map_int(ttSig, ~ length(unique(.x$geneid)))
 # DLPFC HIPPO
 #  1514  1255
 
-map_int(ttSig_bonf, ~ length(unique(.x$geneid)))
-# DLPFC HIPPO
-#   240   218
-
 ## Original numbers when computing FDR across all 4 features at the same time:
 # DLPFC HIPPO
 #  1519  1256
+
+map_int(ttSig_bonf, ~ length(unique(.x$geneid)))
+# DLPFC HIPPO
+#   240   218
 
 map_int(ttSig, ~ length(unique(.x$geneid[.x$TWAS.P < 5e-08])))
 # DLPFC HIPPO
@@ -1741,6 +1741,7 @@ cbind(map_dfr(split(tt, tt$region), ~ map_dfr(split(.x, .x$feature), ~ sum(p.adj
 #   exon gene jxn  tx region
 # 1  371   81 194 122  DLPFC
 # 2  246   56 159 117  HIPPO
+
 
 
 
