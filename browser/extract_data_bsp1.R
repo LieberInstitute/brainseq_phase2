@@ -35,6 +35,7 @@ message(paste(Sys.time(), 'fixing exon ids'))
 e <- DT$feature_id[DT$Type == 'Exon']
 
 ## Use data.table syntax ^^
+setkey(exon_name_map, libd_bsp2)
 DT$feature_id[DT$Type == 'Exon'] <- exon_name_map[.(e), gencode]
 
 ## Make Type lowercase to match file names from other tables
