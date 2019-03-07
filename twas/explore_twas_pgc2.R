@@ -629,39 +629,39 @@ by_locus(1.1)
 # # A tibble: 2 x 3
 #   HIPPO DLPFC state
 #   <int> <int> <lgl>
-# 1    53    58 FALSE
-# 2    50    58 TRUE
+# 1    40    45 FALSE
+# 2    63    71 TRUE
 perc_locus(1.1)
-#      HIPPO DLPFC
-# 1 48.54369    50
+#      HIPPO   DLPFC
+# 1 61.16505 61.2069
 
 ## raggr eQTL locus that have a TWAS FDR <5% result
 by_locus(0.05)
 # # A tibble: 2 x 3
 #   HIPPO DLPFC state
 #   <int> <int> <lgl>
-# 1    63    67 FALSE
-# 2    40    49 TRUE
+# 1    54    58 FALSE
+# 2    49    58 TRUE
 perc_locus(0.05)
-#      HIPPO    DLPFC
-# 1 38.83495 42.24138
+#      HIPPO DLPFC
+# 1 47.57282    50
 perc_locus(0.05) / perc_locus(1.1) * 100
-#   HIPPO    DLPFC
-# 1    80 84.48276
+#      HIPPO    DLPFC
+# 1 77.77778 81.69014
 
 ## raggr eQTL locus that have a TWAS Bonf <5% result
 by_locus(0.05, var = 'TWAS.Bonf')
 # # A tibble: 2 x 3
 #   HIPPO DLPFC state
 #   <int> <int> <lgl>
-# 1    79    85 FALSE
-# 2    24    31 TRUE
+# 1    75    84 FALSE
+# 2    28    32 TRUE
 perc_locus(0.05, var = 'TWAS.Bonf')
 #      HIPPO    DLPFC
-# 1 23.30097 26.72414
+# 1 27.18447 27.58621
 perc_locus(0.05, var = 'TWAS.Bonf') / perc_locus(1.1) * 100
-#   HIPPO    DLPFC
-# 1    48 53.44828
+#      HIPPO    DLPFC
+# 1 44.44444 45.07042
 
 
 ## Overlap by region of all loci considered
@@ -670,30 +670,29 @@ shared_by_locus(1.1)
 # 00   0     0     0
 # 01  12     0     1
 # 10   4     1     0
-# 11  46     1     1
+# 11  59     1     1
 
 ## Now with the ones that are TWAS FDR < 5%
 shared_by_locus(0.05)
 #    num HIPPO DLPFC
 # 00   0     0     0
-# 01  11     0     1
-# 10   2     1     0
-# 11  38     1     1
+# 01  14     0     1
+# 10   5     1     0
+# 11  44     1     1
 
 ## Now with the ones that are TWAS Bonf < 5%
 shared_by_locus(0.05, var = 'TWAS.Bonf')
 #    num HIPPO DLPFC
 # 00   0     0     0
-# 01   9     0     1
-# 10   2     1     0
-# 11  22     1     1
+# 01   8     0     1
+# 10   4     1     0
+# 11  24     1     1
 
 pdf('pdf/pgc2_venn_by_locus.pdf', useDingbats = FALSE)
 make_pretty_venn(1.1, 'rAggr loci considered in TWAS')
 make_pretty_venn(0.05, 'rAggr loci with TWAS FDR<5%')
 make_pretty_venn(0.05, 'rAggr loci with TWAS Bonf<5%', var = 'TWAS.Bonf')
 dev.off()
-
 system('rm VennDiagram*')
 
 ## Features by locus that were considered in the TWAS analysis
@@ -874,7 +873,6 @@ make_pretty_venn_by_feature(1.1, 'rAggr loci considered in TWAS')
 make_pretty_venn_by_feature(0.05, 'rAggr loci with TWAS FDR<5%')
 make_pretty_venn_by_feature(0.05, 'rAggr loci with TWAS Bonf<5%', var = 'TWAS.Bonf')
 dev.off()
-
 system('rm VennDiagram*')
 
 
@@ -1053,7 +1051,6 @@ make_pretty_venn_shared_by_feature(1.1, 'Features with TWAS weights')
 make_pretty_venn_shared_by_feature(0.05, 'Features with TWAS FDR<5%')
 make_pretty_venn_shared_by_feature(0.05, 'Features with TWAS Bonf<5%', var = 'TWAS.Bonf')
 dev.off()
-
 system('rm VennDiagram*')
 
 
@@ -1482,7 +1479,7 @@ session_info()
 #  collate  en_US.UTF-8
 #  ctype    en_US.UTF-8
 #  tz       US/Eastern
-#  date     2019-03-06
+#  date     2019-03-07
 #
 # ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 #  package        * version  date       lib source

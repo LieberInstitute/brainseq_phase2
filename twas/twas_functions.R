@@ -178,7 +178,7 @@ create_by_status <- function(tt_sigonly, filename = 'pdf/twas_fdr5perc_by_status
 }
 
 check_by_locus <- function(rag, ref) {
-    by_loc <- split(rag$SNP, rag$IndexSNP)
+    by_loc <- split(rag$IndexSNP, rag$IndexSNP)
     map_dbl(by_loc, ~ sum(.x %in% ref))
 }
 
@@ -192,7 +192,7 @@ clean_by_state <- function(x) {
 by_locus <- function(cut, list = FALSE, var = 'TWAS.FDR') {
     by_locus <- map2(
         raggr_clean,
-        map(names(raggr_clean), ~ tt$BEST.GWAS.ID[tt[, var, drop = TRUE] < cut & tt$region == .x]),
+        map(names(raggr_clean), ~ tt$BEST.GWAS.indexSNP[tt[, var, drop = TRUE] < cut & tt$region == .x]),
         check_by_locus
     )
     if(list) return(by_locus)

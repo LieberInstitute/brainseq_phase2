@@ -779,64 +779,64 @@ by_locus(1.1)
 # # A tibble: 2 x 3
 #   HIPPO DLPFC state
 #   <int> <int> <lgl>
-# 1    44    50 FALSE
-# 2    59    66 TRUE
+# 1    26    30 FALSE
+# 2    77    86 TRUE
 perc_locus(1.1)
 #      HIPPO    DLPFC
-# 1 57.28155 56.89655
+# 1 74.75728 74.13793
 
 ## raggr eQTL locus that have a TWAS FDR <5% result
 by_locus(0.05)
 # # A tibble: 2 x 3
 #   HIPPO DLPFC state
 #   <int> <int> <lgl>
-# 1    50    58 FALSE
-# 2    53    58 TRUE
+# 1    34    43 FALSE
+# 2    69    73 TRUE
 perc_locus(0.05)
-#      HIPPO DLPFC
-# 1 51.45631    50
+#      HIPPO    DLPFC
+# 1 66.99029 62.93103
 perc_locus(0.05) / perc_locus(1.1) * 100
 #      HIPPO    DLPFC
-# 1 89.83051 87.87879
+# 1 89.61039 84.88372
 
 ## raggr eQTL locus that have a TWAS Bonf <5% result
 by_locus(0.05, var = 'TWAS.Bonf')
 # # A tibble: 2 x 3
 #   HIPPO DLPFC state
 #   <int> <int> <lgl>
-# 1    62    66 FALSE
-# 2    41    50 TRUE
+# 1    54    62 FALSE
+# 2    49    54 TRUE
 perc_locus(0.05, var = 'TWAS.Bonf')
 #      HIPPO    DLPFC
-# 1 39.80583 43.10345
+# 1 47.57282 46.55172
 perc_locus(0.05, var = 'TWAS.Bonf') / perc_locus(1.1) * 100
-#      HIPPO    DLPFC
-# 1 69.49153 75.75758
+#      HIPPO   DLPFC
+# 1 63.63636 62.7907
 
 
 ## Overlap by region of all loci considered
 shared_by_locus(1.1)
 #    num HIPPO DLPFC
 # 00   0     0     0
-# 01  13     0     1
+# 01  15     0     1
 # 10   6     1     0
-# 11  53     1     1
+# 11  71     1     1
 
 ## Now with the ones that are TWAS FDR < 5%
 shared_by_locus(0.05)
 #    num HIPPO DLPFC
 # 00   0     0     0
-# 01  12     0     1
-# 10   7     1     0
-# 11  46     1     1
+# 01  13     0     1
+# 10   9     1     0
+# 11  60     1     1
 
 ## Now with the ones that are TWAS Bonf < 5%
 shared_by_locus(0.05, var = 'TWAS.Bonf')
 #    num HIPPO DLPFC
 # 00   0     0     0
-# 01  13     0     1
-# 10   4     1     0
-# 11  37     1     1
+# 01  12     0     1
+# 10   7     1     0
+# 11  42     1     1
 
 
 pdf('pdf/venn_by_locus.pdf', useDingbats = FALSE)
@@ -844,7 +844,6 @@ make_pretty_venn(1.1, 'rAggr loci considered in TWAS')
 make_pretty_venn(0.05, 'rAggr loci with TWAS FDR<5%')
 make_pretty_venn(0.05, 'rAggr loci with TWAS Bonf<5%', var = 'TWAS.Bonf')
 dev.off()
-
 system('rm VennDiagram*')
 
 ## Features by locus that were considered in the TWAS analysis
