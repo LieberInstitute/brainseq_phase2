@@ -38,7 +38,6 @@ dlpfc_bsp1_genes = geneEqtl
 dlpfc_bsp1_exons = exonEqtl
 dlpfc_bsp1_jxns = jxnEqtl
 dlpfc_bsp1_txs = txEqtl
-rm(allEqtl)
 
 # BrainSeq
 message(paste(Sys.time(), 'loading BrainSeq Phase II eQTL results'))
