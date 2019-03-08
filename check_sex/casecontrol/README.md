@@ -9,19 +9,19 @@ We performed differential expression analyses for sex for each brain region (FDR
 ## gene
 
 ![DLPFC gene](pdf/sczd_vs_sex_t_gene_autosomal-0.png)
-![HIPPO gene](pdf/sczd_vs_sex_t_gene_autosomal-0.png)
+![HIPPO gene](pdf/sczd_vs_sex_t_gene_autosomal-1.png)
 
 ## exon
 
 ![DLPFC exon](pdf/sczd_vs_sex_t_exon_autosomal-0.png)
-![HIPPO exon](pdf/sczd_vs_sex_t_exon_autosomal-0.png)
+![HIPPO exon](pdf/sczd_vs_sex_t_exon_autosomal-1.png)
 
 ## jxn
 
 ![DLPFC jxn](pdf/sczd_vs_sex_t_jxn_autosomal-0.png)
-![HIPPO jxn](pdf/sczd_vs_sex_t_jxn_autosomal-0.png)
+![HIPPO jxn](pdf/sczd_vs_sex_t_jxn_autosomal-1.png)
 
 ## tx
 
 ![DLPFC tx](pdf/sczd_vs_sex_t_tx_autosomal-0.png)
-![HIPPO tx](pdf/sczd_vs_sex_t_tx_autosomal-0.png)
+![HIPPO tx](pdf/sczd_vs_sex_t_tx_autosomal-1.png)
