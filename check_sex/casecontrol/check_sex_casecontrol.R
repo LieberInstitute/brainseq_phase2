@@ -122,7 +122,8 @@ compute_overlap <- function(stats) {
 }
 
 ## Overlap of SCZD DE features and Sex DE features
-map(sz_stats, ~ addmargins(compute_overlap(.x)))
+overlaps <- map(sz_stats, ~ addmargins(compute_overlap(.x)))
+overlaps
 # $DLPFC_Gene
 #        Sex DE
 # SCZD DE FALSE  TRUE   Sum
@@ -181,9 +182,11 @@ map(sz_stats, ~ addmargins(compute_overlap(.x)))
 
 
 ## Corresponding chisq p-values
-map_dbl(sz_stats, ~ chisq.test(compute_overlap(.x), simulate.p.value = TRUE, B = 1e4)$p.value)
+set.seed(20190308)
+p_vals <- map_dbl(sz_stats, ~ chisq.test(compute_overlap(.x), simulate.p.value = TRUE, B = 1e4)$p.value)
+p_vals
 # DLPFC_Gene DLPFC_Exon  DLPFC_Jxn   DLPFC_Tx HIPPO_Gene HIPPO_Exon  HIPPO_Jxn
-# 0.20927907 0.27497250 0.16818318 1.00000000 1.00000000 0.65663434 0.01189881
+# 0.21457854 0.26997300 0.16938306 1.00000000 1.00000000 0.66543346 0.00909909
 #   HIPPO_Tx
 #        NaN
 
@@ -192,7 +195,8 @@ map_dbl(sz_stats, ~ getOR(compute_overlap(.x)))
 
 
 ## Now exclude autosome features
-map(sz_stats_nosex, ~ addmargins(compute_overlap(.x)))
+overlaps_auto <- map(sz_stats_nosex, ~ addmargins(compute_overlap(.x)))
+overlaps_auto
 # $DLPFC_Gene
 #        Sex DE
 # SCZD DE FALSE  TRUE   Sum
@@ -249,9 +253,11 @@ map(sz_stats_nosex, ~ addmargins(compute_overlap(.x)))
 #   TRUE      0     0     0
 #   Sum   89991   128 90119
 
-map_dbl(sz_stats_nosex, ~ chisq.test(foo(.x), simulate.p.value = TRUE, B = 1e4)$p.value)
+set.seed(20190308)
+p_vals_auto <- map_dbl(sz_stats_nosex, ~ chisq.test(compute_overlap(.x), simulate.p.value = TRUE, B = 1e4)$p.value)
+p_vals_auto
 # DLPFC_Gene DLPFC_Exon  DLPFC_Jxn   DLPFC_Tx HIPPO_Gene HIPPO_Exon  HIPPO_Jxn
-# 0.04919508 0.67993201 0.06859314 1.00000000 1.00000000 1.00000000 0.00089991
+# 0.04969503 0.67283272 0.07049295 1.00000000 1.00000000 1.00000000 0.00079992
 #   HIPPO_Tx
 #        NaN
 
@@ -269,8 +275,15 @@ map_dbl(sz_stats_nosex, ~ getOR(compute_overlap(.x)))
 
 ## Correlation across t-statistics
 map_dbl(sz_stats, ~ cor(.x$t, .x$sext))
+#  DLPFC_Gene   DLPFC_Exon    DLPFC_Jxn     DLPFC_Tx   HIPPO_Gene   HIPPO_Exon
+# 0.047719208  0.036298540  0.032824981  0.016283529 -0.009889695  0.010819731
+#   HIPPO_Jxn     HIPPO_Tx
+# 0.000168062 -0.015039394
 map_dbl(sz_stats_nosex, ~ cor(.x$t, .x$sext))
-
+#   DLPFC_Gene    DLPFC_Exon     DLPFC_Jxn      DLPFC_Tx    HIPPO_Gene
+# 0.0943334650  0.0760722723  0.0627606668  0.0391245717  0.0004921848
+#   HIPPO_Exon     HIPPO_Jxn      HIPPO_Tx
+# 0.0249700703 -0.0055431699  0.0244796302
 
 plot_t_stats <- function(set, filename, stats) {
     i <- c(1, 5) + case_when(
@@ -308,6 +321,104 @@ map(features, ~
     plot_t_stats(.x, paste0('pdf/sczd_vs_sex_t_', .x, '_autosomal.pdf'), sz_stats_nosex)
 )
 
+
+## Make a table
+make_table <- function(stats) {
+    ov <- map(stats, ~ compute_overlap(.x))
+    
+    res <- map_dfr(ov,
+        ~ as.data.frame(matrix(as.vector(.x), nrow = 1, dimnames = list(1, c('Null_both', 'DE_SCZD', 'DE_Sex', 'DE_both'))))
+    )
+    res$region <- ss(names(ov), '_', 1)
+    res$feature <- tolower(ss(names(ov), '_', 2))
+    res$OR <- map_dbl(ov, getOR)
+    set.seed(20180308)
+    res$pval <- map_dbl(ov, ~ chisq.test(.x, simulate.p.value = TRUE, B = 1e5)$p.value)
+    res$pval_bonf <- p.adjust(res$pval, 'bonf')
+    res$cor_t <- map_dbl(stats, ~ cor(.x$t, .x$sext))
+    
+    ## Re-order by feature
+    res <- res[c(1,5,2,6,3,7,4,8), ]
+    return(res)
+}
+
+sz_table <- make_table(sz_stats)
+options(width = 120)
+sz_table
+#   Null_both DE_SCZD DE_Sex DE_both region feature        OR      pval  pval_bonf        cor_t
+# 1     24130     240    277       5  DLPFC    gene  1.814832 0.2101379 1.00000000  0.047719208
+# 5     24488      48    116       0  HIPPO    gene  0.000000 1.0000000 1.00000000 -0.009889695
+# 2    394567     440   1576       0  DLPFC    exon  0.000000 0.2749373 1.00000000  0.036298540
+# 6    395125     197   1261       0  HIPPO    exon  0.000000 0.6642134 1.00000000  0.010819731
+# 3    295628      36   1516       1  DLPFC     jxn  5.416813 0.1715583 1.00000000  0.032824981
+# 7    296033      39   1107       2  HIPPO     jxn 13.713803 0.0104399 0.07307927  0.000168062
+# 4     92386       6    340       0  DLPFC      tx  0.000000 1.0000000 1.00000000  0.016283529
+# 8     92376       0    356       0  HIPPO      tx       NaN       NaN        NaN -0.015039394
+
+sz_table_nosex <- make_table(sz_stats_nosex)
+sz_table_nosex
+#   Null_both DE_SCZD DE_Sex DE_both region feature        OR         pval   pval_bonf         cor_t
+# 1     23345     230    197       5  DLPFC    gene  2.576142 0.0506594934 0.354616454  0.0943334650
+# 5     23684      48     45       0  HIPPO    gene  0.000000 1.0000000000 1.000000000  0.0004921848
+# 2    384030     413    537       0  DLPFC    exon  0.000000 0.6751532485 1.000000000  0.0760722723
+# 6    384509     197    274       0  HIPPO    exon  0.000000 1.0000000000 1.000000000  0.0249700703
+# 3    286955      34    609       1  DLPFC     jxn 13.858543 0.0720592794 0.504414956  0.0627606668
+# 7    287259      39    299       2  HIPPO     jxn 49.268330 0.0007699923 0.005389946 -0.0055431699
+# 4     90007       6    106       0  DLPFC      tx  0.000000 1.0000000000 1.000000000  0.0391245717
+# 8     89991       0    128       0  HIPPO      tx       NaN          NaN         NaN  0.0244796302
+
+sz_all <- matrix(colSums(sz_table[, 1:4]), ncol = 2)
+sz_all
+#         [,1] [,2]
+# [1,] 1614733 6549
+# [2,]    1006    8
+set.seed(20180308)
+chisq.test(sz_all, simulate.p.value = TRUE, B = 1e5)$p.value
+# [1] 0.07333927
+
+sz_all_nosex <- matrix(colSums(sz_table_nosex[, 1:4]), ncol = 2)
+sz_all_nosex
+set.seed(20180308)
+#         [,1] [,2]
+# [1,] 1569780 2195
+# [2,]     967    8
+chisq.test(sz_all_nosex, simulate.p.value = TRUE, B = 1e5)$p.value
+# [1] 0.0001399986
+
+save(sz_table, sz_table_nosex, file = 'rdas/sz_table.Rdata')
+
+
+export_table <- function(tab, filename) {
+    write.csv(tab, file = paste0('rdas/', filename, '.csv'), row.names = FALSE, quote = FALSE)
+}
+export_table(sz_table, 'sz_vs_sex_summmary')
+export_table(sz_table_nosex, 'sz_vs_sex_summmary_autosomal')
+
+## Show those that overlap
+options(width = 300)
+feat_ov <- map(sz_stats_nosex, ~ .x[.x$adj.P.Val < 0.05 & .x$sexReg, ])
+feat_ov[map_lgl(feat_ov, ~ nrow(.x) > 0)]
+# $DLPFC_Gene
+#                    Length          gencodeID       ensemblID      gene_type Symbol EntrezID Class  meanExprs NumTx    gencodeTx passExprsCut       logFC  AveExpr         t      P.Value  adj.P.Val          B   chr p_bonf sexReg  sexM sexF      sext
+# ENSG00000132854.18   5980 ENSG00000132854.18 ENSG00000132854 protein_coding  KANK4   163782 InGen  0.3680731     4 ENST0000....         TRUE -0.26024883 1.056869 -4.029944 6.824644e-05 0.02209946  1.4449003  chr1      1   TRUE FALSE TRUE -3.892680
+# ENSG00000177301.13  12344 ENSG00000177301.13 ENSG00000177301 protein_coding  KCNA2     3737 InGen 22.1524555     5 ENST0000....         TRUE -0.06685712 8.736897 -3.719575 2.317602e-04 0.03548667 -0.2766284  chr1      1   TRUE FALSE TRUE -3.485173
+# ENSG00000151690.14   6031 ENSG00000151690.14 ENSG00000151690 protein_coding  MFSD6    54842 InGen 18.9680190    10 ENST0000....         TRUE -0.05382237 7.240094 -3.640553 3.123624e-04 0.04011692 -0.4524693  chr2      1   TRUE FALSE TRUE -3.813113
+# ENSG00000105971.14   6926 ENSG00000105971.14 ENSG00000105971 protein_coding   CAV2      858 InGen  1.2640041    15 ENST0000....         TRUE  0.11617901 3.173690  3.670080 2.795711e-04 0.03828881  0.1033548  chr7      1   TRUE FALSE TRUE -3.732529
+# ENSG00000177599.12   3032 ENSG00000177599.12 ENSG00000177599 protein_coding ZNF491   126069 InGen  1.8280137     4 ENST0000....         TRUE -0.08623048 2.379584 -3.677721 2.716280e-04 0.03783149  0.2173570 chr19      1   TRUE FALSE TRUE -5.094236
+#
+# $DLPFC_Jxn
+#                            inGencode inGencodeStart inGencodeEnd gencodeGeneID ensemblID Symbol gencodeStrand gencodeTx numTx Class startExon endExon newGeneID newGeneSymbol isFusion meanExprs Length passExprsCut      logFC  AveExpr        t      P.Value  adj.P.Val        B   chr    p_bonf sexReg
+# chr14:49853669-49862578(-)     FALSE          FALSE        FALSE          <NA>      <NA>   <NA>          <NA>               0 Novel        NA      NA      <NA>          <NA>    FALSE  12239.69    100         TRUE -0.5996511 9.082305 -4.98405 9.733285e-07 0.02066105 -1.05056 chr14 0.2892547   TRUE
+#                             sexM sexF      sext
+# chr14:49853669-49862578(-) FALSE TRUE -4.094468
+#
+# $HIPPO_Jxn
+#                   inGencode inGencodeStart inGencodeEnd gencodeGeneID ensemblID Symbol gencodeStrand gencodeTx numTx Class startExon endExon newGeneID newGeneSymbol isFusion meanExprs Length passExprsCut    logFC AveExpr         t      P.Value    adj.P.Val         B  chr       p_bonf sexReg  sexM
+# chrM:2514-2761(+)     FALSE          FALSE        FALSE          <NA>      <NA>   <NA>          <NA>               0 Novel        NA      NA      <NA>          <NA>    FALSE  4732.402    100         TRUE 4.437348 5.98525 10.608046 1.194987e-22 1.775637e-17 37.555741 chrM 3.551275e-17   TRUE FALSE
+# chrM:2579-2761(+)     FALSE          FALSE        FALSE          <NA>      <NA>   <NA>          <NA>               0 Novel        NA      NA      <NA>          <NA>    FALSE  6053.336    100         TRUE 1.414241 8.04210  5.877925 1.068118e-08 5.290406e-04  5.730943 chrM 3.174243e-03   TRUE  TRUE
+#                    sexF      sext
+# chrM:2514-2761(+)  TRUE -5.246492
+# chrM:2579-2761(+) FALSE  4.664882
 
 ## Reproducibility information
 print('Reproducibility information:')
