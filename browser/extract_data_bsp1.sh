@@ -1,6 +1,6 @@
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=330G,h_vmem=330G,h_fsize=200G
+#$ -l mem_free=360G,h_vmem=360G,h_fsize=200G
 #$ -N extract_data_bsp1
 #$ -o logs/extract_data_bsp1.txt
 #$ -e logs/extract_data_bsp1.txt
