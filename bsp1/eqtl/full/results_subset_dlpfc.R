@@ -21,23 +21,16 @@ dir.create('rdas', showWarnings = FALSE)
 message(paste(Sys.time(), 'loading BSP1 eQTL results'))
 load("eqtl_tables/mergedEqtl_output_dlpfc_4features_in_progress.rda", verbose=TRUE)
 
-message(paste(Sys.time(), 'checking for NAs on the BSP1 eQTL table'))
-na_vec <- !is.na(allEqtl$snps) & !is.na(allEqtl$gene)
-table(na_vec)
-if(any(!na_vec)) {
-    message(paste(Sys.time(), 'removing NAs from the BSP1 eQTL table'))
-    allEqtl <- allEqtl[na_vec, ]
-}
-
-message(paste(Sys.time(), 'convert to a data.table'))
-allEqtl <- data.table(as.data.frame(allEqtl))
-
 # break up into pieces
-message(paste(Sys.time(), 'breaking up by feature'))
-dlpfc_bsp1_genes = geneEqtl
-dlpfc_bsp1_exons = exonEqtl
-dlpfc_bsp1_jxns = jxnEqtl
-dlpfc_bsp1_txs = txEqtl
+message(paste(Sys.time(), 'breaking up by feature and converting to data.table'))
+dlpfc_bsp1_genes = data.table(as.data.frame(geneEqtl))
+rm(geneEqtl)
+dlpfc_bsp1_exons = data.table(as.data.frame(exonEqtl))
+rm(exonEqtl)
+dlpfc_bsp1_jxns = data.table(as.data.frame(jxnEqtl))
+rm(jxnEqtl)
+dlpfc_bsp1_txs = data.table(as.data.frame(txEqtl))
+rm(txEqtl)
 
 # BrainSeq
 message(paste(Sys.time(), 'loading BrainSeq Phase II eQTL results'))
