@@ -24,6 +24,11 @@ if (!is.null(opt$help)) {
 	q(status=1)
 }
 
+## Load DNAm pd prop
+load('rda/methprop_pd.Rdata', verbose = TRUE)
+meth_pd <- pd
+meth_pd$Brain.Region <- toupper(meth_pd$Brain.Region)
+
 ## Load data
 load_foo <- function(type) {
     load_file <- file.path(
@@ -94,20 +99,82 @@ load_foo <- function(type) {
 #    colData(rse)$mean_rRNA_rate <- mean(colData(rse)$rRNA_rate)
     colData(rse)$mean_RIN <- mean(colData(rse)$RIN)
     
+    colData(rse)$agegroup <- factor(with(colData(rse), dplyr::case_when(
+            Age < 0 ~ 'Prenatal',
+            Age >= 0 & Age < 1 ~ 'Infant',
+            Age >= 1 & Age < 10 ~ 'Child',
+            Age >= 10 & Age < 20 ~ 'Teen',
+            Age >= 20 & Age < 50 ~ 'Adult',
+            Age >= 50 ~ 'OlderAdult'
+    )), levels = c('Prenatal', 'Infant', 'Child', 'Teen', 'Adult', 'OlderAdult'))
+    
+    ## Add cell type info
+    m_meth <- match(
+        paste0(colData(rse)$Region, '-', colData(rse)$BrNum),
+        paste0(meth_pd$Brain.Region, '-', meth_pd$BrNum)
+    )
+    colData(rse)$NeuN <- meth_pd$NeuN_pos[m_meth]
+    
+    print(with(colData(rse), addmargins(table('Age group' = agegroup, 'Missing NeuN' = is.na(m_meth)))))
+#             Missing NeuN
+# Age group    FALSE TRUE Sum
+#   Prenatal      23   33  56
+#   Infant        19    9  28
+#   Child         16    6  22
+#   Teen          60   17  77
+#   Adult        270  109 379
+#   OlderAdult   218  120 338
+#   Sum          606  294 900
+    
+    ## Drop those that have no cell type estimation info
+    rse <- rse[, !is.na(m_meth)]
+    
     return(rse)
 }
 
 rse <- load_foo(opt$type)
 
+## Number of samples when loading genes
+# rse <- load_foo('gene')
+#             Missing NeuN
+# Age group    FALSE TRUE Sum
+#   Prenatal      23   33  56
+#   Infant        19    9  28
+#   Child         16    6  22
+#   Teen          56   14  70
+#   Adult        186   68 254
+#   OlderAdult   112   72 184
+#   Sum          412  202 614
+
+with(colData(rse), addmargins(table('Age group' = agegroup, 'Region' = Region)))
+#             Region
+# Age group    DLPFC HIPPO Sum
+#   Prenatal       8    15  23
+#   Infant         9    10  19
+#   Child          7     9  16
+#   Teen          25    31  56
+#   Adult         85   101 186
+#   OlderAdult    55    57 112
+#   Sum          189   223 412
+
+tapply(colData(rse)$NeuN, colData(rse)$Region, summary)
+# $DLPFC
+#    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+#  0.0000  0.2302  0.2918  0.2760  0.3300  0.4264
+#
+# $HIPPO
+#    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+# 0.01978 0.13316 0.16724 0.17122 0.19662 0.37130
+
 ## To simplify later code
 pd <- as.data.frame(colData(rse))
-pd <- pd[, match(c('Age', 'fetal', 'birth', 'infant', 'child', 'teen', 'adult', 'Sex', 'snpPC1', 'snpPC2', 'snpPC3', 'snpPC4', 'snpPC5', 'Region', 'Race', 'mean_mitoRate', 'mean_totalAssignedGene'), colnames(pd))]
+pd <- pd[, match(c('Age', 'fetal', 'birth', 'infant', 'child', 'teen', 'adult', 'Sex', 'snpPC1', 'snpPC2', 'snpPC3', 'snpPC4', 'snpPC5', 'Region', 'Race', 'mean_mitoRate', 'mean_totalAssignedGene', 'NeuN'), colnames(pd))]
 
 ## Define models
-fm_mod <-  ~Age + fetal + birth + infant + child + teen + adult + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN
-fm_mod0 <- ~ Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN
-fm_mod_all <- ~Age *Region + fetal * Region + birth *Region + infant *Region + child * Region + teen * Region + adult * Region + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN
-fm_mod0_all <- ~ Age + fetal + birth + infant + child + teen + adult + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN
+fm_mod <-  ~Age + fetal + birth + infant + child + teen + adult + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + NeuN
+fm_mod0 <- ~ Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + NeuN
+fm_mod_all <- ~Age *Region + fetal * Region + birth *Region + infant *Region + child * Region + teen * Region + adult * Region + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + NeuN
+fm_mod0_all <- ~ Age + fetal + birth + infant + child + teen + adult + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + NeuN
 
 
 get_mods <- function(pd, int = FALSE) {    
@@ -134,7 +201,7 @@ stopifnot(is.fullrank(design))
 if(opt$type != 'tx') {
     dge <- DGEList(counts = assays(rse)$counts)
     dge <- calcNormFactors(dge)
-    pdf(paste0('pdf/limma_dev_interaction_', opt$type, '.pdf'))
+    pdf(paste0('pdf/limma_dev_interaction_adjNeunProp_', opt$type, '.pdf'))
     v <- voom(dge, design, plot = TRUE)
     dev.off()
     
@@ -168,7 +235,7 @@ top <- topTable(fit, coef = grep(':', colnames(design)), n = nrow(rse),
     sort.by = 'none')
 
 save(corfit, fit, top, exprsNorm,
-    file = paste0('rda/limma_dev_interaction_', opt$type, '.Rdata'))
+    file = paste0('rda/limma_dev_interaction_adjNeunProp_', opt$type, '.Rdata'))
 
 ## Reproducibility information
 print('Reproducibility information:')

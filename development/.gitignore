@@ -3,3 +3,4 @@ rda
 pdf/volcano*
 tmp*
 test_corfit*
+.*.sh

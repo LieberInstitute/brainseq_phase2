@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## Usage:
-# sh run_limma_dev.sh
+# sh run_limma_dev_adjNeunProp.sh
 
 mkdir -p logs
 mkdir -p rda
@@ -10,7 +10,7 @@ mkdir -p pdf
 for featuretype in gene exon jxn tx
 do
 
-SHORT="limma_dev_${featuretype}"
+SHORT="limma_dev_${featuretype}_adjNeunProp"
 
 # Construct shell file
 echo "Creating script for feature type ${featuretype}"
@@ -34,8 +34,8 @@ echo "Job name: \${JOB_NAME}"
 echo "Hostname: \${HOSTNAME}"
 echo "Task id: \${TASK_ID}"
 
-module load conda_R/3.4.x
-Rscript limma_dev.R -t ${featuretype}
+# module load conda_R/3.4.x
+Rscript limma_dev_adjNeunProp.R -t ${featuretype}
 
 echo "**** Job ends ****"
 date
