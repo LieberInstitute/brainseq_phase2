@@ -23,12 +23,17 @@ load("eqtl_tables/mergedEqtl_output_dlpfc_4features_in_progress.rda", verbose=TR
 
 # break up into pieces
 message(paste(Sys.time(), 'breaking up by feature and converting to data.table'))
+
+message(paste(Sys.time(), 'gene'))
 dlpfc_bsp1_genes = data.table(as.data.frame(geneEqtl))
 rm(geneEqtl)
+message(paste(Sys.time(), 'exon'))
 dlpfc_bsp1_exons = data.table(as.data.frame(exonEqtl))
 rm(exonEqtl)
+message(paste(Sys.time(), 'jxn'))
 dlpfc_bsp1_jxns = data.table(as.data.frame(jxnEqtl))
 rm(jxnEqtl)
+message(paste(Sys.time(), 'tx'))
 dlpfc_bsp1_txs = data.table(as.data.frame(txEqtl))
 rm(txEqtl)
 
