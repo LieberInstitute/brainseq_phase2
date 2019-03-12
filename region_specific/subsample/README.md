@@ -5,8 +5,8 @@ For the prenatal samples, we used 28 samples per brain region (56 total) for our
 
 The plots below show the number of genes with P-bonferroni <1% between DLPFC and HIPPO in the 82 adult sub-sampled gene-level analyses. The orange lines denote the number of genes in our prenatal gene analysis with P-bonferroni <1%.
 
-!['Distribution genes P.bonf <1%'](subsample/pdf/number_de_genes_adult_subsampled_to_prenatal_numbers_Page_1.png)
+![Distribution genes P.bonf <1%](pdf/number_de_genes_adult_subsampled_to_prenatal_numbers_Page_1.png)
 
 This second plot requires that the signal is replicated in BrainSpan (without sub-sampling BrainSpan).
 
-!['Distribution genes P.bonf <1% and replicating in BrainSpan'](subsample/pdf/number_de_genes_adult_subsampled_to_prenatal_numbers_Page_2.png)
+![Distribution genes P.bonf <1% and replicating in BrainSpan](pdf/number_de_genes_adult_subsampled_to_prenatal_numbers_Page_2.png)
