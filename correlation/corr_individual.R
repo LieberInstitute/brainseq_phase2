@@ -96,7 +96,7 @@ mapply(function(x, y, set, type) {
     dx <- factor(ifelse(dx == 'Schizo', 'SCZD', ifelse(dx == 'Control', 'Control', 'hmm')))
     boxplot(x[m] ~ dx, main = paste(type, '-', set, '\n p-value:', signif(p, 3)),
         xlab = 'SCZD diagnosis', outline = FALSE, ylab = 'Correlation', ylim = ylim)
-    points(x[m] ~ jitter(as.numeric(dx), amount = 0.15), cex = 1.5, pch = 21, bg = '#009E73')
+    points(x[m] ~ jitter(as.numeric(dx), amount = 0.15), cex = 1.5, pch = 21, bg = ifelse(dx == 'SCZD', 'aquamarine4', 'orchid4'))
 }, indv_cleaned, simple_rse[[1]], names(indv_cleaned), 'cleaned expr (keeping Dx)')
 dev.off()
 
@@ -296,7 +296,7 @@ kegg_sczd <- function(kegg_cor, type) {
             '\np-value: ', signif(p, 3)),
             ylim = ylim,
             xlab = 'SCZD diagnosis', outline = FALSE, ylab = paste('Correlation -', type))
-        points(pathway ~ jitter(as.numeric(dx), amount = 0.15), cex = 1.5, pch = 21, bg = ifelse(type == 'expr', 'deepskyblue3', '#009E73'))
+        if(type == 'expr') points(pathway ~ jitter(as.numeric(dx), amount = 0.15), cex = 1.5, pch = 21, bg = 'deepskyblue3') else points(pathway ~ jitter(as.numeric(dx), amount = 0.15), cex = 1.5, pch = 21, bg = ifelse(dx == 'SCZD', 'aquamarine4', 'orchid4'))
                 
         c(summary(f)$coef[2, ], mean_sczd = mean(pathway[dx == 'SCZD']), mean_control = mean(pathway[dx == 'Control']))
     }, kegg_cor, names(kegg_cor), SIMPLIFY = FALSE))
@@ -414,7 +414,7 @@ kegg_go <- function(go_cor, go_info, type, go_type) {
             '\np-value: ', signif(p, 3)),
             ylim = ylim,
             xlab = 'SCZD diagnosis', outline = FALSE, ylab = paste('Correlation -', type))
-        points(pathway ~ jitter(as.numeric(dx), amount = 0.15), cex = 1.5, pch = 21, bg = ifelse(type == 'expr', 'deepskyblue3', '#009E73'))
+        if(type == 'expr') points(pathway ~ jitter(as.numeric(dx), amount = 0.15), cex = 1.5, pch = 21, bg = 'deepskyblue3') else points(pathway ~ jitter(as.numeric(dx), amount = 0.15), cex = 1.5, pch = 21, bg = ifelse(dx == 'SCZD', 'aquamarine4', 'orchid4'))
                 
         c(summary(f)$coef[2, ], mean_sczd = mean(pathway[dx == 'SCZD']), mean_control = mean(pathway[dx == 'Control']))
     }, go_cor, names(go_cor), SIMPLIFY = FALSE))
@@ -568,7 +568,7 @@ corrsczd_info <- function(corrsczd, type) {
             '\np-value: ', signif(p, 3)),
             ylim = ylim,
             xlab = 'SCZD diagnosis', outline = FALSE, ylab = paste('Correlation -', type))
-        points(pathway ~ jitter(as.numeric(dx), amount = 0.15), cex = 1.5, pch = 21, bg = ifelse(type == 'expr', 'deepskyblue3', '#009E73'))
+        if(type == 'expr') points(pathway ~ jitter(as.numeric(dx), amount = 0.15), cex = 1.5, pch = 21, bg = 'deepskyblue3') else points(pathway ~ jitter(as.numeric(dx), amount = 0.15), cex = 1.5, pch = 21, bg = ifelse(dx == 'SCZD', 'aquamarine4', 'orchid4'))
                 
         c(summary(f)$coef[2, ], mean_sczd = mean(pathway[dx == 'SCZD']), mean_control = mean(pathway[dx == 'Control']))
     }, corrsczd, names(corrsczd), SIMPLIFY = FALSE))
