@@ -20,8 +20,4 @@ make_table(tab_pbonf_span)
 
 The following plot shows the F-statistics from the original model against the NeuN adjusted model with DE determined by P-bonferroni<1% and requiring replication in BrainSpan.
 
-<object data="f_original_vs_f_adjNeuN.pdf" type="application/pdf" width="700px" height="700px">
-    <embed src="f_original_vs_f_adjNeuN.pdf">
-        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="f_original_vs_f_adjNeuN.pdf">Download PDF</a>.</p>
-    </embed>
-</object>
+![F-statistics original vs NeuN-adjusted](f_original_vs_f_adjNeuN.png)
