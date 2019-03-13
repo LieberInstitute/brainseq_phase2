@@ -105,53 +105,6 @@ ggplot(subset(info_cat, rank <= 1000), aes(x = rank, y = concordance, color = ag
     labs(caption = 'Dotted line denotes expection by chance')
 dev.off()
 
-
-info_cat_t <- map2_dfr(
-    info,
-    names(info),
-    function(.x, agegrp) {
-        map2_dfr(
-            .x,
-            names(.x),
-            ~ mutate(CATplot(rank(.x$t), rank(.x$span_t), maxrank = maxrank, ylim = c(0, 1), make.plot = FALSE), age = agegrp, feature = .y)
-        )
-    }
-)
-pdf('concordance_vs_chance_by_age_rank_by_t.pdf', useDingbats = FALSE, width = 25)
-ggplot(info_cat_t, aes(x = rank, y = concordance, color = age)) +
-    geom_line(size = 2) +
-    facet_grid(~ factor(feature, levels = features)) +
-    geom_abline(aes(slope = slope, intercept = intercept), data = dat_ablines, color = 'black', linetype = 'dashed', size = 1.5) +
-    xlab('Rank by t-statistic') +
-    ylab('Concordance') +
-    theme_bw(base_size = 30) +
-    scale_color_manual(values = c('prenatal' = 'orange', 'adult' = 'purple')) +
-    labs(caption = 'Dotted line denotes expection by chance')
-ggplot(subset(info_cat_t, rank <= 1000), aes(x = rank, y = concordance, color = age)) +
-    geom_line(size = 2) +
-    facet_grid(~ factor(feature, levels = features)) +
-    geom_abline(aes(slope = slope, intercept = intercept), data = dat_ablines, color = 'black', linetype = 'dashed', size = 1.5) +
-    xlab('Rank by t-statistic') +
-    ylab('Concordance') +
-    theme_bw(base_size = 30) +
-    scale_color_manual(values = c('prenatal' = 'orange', 'adult' = 'purple')) +
-    labs(caption = 'Dotted line denotes expection by chance')
-dev.off()
-
-
-# h <- info[[1]][[1]]
-
-# pdf('test.pdf', useDingbats = FALSE)
-#
-# xx <- CATplot(
-#     - h$rank,
-#     - h$rank_span, maxrank = maxrank, ylim = ylim)
-# xx4 <- CATplot(
-#     - rank(h$t),
-#     - rank(h$span_t), maxrank = maxrank, ylim = ylim)
-# dev.off()
-
-
 ## Reproducibility information
 print('Reproducibility information:')
 Sys.time()
