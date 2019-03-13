@@ -33,3 +33,4 @@ The table below shows the gene type frequency and percent for each of these 955 
 # unitary_pseudogene                     1  0.1047120
 ```
 
+The 955 genes themselves have low levels of expression themselves with a range from 0.2501 to 0.679 mean RPKM (mean=0.369) when the cutoff at the gene level was 0.25 mean RPKM. We note that only 68 (7.1%) of these 955 genes are protein coding, in contrast with 415 (43.5%), 160 (16.8%) and 110 (11.5%) which are processed pseudogenes, lincRNAs or antisense. Thus, it’s expected that the more fine-grained features (exon, junctions and transcripts) show even lower levels of expression.

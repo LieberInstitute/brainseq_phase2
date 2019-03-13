@@ -180,6 +180,13 @@ cbind(gtype, percent = gtype / length(gene_only) * 100)
 # transcribed_unprocessed_pseudogene     1  0.1047120
 # unitary_pseudogene                     1  0.1047120
 
+
+with(rowRanges(rses$gene), summary(meanExprs[ensemblID %in% gene_only]))
+#   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+# 0.2501  0.2875  0.3403  0.3690  0.4288  0.6790
+with(rowRanges(rses$gene), sd(meanExprs[ensemblID %in% gene_only]))
+# [1] 0.09899494
+
 ## Reproducibility information
 print('Reproducibility information:')
 Sys.time()
