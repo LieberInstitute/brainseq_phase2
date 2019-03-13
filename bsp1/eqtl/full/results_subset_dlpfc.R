@@ -5,6 +5,8 @@ library(jaffelab)
 library('data.table')
 library('devtools')
 
+setDTthreads(threads = 1)
+
 dir.create('rdas', showWarnings = FALSE)
 
 ## in each region, and in interaction:
@@ -19,6 +21,7 @@ dir.create('rdas', showWarnings = FALSE)
 
 # BSP1
 message(paste(Sys.time(), 'loading BSP1 eQTL results'))
+# bsp1 <- fread('BrainSeqPhaseII_eQTL_dlpfc_replication_bsp1.txt')
 load("eqtl_tables/mergedEqtl_output_dlpfc_4features_in_progress.rda", verbose=TRUE)
 
 # break up into pieces
