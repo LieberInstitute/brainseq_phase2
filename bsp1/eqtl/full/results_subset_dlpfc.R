@@ -21,24 +21,25 @@ dir.create('rdas', showWarnings = FALSE)
 
 # BSP1
 message(paste(Sys.time(), 'loading BSP1 eQTL results'))
-# bsp1 <- fread('BrainSeqPhaseII_eQTL_dlpfc_replication_bsp1.txt')
-load("eqtl_tables/mergedEqtl_output_dlpfc_4features_in_progress.rda", verbose=TRUE)
+bsp1 <- fread(
+    '/dcl01/lieber/ajaffe/lab/brainseq_phase2/browser/BrainSeqPhaseII_eQTL_dlpfc_replication_bsp1.txt',
+    col.names = c('snps', 'gene', 'statistic', 'pvalue', 'FDR', 'beta', 'Type')
+)
+# bsp1 <- fread('/dcl01/lieber/ajaffe/lab/brainseq_phase2/browser/test.txt', col.names = c('snps', 'gene', 'statistic', 'pvalue', 'FDR', 'beta', 'Type'))
 
 # break up into pieces
-message(paste(Sys.time(), 'breaking up by feature and converting to data.table'))
+message(paste(Sys.time(), 'breaking up by feature'))
 
 message(paste(Sys.time(), 'gene'))
-dlpfc_bsp1_genes = data.table(as.data.frame(geneEqtl))
-rm(geneEqtl)
+dlpfc_bsp1_genes <- bsp1[Type == 'gene']
 message(paste(Sys.time(), 'exon'))
-dlpfc_bsp1_exons = data.table(as.data.frame(exonEqtl))
-rm(exonEqtl)
+dlpfc_bsp1_exons <- bsp1[Type == 'exon']
 message(paste(Sys.time(), 'jxn'))
-dlpfc_bsp1_jxns = data.table(as.data.frame(jxnEqtl))
-rm(jxnEqtl)
+dlpfc_bsp1_jxns <- bsp1[Type == 'jxn']
 message(paste(Sys.time(), 'tx'))
-dlpfc_bsp1_txs = data.table(as.data.frame(txEqtl))
-rm(txEqtl)
+dlpfc_bsp1_txs <- bsp1[Type == 'tx']
+
+rm(bsp1)
 
 # BrainSeq
 message(paste(Sys.time(), 'loading BrainSeq Phase II eQTL results'))
@@ -90,14 +91,9 @@ dlpfc_bsp1_txs <- subset_bsp1(dlpfc_bsp1_txs, d_sig_txs)
 message(paste(Sys.time(), 'saving tx results'))
 save(dlpfc_bsp1_txs,d_sig_txs, file = "rdas/dlpfc_compare_txs.rda")
 
-
 ## Reproducibility information
 print('Reproducibility information:')
 Sys.time()
 proc.time()
 options(width = 120)
 session_info()
-
-
-
-	  
