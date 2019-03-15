@@ -31,6 +31,5 @@ degradation_strand_*
 
 ## Un-used analyses
 eQTL_DNAm_mediation
-cellComp
 wgcna
 wgcna_combined
