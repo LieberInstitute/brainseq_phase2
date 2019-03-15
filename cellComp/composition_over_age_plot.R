@@ -5,16 +5,18 @@ library('SummarizedExperiment')
 library('ggplot2')
 library('jaffelab')
 
+source('../development/load_funs.R')
+
 ## Load the data
 load("RNA_cell_proportions_brainSeq_phase2.rda")
 load("../expr_cutoff/rse_gene.Rdata")
 
-## Re-weight so the sum is 1? Will decide later.
+## Re-weight so the sum is 1? Yes
 summary(rowSums(propEsts))
 #  Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
 # 1.205   1.548   1.579   1.575   1.617   1.871
-x <- sweep(propEsts, 1, rowSums(propEsts), '/')
-summary(rowSums(x))
+propEsts <- sweep(propEsts, 1, rowSums(propEsts), '/')
+summary(rowSums(propEsts))
 # Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
 #    1       1       1       1       1       1
    
@@ -36,6 +38,31 @@ colData(rse_gene)$ageStage <- factor(with(colData(rse_gene), dplyr::case_when(
 ## Add cell type info
 m_cell <- match(colnames(rse_gene), rownames(propEsts))
 colData(rse_gene) <- cbind(colData(rse_gene), propEsts[m_cell, ])
+
+## Add age linear splines
+fetal <- ifelse(colData(rse_gene)$Age < 0, 1,0)
+birth <- colData(rse_gene)$Age
+birth[birth < 0] <- 0 # linear spline
+infant <- colData(rse_gene)$Age - 1
+infant[infant < 0] <- 0 # linear spline
+child <- colData(rse_gene)$Age - 10
+child[child < 0] <- 0 # linear spline
+teen <- colData(rse_gene)$Age - 20
+teen[teen < 0] <- 0 # linear spline
+adult <- colData(rse_gene)$Age - 50
+adult[adult < 0] <- 0 # linear spline
+
+colData(rse_gene)$fetal <- fetal
+colData(rse_gene)$birth <- birth
+colData(rse_gene)$infant <- infant
+colData(rse_gene)$child <- child
+colData(rse_gene)$teen <- teen
+colData(rse_gene)$adult <- adult
+
+## Add means
+colData(rse_gene)$mean_mitoRate <- mean(colData(rse_gene)$mitoRate)
+colData(rse_gene)$mean_totalAssignedGene <- mean(colData(rse_gene)$totalAssignedGene)
+colData(rse_gene)$mean_RIN <- mean(colData(rse_gene)$RIN)
 
 ## Save for later use (if necessary)
 pd <- colData(rse_gene)
@@ -89,35 +116,7 @@ p_cols <- ifelse(colData(rse_gene)$Region == 'HIPPO', 'steelblue1', 'darkgoldenr
 l_cols <- c('lightgoldenrod', 'light blue')
 age_brks <- c(-1, 0, 1, 10, 20, 50, 100)
 
-source('../development/load_funs.R')
-
-rse <- rse_gene
-## Add age linear splines
-fetal <- ifelse(colData(rse)$Age < 0, 1,0)
-birth <- colData(rse)$Age
-birth[birth < 0] <- 0 # linear spline
-infant <- colData(rse)$Age - 1
-infant[infant < 0] <- 0 # linear spline
-child <- colData(rse)$Age - 10
-child[child < 0] <- 0 # linear spline
-teen <- colData(rse)$Age - 20
-teen[teen < 0] <- 0 # linear spline
-adult <- colData(rse)$Age - 50
-adult[adult < 0] <- 0 # linear spline
-
-colData(rse)$fetal <- fetal
-colData(rse)$birth <- birth
-colData(rse)$infant <- infant
-colData(rse)$child <- child
-colData(rse)$teen <- teen
-colData(rse)$adult <- adult
-
-## Add means
-colData(rse)$mean_mitoRate <- mean(colData(rse)$mitoRate)
-colData(rse)$mean_totalAssignedGene <- mean(colData(rse)$totalAssignedGene)
-colData(rse)$mean_RIN <- mean(colData(rse)$RIN)
-
-design <- get_mods( colData(rse), int = TRUE)$mod
+design <- get_mods( colData(rse_gene), int = TRUE)$mod
 
 plot_age_mod <-
     design[, c(
@@ -150,9 +149,6 @@ for(i in seq_along(propEsts)) {
     legend('top', c('DLPFC', 'HIPPO'), col = l_cols, lwd = 3, bty = 'n', ncol = 1, cex = 1.5)
 }
 dev.off()
-
-
-
 
 
 ## Reproducibility information
