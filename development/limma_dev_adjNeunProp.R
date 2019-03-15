@@ -27,6 +27,15 @@ if (!is.null(opt$help)) {
 ## Load cell proportion info
 load('../cellComp/RNA_cell_proportions_brainSeq_phase2.rda')
 
+## Re-weight so the sum is 1? Yes
+summary(rowSums(propEsts))
+#  Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+# 1.205   1.548   1.579   1.575   1.617   1.871
+propEsts <- sweep(propEsts, 1, rowSums(propEsts), '/')
+summary(rowSums(propEsts))
+# Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+#    1       1       1       1       1       1
+
 ## Load data
 load_foo <- function(type) {
     load_file <- file.path(
@@ -118,11 +127,11 @@ rse <- load_foo(opt$type)
 tapply(colData(rse)$Neurons, colData(rse)$Region, summary)
 # $DLPFC
 #    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
-#  0.0000  0.6237  0.7118  0.6522  0.7618  0.9592
+#  0.0000  0.3914  0.4484  0.4152  0.4801  0.6533
 #
 # $HIPPO
 #    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
-#  0.0000  0.4931  0.5909  0.5454  0.6434  0.8776
+#  0.0000  0.3012  0.3671  0.3449  0.4057  0.5771
 
 ## To simplify later code
 pd <- as.data.frame(colData(rse))
