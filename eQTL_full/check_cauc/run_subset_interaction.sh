@@ -1,6 +1,6 @@
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=110G,h_vmem=110G,h_fsize=200G
+#$ -l mem_free=25G,h_vmem=25G,h_fsize=200G
 #$ -N interaction_subset_cauc
 #$ -o logs/interaction_subset_cauc.txt
 #$ -e logs/interaction_subset_cauc.txt
