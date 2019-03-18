@@ -1,6 +1,6 @@
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=70G,h_vmem=70G,h_fsize=200G
+#$ -l mem_free=80G,h_vmem=80G,h_fsize=200G
 #$ -N dlpfc_subset_cauc
 #$ -o logs/dlpfc_subset_cauc.txt
 #$ -e logs/dlpfc_subset_cauc.txt

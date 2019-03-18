@@ -68,6 +68,13 @@ subset_cauc <- function(cauc, brainseq) {
     cauc[.(brainseq$snps, brainseq$gene)]
 }
 
+## Subset FDR<1% in CAUC
+message(paste(Sys.time(), 'subsetting and saving FDR<1% CAUC-only results'))
+d_sig_genes_cauc <- dlpfc_cauc_genes[dlpfc_cauc_genes$FDR < 0.01, ]
+setkey(d_sig_genes_cauc, snps, gene)
+save(d_sig_genes_cauc, file = 'rdas/d_sig_genes_cauc.Rdata')
+rim(d_sig_genes_cauc)
+
 message(paste(Sys.time(), 'matching gene results'))
 dlpfc_cauc_genes <- subset_cauc(dlpfc_cauc_genes, d_sig_genes)
 message(paste(Sys.time(), 'saving gene results'))

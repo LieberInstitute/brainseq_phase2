@@ -71,6 +71,13 @@ subset_cauc <- function(cauc, brainseq) {
     cauc[.(brainseq$snps, brainseq$gene)]
 }
 
+## Subset FDR<1% in CAUC
+message(paste(Sys.time(), 'subsetting and saving FDR<1% CAUC-only results'))
+i_sig_genes_cauc <- inter_cauc_genes[inter_cauc_genes$FDR < 0.01, ]
+setkey(i_sig_genes_cauc, snps, gene)
+save(i_sig_genes_cauc, file = 'rdas/i_sig_genes_cauc.Rdata')
+rim(i_sig_genes_cauc)
+
 message(paste(Sys.time(), 'matching gene results'))
 inter_cauc_genes <- subset_cauc(inter_cauc_genes, i_sig_genes)
 message(paste(Sys.time(), 'saving gene results'))
