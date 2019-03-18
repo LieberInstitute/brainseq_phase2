@@ -25,7 +25,6 @@ bsp1 <- fread(
     '/dcl01/lieber/ajaffe/lab/brainseq_phase2/browser/BrainSeqPhaseII_eQTL_dlpfc_replication_bsp1.txt',
     col.names = c('snps', 'gene', 'statistic', 'pvalue', 'FDR', 'beta', 'Type')
 )
-# bsp1 <- fread('/dcl01/lieber/ajaffe/lab/brainseq_phase2/browser/test.txt', col.names = c('snps', 'gene', 'statistic', 'pvalue', 'FDR', 'beta', 'Type'))
 
 # break up into pieces
 message(paste(Sys.time(), 'breaking up by feature'))
@@ -49,6 +48,16 @@ load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/eQTL_full/eqtl_tables/mergedEqtl_
 message(paste(Sys.time(), 'subsetting to significant results'))
 d_sig = data.table(as.data.frame(allEqtl[allEqtl$FDR < 0.01,]))
 rm(allEqtl)
+
+## Fix exon ids so they'll match with those from
+## /dcl01/lieber/ajaffe/lab/brainseq_phase2/browser/BrainSeqPhaseII_eQTL_dlpfc_replication_bsp1.txt
+load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/browser/rda/exon_name_map.Rdata', verbose = TRUE)
+setkey(exon_name_map, libd_bsp2)
+d_sig$gene[d_sig$Type == 'Exon'] <- exon_name_map[.(d_sig$gene[d_sig$Type == 'Exon']), gencode]
+rm(exon_name_map)
+
+## Change jxn ids so they'll match as well
+d_sig$gene[d_sig$Type == 'Jxn'] <- gsub('\\(\\+\\)|\\(\\-\\)', '(*)', d_sig$gene[d_sig$Type == 'Jxn'])
 
 message(paste(Sys.time(), 'breaking up by feature'))
 proc_brainseq <- function(df) {
@@ -90,6 +99,29 @@ message(paste(Sys.time(), 'matching tx results'))
 dlpfc_bsp1_txs <- subset_bsp1(dlpfc_bsp1_txs, d_sig_txs)
 message(paste(Sys.time(), 'saving tx results'))
 save(dlpfc_bsp1_txs,d_sig_txs, file = "rdas/dlpfc_compare_txs.rda")
+
+## Also write to smaller files for the browser
+export_subset <- function(DT) {
+    ## So the column matches the snpAnno column name
+    colnames(DT)[1] <- 'snp'
+
+    ## So the column matches the feature annotation column
+    colnames(DT)[2] <- 'feature_id'
+
+    ## Make Type lowercase to match file names from other tables
+    DT$Type <- tolower(DT$Type)
+    
+    feature <- unique(DT$Type)
+    feature <- feature[!is.na(feature)]
+
+    f_new <- paste0('/dcl01/lieber/ajaffe/lab/brainseq_phase2/browser/BrainSeqPhaseII_eQTL_dlpfc_replication_bsp1_', feature, '.txt')
+    message(paste(Sys.time(), 'writing', f_new))
+    fwrite(DT, file = f_new, sep = '\t', row.names = FALSE)
+}
+export_subset(dlpfc_bsp1_genes)
+export_subset(dlpfc_bsp1_exons)
+export_subset(dlpfc_bsp1_jxn)
+export_subset(dlpfc_bsp1_txs)
 
 ## Reproducibility information
 print('Reproducibility information:')
