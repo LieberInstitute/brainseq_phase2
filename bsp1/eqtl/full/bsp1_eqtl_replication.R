@@ -49,7 +49,7 @@ comp_qtl <- function(type, dfs, perc = FALSE, cutde = 0.01) {
         print(table(is.na(df$bsp1_statistic)))
     }
     
-    res <- addmargins(table('Equal sign' = sign(df$statistic) == sign(df$bsp1_statistic), 'BSP1 p<0.01' = df$bsp1_pvalue < cutde))
+    res <- addmargins(table(sign(df$statistic) == sign(df$cauc_statistic),  df$cauc_pvalue < cutde, dnn = c('Equal sign', paste0('CAUC p<', cutde))))
     if(!perc) return(res)
     
     ## Calculate percent over all of brainseq
@@ -134,14 +134,14 @@ comp_qtl_short(dlpfc[c('gene', 'tx')], perc = TRUE)
 
 
 comp_qtl_short(dlpfc[c('gene', 'tx')], cutde = 0.05)
-#           BSP1 p<0.01
+#           BSP1 p<0.05
 # Equal sign   FALSE    TRUE     Sum
 #      FALSE   51983   27205   79188
 #      TRUE   144519 1290533 1435052
 #      Sum    196502 1317738 1514240
 #
 # $tx
-#           BSP1 p<0.01
+#           BSP1 p<0.05
 # Equal sign   FALSE    TRUE     Sum
 #      FALSE   84053   25424  109477
 #      TRUE   237753 1844323 2082076
@@ -149,14 +149,14 @@ comp_qtl_short(dlpfc[c('gene', 'tx')], cutde = 0.05)
 
 comp_qtl_short(dlpfc[c('gene', 'tx')], perc = TRUE, cutde = 0.05)
 # $gene
-#           BSP1 p<0.01
+#           BSP1 p<0.05
 # Equal sign     FALSE      TRUE       Sum
 #      FALSE  3.294310  1.724058  5.018369
 #      TRUE   9.158580 81.784744 90.943324
 #      Sum   12.452890 83.508802 95.961692
 #
 # $tx
-#           BSP1 p<0.01
+#           BSP1 p<0.05
 # Equal sign     FALSE      TRUE       Sum
 #      FALSE  3.700715  1.119377  4.820091
 #      TRUE  10.467872 81.202493 91.670365

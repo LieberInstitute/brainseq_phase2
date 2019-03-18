@@ -73,7 +73,7 @@ comp_qtl <- function(type, dfs, perc = FALSE, cutde = 0.01) {
         print(table(is.na(df$gtex_statistic)))
     }
     
-    res <- addmargins(table('Equal sign' = sign(df$statistic) == sign(df$gtex_statistic), 'GTEx p<0.01' = df$gtex_pvalue < cutde))
+    res <- addmargins(table(sign(df$statistic) == sign(df$cauc_statistic),  df$cauc_pvalue < cutde, dnn = c('Equal sign', paste0('CAUC p<', cutde))))
     if(!perc) return(res)
     
     ## Calculate percent over all of brainseq
@@ -162,28 +162,28 @@ comp_qtl_short(interaction, perc = TRUE)
 
 comp_qtl_short(interaction, cutde = 0.05)
 # $gene
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign FALSE  TRUE   Sum
 #      FALSE  8425   522  8947
 #      TRUE  17284  9727 27011
 #      Sum   25709 10249 35958
 #
 # $exon
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign FALSE  TRUE   Sum
 #      FALSE 16158  1627 17785
 #      TRUE  33357 28293 61650
 #      Sum   49515 29920 79435
 #
 # $jxn
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign FALSE  TRUE   Sum
 #      FALSE 23903  1097 25000
 #      TRUE  26352 15477 41829
 #      Sum   50255 16574 66829
 #
 # $tx
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign FALSE  TRUE   Sum
 #      FALSE  2539   469  3008
 #      TRUE   7855  8795 16650
@@ -191,28 +191,28 @@ comp_qtl_short(interaction, cutde = 0.05)
 
 comp_qtl_short(interaction, perc = TRUE, cutde = 0.05)
 # $gene
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign     FALSE      TRUE       Sum
 #      FALSE 21.014167  1.302005 22.316173
 #      TRUE  43.110845 24.261698 67.372543
 #      Sum   64.125012 25.563703 89.688716
 #
 # $exon
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign     FALSE      TRUE       Sum
 #      FALSE 17.968707  1.809326 19.778032
 #      TRUE  37.095070 31.463586 68.558656
 #      Sum   55.063777 33.272911 88.336688
 #
 # $jxn
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign     FALSE      TRUE       Sum
 #      FALSE 31.616470  1.451001 33.067471
 #      TRUE  34.855760 20.471410 55.327170
 #      Sum   66.472230 21.922410 88.394640
 #
 # $tx
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign     FALSE      TRUE       Sum
 #      FALSE 11.596255  2.142042 13.738296
 #      TRUE  35.875771 40.168988 76.044759
@@ -295,28 +295,28 @@ comp_qtl_short(hippo, perc = TRUE)
 
 comp_qtl_short(hippo, cutde = 0.05)
 # $gene
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign  FALSE   TRUE    Sum
 #      FALSE 160756  25618 186374
 #      TRUE  408772 342675 751447
 #      Sum   569528 368293 937821
 #
 # $exon
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign   FALSE    TRUE     Sum
 #      FALSE 1140304  151809 1292113
 #      TRUE  2400563 1732369 4132932
 #      Sum   3540867 1884178 5425045
 #
 # $jxn
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign   FALSE    TRUE     Sum
 #      FALSE 1029699   59093 1088792
 #      TRUE  1333462 1056178 2389640
 #      Sum   2363161 1115271 3478432
 #
 # $tx
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign   FALSE    TRUE     Sum
 #      FALSE  271088   33033  304121
 #      TRUE   645543  548067 1193610
@@ -324,28 +324,28 @@ comp_qtl_short(hippo, cutde = 0.05)
 
 comp_qtl_short(hippo, perc = TRUE, cutde = 0.05)
 # $gene
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign     FALSE      TRUE       Sum
 #      FALSE 14.943857  2.381446 17.325303
 #      TRUE  37.999392 31.855024 69.854416
 #      Sum   52.943249 34.236469 87.179718
 #
 # $exon
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign     FALSE      TRUE       Sum
 #      FALSE 18.373108  2.446017 20.819125
 #      TRUE  38.678987 27.912735 66.591722
 #      Sum   57.052096 30.358752 87.410848
 #
 # $jxn
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign    FALSE     TRUE      Sum
 #      FALSE 26.03373  1.49404 27.52777
 #      TRUE  33.71373 26.70320 60.41693
 #      Sum   59.74746 28.19724 87.94470
 #
 # $tx
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign     FALSE      TRUE       Sum
 #      FALSE 15.922235  1.940179 17.862414
 #      TRUE  37.915687 32.190476 70.106163
@@ -428,28 +428,28 @@ comp_qtl_short(dlpfc, perc = TRUE)
 
 comp_qtl_short(dlpfc, cutde = 0.05)
 # $gene
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign   FALSE    TRUE     Sum
 #      FALSE  231205   35991  267196
 #      TRUE   592282  512092 1104374
 #      Sum    823487  548083 1371570
 #
 # $exon
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign   FALSE    TRUE     Sum
 #      FALSE 1584302  257460 1841762
 #      TRUE  3374285 2589091 5963376
 #      Sum   4958587 2846551 7805138
 #
 # $jxn
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign   FALSE    TRUE     Sum
 #      FALSE 1246207   78374 1324581
 #      TRUE  1799967 1506087 3306054
 #      Sum   3046174 1584461 4630635
 #
 # $tx
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign   FALSE    TRUE     Sum
 #      FALSE  329602   47618  377220
 #      TRUE   827367  789895 1617262
@@ -457,28 +457,28 @@ comp_qtl_short(dlpfc, cutde = 0.05)
 
 comp_qtl_short(dlpfc, perc = TRUE, cutde = 0.05)
 # $gene
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign     FALSE      TRUE       Sum
 #      FALSE 14.652118  2.280852 16.932970
 #      TRUE  37.534594 32.452725 69.987319
 #      Sum   52.186712 34.733577 86.920289
 #
 # $exon
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign     FALSE      TRUE       Sum
 #      FALSE 17.744704  2.883637 20.628341
 #      TRUE  37.793103 28.998672 66.791774
 #      Sum   55.537807 31.882308 87.420115
 #
 # $jxn
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign     FALSE      TRUE       Sum
 #      FALSE 23.691581  1.489964 25.181545
 #      TRUE  34.219085 28.632147 62.851232
 #      Sum   57.910666 30.122111 88.032777
 #
 # $tx
-#           GTEx p<0.01
+#           GTEx p<0.05
 # Equal sign     FALSE      TRUE       Sum
 #      FALSE 14.511831  2.096542 16.608373
 #      TRUE  36.427602 34.777771 71.205373
