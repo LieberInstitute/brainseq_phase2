@@ -1,0 +1,201 @@
+Loading git
+Adding LIBD modules
+**** Job starts ****
+Thu Mar 14 10:41:01 EDT 2019
+**** JHPCE info ****
+User: lcollado
+Job id: 6750580
+Job name: dlpfc_subset
+Hostname: compute-115
+Task id: 
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colMeans,
+    colnames, colSums, dirname, do.call, duplicated, eval, evalq,
+    Filter, Find, get, grep, grepl, intersect, is.unsorted, lapply,
+    lengths, Map, mapply, match, mget, order, paste, pmax, pmax.int,
+    pmin, pmin.int, Position, rank, rbind, Reduce, rowMeans, rownames,
+    rowSums, sapply, setdiff, sort, table, tapply, union, unique,
+    unsplit, which, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:base’:
+
+    expand.grid
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: DelayedArray
+Loading required package: matrixStats
+
+Attaching package: ‘matrixStats’
+
+The following objects are masked from ‘package:Biobase’:
+
+    anyMissing, rowMedians
+
+Loading required package: BiocParallel
+
+Attaching package: ‘DelayedArray’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+
+The following objects are masked from ‘package:base’:
+
+    aperm, apply
+
+Loading required package: rafalib
+
+Attaching package: ‘data.table’
+
+The following object is masked from ‘package:SummarizedExperiment’:
+
+    shift
+
+The following object is masked from ‘package:GenomicRanges’:
+
+    shift
+
+The following object is masked from ‘package:IRanges’:
+
+    shift
+
+The following objects are masked from ‘package:S4Vectors’:
+
+    first, second
+
+2019-03-14 10:41:13 loading BSP1 eQTL results
+2019-03-14 12:04:45 breaking up by feature
+2019-03-14 12:04:45 gene
+2019-03-14 12:05:47 exon
+2019-03-14 12:19:55 jxn
+2019-03-14 12:28:16 tx
+2019-03-14 12:29:12 loading BrainSeq Phase II eQTL results
+Loading objects:
+  allEqtl
+2019-03-14 12:34:42 subsetting to significant results
+2019-03-14 12:39:33 breaking up by feature
+2019-03-14 12:39:33 setting keys
+2019-03-14 12:39:36 setting keys
+2019-03-14 12:39:46 setting keys
+2019-03-14 12:39:52 setting keys
+2019-03-14 12:39:57 matching gene results
+2019-03-14 12:39:57 create keys: bsp1
+2019-03-14 12:40:32 subset bsp1 by brainseq
+2019-03-14 12:40:36 saving gene results
+2019-03-14 12:41:44 matching exon results
+2019-03-14 12:41:44 create keys: bsp1
+2019-03-14 12:52:51 subset bsp1 by brainseq
+2019-03-14 12:53:04 saving exon results
+2019-03-14 12:57:30 matching jxn results
+2019-03-14 12:57:30 create keys: bsp1
+2019-03-14 13:04:38 subset bsp1 by brainseq
+2019-03-14 13:04:50 saving jxn results
+2019-03-14 13:07:39 matching tx results
+2019-03-14 13:07:39 create keys: bsp1
+2019-03-14 13:09:44 subset bsp1 by brainseq
+2019-03-14 13:09:50 saving tx results
+[1] "Reproducibility information:"
+[1] "2019-03-14 13:11:18 EDT"
+    user   system  elapsed 
+5395.750 1427.743 9017.694 
+─ Session info ───────────────────────────────────────────────────────────────────────────────────────────────────────
+ setting  value                                                 
+ version  R version 3.5.1 Patched (2018-10-29 r75535)           
+ os       Red Hat Enterprise Linux Server release 6.9 (Santiago)
+ system   x86_64, linux-gnu                                     
+ ui       X11                                                   
+ language (EN)                                                  
+ collate  en_US.UTF-8                                           
+ ctype    en_US.UTF-8                                           
+ tz       US/Eastern                                            
+ date     2019-03-14                                            
+
+─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
+ ! package              * version   date       lib source                                   
+   assertthat             0.2.0     2017-04-11 [2] CRAN (R 3.5.0)                           
+   backports              1.1.3     2018-12-14 [2] CRAN (R 3.5.1)                           
+   Biobase              * 2.42.0    2018-10-30 [2] Bioconductor                             
+   BiocGenerics         * 0.28.0    2018-10-30 [1] Bioconductor                             
+ V BiocParallel         * 1.16.5    2019-02-10 [1] Bioconductor                             
+   bitops                 1.0-6     2013-08-17 [2] CRAN (R 3.5.0)                           
+   callr                  3.1.1     2018-12-21 [2] CRAN (R 3.5.1)                           
+   cli                    1.0.1     2018-09-25 [1] CRAN (R 3.5.1)                           
+   crayon                 1.3.4     2017-09-16 [1] CRAN (R 3.5.0)                           
+   data.table           * 1.12.0    2019-01-13 [1] CRAN (R 3.5.1)                           
+   DelayedArray         * 0.8.0     2018-10-30 [2] Bioconductor                             
+   desc                   1.2.0     2018-05-01 [2] CRAN (R 3.5.1)                           
+   devtools             * 2.0.1     2018-10-26 [1] CRAN (R 3.5.1)                           
+   digest                 0.6.18    2018-10-10 [1] CRAN (R 3.5.1)                           
+   fs                     1.2.6     2018-08-23 [2] CRAN (R 3.5.1)                           
+   GenomeInfoDb         * 1.18.1    2018-11-12 [1] Bioconductor                             
+   GenomeInfoDbData       1.2.0     2018-11-02 [2] Bioconductor                             
+   GenomicRanges        * 1.34.0    2018-10-30 [1] Bioconductor                             
+   glue                   1.3.0     2018-07-17 [1] CRAN (R 3.5.1)                           
+   IRanges              * 2.16.0    2018-10-30 [1] Bioconductor                             
+   jaffelab             * 0.99.21   2018-05-03 [1] Github (LieberInstitute/jaffelab@7ed0ab7)
+   lattice                0.20-38   2018-11-04 [3] CRAN (R 3.5.1)                           
+   limma                  3.38.3    2018-12-02 [1] Bioconductor                             
+   magrittr               1.5       2014-11-22 [1] CRAN (R 3.5.0)                           
+   Matrix                 1.2-15    2018-11-01 [3] CRAN (R 3.5.1)                           
+   matrixStats          * 0.54.0    2018-07-23 [1] CRAN (R 3.5.1)                           
+   memoise                1.1.0     2017-04-21 [2] CRAN (R 3.5.0)                           
+   pkgbuild               1.0.2     2018-10-16 [2] CRAN (R 3.5.1)                           
+   pkgload                1.0.2     2018-10-29 [2] CRAN (R 3.5.1)                           
+   prettyunits            1.0.2     2015-07-13 [1] CRAN (R 3.5.0)                           
+   processx               3.2.1     2018-12-05 [1] CRAN (R 3.5.1)                           
+   ps                     1.3.0     2018-12-21 [2] CRAN (R 3.5.1)                           
+   R6                     2.3.0     2018-10-04 [2] CRAN (R 3.5.1)                           
+   rafalib              * 1.0.0     2015-08-09 [1] CRAN (R 3.5.0)                           
+   RColorBrewer           1.1-2     2014-12-07 [2] CRAN (R 3.5.0)                           
+   Rcpp                   1.0.0     2018-11-07 [1] CRAN (R 3.5.1)                           
+   RCurl                  1.95-4.11 2018-07-15 [2] CRAN (R 3.5.1)                           
+   remotes                2.0.2     2018-10-30 [1] CRAN (R 3.5.1)                           
+   rlang                  0.3.1     2019-01-08 [1] CRAN (R 3.5.1)                           
+   rprojroot              1.3-2     2018-01-03 [2] CRAN (R 3.5.0)                           
+   S4Vectors            * 0.20.1    2018-11-09 [1] Bioconductor                             
+   segmented              0.5-3.0   2017-11-30 [2] CRAN (R 3.5.0)                           
+   sessioninfo            1.1.1     2018-11-05 [1] CRAN (R 3.5.1)                           
+   SummarizedExperiment * 1.12.0    2018-10-30 [1] Bioconductor                             
+   testthat               2.0.1     2018-10-13 [1] CRAN (R 3.5.1)                           
+   usethis              * 1.4.0     2018-08-14 [2] CRAN (R 3.5.1)                           
+   withr                  2.1.2     2018-03-15 [2] CRAN (R 3.5.0)                           
+   XVector                0.22.0    2018-10-30 [1] Bioconductor                             
+   zlibbioc               1.28.0    2018-10-30 [2] Bioconductor                             
+
+[1] /users/lcollado/R/x86_64-pc-linux-gnu-library/3.5.x
+[2] /jhpce/shared/jhpce/core/conda/miniconda-3/envs/svnR-3.5.x/R/3.5.x/lib64/R/site-library
+[3] /jhpce/shared/jhpce/core/conda/miniconda-3/envs/svnR-3.5.x/R/3.5.x/lib64/R/library
+
+ V ── Loaded and on-disk version mismatch.
+**** Job ends ****
+Thu Mar 14 13:11:48 EDT 2019
