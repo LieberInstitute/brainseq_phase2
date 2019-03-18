@@ -17,15 +17,19 @@ dir.create('rdas', showWarnings = FALSE)
 ###### DLPFC ######
 ###################
 
-# GTEx
-message(paste(Sys.time(), 'loading GTEx eQTL results'))
-load("eqtl_tables/mergedEqtl_output_dlpfc_4features.rda", verbose=TRUE)
+# CAUC
+message(paste(Sys.time(), 'loading CAUC eQTL results'))
+load("eqtl_tables/mergedEqtl_output_dlpfc_gene.rda", verbose=TRUE)
 
-message(paste(Sys.time(), 'checking for NAs on the GTEx eQTL table'))
+## To avoid changing the rest of the code
+allEqtl <- geneEqtl
+rm(geneEqtl)
+
+message(paste(Sys.time(), 'checking for NAs on the CAUC eQTL table'))
 na_vec <- !is.na(allEqtl$snps) & !is.na(allEqtl$gene)
 table(na_vec)
 if(any(!na_vec)) {
-    message(paste(Sys.time(), 'removing NAs from the GTEx eQTL table'))
+    message(paste(Sys.time(), 'removing NAs from the CAUC eQTL table'))
     allEqtl <- allEqtl[na_vec, ]
 }
 
@@ -34,15 +38,12 @@ allEqtl <- data.table(as.data.frame(allEqtl))
 
 # break up into pieces
 message(paste(Sys.time(), 'breaking up by feature'))
-dlpfc_gtex_genes = allEqtl[allEqtl$Type=="Gene",]
-dlpfc_gtex_exons = allEqtl[allEqtl$Type=="Exon",]
-dlpfc_gtex_jxns = allEqtl[allEqtl$Type=="Jxn",]
-dlpfc_gtex_txs = allEqtl[allEqtl$Type=="Tx",]
+dlpfc_cauc_genes = allEqtl[allEqtl$Type=="Gene",]
 rm(allEqtl)
 
 # BrainSeq
 message(paste(Sys.time(), 'loading BrainSeq Phase II eQTL results'))
-load("../eQTL_full/eqtl_tables/mergedEqtl_output_dlpfc_4features.rda", verbose=TRUE)
+load("../eqtl_tables/mergedEqtl_output_dlpfc_4features.rda", verbose=TRUE)
 
 # keep only significant
 message(paste(Sys.time(), 'subsetting to significant results'))
@@ -56,40 +57,21 @@ proc_brainseq <- function(df) {
     return(df)
 }
 d_sig_genes = proc_brainseq(d_sig[d_sig$Type=="Gene",])
-d_sig_exons = proc_brainseq(d_sig[d_sig$Type=="Exon",])
-d_sig_jxns = proc_brainseq(d_sig[d_sig$Type=="Jxn",])
-d_sig_txs = proc_brainseq(d_sig[d_sig$Type=="Tx",])
 rm(d_sig)
 
-## subset GTEx to our results
-subset_gtex <- function(gtex, brainseq) {    
-    message(paste(Sys.time(), 'create keys: gtex'))
-    setkey(gtex, snps, gene)
+## subset CAUC to our results
+subset_cauc <- function(cauc, brainseq) {    
+    message(paste(Sys.time(), 'create keys: cauc'))
+    setkey(cauc, snps, gene)
 
-    message(paste(Sys.time(), 'subset gtex by brainseq'))
-    gtex[.(brainseq$snps, brainseq$gene)]
+    message(paste(Sys.time(), 'subset cauc by brainseq'))
+    cauc[.(brainseq$snps, brainseq$gene)]
 }
 
 message(paste(Sys.time(), 'matching gene results'))
-dlpfc_gtex_genes <- subset_gtex(dlpfc_gtex_genes, d_sig_genes)
+dlpfc_cauc_genes <- subset_cauc(dlpfc_cauc_genes, d_sig_genes)
 message(paste(Sys.time(), 'saving gene results'))
-save(dlpfc_gtex_genes,d_sig_genes, file = "rdas/dlpfc_compare_genes.rda")
-
-message(paste(Sys.time(), 'matching exon results'))
-dlpfc_gtex_exons <- subset_gtex(dlpfc_gtex_exons, d_sig_exons)
-message(paste(Sys.time(), 'saving exon results'))
-save(dlpfc_gtex_exons,d_sig_exons, file = "rdas/dlpfc_compare_exons.rda")
-
-message(paste(Sys.time(), 'matching jxn results'))
-dlpfc_gtex_jxns <- subset_gtex(dlpfc_gtex_jxns, d_sig_jxns)
-message(paste(Sys.time(), 'saving jxn results'))
-save(dlpfc_gtex_jxns,d_sig_jxns, file = "rdas/dlpfc_compare_jxns.rda")
-
-message(paste(Sys.time(), 'matching tx results'))
-dlpfc_gtex_txs <- subset_gtex(dlpfc_gtex_txs, d_sig_txs)
-message(paste(Sys.time(), 'saving tx results'))
-save(dlpfc_gtex_txs,d_sig_txs, file = "rdas/dlpfc_compare_txs.rda")
-
+save(dlpfc_cauc_genes,d_sig_genes, file = "rdas/dlpfc_compare_genes.rda")
 
 ## Reproducibility information
 print('Reproducibility information:')
