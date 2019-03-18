@@ -123,6 +123,9 @@ export_subset(dlpfc_bsp1_exons)
 export_subset(dlpfc_bsp1_jxn)
 export_subset(dlpfc_bsp1_txs)
 
+message(paste(Sys.time(), 'lines for each file'))
+system('wc -l /dcl01/lieber/ajaffe/lab/brainseq_phase2/browser/BrainSeqPhaseII_eQTL_dlpfc_replication_bsp1_*')
+
 ## Reproducibility information
 print('Reproducibility information:')
 Sys.time()
