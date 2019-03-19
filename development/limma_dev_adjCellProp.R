@@ -124,24 +124,22 @@ load_foo <- function(type) {
 
 rse <- load_foo(opt$type)
 
-tapply(colData(rse)$Neurons, colData(rse)$Region, summary)
-# $DLPFC
-#    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
-#  0.0000  0.3914  0.4484  0.4152  0.4801  0.6533
-#
-# $HIPPO
-#    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
-#  0.0000  0.3012  0.3671  0.3449  0.4057  0.5771
+## Compute summaries for each cell type by region
+summaries <- lapply(colnames(propEsts), function(cell) {
+    tapply(colData(rse)[, cell], colData(rse)$Region, summary)
+})
+names(summaries) <- colnames(propEsts)
+summaries
 
 ## To simplify later code
 pd <- as.data.frame(colData(rse))
-pd <- pd[, match(c('Age', 'fetal', 'birth', 'infant', 'child', 'teen', 'adult', 'Sex', 'snpPC1', 'snpPC2', 'snpPC3', 'snpPC4', 'snpPC5', 'Region', 'Race', 'mean_mitoRate', 'mean_totalAssignedGene', 'Neurons'), colnames(pd))]
+pd <- pd[, match(c('Age', 'fetal', 'birth', 'infant', 'child', 'teen', 'adult', 'Sex', 'snpPC1', 'snpPC2', 'snpPC3', 'snpPC4', 'snpPC5', 'Region', 'Race', 'mean_mitoRate', 'mean_totalAssignedGene', colnames(propEsts)), colnames(pd))]
 
 ## Define models
-fm_mod <-  ~Age + fetal + birth + infant + child + teen + adult + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + Neurons
-fm_mod0 <- ~ Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + Neurons
-fm_mod_all <- ~Age *Region + fetal * Region + birth *Region + infant *Region + child * Region + teen * Region + adult * Region + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + Neurons
-fm_mod0_all <- ~ Age + fetal + birth + infant + child + teen + adult + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + Neurons
+fm_mod <-  ~Age + fetal + birth + infant + child + teen + adult + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + Fetal_replicating + Fetal_quiescent + OPC + Neurons + Astrocytes + Oligodendrocytes + Microglia + Endothelial
+fm_mod0 <- ~ Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + Fetal_replicating + Fetal_quiescent + OPC + Neurons + Astrocytes + Oligodendrocytes + Microglia + Endothelial
+fm_mod_all <- ~Age *Region + fetal * Region + birth *Region + infant *Region + child * Region + teen * Region + adult * Region + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + Fetal_replicating + Fetal_quiescent + OPC + Neurons + Astrocytes + Oligodendrocytes + Microglia + Endothelial
+fm_mod0_all <- ~ Age + fetal + birth + infant + child + teen + adult + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + Fetal_replicating + Fetal_quiescent + OPC + Neurons + Astrocytes + Oligodendrocytes + Microglia + Endothelial
 
 
 get_mods <- function(pd, int = FALSE) {    
@@ -168,7 +166,7 @@ stopifnot(is.fullrank(design))
 if(opt$type != 'tx') {
     dge <- DGEList(counts = assays(rse)$counts)
     dge <- calcNormFactors(dge)
-    pdf(paste0('pdf/limma_dev_interaction_adjNeunProp_', opt$type, '.pdf'))
+    pdf(paste0('pdf/limma_dev_interaction_adjCellProp_', opt$type, '.pdf'))
     v <- voom(dge, design, plot = TRUE)
     dev.off()
     
@@ -202,7 +200,7 @@ top <- topTable(fit, coef = grep(':', colnames(design)), n = nrow(rse),
     sort.by = 'none')
 
 save(corfit, fit, top, exprsNorm,
-    file = paste0('rda/limma_dev_interaction_adjNeunProp_', opt$type, '.Rdata'))
+    file = paste0('rda/limma_dev_interaction_adjCellProp_', opt$type, '.Rdata'))
 
 ## Reproducibility information
 print('Reproducibility information:')
