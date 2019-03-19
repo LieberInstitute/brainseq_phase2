@@ -1,5 +1,5 @@
 library('data.table')
-library('devtools')
+library('sessioninfo')
 
 ## Load subsets of data
 files_sub <- dir('rdas', pattern = '_compare_', full.names = TRUE)
@@ -49,7 +49,7 @@ comp_qtl <- function(type, dfs, perc = FALSE, cutde = 0.01) {
         print(table(is.na(df$bsp1_statistic)))
     }
     
-    res <- addmargins(table(sign(df$statistic) == sign(df$cauc_statistic),  df$cauc_pvalue < cutde, dnn = c('Equal sign', paste0('CAUC p<', cutde))))
+    res <- addmargins(table(sign(df$statistic) == sign(df$bsp1_statistic),  df$bsp1_pvalue < cutde, dnn = c('Equal sign', paste0('BSP1 p<', cutde))))
     if(!perc) return(res)
     
     ## Calculate percent over all of brainseq
@@ -62,44 +62,20 @@ comp_qtl_short <- function(dfs, perc = FALSE, cutde = 0.01) {
     return(res)
 }
 
-## Troubleshooting...
-# dfs <- dlpfc
-# perc <- FALSE
-# cutde <- 0.01
-# type <- 'exon'
-#
-# > purrr::map(dfs, ~table(is.na(.x$bsp1_statistic)))
-# $gene
+comp_qtl_short(dlpfc)
+# 2019-03-19 16:11:38 removing some NAs from BSP1 (TRUEs below) for type gene
 #
 #   FALSE    TRUE
 # 1514240   63723
-#
-# $exon
-#
-#    TRUE
-# 8928309
-#
-# $jxn
-#
-#    TRUE
-# 5260126
-#
-# $tx
+# 2019-03-19 16:11:39 removing some NAs from BSP1 (TRUEs below) for type exon
 #
 #   FALSE    TRUE
-# 2191553   79711
-
-## Ahh.... exons don't match because the ids got switch to gencode ids
-## at https://github.com/LieberInstitute/brainseq_phase2/blob/master/browser/extract_data_bsp1.R#L25-L27
-## The junctions don't match because BSP1 is unstranded and BSP2 is stranded, so the ids don't match 1-1
-## (even after removing the portion of the strand info from the name)
-
-comp_qtl_short(dlpfc[c('gene', 'tx')])
-# 2019-03-18 13:42:29 removing some NAs from BSP1 (TRUEs below) for type gene
+# 8620980  307329
+# 2019-03-19 16:11:47 removing some NAs from BSP1 (TRUEs below) for type jxn
 #
 #   FALSE    TRUE
-# 1514240   63723
-# 2019-03-18 13:42:32 removing some NAs from BSP1 (TRUEs below) for type tx
+# 4639633  620493
+# 2019-03-19 16:11:52 removing some NAs from BSP1 (TRUEs below) for type tx
 #
 #   FALSE    TRUE
 # 2191553   79711
@@ -110,6 +86,20 @@ comp_qtl_short(dlpfc[c('gene', 'tx')])
 #      TRUE   218108 1216944 1435052
 #      Sum    276010 1238230 1514240
 #
+# $exon
+#           BSP1 p<0.01
+# Equal sign   FALSE    TRUE     Sum
+#      FALSE  353861   96471  450332
+#      TRUE  1237307 6933341 8170648
+#      Sum   1591168 7029812 8620980
+#
+# $jxn
+#           BSP1 p<0.01
+# Equal sign   FALSE    TRUE     Sum
+#      FALSE  177156   20938  198094
+#      TRUE   811865 3629674 4441539
+#      Sum    989021 3650612 4639633
+#
 # $tx
 #           BSP1 p<0.01
 # Equal sign   FALSE    TRUE     Sum
@@ -117,7 +107,7 @@ comp_qtl_short(dlpfc[c('gene', 'tx')])
 #      TRUE   340420 1741656 2082076
 #      Sum    431202 1760351 2191553
 
-comp_qtl_short(dlpfc[c('gene', 'tx')], perc = TRUE)
+comp_qtl_short(dlpfc, perc = TRUE)
 # $gene
 #           BSP1 p<0.01
 # Equal sign     FALSE      TRUE       Sum
@@ -131,14 +121,58 @@ comp_qtl_short(dlpfc[c('gene', 'tx')], perc = TRUE)
 #      FALSE  3.996981  0.823110  4.820091
 #      TRUE  14.988130 76.682235 91.670365
 #      Sum   18.985111 77.505345 96.490456
+#
+# > comp_qtl_short(dlpfc, perc = TRUE)
+# $gene
+#           BSP1 p<0.01
+# Equal sign     FALSE      TRUE       Sum
+#      FALSE  3.669414  1.348954  5.018369
+#      TRUE  13.822124 77.121200 90.943324
+#      Sum   17.491538 78.470154 95.961692
+#
+# $exon
+#           BSP1 p<0.01
+# Equal sign     FALSE      TRUE       Sum
+#      FALSE  3.963360  1.080507  5.043867
+#      TRUE  13.858246 77.655702 91.513947
+#      Sum   17.821605 78.736209 96.557814
+#
+# $jxn
+#           BSP1 p<0.01
+# Equal sign      FALSE       TRUE        Sum
+#      FALSE  3.3679041  0.3980513  3.7659554
+#      TRUE  15.4343261 69.0035562 84.4378823
+#      Sum   18.8022302 69.4016075 88.2038377
+#
+# $tx
+#           BSP1 p<0.01
+# Equal sign     FALSE      TRUE       Sum
+#      FALSE  3.996981  0.823110  4.820091
+#      TRUE  14.988130 76.682235 91.670365
+#      Sum   18.985111 77.505345 96.490456
 
 
-comp_qtl_short(dlpfc[c('gene', 'tx')], cutde = 0.05)
+comp_qtl_short(dlpfc, cutde = 0.05)
+# $gene
 #           BSP1 p<0.05
 # Equal sign   FALSE    TRUE     Sum
 #      FALSE   51983   27205   79188
 #      TRUE   144519 1290533 1435052
 #      Sum    196502 1317738 1514240
+#
+# $exon
+#           BSP1 p<0.05
+# Equal sign   FALSE    TRUE     Sum
+#      FALSE  314920  135412  450332
+#      TRUE   837198 7333450 8170648
+#      Sum   1152118 7468862 8620980
+#
+# $jxn
+#           BSP1 p<0.05
+# Equal sign   FALSE    TRUE     Sum
+#      FALSE  165798   32296  198094
+#      TRUE   571094 3870445 4441539
+#      Sum    736892 3902741 4639633
 #
 # $tx
 #           BSP1 p<0.05
@@ -147,13 +181,27 @@ comp_qtl_short(dlpfc[c('gene', 'tx')], cutde = 0.05)
 #      TRUE   237753 1844323 2082076
 #      Sum    321806 1869747 2191553
 
-comp_qtl_short(dlpfc[c('gene', 'tx')], perc = TRUE, cutde = 0.05)
+comp_qtl_short(dlpfc, perc = TRUE, cutde = 0.05)
 # $gene
 #           BSP1 p<0.05
 # Equal sign     FALSE      TRUE       Sum
 #      FALSE  3.294310  1.724058  5.018369
 #      TRUE   9.158580 81.784744 90.943324
 #      Sum   12.452890 83.508802 95.961692
+#
+# $exon
+#           BSP1 p<0.05
+# Equal sign     FALSE      TRUE       Sum
+#      FALSE  3.527208  1.516659  5.043867
+#      TRUE   9.376893 82.137054 91.513947
+#      Sum   12.904101 83.653713 96.557814
+#
+# $jxn
+#           BSP1 p<0.05
+# Equal sign      FALSE       TRUE        Sum
+#      FALSE  3.1519777  0.6139777  3.7659554
+#      TRUE  10.8570403 73.5808420 84.4378823
+#      Sum   14.0090180 74.1948197 88.2038377
 #
 # $tx
 #           BSP1 p<0.05
@@ -180,23 +228,18 @@ session_info()
 #  collate  en_US.UTF-8
 #  ctype    en_US.UTF-8
 #  tz       US/Eastern
-#  date     2019-03-18
+#  date     2019-03-19
 #
 # ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 #  package     * version date       lib source
 #  assertthat    0.2.0   2017-04-11 [2] CRAN (R 3.5.0)
-#  backports     1.1.3   2018-12-14 [2] CRAN (R 3.5.1)
-#  callr         3.1.1   2018-12-21 [2] CRAN (R 3.5.1)
 #  cli           1.0.1   2018-09-25 [1] CRAN (R 3.5.1)
 #  colorout    * 1.2-0   2018-05-02 [1] Github (jalvesaq/colorout@c42088d)
 #  colorspace    1.4-0   2019-01-13 [2] CRAN (R 3.5.1)
 #  crayon        1.3.4   2017-09-16 [1] CRAN (R 3.5.0)
 #  data.table  * 1.12.0  2019-01-13 [1] CRAN (R 3.5.1)
-#  desc          1.2.0   2018-05-01 [2] CRAN (R 3.5.1)
-#  devtools    * 2.0.1   2018-10-26 [1] CRAN (R 3.5.1)
 #  digest        0.6.18  2018-10-10 [1] CRAN (R 3.5.1)
 #  dplyr         0.8.0.1 2019-02-15 [1] CRAN (R 3.5.1)
-#  fs            1.2.6   2018-08-23 [2] CRAN (R 3.5.1)
 #  ggplot2       3.1.0   2018-10-25 [1] CRAN (R 3.5.1)
 #  glue          1.3.1   2019-03-12 [1] CRAN (R 3.5.1)
 #  gtable        0.2.0   2016-02-26 [2] CRAN (R 3.5.0)
@@ -208,32 +251,22 @@ session_info()
 #  lattice       0.20-38 2018-11-04 [3] CRAN (R 3.5.1)
 #  lazyeval      0.2.1   2017-10-29 [2] CRAN (R 3.5.0)
 #  magrittr      1.5     2014-11-22 [1] CRAN (R 3.5.0)
-#  memoise       1.1.0   2017-04-21 [2] CRAN (R 3.5.0)
 #  munsell       0.5.0   2018-06-12 [2] CRAN (R 3.5.1)
 #  pillar        1.3.1   2018-12-15 [1] CRAN (R 3.5.1)
-#  pkgbuild      1.0.2   2018-10-16 [2] CRAN (R 3.5.1)
 #  pkgconfig     2.0.2   2018-08-16 [1] CRAN (R 3.5.1)
-#  pkgload       1.0.2   2018-10-29 [2] CRAN (R 3.5.1)
 #  plyr          1.8.4   2016-06-08 [2] CRAN (R 3.5.0)
 #  png           0.1-7   2013-12-03 [2] CRAN (R 3.5.0)
-#  prettyunits   1.0.2   2015-07-13 [1] CRAN (R 3.5.0)
-#  processx      3.3.0   2019-03-10 [1] CRAN (R 3.5.1)
 #  promises      1.0.1   2018-04-13 [2] CRAN (R 3.5.0)
-#  ps            1.3.0   2018-12-21 [2] CRAN (R 3.5.1)
 #  purrr         0.3.1   2019-03-03 [2] CRAN (R 3.5.1)
 #  R6            2.4.0   2019-02-14 [2] CRAN (R 3.5.1)
 #  Rcpp          1.0.0   2018-11-07 [1] CRAN (R 3.5.1)
-#  remotes       2.0.2   2018-10-30 [1] CRAN (R 3.5.1)
 #  rlang         0.3.1   2019-01-08 [1] CRAN (R 3.5.1)
 #  rmote       * 0.3.4   2018-05-02 [1] deltarho (R 3.5.0)
-#  rprojroot     1.3-2   2018-01-03 [2] CRAN (R 3.5.0)
 #  scales        1.0.0   2018-08-09 [2] CRAN (R 3.5.1)
 #  servr         0.13    2019-03-04 [1] CRAN (R 3.5.1)
-#  sessioninfo   1.1.1   2018-11-05 [1] CRAN (R 3.5.1)
-#  testthat      2.0.1   2018-10-13 [1] CRAN (R 3.5.1)
+#  sessioninfo * 1.1.1   2018-11-05 [1] CRAN (R 3.5.1)
 #  tibble        2.0.1   2019-01-12 [1] CRAN (R 3.5.1)
 #  tidyselect    0.2.5   2018-10-11 [2] CRAN (R 3.5.1)
-#  usethis     * 1.4.0   2018-08-14 [2] CRAN (R 3.5.1)
 #  withr         2.1.2   2018-03-15 [2] CRAN (R 3.5.0)
 #  xfun          0.5     2019-02-20 [1] CRAN (R 3.5.1)
 #
