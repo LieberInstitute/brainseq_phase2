@@ -3,7 +3,7 @@ eQTL CAUC-only sensitivity analysis
 
 We carried out our eQTL analyses using a mixed population of subjects, most of which are either from AA or CAUC races, while adjusting for quantitative genomic ancestry components. This analysis design is in line with our previous work (Jaffe et al 2018). The statistical power gains by combined analysis, coupled with the overall lack of eQTL effect estimates by race, motivated these combined analyses here.
 
-We however ran a sensitivity analysis by subsetting each of our eQTL models (DLPFC, HIPPO and interaction between the two brain regions) to just the CAUC samples (43.8 to 46.1% of the original sample size, see table below) at the gene expression feature level. We still adjusted for quantitative genomic ancestry components despite using individuals from the same race given their heterogeneous ancestry.
+We however ran a sensitivity analysis by subsetting each of our eQTL models (DLPFC, HIPPO and interaction between the two brain regions) to just the CAUC samples (43.8 to 46.1% of the original sample size, see table below) at the gene expression feature level. We still adjusted for quantitative genomic ancestry components despite using individuals from the same race given their heterogeneous ancestry and being genotyped across multiple array platforms.
 
 ```{r}
 sample_sizes
