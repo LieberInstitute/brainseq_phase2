@@ -1,6 +1,6 @@
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=50G,h_vmem=50G,h_fsize=200G
+#$ -l mem_free=45G,h_vmem=45G,h_fsize=200G
 #$ -N hippo_subset_cauc
 #$ -o logs/hippo_subset_cauc.txt
 #$ -e logs/hippo_subset_cauc.txt
