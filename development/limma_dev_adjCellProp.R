@@ -136,10 +136,10 @@ pd <- as.data.frame(colData(rse))
 pd <- pd[, match(c('Age', 'fetal', 'birth', 'infant', 'child', 'teen', 'adult', 'Sex', 'snpPC1', 'snpPC2', 'snpPC3', 'snpPC4', 'snpPC5', 'Region', 'Race', 'mean_mitoRate', 'mean_totalAssignedGene', colnames(propEsts)), colnames(pd))]
 
 ## Define models
-fm_mod <-  ~Age + fetal + birth + infant + child + teen + adult + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + Fetal_replicating + Fetal_quiescent + OPC + Neurons + Astrocytes + Oligodendrocytes + Microglia + Endothelial
-fm_mod0 <- ~ Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + Fetal_replicating + Fetal_quiescent + OPC + Neurons + Astrocytes + Oligodendrocytes + Microglia + Endothelial
-fm_mod_all <- ~Age *Region + fetal * Region + birth *Region + infant *Region + child * Region + teen * Region + adult * Region + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + Fetal_replicating + Fetal_quiescent + OPC + Neurons + Astrocytes + Oligodendrocytes + Microglia + Endothelial
-fm_mod0_all <- ~ Age + fetal + birth + infant + child + teen + adult + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + Fetal_replicating + Fetal_quiescent + OPC + Neurons + Astrocytes + Oligodendrocytes + Microglia + Endothelial
+fm_mod <-  ~Age + fetal + birth + infant + child + teen + adult + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + Fetal_replicating + Fetal_quiescent + OPC + Neurons + Astrocytes + Oligodendrocytes + Microglia
+fm_mod0 <- ~ Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + Fetal_replicating + Fetal_quiescent + OPC + Neurons + Astrocytes + Oligodendrocytes + Microglia
+fm_mod_all <- ~Age *Region + fetal * Region + birth *Region + infant *Region + child * Region + teen * Region + adult * Region + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + Fetal_replicating + Fetal_quiescent + OPC + Neurons + Astrocytes + Oligodendrocytes + Microglia
+fm_mod0_all <- ~ Age + fetal + birth + infant + child + teen + adult + Sex + Region + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + Fetal_replicating + Fetal_quiescent + OPC + Neurons + Astrocytes + Oligodendrocytes + Microglia
 
 
 get_mods <- function(pd, int = FALSE) {    
