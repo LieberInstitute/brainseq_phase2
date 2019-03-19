@@ -1,12 +1,12 @@
 library('data.table')
-library('devtools')
+library('sessioninfo')
 library('SummarizedExperiment')
 
 setDTthreads(1)
 
 ## Load subsets of data
-files_sub <- dir('rdas', pattern = '_compare_', full.names = TRUE)
-stopifnot(length(files_sub) == 3)
+files_sub <- dir('rdas', pattern = '_compare_|_sig_genes_', full.names = TRUE)
+stopifnot(length(files_sub) == 6)
 for(f in files_sub) {
     message(paste(Sys.time(), 'loading', f))
     load(f, verbose = TRUE)
@@ -64,7 +64,7 @@ comp_qtl <- function(type, dfs, perc = FALSE, cutde = 0.01) {
         print(table(is.na(df$cauc_statistic)))
     }
     
-    res <- addmargins(table(sign(df$statistic) == sign(df$cauc_statistic),  df$cauc_pvalue < cutde, dnn = c('Equal sign', paste0('CAUC p<', cutde))))
+    res <- addmargins(table(sign(df$statistic) == sign(df$cauc_statistic),  df$cauc_pvalue < cutde, dnn = c('Equal sign', paste0('CAUC p<', cutde)), useNA = 'ifany'))
     if(!perc) return(res)
     
     ## Calculate percent over all of brainseq
@@ -109,6 +109,31 @@ comp_qtl_short(interaction, perc = TRUE, cutde = 0.05)
 #      TRUE    8.358276  87.201936  95.560212
 #      Sum    12.798064  87.201936 100.000000
 
+or_chisq <- function(x) {
+    x <- x[1:2, 1:2]
+    list(
+        'OR' = jaffelab::getOR(x),
+        'chisq.test' = chisq.test(x),
+        'p.value' = chisq.test(x)$p.value
+    )
+}
+
+or_chisq(comp_qtl_short(interaction, cutde = 0.05)[[1]])
+# $OR
+# [1] Inf
+#
+# $chisq.test
+#
+#     Pearson's Chi-squared test with Yates' continuity correction
+#
+# data:  x
+# X-squared = 12684, df = 1, p-value < 2.2e-16
+#
+#
+# $p.value
+# [1] 0
+
+
 comp_qtl_short(hippo)
 # $gene
 #           CAUC p<0.01
@@ -141,6 +166,21 @@ comp_qtl_short(hippo, perc = TRUE, cutde = 0.05)
 #      TRUE   11.37103724  83.09190106  94.46293829
 #      Sum    16.86422188  83.13577812 100.00000000
 
+or_chisq(comp_qtl_short(hippo, cutde = 0.05)[[1]])
+# $OR
+# [1] 914.8403
+#
+# $chisq.test
+#
+#     Pearson's Chi-squared test with Yates' continuity correction
+#
+# data:  x
+# X-squared = 304940, df = 1, p-value < 2.2e-16
+#
+#
+# $p.value
+# [1] 0
+
 comp_qtl_short(dlpfc)
 # $gene
 #           CAUC p<0.01
@@ -172,6 +212,166 @@ comp_qtl_short(dlpfc, perc = TRUE, cutde = 0.05)
 #      FALSE   5.85596747   0.04740289   5.90337036
 #      TRUE   11.75502848  82.34160117  94.09662964
 #      Sum    17.61099595  82.38900405 100.00000000
+
+or_chisq(comp_qtl_short(dlpfc, cutde = 0.05)[[1]])
+# $OR
+# [1] 865.3454
+#
+# $chisq.test
+#
+#     Pearson's Chi-squared test with Yates' continuity correction
+#
+# data:  x
+# X-squared = 454150, df = 1, p-value < 2.2e-16
+#
+#
+# $p.value
+# [1] 0
+
+
+## For testing
+# cauc <- i_sig_genes_cauc
+# brainseq <- i_sig_genes
+
+## This is the reverse of subset_cauc() defined
+## in the results_subset_*.R scripts
+##
+## subset BrainSeq based on CAUC
+subset_brainseq <- function(cauc, brainseq) {    
+    message(paste(Sys.time(), 'create keys: brainseq'))
+    setkey(brainseq, snps, gene)
+
+    message(paste(Sys.time(), 'subset brainseq by cauc'))
+    brainseq[.(cauc$snps, cauc$gene)]
+}
+
+
+merge_qtl_rev <- function(cauc, brainseq) {
+    ## Match CAUC to BrainSeq
+    brainseq <- subset_brainseq(cauc, brainseq)
+    
+    ## All should be in the same order
+    stopifnot(identical(cauc$snps, brainseq$snps))
+    stopifnot(identical(cauc$gene, brainseq$gene))
+    
+    ## Use the latest Symbol info from CAUC files
+    brainseq$Symbol <- cauc$Symbol
+    
+    ## Keep only a few CAUC columns
+    to_add <- cauc[, c('statistic', 'pvalue', 'FDR', 'beta')]
+    colnames(to_add) <- paste0('cauc_', colnames(to_add))
+    
+    ## Combine
+    cbind(brainseq, to_add)
+}
+
+## Merge (reverse)
+message(paste(Sys.time(), 'merging interaction QTLs (from CAUC)'))
+cauc_sig <- list(
+    'interaction' = merge_qtl_rev(i_sig_genes_cauc, i_sig_genes),
+    'dlpfc' = merge_qtl_rev(d_sig_genes_cauc, d_sig_genes),
+    'hippo' = merge_qtl_rev(h_sig_genes_cauc, h_sig_genes)
+)
+sapply(cauc_sig, nrow)
+# interaction       dlpfc       hippo
+#       11062      844726      573296
+
+## How many of the FDR<1% CAUC eQTLs are FDR<1% BrainSeq Phase II eQTLs
+add_prefix <- function(x, prefix) {
+    y <- t(x)
+    colnames(y) <- paste0(prefix, '_', rownames(x))
+    return(y)
+}
+cauc_sig_in_brainseq <- sapply(cauc_sig, function(x) table(!is.na(x$statistic)))
+cauc_sig_in_brainseq_perc <- sweep(cauc_sig_in_brainseq, 2, 1 / sapply(cauc_sig, nrow) * 100, '*')
+
+(cauc_sig_in_brainseq_tab <- cbind(add_prefix(cauc_sig_in_brainseq, 'N'), add_prefix(cauc_sig_in_brainseq_perc, 'Percent')))
+#             N_FALSE N_TRUE Percent_FALSE Percent_TRUE
+# interaction    2393   8669      21.63262     78.36738
+# dlpfc        124627 720099      14.75354     85.24646
+# hippo         87323 485973      15.23175     84.76825
+
+message(paste(Sys.time(), 'saving merged QTLs (from CAUC)'))
+save(cauc_sig, file = 'rdas/merged_CAUC_BrainSeq_QTLs_CAUC_sig.Rdata')
+
+
+
+comp_qtl_rev <- function(type, dfs, perc = FALSE) {
+    df <- dfs[[type]]
+    
+    res <- addmargins(table(sign(df$statistic) == sign(df$cauc_statistic),  !is.na(df$statistic), dnn = c('Equal sign', 'BrainSeq FDR<1%'), useNA = 'ifany'))
+    if(!perc) return(res)
+    
+    ## Calculate percent over all of brainseq
+    ## the total marginal will not be 100% unless there were no NAs
+    round(res / nrow(df) * 100, 5)
+}
+comp_qtl_short_rev <- function(dfs, perc = FALSE) {
+    res <- lapply(names(dfs), comp_qtl_rev, dfs = dfs, perc = perc)
+    names(res) <- names(dfs)
+    return(res)
+}
+
+
+
+## These run, but are not informative
+# comp_qtl_short(cauc_sig, cutde = 0.05)
+# comp_qtl_short(cauc_sig, cutde = 0.05, perc = TRUE)
+
+comp_qtl_short_rev(cauc_sig)
+# $interaction
+#           BrainSeq FDR<1%
+# Equal sign FALSE  TRUE   Sum
+#       TRUE     0  8669  8669
+#       <NA>  2393     0  2393
+#       Sum   2393  8669 11062
+#
+# $dlpfc
+#           BrainSeq FDR<1%
+# Equal sign  FALSE   TRUE    Sum
+#      FALSE      0     50     50
+#      TRUE       0 720049 720049
+#      <NA>  124627      0 124627
+#      Sum   124627 720099 844726
+#
+# $hippo
+#           BrainSeq FDR<1%
+# Equal sign  FALSE   TRUE    Sum
+#      FALSE      0     31     31
+#      TRUE       0 485942 485942
+#      <NA>   87323      0  87323
+#      Sum    87323 485973 573296
+comp_qtl_short_rev(cauc_sig, perc = TRUE)
+# $interaction
+#           BrainSeq FDR<1%
+# Equal sign     FALSE      TRUE       Sum
+#       TRUE   0.00000  78.36738  78.36738
+#       <NA>  21.63262   0.00000  21.63262
+#       Sum   21.63262  78.36738 100.00000
+#
+# $dlpfc
+#           BrainSeq FDR<1%
+# Equal sign     FALSE      TRUE       Sum
+#      FALSE   0.00000   0.00592   0.00592
+#      TRUE    0.00000  85.24054  85.24054
+#      <NA>   14.75354   0.00000  14.75354
+#      Sum    14.75354  85.24646 100.00000
+#
+# $hippo
+#           BrainSeq FDR<1%
+# Equal sign     FALSE      TRUE       Sum
+#      FALSE   0.00000   0.00541   0.00541
+#      TRUE    0.00000  84.76285  84.76285
+#      <NA>   15.23175   0.00000  15.23175
+#      Sum    15.23175  84.76825 100.00000
+
+## Percet of those that are FDR<1% in both that have either unequal t-stat signs (first row) or equal signs
+e_sign_perc <- sapply(comp_qtl_short_rev(cauc_sig)[2:3], function(x) { y  <- x[1, 2] / x[4, 2] * 100 ; return(c(y, 100 - y))})
+rownames(e_sign_perc) <- c('FALSE', 'TRUE')
+e_sign_perc
+#             dlpfc        hippo
+# FALSE  0.00694349  0.006378955
+# TRUE  99.99305651 99.993621045
 
 
 ## Get original and new sample sizes
@@ -226,28 +426,23 @@ session_info()
 #  collate  en_US.UTF-8
 #  ctype    en_US.UTF-8
 #  tz       US/Eastern
-#  date     2019-03-18
+#  date     2019-03-19
 #
 # ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 #  package              * version   date       lib source
 #  assertthat             0.2.0     2017-04-11 [2] CRAN (R 3.5.0)
-#  backports              1.1.3     2018-12-14 [2] CRAN (R 3.5.1)
 #  Biobase              * 2.42.0    2018-10-30 [2] Bioconductor
 #  BiocGenerics         * 0.28.0    2018-10-30 [1] Bioconductor
 #  BiocParallel         * 1.16.6    2019-02-10 [1] Bioconductor
 #  bitops                 1.0-6     2013-08-17 [2] CRAN (R 3.5.0)
-#  callr                  3.1.1     2018-12-21 [2] CRAN (R 3.5.1)
 #  cli                    1.0.1     2018-09-25 [1] CRAN (R 3.5.1)
 #  colorout             * 1.2-0     2018-05-02 [1] Github (jalvesaq/colorout@c42088d)
 #  colorspace             1.4-0     2019-01-13 [2] CRAN (R 3.5.1)
 #  crayon                 1.3.4     2017-09-16 [1] CRAN (R 3.5.0)
 #  data.table           * 1.12.0    2019-01-13 [1] CRAN (R 3.5.1)
 #  DelayedArray         * 0.8.0     2018-10-30 [2] Bioconductor
-#  desc                   1.2.0     2018-05-01 [2] CRAN (R 3.5.1)
-#  devtools             * 2.0.1     2018-10-26 [1] CRAN (R 3.5.1)
 #  digest                 0.6.18    2018-10-10 [1] CRAN (R 3.5.1)
 #  dplyr                  0.8.0.1   2019-02-15 [1] CRAN (R 3.5.1)
-#  fs                     1.2.6     2018-08-23 [2] CRAN (R 3.5.1)
 #  GenomeInfoDb         * 1.18.2    2019-02-12 [1] Bioconductor
 #  GenomeInfoDbData       1.2.0     2018-11-02 [2] Bioconductor
 #  GenomicRanges        * 1.34.0    2018-10-30 [1] Bioconductor
@@ -258,42 +453,37 @@ session_info()
 #  htmlwidgets            1.3       2018-09-30 [1] CRAN (R 3.5.1)
 #  httpuv                 1.4.5.1   2018-12-18 [2] CRAN (R 3.5.1)
 #  IRanges              * 2.16.0    2018-10-30 [1] Bioconductor
+#  jaffelab               0.99.21   2018-05-03 [1] Github (LieberInstitute/jaffelab@7ed0ab7)
 #  jsonlite               1.6       2018-12-07 [2] CRAN (R 3.5.1)
 #  later                  0.8.0     2019-02-11 [2] CRAN (R 3.5.1)
 #  lattice                0.20-38   2018-11-04 [3] CRAN (R 3.5.1)
 #  lazyeval               0.2.1     2017-10-29 [2] CRAN (R 3.5.0)
+#  limma                  3.38.3    2018-12-02 [1] Bioconductor
 #  magrittr               1.5       2014-11-22 [1] CRAN (R 3.5.0)
 #  Matrix                 1.2-15    2018-11-01 [3] CRAN (R 3.5.1)
 #  matrixStats          * 0.54.0    2018-07-23 [1] CRAN (R 3.5.1)
-#  memoise                1.1.0     2017-04-21 [2] CRAN (R 3.5.0)
 #  munsell                0.5.0     2018-06-12 [2] CRAN (R 3.5.1)
 #  pillar                 1.3.1     2018-12-15 [1] CRAN (R 3.5.1)
-#  pkgbuild               1.0.2     2018-10-16 [2] CRAN (R 3.5.1)
 #  pkgconfig              2.0.2     2018-08-16 [1] CRAN (R 3.5.1)
-#  pkgload                1.0.2     2018-10-29 [2] CRAN (R 3.5.1)
 #  plyr                   1.8.4     2016-06-08 [2] CRAN (R 3.5.0)
 #  png                    0.1-7     2013-12-03 [2] CRAN (R 3.5.0)
-#  prettyunits            1.0.2     2015-07-13 [1] CRAN (R 3.5.0)
-#  processx               3.3.0     2019-03-10 [1] CRAN (R 3.5.1)
 #  promises               1.0.1     2018-04-13 [2] CRAN (R 3.5.0)
-#  ps                     1.3.0     2018-12-21 [2] CRAN (R 3.5.1)
 #  purrr                  0.3.1     2019-03-03 [2] CRAN (R 3.5.1)
 #  R6                     2.4.0     2019-02-14 [2] CRAN (R 3.5.1)
+#  rafalib                1.0.0     2015-08-09 [1] CRAN (R 3.5.0)
+#  RColorBrewer           1.1-2     2014-12-07 [2] CRAN (R 3.5.0)
 #  Rcpp                   1.0.0     2018-11-07 [1] CRAN (R 3.5.1)
 #  RCurl                  1.95-4.12 2019-03-04 [2] CRAN (R 3.5.1)
-#  remotes                2.0.2     2018-10-30 [1] CRAN (R 3.5.1)
 #  rlang                  0.3.1     2019-01-08 [1] CRAN (R 3.5.1)
 #  rmote                * 0.3.4     2018-05-02 [1] deltarho (R 3.5.0)
-#  rprojroot              1.3-2     2018-01-03 [2] CRAN (R 3.5.0)
 #  S4Vectors            * 0.20.1    2018-11-09 [1] Bioconductor
 #  scales                 1.0.0     2018-08-09 [2] CRAN (R 3.5.1)
+#  segmented              0.5-3.0   2017-11-30 [2] CRAN (R 3.5.0)
 #  servr                  0.13      2019-03-04 [1] CRAN (R 3.5.1)
-#  sessioninfo            1.1.1     2018-11-05 [1] CRAN (R 3.5.1)
+#  sessioninfo          * 1.1.1     2018-11-05 [1] CRAN (R 3.5.1)
 #  SummarizedExperiment * 1.12.0    2018-10-30 [1] Bioconductor
-#  testthat               2.0.1     2018-10-13 [1] CRAN (R 3.5.1)
 #  tibble                 2.0.1     2019-01-12 [1] CRAN (R 3.5.1)
 #  tidyselect             0.2.5     2018-10-11 [2] CRAN (R 3.5.1)
-#  usethis              * 1.4.0     2018-08-14 [2] CRAN (R 3.5.1)
 #  withr                  2.1.2     2018-03-15 [2] CRAN (R 3.5.0)
 #  xfun                   0.5       2019-02-20 [1] CRAN (R 3.5.1)
 #  XVector                0.22.0    2018-10-30 [1] Bioconductor

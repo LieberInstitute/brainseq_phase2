@@ -1,12 +1,12 @@
 Loading git
 Adding LIBD modules
 **** Job starts ****
-Mon Mar 18 13:36:04 EDT 2019
+Tue Mar 19 11:30:05 EDT 2019
 **** JHPCE info ****
 User: lcollado
-Job id: 6768398
+Job id: 6780006
 Job name: hippo_subset_cauc
-Hostname: compute-113
+Hostname: compute-065
 Task id: 
 Loading required package: GenomicRanges
 Loading required package: stats4
@@ -93,29 +93,30 @@ The following objects are masked from ‘package:S4Vectors’:
 
     first, second
 
-2019-03-18 13:36:14 loading CAUC eQTL results
+2019-03-19 11:30:18 loading CAUC eQTL results
 Loading objects:
   geneEqtl
-2019-03-18 13:50:57 checking for NAs on the CAUC eQTL table
+2019-03-19 11:48:59 checking for NAs on the CAUC eQTL table
 na_vec
     TRUE 
 58934905 
-2019-03-18 13:51:39 convert to a data.table
-2019-03-18 13:55:22 breaking up by feature
-2019-03-18 13:56:00 loading BrainSeq Phase II eQTL results
+2019-03-19 11:50:20 convert to a data.table
+2019-03-19 11:59:32 breaking up by feature
+2019-03-19 12:01:16 loading BrainSeq Phase II eQTL results
 Loading objects:
   allEqtl
-2019-03-18 13:59:55 subsetting to significant results
-2019-03-18 14:00:10 breaking up by feature
-2019-03-18 14:00:10 setting keys
-2019-03-18 14:00:12 matching gene results
-2019-03-18 14:00:12 create keys: cauc
-2019-03-18 14:00:42 subset cauc by brainseq
-2019-03-18 14:00:45 saving gene results
+2019-03-19 12:07:00 subsetting to significant results
+2019-03-19 12:07:19 breaking up by feature
+2019-03-19 12:07:19 setting keys
+2019-03-19 12:07:22 subsetting and saving FDR<1% CAUC-only results
+2019-03-19 12:07:44 matching gene results
+2019-03-19 12:07:44 create keys: cauc
+2019-03-19 12:09:12 subset cauc by brainseq
+2019-03-19 12:09:16 saving gene results
 [1] "Reproducibility information:"
-[1] "2019-03-18 14:01:54 EDT"
+[1] "2019-03-19 12:11:06 EDT"
     user   system  elapsed 
-1524.846   23.280 1549.348 
+1876.968   31.720 2461.339 
 ─ Session info ───────────────────────────────────────────────────────────────────────────────────────────────────────
  setting  value                                                 
  version  R version 3.5.1 Patched (2018-10-29 r75535)           
@@ -126,7 +127,7 @@ Loading objects:
  collate  en_US.UTF-8                                           
  ctype    en_US.UTF-8                                           
  tz       US/Eastern                                            
- date     2019-03-18                                            
+ date     2019-03-19                                            
 
 ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
  package              * version   date       lib source                                   
@@ -184,4 +185,4 @@ Loading objects:
 [2] /jhpce/shared/jhpce/core/conda/miniconda-3/envs/svnR-3.5.x/R/3.5.x/lib64/R/site-library
 [3] /jhpce/shared/jhpce/core/conda/miniconda-3/envs/svnR-3.5.x/R/3.5.x/lib64/R/library
 **** Job ends ****
-Mon Mar 18 14:02:00 EDT 2019
+Tue Mar 19 12:11:15 EDT 2019
