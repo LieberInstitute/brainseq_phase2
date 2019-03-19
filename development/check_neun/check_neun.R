@@ -48,36 +48,36 @@ map(tab_pbonf, addmargins)
 # $gene
 #                 NeuN Bonf<1%
 # Original Bonf<1% FALSE  TRUE   Sum
-#            FALSE  6905     2  6907
-#            TRUE  17061   684 17745
-#            Sum   23966   686 24652
+#            FALSE  4566  2341  6907
+#            TRUE   1241 16504 17745
+#            Sum    5807 18845 24652
 #
 # $exon
 #                 NeuN Bonf<1%
 # Original Bonf<1%  FALSE   TRUE    Sum
-#            FALSE 109716     28 109744
-#            TRUE  283760   3075 286835
-#            Sum   393476   3103 396579
+#            FALSE  77518  32226 109744
+#            TRUE   19697 267138 286835
+#            Sum    97215 299364 396579
 #
 # $jxn
 #                 NeuN Bonf<1%
 # Original Bonf<1%  FALSE   TRUE    Sum
-#            FALSE 104732     62 104794
-#            TRUE  191304   1083 192387
-#            Sum   296036   1145 297181
+#            FALSE  89159  15635 104794
+#            TRUE   15911 176476 192387
+#            Sum   105070 192111 297181
 #
 # $tx
 #                 NeuN Bonf<1%
 # Original Bonf<1% FALSE  TRUE   Sum
-#            FALSE 88902    15 88917
-#            TRUE   3345   470  3815
-#            Sum   92247   485 92732
+#            FALSE 88313   604 88917
+#            TRUE    662  3153  3815
+#            Sum   88975  3757 92732
 map_dbl(tab_pbonf, getOR)
-#       gene       exon        jxn         tx
-# 138.415685  42.462531   9.562955 832.764126
+#     gene      exon       jxn        tx
+# 25.93892  32.62359  63.24926 696.39185
 map_dbl(tab_pbonf, ~ chisq.test(.x)$p.value)
-#         gene          exon           jxn            tx
-# 3.859747e-60 3.197824e-245  2.838502e-99  0.000000e+00
+# gene exon  jxn   tx
+#    0    0    0    0
 
 
 tab_pbonf_span <- map(
@@ -88,36 +88,36 @@ map(tab_pbonf_span , addmargins)
 # $gene
 #                                 NeuN Bonf<1% & Rep BrainSpan
 # Original Bonf<1% & Rep BrainSpan FALSE  TRUE   Sum
-#                            FALSE 13813     0 13813
-#                            TRUE  10293   546 10839
-#                            Sum   24106   546 24652
+#                            FALSE 12743  1070 13813
+#                            TRUE    647 10192 10839
+#                            Sum   13390 11262 24652
 #
 # $exon
 #                                 NeuN Bonf<1% & Rep BrainSpan
 # Original Bonf<1% & Rep BrainSpan  FALSE   TRUE    Sum
-#                            FALSE 227311     15 227326
-#                            TRUE  166744   2509 169253
-#                            Sum   394055   2524 396579
+#                            FALSE 211284  16042 227326
+#                            TRUE   10722 158531 169253
+#                            Sum   222006 174573 396579
 #
 # $jxn
 #                                 NeuN Bonf<1% & Rep BrainSpan
 # Original Bonf<1% & Rep BrainSpan  FALSE   TRUE    Sum
-#                            FALSE 153227     59 153286
-#                            TRUE  142957    938 143895
-#                            Sum   296184    997 297181
+#                            FALSE 142089  11197 153286
+#                            TRUE   12034 131861 143895
+#                            Sum   154123 143058 297181
 #
 # $tx
 #                                 NeuN Bonf<1% & Rep BrainSpan
 # Original Bonf<1% & Rep BrainSpan FALSE  TRUE   Sum
-#                            FALSE 91012     5 91017
-#                            TRUE   1415   300  1715
-#                            Sum   92427   305 92732
+#                            FALSE 90846   171 91017
+#                            TRUE    224  1491  1715
+#                            Sum   91070  1662 92732
 map_dbl(tab_pbonf_span , getOR)
-# gene       exon        jxn         tx
-#  Inf  228.02352   17.04044 3859.16608
+#     gene      exon       jxn        tx
+# 187.6044  194.7361  139.0481 3536.2204
 map_dbl(tab_pbonf_span , ~ chisq.test(.x)$p.value)
-#          gene          exon           jxn            tx
-# 2.916268e-156  0.000000e+00 3.084074e-183  0.000000e+00
+# gene exon  jxn   tx
+#    0    0    0    0
 
 make_table <- function(ov) {
     
@@ -133,35 +133,33 @@ make_table <- function(ov) {
 
 options(width = 120)
 make_table(tab_pbonf)
-#   Null_both Original_only NeuN_only Both feature         OR          pval     pval_bonf
-# 1      6905         17061         2  684    gene 138.415685  3.859747e-60  1.543899e-59
-# 2    109716        283760        28 3075    exon  42.462531 3.197824e-245 1.279130e-244
-# 3    104732        191304        62 1083     jxn   9.562955  2.838502e-99  1.135401e-98
-# 4     88902          3345        15  470      tx 832.764126  0.000000e+00  0.000000e+00
+#   Null_both Original_only NeuN_only   Both feature        OR pval pval_bonf
+# 1      4566          1241      2341  16504    gene  25.93892    0         0
+# 2     77518         19697     32226 267138    exon  32.62359    0         0
+# 3     89159         15911     15635 176476     jxn  63.24926    0         0
+# 4     88313           662       604   3153      tx 696.39185    0         0
 make_table(tab_pbonf_span)
-  Null_both Original_only NeuN_only Both feature         OR          pval     pval_bonf
-# 1     13813         10293         0  546    gene        Inf 2.916268e-156 1.166507e-155
-# 2    227311        166744        15 2509    exon  228.02352  0.000000e+00  0.000000e+00
-# 3    153227        142957        59  938     jxn   17.04044 3.084074e-183 1.233629e-182
-# 4     91012          1415         5  300      tx 3859.16608  0.000000e+00  0.000000e+00
+#   Null_both Original_only NeuN_only   Both feature        OR pval pval_bonf
+# 1     12743           647      1070  10192    gene  187.6044    0         0
+# 2    211284         10722     16042 158531    exon  194.7361    0         0
+# 3    142089         12034     11197 131861     jxn  139.0481    0         0
+# 4     90846           224       171   1491      tx 3536.2204    0         0
 
 map_dbl(dev_type, ~ cor(.x$F, .x$neun_F))
-#       gene        jxn         tx
-# 0.08688325 0.16308335 0.70752450
+#      gene      exon       jxn        tx
+# 0.9088368 0.9150995 0.9132362 0.9671942
 
 ## Compute the correlation on the scale that I'm actually plotting below
 map_dbl(dev_type, ~ cor(log10(.x$F), log10(.x$neun_F)))
-#       gene       exon        jxn         tx
-# 0.08688325 0.09072702 0.16308335 0.70752450
+#      gene      exon       jxn        tx
+# 0.8823008 0.8932323 0.9192852 0.9490049
 
 corrs <- cbind(map_dfr(dev_type, ~ map_dbl(split(.x, .x$de), ~ cor(log10(.x$F), log10(.x$neun_F)))), DE = c('FALSE', 'TRUE'))
 corrs
-#         gene      exon       jxn        tx    DE
-# 1 0.16026235 0.1181208 0.3079739 0.5696692 FALSE
-# 2 0.06215385 0.0578365 0.1700112 0.5925908  TRUE
+#        gene      exon       jxn        tx    DE
+# 1 0.8517315 0.8760462 0.9010913 0.9420888 FALSE
+# 2 0.8547177 0.8640188 0.8863927 0.9478907  TRUE
 
-
-# ggplot(dev_type$gene, aes(x = F, y = neun_F, color = de)) + geom_point() + scale_x_log10() + scale_y_log10() + facet_grid( ~ de)
 
 pdf('f_original_vs_f_adjNeuN_by_feature.pdf', width = 12, useDingbats = FALSE)
 map2(dev_type, names(dev_type), function(df, type) {
@@ -209,13 +207,11 @@ session_info()
 #  collate  en_US.UTF-8
 #  ctype    en_US.UTF-8
 #  tz       US/Eastern
-#  date     2019-03-13
+#  date     2019-03-19
 #
 # ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 #  package          * version   date       lib source
 #  assertthat         0.2.0     2017-04-11 [2] CRAN (R 3.5.0)
-#  bindr              0.1.1     2018-03-13 [1] CRAN (R 3.5.0)
-#  bindrcpp           0.2.2     2018-03-29 [1] CRAN (R 3.5.0)
 #  BiocGenerics       0.28.0    2018-10-30 [1] Bioconductor
 #  bitops             1.0-6     2013-08-17 [2] CRAN (R 3.5.0)
 #  cli                1.0.1     2018-09-25 [1] CRAN (R 3.5.1)
@@ -223,12 +219,12 @@ session_info()
 #  colorspace         1.4-0     2019-01-13 [2] CRAN (R 3.5.1)
 #  crayon             1.3.4     2017-09-16 [1] CRAN (R 3.5.0)
 #  digest             0.6.18    2018-10-10 [1] CRAN (R 3.5.1)
-#  dplyr              0.7.8     2018-11-10 [1] CRAN (R 3.5.1)
-#  GenomeInfoDb       1.18.1    2018-11-12 [1] Bioconductor
+#  dplyr              0.8.0.1   2019-02-15 [1] CRAN (R 3.5.1)
+#  GenomeInfoDb       1.18.2    2019-02-12 [1] Bioconductor
 #  GenomeInfoDbData   1.2.0     2018-11-02 [2] Bioconductor
 #  GenomicRanges      1.34.0    2018-10-30 [1] Bioconductor
 #  ggplot2          * 3.1.0     2018-10-25 [1] CRAN (R 3.5.1)
-#  glue               1.3.0     2018-07-17 [1] CRAN (R 3.5.1)
+#  glue               1.3.1     2019-03-12 [1] CRAN (R 3.5.1)
 #  gtable             0.2.0     2016-02-26 [2] CRAN (R 3.5.0)
 #  hexbin           * 1.27.2    2018-01-15 [2] CRAN (R 3.5.0)
 #  htmltools          0.3.6     2017-04-28 [2] CRAN (R 3.5.0)
@@ -236,38 +232,39 @@ session_info()
 #  httpuv             1.4.5.1   2018-12-18 [2] CRAN (R 3.5.1)
 #  IRanges            2.16.0    2018-10-30 [1] Bioconductor
 #  jaffelab         * 0.99.21   2018-05-03 [1] Github (LieberInstitute/jaffelab@7ed0ab7)
+#  jsonlite           1.6       2018-12-07 [2] CRAN (R 3.5.1)
 #  labeling           0.3       2014-08-23 [2] CRAN (R 3.5.0)
-#  later              0.7.5     2018-09-18 [2] CRAN (R 3.5.1)
+#  later              0.8.0     2019-02-11 [2] CRAN (R 3.5.1)
 #  lattice            0.20-38   2018-11-04 [3] CRAN (R 3.5.1)
 #  lazyeval           0.2.1     2017-10-29 [2] CRAN (R 3.5.0)
 #  limma              3.38.3    2018-12-02 [1] Bioconductor
 #  magrittr           1.5       2014-11-22 [1] CRAN (R 3.5.0)
-#  munsell            0.5.0     2018-06-12 [2] CRAN (R 3.5.0)
+#  munsell            0.5.0     2018-06-12 [2] CRAN (R 3.5.1)
 #  pillar             1.3.1     2018-12-15 [1] CRAN (R 3.5.1)
 #  pkgconfig          2.0.2     2018-08-16 [1] CRAN (R 3.5.1)
 #  plyr               1.8.4     2016-06-08 [2] CRAN (R 3.5.0)
 #  png                0.1-7     2013-12-03 [2] CRAN (R 3.5.0)
 #  promises           1.0.1     2018-04-13 [2] CRAN (R 3.5.0)
-#  purrr            * 0.2.5     2018-05-29 [2] CRAN (R 3.5.0)
-#  R6                 2.3.0     2018-10-04 [2] CRAN (R 3.5.1)
+#  purrr            * 0.3.1     2019-03-03 [2] CRAN (R 3.5.1)
+#  R6                 2.4.0     2019-02-14 [2] CRAN (R 3.5.1)
 #  rafalib          * 1.0.0     2015-08-09 [1] CRAN (R 3.5.0)
 #  RColorBrewer       1.1-2     2014-12-07 [2] CRAN (R 3.5.0)
 #  Rcpp               1.0.0     2018-11-07 [1] CRAN (R 3.5.1)
-#  RCurl              1.95-4.11 2018-07-15 [2] CRAN (R 3.5.1)
+#  RCurl              1.95-4.12 2019-03-04 [2] CRAN (R 3.5.1)
 #  reshape2           1.4.3     2017-12-11 [2] CRAN (R 3.5.0)
 #  rlang              0.3.1     2019-01-08 [1] CRAN (R 3.5.1)
 #  rmote            * 0.3.4     2018-05-02 [1] deltarho (R 3.5.0)
 #  S4Vectors          0.20.1    2018-11-09 [1] Bioconductor
 #  scales             1.0.0     2018-08-09 [2] CRAN (R 3.5.1)
 #  segmented          0.5-3.0   2017-11-30 [2] CRAN (R 3.5.0)
-#  servr              0.11      2018-10-23 [1] CRAN (R 3.5.1)
+#  servr              0.13      2019-03-04 [1] CRAN (R 3.5.1)
 #  sessioninfo      * 1.1.1     2018-11-05 [1] CRAN (R 3.5.1)
-#  stringi            1.2.4     2018-07-20 [2] CRAN (R 3.5.1)
-#  stringr            1.3.1     2018-05-10 [1] CRAN (R 3.5.0)
+#  stringi            1.4.3     2019-03-12 [2] CRAN (R 3.5.1)
+#  stringr            1.4.0     2019-02-10 [1] CRAN (R 3.5.1)
 #  tibble             2.0.1     2019-01-12 [1] CRAN (R 3.5.1)
 #  tidyselect         0.2.5     2018-10-11 [2] CRAN (R 3.5.1)
 #  withr              2.1.2     2018-03-15 [2] CRAN (R 3.5.0)
-#  xfun               0.4       2018-10-23 [1] CRAN (R 3.5.1)
+#  xfun               0.5       2019-02-20 [1] CRAN (R 3.5.1)
 #  XVector            0.22.0    2018-10-30 [1] Bioconductor
 #  zlibbioc           1.28.0    2018-10-30 [2] Bioconductor
 #
