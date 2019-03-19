@@ -120,7 +120,7 @@ export_subset <- function(DT) {
 }
 export_subset(dlpfc_bsp1_genes)
 export_subset(dlpfc_bsp1_exons)
-export_subset(dlpfc_bsp1_jxn)
+export_subset(dlpfc_bsp1_jxns)
 export_subset(dlpfc_bsp1_txs)
 
 message(paste(Sys.time(), 'lines for each file'))
