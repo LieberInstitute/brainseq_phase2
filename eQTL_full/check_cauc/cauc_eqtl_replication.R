@@ -311,6 +311,69 @@ comp_qtl_short(dlpfc, perc = TRUE, cutde = max(dlpfc$gene$pvalue))
 #      Sum   5.068446e+01 4.931554e+01 1.000000e+02
 
 
+## Check with only SNV-type SNPs
+load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n551.rda', verbose = TRUE)
+
+keep_snv <- function(dfs) {
+    lapply(dfs, function(x) {
+        m <- match(x$snps, snpMap$SNP)
+        stopifnot(!any(is.na(m)))
+        message(paste(Sys.time(), sum(snpMap$Type[m] == 'SNV'), 'out of', length(m), 'are SNP type = SNV, that is', sum(snpMap$Type[m] == 'SNV') / length(m) * 100, 'percent'))
+        x[snpMap$Type[m] == 'SNV', ]
+    })
+}
+
+
+comp_qtl_short(keep_snv(interaction), cutde = 0.05)
+# 2019-03-20 10:52:34 36164 out of 40092 are SNP type = SNV, that is 90.2025341714058 percent
+# $gene
+#           CAUC p<0.05
+# Equal sign FALSE  TRUE   Sum
+#      FALSE  1610     0  1610
+#      TRUE   3006 31548 34554
+#      Sum    4616 31548 36164
+comp_qtl_short(keep_snv(interaction), perc = TRUE, cutde = 0.05)
+# $gene
+#           CAUC p<0.05
+# Equal sign      FALSE       TRUE        Sum
+#      FALSE   4.451941   0.000000   4.451941
+#      TRUE    8.312134  87.235925  95.548059
+#      Sum    12.764075  87.235925 100.000000
+
+comp_qtl_short(keep_snv(dlpfc), cutde = 0.05)
+# 2019-03-20 10:52:45 1412217 out of 1577963 are SNP type = SNV, that is 89.4962049173523 percent
+# $gene
+#           CAUC p<0.05
+# Equal sign   FALSE    TRUE     Sum
+#      FALSE   83219     656   83875
+#      TRUE   165428 1162914 1328342
+#      Sum    248647 1163570 1412217
+comp_qtl_short(keep_snv(dlpfc), perc = TRUE, cutde = 0.05)
+# $gene
+#           CAUC p<0.05
+# Equal sign        FALSE         TRUE          Sum
+#      FALSE   5.89279126   0.04645178   5.93924305
+#      TRUE   11.71406377  82.34669318  94.06075695
+#      Sum    17.60685504  82.39314496 100.00000000
+
+comp_qtl_short(keep_snv(hippo), cutde = 0.05)
+# 2019-03-20 10:52:57 963700 out of 1075733 are SNP type = SNV, that is 89.5854268670758 percent
+# $gene
+#           CAUC p<0.05
+# Equal sign  FALSE   TRUE    Sum
+#      FALSE  53109    427  53536
+#      TRUE  109398 800766 910164
+#      Sum   162507 801193 963700
+     
+comp_qtl_short(keep_snv(hippo), perc = TRUE, cutde = 0.05)
+# $gene
+#           CAUC p<0.05
+# Equal sign        FALSE         TRUE          Sum
+#      FALSE   5.51094739   0.04430839   5.55525578
+#      TRUE   11.35187299  83.09287123  94.44474422
+#      Sum    16.86282038  83.13717962 100.00000000
+
+
 ## For testing
 # cauc <- i_sig_genes_cauc
 # brainseq <- i_sig_genes
