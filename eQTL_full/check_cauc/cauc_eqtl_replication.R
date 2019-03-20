@@ -7,6 +7,13 @@ setDTthreads(1)
 ## Load subsets of data
 files_sub <- dir('rdas', pattern = '_compare_|_sig_genes_', full.names = TRUE)
 stopifnot(length(files_sub) == 6)
+
+## If resuming the job:
+if(FALSE) {
+    files_sub <- dir('rdas', pattern = 'merged_CAUC_BrainSeq_QTLs_', full.names = TRUE)
+    stopifnot(length(files_sub) == 4)
+}
+
 for(f in files_sub) {
     message(paste(Sys.time(), 'loading', f))
     load(f, verbose = TRUE)
@@ -109,6 +116,30 @@ comp_qtl_short(interaction, perc = TRUE, cutde = 0.05)
 #      TRUE    8.358276  87.201936  95.560212
 #      Sum    12.798064  87.201936 100.000000
 
+comp_qtl_short(interaction, perc = TRUE, cutde = 0.001)
+# $gene
+#           CAUC p<0.001
+# Equal sign      FALSE       TRUE        Sum
+#      FALSE   4.439788   0.000000   4.439788
+#      TRUE   37.690811  57.869400  95.560212
+#      Sum    42.130600  57.869400 100.000000
+
+comp_qtl_short(interaction, perc = TRUE, cutde = 0.0001)
+# $gene
+#           CAUC p<1e-04
+# Equal sign      FALSE       TRUE        Sum
+#      FALSE   4.439788   0.000000   4.439788
+#      TRUE   57.340617  38.219595  95.560212
+#      Sum    61.780405  38.219595 100.000000
+
+comp_qtl_short(interaction, perc = TRUE, cutde = max(interaction$gene$pvalue))
+# $gene
+#           CAUC p<1.30632983923964e-05
+# Equal sign      FALSE       TRUE        Sum
+#      FALSE   4.439788   0.000000   4.439788
+#      TRUE   67.901327  27.658885  95.560212
+#      Sum    72.341115  27.658885 100.000000
+
 or_chisq <- function(x) {
     x <- x[1:2, 1:2]
     list(
@@ -181,6 +212,33 @@ or_chisq(comp_qtl_short(hippo, cutde = 0.05)[[1]])
 # $p.value
 # [1] 0
 
+comp_qtl_short(hippo, perc = TRUE, cutde = 0.001)
+# $gene
+#           CAUC p<0.001
+# Equal sign        FALSE         TRUE          Sum
+#      FALSE 5.531670e+00 5.391672e-03 5.537062e+00
+#      TRUE  3.535245e+01 5.911049e+01 9.446294e+01
+#      Sum   4.088412e+01 5.911588e+01 1.000000e+02
+
+comp_qtl_short(hippo, perc = TRUE, cutde = 0.0001)
+# $gene
+#           CAUC p<1e-04
+# Equal sign        FALSE         TRUE          Sum
+#      FALSE 5.534180e+00 2.881756e-03 5.537062e+00
+#      TRUE  4.913347e+01 4.532946e+01 9.446294e+01
+#      Sum   5.466765e+01 4.533235e+01 1.000000e+02
+
+comp_qtl_short(hippo, perc = TRUE, cutde = max(hippo$gene$pvalue))
+# $gene
+#           CAUC p<0.000182528411297916
+# Equal sign        FALSE         TRUE          Sum
+#      FALSE 5.534087e+00 2.974716e-03 5.537062e+00
+#      TRUE  4.592803e+01 4.853491e+01 9.446294e+01
+#      Sum   5.146212e+01 4.853788e+01 1.000000e+02
+
+
+
+
 comp_qtl_short(dlpfc)
 # $gene
 #           CAUC p<0.01
@@ -227,6 +285,30 @@ or_chisq(comp_qtl_short(dlpfc, cutde = 0.05)[[1]])
 #
 # $p.value
 # [1] 0
+
+comp_qtl_short(dlpfc, perc = TRUE, cutde = 0.001)
+# $gene
+#           CAUC p<0.001
+# Equal sign        FALSE         TRUE          Sum
+#      FALSE   5.89779355   0.00557681   5.90337036
+#      TRUE   36.60459719  57.49203245  94.09662964
+#      Sum    42.50239074  57.49760926 100.00000000
+
+comp_qtl_short(dlpfc, perc = TRUE, cutde = 0.0001)
+# $gene
+#           CAUC p<1e-04
+# Equal sign        FALSE         TRUE          Sum
+#      FALSE 5.900265e+00 3.105269e-03 5.903370e+00
+#      TRUE  5.029123e+01 4.380540e+01 9.409663e+01
+#      Sum   5.619149e+01 4.380851e+01 1.000000e+02
+
+comp_qtl_short(dlpfc, perc = TRUE, cutde = max(dlpfc$gene$pvalue))
+# $gene
+#           CAUC p<0.000267745820149456
+# Equal sign        FALSE         TRUE          Sum
+#      FALSE 5.899948e+00 3.422133e-03 5.903370e+00
+#      TRUE  4.478451e+01 4.931212e+01 9.409663e+01
+#      Sum   5.068446e+01 4.931554e+01 1.000000e+02
 
 
 ## For testing
