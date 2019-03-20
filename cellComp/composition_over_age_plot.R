@@ -265,7 +265,7 @@ session_info()
 #  collate  en_US.UTF-8
 #  ctype    en_US.UTF-8
 #  tz       US/Eastern
-#  date     2019-03-15
+#  date     2019-03-20
 #
 # ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 #  package              * version   date       lib source
@@ -293,11 +293,10 @@ session_info()
 #  IRanges              * 2.16.0    2018-10-30 [1] Bioconductor
 #  jaffelab             * 0.99.21   2018-05-03 [1] Github (LieberInstitute/jaffelab@7ed0ab7)
 #  jsonlite               1.6       2018-12-07 [2] CRAN (R 3.5.1)
-#  labeling               0.3       2014-08-23 [2] CRAN (R 3.5.0)
 #  later                  0.8.0     2019-02-11 [2] CRAN (R 3.5.1)
 #  lattice                0.20-38   2018-11-04 [3] CRAN (R 3.5.1)
 #  lazyeval               0.2.1     2017-10-29 [2] CRAN (R 3.5.0)
-#  limma                  3.38.3    2018-12-02 [1] Bioconductor
+#  limma                * 3.38.3    2018-12-02 [1] Bioconductor
 #  magrittr               1.5       2014-11-22 [1] CRAN (R 3.5.0)
 #  Matrix                 1.2-15    2018-11-01 [3] CRAN (R 3.5.1)
 #  matrixStats          * 0.54.0    2018-07-23 [1] CRAN (R 3.5.1)
@@ -320,9 +319,9 @@ session_info()
 #  segmented              0.5-3.0   2017-11-30 [2] CRAN (R 3.5.0)
 #  servr                  0.13      2019-03-04 [1] CRAN (R 3.5.1)
 #  sessioninfo          * 1.1.1     2018-11-05 [1] CRAN (R 3.5.1)
+#  statmod                1.4.30    2017-06-18 [2] CRAN (R 3.5.0)
 #  SummarizedExperiment * 1.12.0    2018-10-30 [1] Bioconductor
 #  tibble                 2.0.1     2019-01-12 [1] CRAN (R 3.5.1)
-#  tidyr                  0.8.3     2019-03-01 [2] CRAN (R 3.5.1)
 #  tidyselect             0.2.5     2018-10-11 [2] CRAN (R 3.5.1)
 #  withr                  2.1.2     2018-03-15 [2] CRAN (R 3.5.0)
 #  xfun                   0.5       2019-02-20 [1] CRAN (R 3.5.1)
