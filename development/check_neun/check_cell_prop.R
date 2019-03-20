@@ -14,10 +14,9 @@ pcheck_both$de <- get_de(pcheck_both)
 ## Rename for simplicity
 dev <- pcheck_both
 
-# features <- c('gene', 'exon', 'jxn', 'tx')
-features <- c('gene', 'tx')
+features <- c('gene', 'exon', 'jxn', 'tx')
 top <- lapply(features, function(type) {
-    f <- paste0('../rda/limma_dev_interaction_adjCellProp_', type, '.Rdata')
+    f <- paste0('../rda/limma_dev_interaction_adjNeunProp_', type, '.Rdata')
     message(paste(Sys.time(), 'loading', f))
     load(f, verbose = TRUE)
     top$type <- type
@@ -39,11 +38,11 @@ stopifnot(!any(is.na(m)))
 neun <- neun[m, ]
 
 dev <- cbind(dev, neun)
-dev_type <- split(dev, factor(dev$type, levels = features))
+dev_type <- split(dev, factor(dev$type, levels = c('gene', 'exon', 'jxn', 'tx')))
 
 tab_pbonf <- map(
     dev_type,
-    ~ with(.x, table('Original Bonf<1%' = P.Bonf < 0.01, 'CellProp Bonf<1%' = neun_P.Bonf < 0.01))
+    ~ with(.x, table('Original Bonf<1%' = P.Bonf < 0.01, 'NeuN Bonf<1%' = neun_P.Bonf < 0.01))
 )
 map(tab_pbonf, addmargins)
 # $gene
@@ -123,7 +122,7 @@ map_dbl(tab_pbonf_span , ~ chisq.test(.x)$p.value)
 make_table <- function(ov) {
     
     res <- map_dfr(ov,
-        ~ as.data.frame(matrix(as.vector(.x[1:2, 1:2]), nrow = 1, dimnames = list(1, c('Null_both', 'Original_only', 'CellProp_only', 'Both'))))
+        ~ as.data.frame(matrix(as.vector(.x[1:2, 1:2]), nrow = 1, dimnames = list(1, c('Null_both', 'Original_only', 'NeuN_only', 'Both'))))
     )
     res$feature <- names(ov)
     res$OR <- map_dbl(ov, ~ getOR(.x[1:2, 1:2]))
@@ -162,7 +161,7 @@ corrs
 # 2 0.8547177 0.8640188 0.8863927 0.9478907  TRUE
 
 
-pdf('f_original_vs_f_adjCellProp_by_feature.pdf', width = 12, useDingbats = FALSE)
+pdf('f_original_vs_f_adjNeuN_by_feature.pdf', width = 12, useDingbats = FALSE)
 map2(dev_type, names(dev_type), function(df, type) {
     print(
         ggplot(df, aes(x = F, y = neun_F)) +
@@ -172,14 +171,14 @@ map2(dev_type, names(dev_type), function(df, type) {
             facet_grid( ~ de) +
             theme_bw(base_size = 30) +
             xlab('F-statistic: original') + 
-            ylab('F-statistic: adj. cell fraction') +
+            ylab('F-statistic: adj. NeuN prop') +
             labs(caption = 'Separated by DE status', title =  paste(type, 'corr =', paste(signif(corrs[, type], 3), collapse = ', ')))
     )
     return(invisible(NULL))
 })
 dev.off()
 
-pdf('f_original_vs_f_adjCellProp.pdf', width = 12, useDingbats = FALSE, height = 18)
+pdf('f_original_vs_f_adjNeuN.pdf', width = 12, useDingbats = FALSE, height = 18)
 ggplot(dev, aes(x = F, y = neun_F)) +
     geom_hex(aes(fill=..density..), bins = 100) +
     scale_x_log10() +
@@ -187,7 +186,7 @@ ggplot(dev, aes(x = F, y = neun_F)) +
     facet_grid(type ~ de) +
     theme_bw(base_size = 30) +
     xlab('F-statistic: original') + 
-    ylab('F-statistic: adj. cell fraction') +
+    ylab('F-statistic: adj. NeuN prop') +
     labs(caption = 'Separated by DE status')
 dev.off()
 
