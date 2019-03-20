@@ -1,0 +1,194 @@
+Loading git
+Adding LIBD modules
+**** Job starts ****
+Tue Mar 19 11:25:47 EDT 2019
+**** JHPCE info ****
+User: lcollado
+Job id: 6780001
+Job name: limma_dev_jxn_adjCellProp
+Hostname: compute-056
+Task id: 
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colMeans,
+    colnames, colSums, dirname, do.call, duplicated, eval, evalq,
+    Filter, Find, get, grep, grepl, intersect, is.unsorted, lapply,
+    lengths, Map, mapply, match, mget, order, paste, pmax, pmax.int,
+    pmin, pmin.int, Position, rank, rbind, Reduce, rowMeans, rownames,
+    rowSums, sapply, setdiff, sort, table, tapply, union, unique,
+    unsplit, which, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:base’:
+
+    expand.grid
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: DelayedArray
+Loading required package: matrixStats
+
+Attaching package: ‘matrixStats’
+
+The following objects are masked from ‘package:Biobase’:
+
+    anyMissing, rowMedians
+
+Loading required package: BiocParallel
+
+Attaching package: ‘DelayedArray’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+
+The following objects are masked from ‘package:base’:
+
+    aperm, apply
+
+
+Attaching package: ‘limma’
+
+The following object is masked from ‘package:BiocGenerics’:
+
+    plotMA
+
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  1.205   1.548   1.579   1.575   1.617   1.871 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+      1       1       1       1       1       1 
+[1] "Number of missing brains in the MDS data"
+
+FALSE 
+  614 
+$Fetal_replicating
+$Fetal_replicating$DLPFC
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.00000 0.00000 0.00000 0.02765 0.00000 0.56285 
+
+$Fetal_replicating$HIPPO
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.00000 0.00000 0.00000 0.02671 0.00000 0.62444 
+
+
+$Fetal_quiescent
+$Fetal_quiescent$DLPFC
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+0.000000 0.000000 0.000000 0.062369 0.004794 0.707074 
+
+$Fetal_quiescent$HIPPO
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.00000 0.00000 0.01275 0.05977 0.02847 0.73139 
+
+
+$OPC
+$OPC$DLPFC
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+0.000000 0.000000 0.000000 0.001824 0.000000 0.065115 
+
+$OPC$HIPPO
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+0.000000 0.000000 0.000000 0.001161 0.000000 0.054426 
+
+
+$Neurons
+$Neurons$DLPFC
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.0000  0.3914  0.4484  0.4152  0.4801  0.6533 
+
+$Neurons$HIPPO
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.0000  0.3012  0.3671  0.3449  0.4057  0.5771 
+
+
+$Astrocytes
+$Astrocytes$DLPFC
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.0000  0.2002  0.2338  0.2135  0.2520  0.4318 
+
+$Astrocytes$HIPPO
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.0000  0.2084  0.2366  0.2219  0.2570  0.4591 
+
+
+$Oligodendrocytes
+$Oligodendrocytes$DLPFC
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.0000  0.1316  0.2032  0.1864  0.2507  0.5339 
+
+$Oligodendrocytes$HIPPO
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.0000  0.1918  0.2370  0.2220  0.2773  0.4657 
+
+
+$Microglia
+$Microglia$DLPFC
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.00000 0.00000 0.01872 0.02560 0.03587 0.20938 
+
+$Microglia$HIPPO
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.00000 0.00000 0.03290 0.04170 0.06871 0.20786 
+
+
+$Endothelial
+$Endothelial$DLPFC
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.00000 0.04530 0.06092 0.06756 0.08397 0.32198 
+
+$Endothelial$HIPPO
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.00000 0.04185 0.06833 0.08189 0.10460 0.36755 
+
+
+$mod
+ [1] "(Intercept)"            "Age"                    "RegionHIPPO"           
+ [4] "fetal"                  "birth"                  "infant"                
+ [7] "child"                  "teen"                   "adult"                 
+[10] "SexM"                   "snpPC1"                 "snpPC2"                
+[13] "snpPC3"                 "snpPC4"                 "snpPC5"                
+[16] "mean_mitoRate"          "mean_totalAssignedGene" "mean_RIN"              
+[19] "Fetal_replicating"      "Fetal_quiescent"        "OPC"                   
+[22] "Neurons"                "Astrocytes"             "Oligodendrocytes"      
+[25] "Microglia"              "Age:RegionHIPPO"        "RegionHIPPO:fetal"     
+[28] "RegionHIPPO:birth"      "RegionHIPPO:infant"     "RegionHIPPO:child"     
+[31] "RegionHIPPO:teen"       "RegionHIPPO:adult"     
+
+$mod0
+ [1] "(Intercept)"            "Age"                    "fetal"                 
+ [4] "birth"                  "infant"                 "child"                 
+ [7] "teen"                   "adult"                  "SexM"                  
+[10] "RegionHIPPO"            "snpPC1"                 "snpPC2"                
+[13] "snpPC3"                 "snpPC4"                 "snpPC5"                
+[16] "mean_mitoRate"          "mean_totalAssignedGene" "mean_RIN"              
+[19] "Fetal_replicating"      "Fetal_quiescent"        "OPC"                   
+[22] "Neurons"                "Astrocytes"             "Oligodendrocytes"      
+[25] "Microglia"             
+

@@ -14,9 +14,10 @@ pcheck_both$de <- get_de(pcheck_both)
 ## Rename for simplicity
 dev <- pcheck_both
 
-features <- c('gene', 'exon', 'jxn', 'tx')
+# features <- c('gene', 'exon', 'jxn', 'tx')
+features <- c('gene', 'tx')
 top <- lapply(features, function(type) {
-    f <- paste0('../rda/limma_dev_interaction_adjNeunProp_', type, '.Rdata')
+    f <- paste0('../rda/limma_dev_interaction_adjCellProp_', type, '.Rdata')
     message(paste(Sys.time(), 'loading', f))
     load(f, verbose = TRUE)
     top$type <- type
@@ -38,91 +39,63 @@ stopifnot(!any(is.na(m)))
 neun <- neun[m, ]
 
 dev <- cbind(dev, neun)
-dev_type <- split(dev, factor(dev$type, levels = c('gene', 'exon', 'jxn', 'tx')))
+dev_type <- split(dev, factor(dev$type, levels = features))
 
 tab_pbonf <- map(
     dev_type,
-    ~ with(.x, table('Original Bonf<1%' = P.Bonf < 0.01, 'NeuN Bonf<1%' = neun_P.Bonf < 0.01))
+    ~ with(.x, table('Original Bonf<1%' = P.Bonf < 0.01, 'CellProp Bonf<1%' = neun_P.Bonf < 0.01))
 )
 map(tab_pbonf, addmargins)
 # $gene
-#                 NeuN Bonf<1%
+#                 CellProp Bonf<1%
 # Original Bonf<1% FALSE  TRUE   Sum
-#            FALSE  4566  2341  6907
-#            TRUE   1241 16504 17745
-#            Sum    5807 18845 24652
-#
-# $exon
-#                 NeuN Bonf<1%
-# Original Bonf<1%  FALSE   TRUE    Sum
-#            FALSE  77518  32226 109744
-#            TRUE   19697 267138 286835
-#            Sum    97215 299364 396579
-#
-# $jxn
-#                 NeuN Bonf<1%
-# Original Bonf<1%  FALSE   TRUE    Sum
-#            FALSE  89159  15635 104794
-#            TRUE   15911 176476 192387
-#            Sum   105070 192111 297181
+#            FALSE  3878  3029  6907
+#            TRUE   1382 16363 17745
+#            Sum    5260 19392 24652
 #
 # $tx
-#                 NeuN Bonf<1%
+#                 CellProp Bonf<1%
 # Original Bonf<1% FALSE  TRUE   Sum
-#            FALSE 88313   604 88917
-#            TRUE    662  3153  3815
-#            Sum   88975  3757 92732
+#            FALSE 88040   877 88917
+#            TRUE   1049  2766  3815
+#            Sum   89089  3643 92732
 map_dbl(tab_pbonf, getOR)
-#     gene      exon       jxn        tx
-# 25.93892  32.62359  63.24926 696.39185
+#     gene        tx
+# 15.15875 264.70194
 map_dbl(tab_pbonf, ~ chisq.test(.x)$p.value)
-# gene exon  jxn   tx
-#    0    0    0    0
+# gene   tx
+#    0    0
 
 
 tab_pbonf_span <- map(
     dev_type,
-    ~ with(.x, table('Original Bonf<1% & Rep BrainSpan' = P.Bonf < 0.01 & span_P.Value < 0.05, 'NeuN Bonf<1% & Rep BrainSpan' = neun_P.Bonf < 0.01  & span_P.Value < 0.05))
+    ~ with(.x, table('Original Bonf<1% & Rep BrainSpan' = P.Bonf < 0.01 & span_P.Value < 0.05, 'CellProp Bonf<1% & Rep BrainSpan' = neun_P.Bonf < 0.01  & span_P.Value < 0.05))
 )
 map(tab_pbonf_span , addmargins)
 # $gene
-#                                 NeuN Bonf<1% & Rep BrainSpan
+#                                 CellProp Bonf<1% & Rep BrainSpan
 # Original Bonf<1% & Rep BrainSpan FALSE  TRUE   Sum
-#                            FALSE 12743  1070 13813
-#                            TRUE    647 10192 10839
-#                            Sum   13390 11262 24652
-#
-# $exon
-#                                 NeuN Bonf<1% & Rep BrainSpan
-# Original Bonf<1% & Rep BrainSpan  FALSE   TRUE    Sum
-#                            FALSE 211284  16042 227326
-#                            TRUE   10722 158531 169253
-#                            Sum   222006 174573 396579
-#
-# $jxn
-#                                 NeuN Bonf<1% & Rep BrainSpan
-# Original Bonf<1% & Rep BrainSpan  FALSE   TRUE    Sum
-#                            FALSE 142089  11197 153286
-#                            TRUE   12034 131861 143895
-#                            Sum   154123 143058 297181
+#                            FALSE 12501  1312 13813
+#                            TRUE    748 10091 10839
+#                            Sum   13249 11403 24652
 #
 # $tx
-#                                 NeuN Bonf<1% & Rep BrainSpan
+#                                 CellProp Bonf<1% & Rep BrainSpan
 # Original Bonf<1% & Rep BrainSpan FALSE  TRUE   Sum
-#                            FALSE 90846   171 91017
-#                            TRUE    224  1491  1715
-#                            Sum   91070  1662 92732
+#                            FALSE 90783   234 91017
+#                            TRUE    408  1307  1715
+#                            Sum   91191  1541 92732
 map_dbl(tab_pbonf_span , getOR)
-#     gene      exon       jxn        tx
-# 187.6044  194.7361  139.0481 3536.2204
+#     gene        tx
+# 128.5415 1242.8082
 map_dbl(tab_pbonf_span , ~ chisq.test(.x)$p.value)
-# gene exon  jxn   tx
-#    0    0    0    0
+# gene   tx
+#    0    0
 
 make_table <- function(ov) {
     
     res <- map_dfr(ov,
-        ~ as.data.frame(matrix(as.vector(.x[1:2, 1:2]), nrow = 1, dimnames = list(1, c('Null_both', 'Original_only', 'NeuN_only', 'Both'))))
+        ~ as.data.frame(matrix(as.vector(.x[1:2, 1:2]), nrow = 1, dimnames = list(1, c('Null_both', 'Original_only', 'CellProp_only', 'Both'))))
     )
     res$feature <- names(ov)
     res$OR <- map_dbl(ov, ~ getOR(.x[1:2, 1:2]))
@@ -133,35 +106,31 @@ make_table <- function(ov) {
 
 options(width = 120)
 make_table(tab_pbonf)
-#   Null_both Original_only NeuN_only   Both feature        OR pval pval_bonf
-# 1      4566          1241      2341  16504    gene  25.93892    0         0
-# 2     77518         19697     32226 267138    exon  32.62359    0         0
-# 3     89159         15911     15635 176476     jxn  63.24926    0         0
-# 4     88313           662       604   3153      tx 696.39185    0         0
+#   Null_both Original_only CellProp_only  Both feature        OR pval pval_bonf
+# 1      3878          1382          3029 16363    gene  15.15875    0         0
+# 2     88040          1049           877  2766      tx 264.70194    0         0
 make_table(tab_pbonf_span)
-#   Null_both Original_only NeuN_only   Both feature        OR pval pval_bonf
-# 1     12743           647      1070  10192    gene  187.6044    0         0
-# 2    211284         10722     16042 158531    exon  194.7361    0         0
-# 3    142089         12034     11197 131861     jxn  139.0481    0         0
-# 4     90846           224       171   1491      tx 3536.2204    0         0
+#   Null_both Original_only CellProp_only  Both feature        OR pval pval_bonf
+# 1     12501           748          1312 10091    gene  128.5415    0         0
+# 2     90783           408           234  1307      tx 1242.8082    0         0
 
 map_dbl(dev_type, ~ cor(.x$F, .x$neun_F))
-#      gene      exon       jxn        tx
-# 0.9088368 0.9150995 0.9132362 0.9671942
+#      gene        tx
+# 0.8702397 0.9275750
 
 ## Compute the correlation on the scale that I'm actually plotting below
 map_dbl(dev_type, ~ cor(log10(.x$F), log10(.x$neun_F)))
-#      gene      exon       jxn        tx
-# 0.8823008 0.8932323 0.9192852 0.9490049
+#      gene        tx
+# 0.8227183 0.8821472
 
 corrs <- cbind(map_dfr(dev_type, ~ map_dbl(split(.x, .x$de), ~ cor(log10(.x$F), log10(.x$neun_F)))), DE = c('FALSE', 'TRUE'))
 corrs
-#        gene      exon       jxn        tx    DE
-# 1 0.8517315 0.8760462 0.9010913 0.9420888 FALSE
-# 2 0.8547177 0.8640188 0.8863927 0.9478907  TRUE
+#        gene        tx    DE
+# 1 0.7959842 0.8673563 FALSE
+# 2 0.7670905 0.8729942  TRUE
 
 
-pdf('f_original_vs_f_adjNeuN_by_feature.pdf', width = 12, useDingbats = FALSE)
+pdf('f_original_vs_f_adjCellProp_by_feature.pdf', width = 12, useDingbats = FALSE)
 map2(dev_type, names(dev_type), function(df, type) {
     print(
         ggplot(df, aes(x = F, y = neun_F)) +
@@ -171,14 +140,14 @@ map2(dev_type, names(dev_type), function(df, type) {
             facet_grid( ~ de) +
             theme_bw(base_size = 30) +
             xlab('F-statistic: original') + 
-            ylab('F-statistic: adj. NeuN prop') +
+            ylab('F-statistic: adj. cell fraction') +
             labs(caption = 'Separated by DE status', title =  paste(type, 'corr =', paste(signif(corrs[, type], 3), collapse = ', ')))
     )
     return(invisible(NULL))
 })
 dev.off()
 
-pdf('f_original_vs_f_adjNeuN.pdf', width = 12, useDingbats = FALSE, height = 18)
+pdf('f_original_vs_f_adjCellProp.pdf', width = 12, useDingbats = FALSE, height = 18)
 ggplot(dev, aes(x = F, y = neun_F)) +
     geom_hex(aes(fill=..density..), bins = 100) +
     scale_x_log10() +
@@ -186,7 +155,7 @@ ggplot(dev, aes(x = F, y = neun_F)) +
     facet_grid(type ~ de) +
     theme_bw(base_size = 30) +
     xlab('F-statistic: original') + 
-    ylab('F-statistic: adj. NeuN prop') +
+    ylab('F-statistic: adj. cell fraction') +
     labs(caption = 'Separated by DE status')
 dev.off()
 
@@ -207,7 +176,7 @@ session_info()
 #  collate  en_US.UTF-8
 #  ctype    en_US.UTF-8
 #  tz       US/Eastern
-#  date     2019-03-19
+#  date     2019-03-20
 #
 # ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 #  package          * version   date       lib source

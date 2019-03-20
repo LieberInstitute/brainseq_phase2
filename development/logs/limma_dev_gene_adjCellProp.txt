@@ -1,0 +1,283 @@
+Loading git
+Adding LIBD modules
+**** Job starts ****
+Tue Mar 19 11:25:55 EDT 2019
+**** JHPCE info ****
+User: lcollado
+Job id: 6779999
+Job name: limma_dev_gene_adjCellProp
+Hostname: compute-047
+Task id: 
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colMeans,
+    colnames, colSums, dirname, do.call, duplicated, eval, evalq,
+    Filter, Find, get, grep, grepl, intersect, is.unsorted, lapply,
+    lengths, Map, mapply, match, mget, order, paste, pmax, pmax.int,
+    pmin, pmin.int, Position, rank, rbind, Reduce, rowMeans, rownames,
+    rowSums, sapply, setdiff, sort, table, tapply, union, unique,
+    unsplit, which, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:base’:
+
+    expand.grid
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: DelayedArray
+Loading required package: matrixStats
+
+Attaching package: ‘matrixStats’
+
+The following objects are masked from ‘package:Biobase’:
+
+    anyMissing, rowMedians
+
+Loading required package: BiocParallel
+
+Attaching package: ‘DelayedArray’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+
+The following objects are masked from ‘package:base’:
+
+    aperm, apply
+
+
+Attaching package: ‘limma’
+
+The following object is masked from ‘package:BiocGenerics’:
+
+    plotMA
+
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  1.205   1.548   1.579   1.575   1.617   1.871 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+      1       1       1       1       1       1 
+[1] "Number of missing brains in the MDS data"
+
+FALSE 
+  614 
+$Fetal_replicating
+$Fetal_replicating$DLPFC
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.00000 0.00000 0.00000 0.02765 0.00000 0.56285 
+
+$Fetal_replicating$HIPPO
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.00000 0.00000 0.00000 0.02671 0.00000 0.62444 
+
+
+$Fetal_quiescent
+$Fetal_quiescent$DLPFC
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+0.000000 0.000000 0.000000 0.062369 0.004794 0.707074 
+
+$Fetal_quiescent$HIPPO
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.00000 0.00000 0.01275 0.05977 0.02847 0.73139 
+
+
+$OPC
+$OPC$DLPFC
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+0.000000 0.000000 0.000000 0.001824 0.000000 0.065115 
+
+$OPC$HIPPO
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+0.000000 0.000000 0.000000 0.001161 0.000000 0.054426 
+
+
+$Neurons
+$Neurons$DLPFC
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.0000  0.3914  0.4484  0.4152  0.4801  0.6533 
+
+$Neurons$HIPPO
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.0000  0.3012  0.3671  0.3449  0.4057  0.5771 
+
+
+$Astrocytes
+$Astrocytes$DLPFC
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.0000  0.2002  0.2338  0.2135  0.2520  0.4318 
+
+$Astrocytes$HIPPO
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.0000  0.2084  0.2366  0.2219  0.2570  0.4591 
+
+
+$Oligodendrocytes
+$Oligodendrocytes$DLPFC
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.0000  0.1316  0.2032  0.1864  0.2507  0.5339 
+
+$Oligodendrocytes$HIPPO
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.0000  0.1918  0.2370  0.2220  0.2773  0.4657 
+
+
+$Microglia
+$Microglia$DLPFC
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.00000 0.00000 0.01872 0.02560 0.03587 0.20938 
+
+$Microglia$HIPPO
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.00000 0.00000 0.03290 0.04170 0.06871 0.20786 
+
+
+$Endothelial
+$Endothelial$DLPFC
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.00000 0.04530 0.06092 0.06756 0.08397 0.32198 
+
+$Endothelial$HIPPO
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.00000 0.04185 0.06833 0.08189 0.10460 0.36755 
+
+
+$mod
+ [1] "(Intercept)"            "Age"                    "RegionHIPPO"           
+ [4] "fetal"                  "birth"                  "infant"                
+ [7] "child"                  "teen"                   "adult"                 
+[10] "SexM"                   "snpPC1"                 "snpPC2"                
+[13] "snpPC3"                 "snpPC4"                 "snpPC5"                
+[16] "mean_mitoRate"          "mean_totalAssignedGene" "mean_RIN"              
+[19] "Fetal_replicating"      "Fetal_quiescent"        "OPC"                   
+[22] "Neurons"                "Astrocytes"             "Oligodendrocytes"      
+[25] "Microglia"              "Age:RegionHIPPO"        "RegionHIPPO:fetal"     
+[28] "RegionHIPPO:birth"      "RegionHIPPO:infant"     "RegionHIPPO:child"     
+[31] "RegionHIPPO:teen"       "RegionHIPPO:adult"     
+
+$mod0
+ [1] "(Intercept)"            "Age"                    "fetal"                 
+ [4] "birth"                  "infant"                 "child"                 
+ [7] "teen"                   "adult"                  "SexM"                  
+[10] "RegionHIPPO"            "snpPC1"                 "snpPC2"                
+[13] "snpPC3"                 "snpPC4"                 "snpPC5"                
+[16] "mean_mitoRate"          "mean_totalAssignedGene" "mean_RIN"              
+[19] "Fetal_replicating"      "Fetal_quiescent"        "OPC"                   
+[22] "Neurons"                "Astrocytes"             "Oligodendrocytes"      
+[25] "Microglia"             
+
+   user  system elapsed 
+  2.000   0.000   2.022 
+[1] "Consensus correlation and summary (also after tanh transform)"
+[1] 0.4702922
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+-0.2875  0.2749  0.4856  0.5520  0.7688  2.2176 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+-0.2799  0.2681  0.4508  0.4564  0.6462  0.9766 
+[1] "Age:RegionHIPPO"    "RegionHIPPO:fetal"  "RegionHIPPO:birth" 
+[4] "RegionHIPPO:infant" "RegionHIPPO:child"  "RegionHIPPO:teen"  
+[7] "RegionHIPPO:adult" 
+[1] "Reproducibility information:"
+[1] "2019-03-19 20:29:17 EDT"
+     user    system   elapsed 
+32461.792    24.891 32601.105 
+─ Session info ───────────────────────────────────────────────────────────────────────────────────────────────────────
+ setting  value                                                 
+ version  R version 3.5.1 Patched (2018-10-29 r75535)           
+ os       Red Hat Enterprise Linux Server release 6.9 (Santiago)
+ system   x86_64, linux-gnu                                     
+ ui       X11                                                   
+ language (EN)                                                  
+ collate  en_US.UTF-8                                           
+ ctype    en_US.UTF-8                                           
+ tz       US/Eastern                                            
+ date     2019-03-19                                            
+
+─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
+ package              * version   date       lib source        
+ assertthat             0.2.0     2017-04-11 [2] CRAN (R 3.5.0)
+ backports              1.1.3     2018-12-14 [2] CRAN (R 3.5.1)
+ Biobase              * 2.42.0    2018-10-30 [2] Bioconductor  
+ BiocGenerics         * 0.28.0    2018-10-30 [1] Bioconductor  
+ BiocParallel         * 1.16.6    2019-02-10 [1] Bioconductor  
+ bitops                 1.0-6     2013-08-17 [2] CRAN (R 3.5.0)
+ callr                  3.1.1     2018-12-21 [2] CRAN (R 3.5.1)
+ cli                    1.0.1     2018-09-25 [1] CRAN (R 3.5.1)
+ crayon                 1.3.4     2017-09-16 [1] CRAN (R 3.5.0)
+ DelayedArray         * 0.8.0     2018-10-30 [2] Bioconductor  
+ desc                   1.2.0     2018-05-01 [2] CRAN (R 3.5.1)
+ devtools             * 2.0.1     2018-10-26 [1] CRAN (R 3.5.1)
+ digest                 0.6.18    2018-10-10 [1] CRAN (R 3.5.1)
+ dplyr                  0.8.0.1   2019-02-15 [1] CRAN (R 3.5.1)
+ edgeR                * 3.24.3    2019-01-02 [1] Bioconductor  
+ fs                     1.2.6     2018-08-23 [2] CRAN (R 3.5.1)
+ GenomeInfoDb         * 1.18.2    2019-02-12 [1] Bioconductor  
+ GenomeInfoDbData       1.2.0     2018-11-02 [2] Bioconductor  
+ GenomicRanges        * 1.34.0    2018-10-30 [1] Bioconductor  
+ getopt               * 1.20.2    2018-02-16 [1] CRAN (R 3.5.0)
+ glue                   1.3.1     2019-03-12 [1] CRAN (R 3.5.1)
+ IRanges              * 2.16.0    2018-10-30 [1] Bioconductor  
+ lattice                0.20-38   2018-11-04 [3] CRAN (R 3.5.1)
+ limma                * 3.38.3    2018-12-02 [1] Bioconductor  
+ locfit                 1.5-9.1   2013-04-20 [2] CRAN (R 3.5.0)
+ magrittr               1.5       2014-11-22 [1] CRAN (R 3.5.0)
+ Matrix                 1.2-15    2018-11-01 [3] CRAN (R 3.5.1)
+ matrixStats          * 0.54.0    2018-07-23 [1] CRAN (R 3.5.1)
+ memoise                1.1.0     2017-04-21 [2] CRAN (R 3.5.0)
+ pillar                 1.3.1     2018-12-15 [1] CRAN (R 3.5.1)
+ pkgbuild               1.0.2     2018-10-16 [2] CRAN (R 3.5.1)
+ pkgconfig              2.0.2     2018-08-16 [1] CRAN (R 3.5.1)
+ pkgload                1.0.2     2018-10-29 [2] CRAN (R 3.5.1)
+ prettyunits            1.0.2     2015-07-13 [1] CRAN (R 3.5.0)
+ processx               3.3.0     2019-03-10 [1] CRAN (R 3.5.1)
+ ps                     1.3.0     2018-12-21 [2] CRAN (R 3.5.1)
+ purrr                  0.3.1     2019-03-03 [2] CRAN (R 3.5.1)
+ R6                     2.4.0     2019-02-14 [2] CRAN (R 3.5.1)
+ Rcpp                   1.0.0     2018-11-07 [1] CRAN (R 3.5.1)
+ RCurl                  1.95-4.12 2019-03-04 [2] CRAN (R 3.5.1)
+ remotes                2.0.2     2018-10-30 [1] CRAN (R 3.5.1)
+ rlang                  0.3.1     2019-01-08 [1] CRAN (R 3.5.1)
+ rprojroot              1.3-2     2018-01-03 [2] CRAN (R 3.5.0)
+ S4Vectors            * 0.20.1    2018-11-09 [1] Bioconductor  
+ sessioninfo            1.1.1     2018-11-05 [1] CRAN (R 3.5.1)
+ statmod                1.4.30    2017-06-18 [2] CRAN (R 3.5.0)
+ SummarizedExperiment * 1.12.0    2018-10-30 [1] Bioconductor  
+ testthat               2.0.1     2018-10-13 [1] CRAN (R 3.5.1)
+ tibble                 2.0.1     2019-01-12 [1] CRAN (R 3.5.1)
+ tidyselect             0.2.5     2018-10-11 [2] CRAN (R 3.5.1)
+ usethis              * 1.4.0     2018-08-14 [2] CRAN (R 3.5.1)
+ withr                  2.1.2     2018-03-15 [2] CRAN (R 3.5.0)
+ XVector                0.22.0    2018-10-30 [1] Bioconductor  
+ zlibbioc               1.28.0    2018-10-30 [2] Bioconductor  
+
+[1] /users/lcollado/R/x86_64-pc-linux-gnu-library/3.5.x
+[2] /jhpce/shared/jhpce/core/conda/miniconda-3/envs/svnR-3.5.x/R/3.5.x/lib64/R/site-library
+[3] /jhpce/shared/jhpce/core/conda/miniconda-3/envs/svnR-3.5.x/R/3.5.x/lib64/R/library
+**** Job ends ****
+Tue Mar 19 20:29:20 EDT 2019
