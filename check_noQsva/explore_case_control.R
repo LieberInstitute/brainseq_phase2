@@ -415,7 +415,20 @@ prev <- list(
         )
 )
 
+outGene <- lapply(files, function(f) {
+    message(paste(Sys.time(), 'loading', f))
+    load(f, verbose = TRUE)
+    return(outGene)
+})
+names(outGene) <- c('HIPPO_matchQSV', 'DLPFC_matchQSV')
+## Make sure the order is correct
+stopifnot(all(sapply(gsub('_.*', '', names(outGene)), grep, x = files) - 1:2 == 0))
 
+## Not the same order as in
+## https://github.com/LieberInstitute/qsva_brain/blob/master/brainseq_phase2_qsv/explore_case_control.R
+## But that way I don't have to change the code that
+## I started last week
+outGene <- c(prev, outGene)
 
 
 ## Scatter of logFC
@@ -438,12 +451,25 @@ comp_log <- function(x, y, xlab, ylab, var = 'logFC', de = FALSE, n = 150, onlyx
     x <- x[match(common, x$ensemblID), ]
     y <- y[match(common, y$ensemblID), ]
     corr = signif(cor(x[, var], y[, var], use = 'pairwise.complete.obs'), 3)
+    
+    ## Use colors by FDR < 0.05
+    colgroup <- rep('none', nrow(x))
+    colgroup[x$adj.P.Val < 0.05] <- 'x'
+    colgroup[y$adj.P.Val < 0.05] <- 'y'
+    colgroup[x$adj.P.Val < 0.05 & y$adj.P.Val < 0.05] <- 'xy'
+    cols <- dplyr::case_when(
+        colgroup == 'none' ~ add.alpha('black', ifelse(de, 1/2, 1/10)),
+        colgroup == 'x' ~ add.alpha('magenta', ifelse(de, 1/2, 1/4)),
+        colgroup == 'y' ~ add.alpha('magenta', ifelse(de, 1/2, 1/4)),
+        colgroup == 'xy' ~ add.alpha('purple', 1/2)
+    )
 
+    par(cex.axis = 2, cex.lab = 2, mar = c(5, 5, 4, 2) + 0.1)
     plot(x = x[, var], y = y[, var],
          xlab = paste(ifelse(var == 't', 't-statistic', 'log2 FC'), xlab),
          ylab = paste(ifelse(var == 't', 't-statistic', 'log2 FC'), ylab),
-         col = add.alpha('black', ifelse(de, 1/2, 1/10)), pch = 16)
-    legend('topleft', legend = paste('r =', corr))
+         col = cols, pch = 16)
+    legend('topleft', legend = paste('r =', corr), cex = 1.8)
     # lines(loess.smooth(y = y[, var], x = x[, var]), col = 'red')
     # abline(lm(y[, var] ~ x[, var]), col = 'blue')
     abline(h = 0, col = 'grey20')
@@ -451,62 +477,84 @@ comp_log <- function(x, y, xlab, ylab, var = 'logFC', de = FALSE, n = 150, onlyx
 }
 
 pdf('pdf/scatter_models.pdf', useDingbats = FALSE)
-comp_log(outGene0[[1]], outGene0[[2]], 'HIPPO', 'DLPFC')
-comp_log(outGene0[[1]], outGene[[1]], 'HIPPO', 'BSP1')
-comp_log(outGene0[[1]], outGene[[2]], 'HIPPO', 'CMC')
-comp_log(outGene0[[2]], outGene[[1]], 'DLPFC', 'BSP1')
-comp_log(outGene0[[2]], outGene[[2]], 'DLPFC', 'CMC')
+# comp_log(outGene0[[1]], outGene0[[2]], 'HIPPO no qSVA', 'DLPFC no qSVA')
+# comp_log(outGene0[[1]], outGene[[1]], 'HIPPO no qSVA', 'BSP1')
+# comp_log(outGene0[[1]], outGene[[2]], 'HIPPO no qSVA', 'CMC')
+# comp_log(outGene0[[2]], outGene[[1]], 'DLPFC no qSVA', 'BSP1')
+# comp_log(outGene0[[2]], outGene[[2]], 'DLPFC no qSVA', 'CMC')
+#
+# comp_log(outGene0[[1]], outGene[[3]], 'HIPPO no qSVA', 'HIPPO with qSVA')
+# comp_log(outGene0[[2]], outGene[[4]], 'DLFPC no qSVA', 'DLPFC with qSVA')
 
-comp_log(outGene0[[1]], outGene0[[2]], 'HIPPO', 'HIPPO with qSVA')
+comp_log(outGene0[[1]], outGene0[[2]], 'HIPPO no qSVA', 'DLPFC no qSVA', var = 't')
+comp_log(outGene0[[1]], outGene[[1]], 'HIPPO no qSVA', 'BSP1', var = 't')
+comp_log(outGene0[[1]], outGene[[2]], 'HIPPO no qSVA', 'CMC', var = 't')
+comp_log(outGene0[[2]], outGene[[1]], 'DLPFC no qSVA', 'BSP1', var = 't')
+comp_log(outGene0[[2]], outGene[[2]], 'DLPFC no qSVA', 'CMC', var = 't')
 
-comp_log(outGene0[[1]], outGene0[[2]], 'HIPPO', 'DLPFC', var = 't')
-comp_log(outGene0[[1]], outGene[[1]], 'HIPPO', 'BSP1', var = 't')
-comp_log(outGene0[[1]], outGene[[2]], 'HIPPO', 'CMC', var = 't')
-comp_log(outGene0[[2]], outGene[[1]], 'DLPFC', 'BSP1', var = 't')
-comp_log(outGene0[[2]], outGene[[2]], 'DLPFC', 'CMC', var = 't')
+comp_log(outGene0[[1]], outGene[[3]], 'HIPPO no qSVA', 'HIPPO with qSVA', var = 't')
+comp_log(outGene0[[2]], outGene[[4]], 'DLFPC no qSVA', 'DLPFC with qSVA', var = 't')
 dev.off()
 
 pdf('pdf/scatter_models_top150de.pdf', useDingbats = FALSE)
-comp_log(outGene0[[1]], outGene0[[2]], 'HIPPO', 'DLPFC', de = TRUE)
-comp_log(outGene0[[1]], outGene[[1]], 'HIPPO', 'BSP1', de = TRUE)
-comp_log(outGene0[[1]], outGene[[2]], 'HIPPO', 'CMC', de = TRUE)
-comp_log(outGene0[[2]], outGene[[1]], 'DLPFC', 'BSP1', de = TRUE)
-comp_log(outGene0[[2]], outGene[[2]], 'DLPFC', 'CMC', de = TRUE)
+# comp_log(outGene0[[1]], outGene0[[2]], 'HIPPO no qSVA', 'DLPFC no qSVA', de = TRUE)
+# comp_log(outGene0[[1]], outGene[[1]], 'HIPPO no qSVA', 'BSP1', de = TRUE)
+# comp_log(outGene0[[1]], outGene[[2]], 'HIPPO no qSVA', 'CMC', de = TRUE)
+# comp_log(outGene0[[2]], outGene[[1]], 'DLPFC no qSVA', 'BSP1', de = TRUE)
+# comp_log(outGene0[[2]], outGene[[2]], 'DLPFC no qSVA', 'CMC', de = TRUE)
+#
+# comp_log(outGene0[[1]], outGene[[3]], 'HIPPO no qSVA', 'HIPPO with qSVA', de = TRUE)
+# comp_log(outGene0[[2]], outGene[[4]], 'DLFPC no qSVA', 'DLPFC with qSVA', de = TRUE)
 
-comp_log(outGene0[[1]], outGene0[[2]], 'HIPPO', 'DLPFC', var = 't', de = TRUE)
-comp_log(outGene0[[1]], outGene[[1]], 'HIPPO', 'BSP1', var = 't', de = TRUE)
-comp_log(outGene0[[1]], outGene[[2]], 'HIPPO', 'CMC', var = 't', de = TRUE)
-comp_log(outGene0[[2]], outGene[[1]], 'DLPFC', 'BSP1', var = 't', de = TRUE)
-comp_log(outGene0[[2]], outGene[[2]], 'DLPFC', 'CMC', var = 't', de = TRUE)
+comp_log(outGene0[[1]], outGene0[[2]], 'HIPPO no qSVA', 'DLPFC no qSVA', var = 't', de = TRUE)
+comp_log(outGene0[[1]], outGene[[1]], 'HIPPO no qSVA', 'BSP1', var = 't', de = TRUE)
+comp_log(outGene0[[1]], outGene[[2]], 'HIPPO no qSVA', 'CMC', var = 't', de = TRUE)
+comp_log(outGene0[[2]], outGene[[1]], 'DLPFC no qSVA', 'BSP1', var = 't', de = TRUE)
+comp_log(outGene0[[2]], outGene[[2]], 'DLPFC no qSVA', 'CMC', var = 't', de = TRUE)
+
+comp_log(outGene0[[1]], outGene[[3]], 'HIPPO no qSVA', 'HIPPO with qSVA', var = 't', de = TRUE)
+comp_log(outGene0[[2]], outGene[[4]], 'DLFPC no qSVA', 'DLPFC with qSVA', var = 't', de = TRUE)
 dev.off()
 
 pdf('pdf/scatter_models_top400de.pdf', useDingbats = FALSE)
-comp_log(outGene0[[1]], outGene0[[2]], 'HIPPO', 'DLPFC', de = TRUE, n = 400)
-comp_log(outGene0[[1]], outGene[[1]], 'HIPPO', 'BSP1', de = TRUE, n = 400)
-comp_log(outGene0[[1]], outGene[[2]], 'HIPPO', 'CMC', de = TRUE, n = 400)
-comp_log(outGene0[[2]], outGene[[1]], 'DLPFC', 'BSP1', de = TRUE, n = 400)
-comp_log(outGene0[[2]], outGene[[2]], 'DLPFC', 'CMC', de = TRUE, n = 400)
+# comp_log(outGene0[[1]], outGene0[[2]], 'HIPPO no qSVA', 'DLPFC no qSVA', de = TRUE, n = 400)
+# comp_log(outGene0[[1]], outGene[[1]], 'HIPPO no qSVA', 'BSP1', de = TRUE, n = 400)
+# comp_log(outGene0[[1]], outGene[[2]], 'HIPPO no qSVA', 'CMC', de = TRUE, n = 400)
+# comp_log(outGene0[[2]], outGene[[1]], 'DLPFC no qSVA', 'BSP1', de = TRUE, n = 400)
+# comp_log(outGene0[[2]], outGene[[2]], 'DLPFC no qSVA', 'CMC', de = TRUE, n = 400)
+#
+# comp_log(outGene0[[1]], outGene[[3]], 'HIPPO no qSVA', 'HIPPO with qSVA', de = TRUE, n = 400)
+# comp_log(outGene0[[2]], outGene[[4]], 'DLFPC no qSVA', 'DLPFC with qSVA', de = TRUE, n = 400)
 
-comp_log(outGene0[[1]], outGene0[[2]], 'HIPPO', 'DLPFC', var = 't', de = TRUE, n = 400)
-comp_log(outGene0[[1]], outGene[[1]], 'HIPPO', 'BSP1', var = 't', de = TRUE, n = 400)
-comp_log(outGene0[[1]], outGene[[2]], 'HIPPO', 'CMC', var = 't', de = TRUE, n = 400)
-comp_log(outGene0[[2]], outGene[[1]], 'DLPFC', 'BSP1', var = 't', de = TRUE, n = 400)
-comp_log(outGene0[[2]], outGene[[2]], 'DLPFC', 'CMC', var = 't', de = TRUE, n = 400)
+comp_log(outGene0[[1]], outGene0[[2]], 'HIPPO no qSVA', 'DLPFC no qSVA', var = 't', de = TRUE, n = 400)
+comp_log(outGene0[[1]], outGene[[1]], 'HIPPO no qSVA', 'BSP1', var = 't', de = TRUE, n = 400)
+comp_log(outGene0[[1]], outGene[[2]], 'HIPPO no qSVA', 'CMC', var = 't', de = TRUE, n = 400)
+comp_log(outGene0[[2]], outGene[[1]], 'DLPFC no qSVA', 'BSP1', var = 't', de = TRUE, n = 400)
+comp_log(outGene0[[2]], outGene[[2]], 'DLPFC no qSVA', 'CMC', var = 't', de = TRUE, n = 400)
+
+comp_log(outGene0[[1]], outGene[[3]], 'HIPPO no qSVA', 'HIPPO with qSVA', var = 't', de = TRUE, n = 400)
+comp_log(outGene0[[2]], outGene[[4]], 'DLFPC no qSVA', 'DLPFC with qSVA', var = 't', de = TRUE, n = 400)
 dev.off()
 
 
 pdf('pdf/scatter_models_top400de_onlyX.pdf', useDingbats = FALSE)
-comp_log(outGene0[[1]], outGene0[[2]], 'HIPPO', 'DLPFC', de = TRUE, n = 400, onlyx = TRUE)
-comp_log(outGene0[[1]], outGene[[1]], 'HIPPO', 'BSP1', de = TRUE, n = 400, onlyx = TRUE)
-comp_log(outGene0[[1]], outGene[[2]], 'HIPPO', 'CMC', de = TRUE, n = 400, onlyx = TRUE)
-comp_log(outGene0[[2]], outGene[[1]], 'DLPFC', 'BSP1', de = TRUE, n = 400, onlyx = TRUE)
-comp_log(outGene0[[2]], outGene[[2]], 'DLPFC', 'CMC', de = TRUE, n = 400, onlyx = TRUE)
+# comp_log(outGene0[[1]], outGene0[[2]], 'HIPPO no qSVA', 'DLPFC no qSVA', de = TRUE, n = 400, onlyx = TRUE)
+# comp_log(outGene0[[1]], outGene[[1]], 'HIPPO no qSVA', 'BSP1', de = TRUE, n = 400, onlyx = TRUE)
+# comp_log(outGene0[[1]], outGene[[2]], 'HIPPO no qSVA', 'CMC', de = TRUE, n = 400, onlyx = TRUE)
+# comp_log(outGene0[[2]], outGene[[1]], 'DLPFC no qSVA', 'BSP1', de = TRUE, n = 400, onlyx = TRUE)
+# comp_log(outGene0[[2]], outGene[[2]], 'DLPFC no qSVA', 'CMC', de = TRUE, n = 400, onlyx = TRUE)
+#
+# comp_log(outGene0[[1]], outGene[[3]], 'HIPPO no qSVA', 'HIPPO with qSVA', de = TRUE, n = 400, onlyx = TRUE)
+# comp_log(outGene0[[2]], outGene[[4]], 'DLFPC no qSVA', 'DLPFC with qSVA', de = TRUE, n = 400, onlyx = TRUE)
 
-comp_log(outGene0[[1]], outGene0[[2]], 'HIPPO', 'DLPFC', var = 't', de = TRUE, n = 400, onlyx = TRUE)
-comp_log(outGene0[[1]], outGene[[1]], 'HIPPO', 'BSP1', var = 't', de = TRUE, n = 400, onlyx = TRUE)
-comp_log(outGene0[[1]], outGene[[2]], 'HIPPO', 'CMC', var = 't', de = TRUE, n = 400, onlyx = TRUE)
-comp_log(outGene0[[2]], outGene[[1]], 'DLPFC', 'BSP1', var = 't', de = TRUE, n = 400, onlyx = TRUE)
-comp_log(outGene0[[2]], outGene[[2]], 'DLPFC', 'CMC', var = 't', de = TRUE, n = 400, onlyx = TRUE)
+comp_log(outGene0[[1]], outGene0[[2]], 'HIPPO no qSVA', 'DLPFC no qSVA', var = 't', de = TRUE, n = 400, onlyx = TRUE)
+comp_log(outGene0[[1]], outGene[[1]], 'HIPPO no qSVA', 'BSP1', var = 't', de = TRUE, n = 400, onlyx = TRUE)
+comp_log(outGene0[[1]], outGene[[2]], 'HIPPO no qSVA', 'CMC', var = 't', de = TRUE, n = 400, onlyx = TRUE)
+comp_log(outGene0[[2]], outGene[[1]], 'DLPFC no qSVA', 'BSP1', var = 't', de = TRUE, n = 400, onlyx = TRUE)
+comp_log(outGene0[[2]], outGene[[2]], 'DLPFC no qSVA', 'CMC', var = 't', de = TRUE, n = 400, onlyx = TRUE)
+
+comp_log(outGene0[[1]], outGene[[3]], 'HIPPO no qSVA', 'HIPPO with qSVA', var = 't', de = TRUE, n = 400, onlyx = TRUE)
+comp_log(outGene0[[2]], outGene[[4]], 'DLFPC no qSVA', 'DLPFC with qSVA', var = 't', de = TRUE, n = 400, onlyx = TRUE)
 dev.off()
 
 
