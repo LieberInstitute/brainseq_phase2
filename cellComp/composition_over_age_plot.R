@@ -4,6 +4,7 @@ library('sessioninfo')
 library('SummarizedExperiment')
 library('ggplot2')
 library('jaffelab')
+library('limma')
 
 source('../development/load_funs.R')
 
@@ -149,6 +150,102 @@ for(i in seq_along(propEsts)) {
     legend('top', c('DLPFC', 'HIPPO'), col = l_cols, lwd = 3, bty = 'n', ncol = 1, cex = 1.5)
 }
 dev.off()
+
+## Use limma like we did at
+## https://github.com/LieberInstitute/brainseq_phase2/blob/master/development/limma_dev.R
+brnum <- pd$BrNum
+props <- t(as.matrix(pd[, colnames(propEsts)]))
+corfit <- duplicateCorrelation(props,
+        design[, c('(Intercept)', 'RegionHIPPO')], block=brnum)
+        
+## Only adjust for the variables plotted
+mod_lm <- cbind(plot_age_mod, design[, grep(':', colnames(design))])
+colnames(mod_lm)
+#  [1] "(Intercept)"        "Age"                "RegionHIPPO"
+#  [4] "fetal"              "birth"              "infant"
+#  [7] "child"              "teen"               "adult"
+# [10] "Age:RegionHIPPO"    "RegionHIPPO:fetal"  "RegionHIPPO:birth"
+# [13] "RegionHIPPO:infant" "RegionHIPPO:child"  "RegionHIPPO:teen"
+# [16] "RegionHIPPO:adult"
+
+## Now fit with limma
+fit <- lmFit(props, design = mod_lm, block=brnum,
+        correlation = corfit$consensus.correlation)
+fit <- eBayes(fit)
+top <- topTable(fit, coef = grep(':', colnames(mod_lm)), n = nrow(props),
+    sort.by = 'none')
+    
+## Add some values for convinience
+top$P.Bonf <- p.adjust(top$P.Value, 'bonf')
+top$P.Bonf.sig <- top$P.Bonf < 0.05
+# top$P.Bonf.Less.1perc <- top$P.Bonf < 0.01
+top$FDR.sig <- top$adj.P.Val < 0.05
+
+## Use a better name and print
+top_cell_prop <- top
+options(width = 300)
+top_cell_prop
+
+
+## Save the results
+write.table(top_cell_prop, file = 'top_cell_prop.txt', sep = '\t', quote = FALSE)
+save(top_cell_prop, file = 'top_cell_prop.Rdata')
+
+## Manually with lm() although that doesn't take into account the repeated measures
+# x <- do.call(rbind, mapply(function(i, cell) {
+#     tmp <- cbind(data.frame(y = pd[, colnames(propEsts)[i]]), pd[, c('Region', colnames(plot_age_mod)[-c(1, 3)])])
+#     fit_lm <- lm(y ~ Region * Age + Region * fetal + Region * birth + Region * infant + Region * infant + Region * child + Region * teen + Region * adult, data = tmp)
+#     fit_lm0 <- lm(y ~ Region + Age + fetal + birth + infant + infant + child + teen + adult, data = tmp)
+#     res <- as.data.frame(anova(fit_lm, fit_lm0)[2, 5:6])
+#     res$cell <- cell
+#     rownames(res) <- NULL
+#     return(res)
+# }, seq_len(ncol(propEsts)), colnames(propEsts), SIMPLIFY = FALSE))
+# x$pbonf <- p.adjust(x[, 2], 'bonf')
+# x$pbonf < 0.05
+
+
+
+
+top_by_age_group <- function(agegroup) {
+    index <- pd$ageGroup == agegroup
+    pd <- pd[index, ]
+    props <- props[, index]
+    brnum <- pd$BrNum
+    mod <- with(pd, model.matrix( ~ Region * Age))
+    corfit <- duplicateCorrelation(props,
+            mod[, c('(Intercept)', 'RegionHIPPO')], block=brnum)
+            
+    fit <- lmFit(props, design = mod, block=brnum,
+            correlation = corfit$consensus.correlation)
+    fit <- eBayes(fit)
+    top <- topTable(fit, coef = grep(':', colnames(mod)), n = nrow(props),
+        sort.by = 'none')
+    top$ageGroup <- agegroup
+    top$cell <- rownames(top)
+    
+    ## Compute these globally
+    ## Leads to basically the same results (like the same one is P.Bonf < 5%)
+    # top$P.Bonf <- p.adjust(top$P.Value, 'bonf')
+    # top$P.Bonf.sig <- top$P.Bonf < 0.05
+    # top$FDR.sig <- top$adj.P.Val < 0.05
+    return(top)        
+}
+
+
+top_cell_by_agegroup <- do.call(rbind, lapply(levels(pd$ageGroup), top_by_age_group))
+top_cell_by_agegroup$P.Bonf <- p.adjust(top_cell_by_agegroup$P.Value, 'bonf')
+top_cell_by_agegroup$P.Bonf.sig <- top_cell_by_agegroup$P.Bonf < 0.05
+top_cell_by_agegroup$FDR.sig <- top_cell_by_agegroup$adj.P.Val < 0.05
+rownames(top_cell_by_agegroup) <- NULL
+options(width = 150)
+subset(top_cell_by_agegroup, P.Bonf.sig)
+#           logFC   AveExpr         t      P.Value   adj.P.Val         B ageGroup       cell      P.Bonf P.Bonf.sig FDR.sig
+# 37 -0.001422805 0.2399906 -3.755022 0.0002008077 0.001606461 -5.820941    Adult Astrocytes 0.009638768       TRUE    TRUE
+
+## Save the results
+write.table(top_cell_by_agegroup, file = 'top_cell_by_agegroup.txt', sep = '\t', quote = FALSE, row.names = FALSE)
+save(top_cell_by_agegroup, file = 'top_cell_by_agegroup.Rdata')
 
 
 ## Reproducibility information
