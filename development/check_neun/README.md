@@ -19,7 +19,7 @@ make_table(tab_pbonf_span)
 ```
 
 
-The following plot shows the F-statistics from the original model against the NeuN adjusted model with DE determined by P-bonferroni<1% and requiring replication in BrainSpan.
+The following plot shows the F-statistics from the original model against the RNA cell fractions adjusted model with DE determined by P-bonferroni<1% and requiring replication in BrainSpan.
 
 ![F-statistics original vs CellProp-adjusted](f_original_vs_f_adjCellProp.png)
 
