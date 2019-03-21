@@ -96,7 +96,7 @@ Number in this table are also shown in several of the `pdf/venn_feature*.pdf` fi
 
 ![TWAS Z by brain region](pdf/twas_z_Page_1.png)
 
-Correlations for the plot above:
+Correlations for the plot above (only using points present in both regions):
 
 ```{r}
 corrs
