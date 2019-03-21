@@ -507,6 +507,36 @@ map(split(region_twas_z, region_twas_z$feature),
 #    Sum     577  289 866
 
 
+## Load SCZD case-control data
+## From https://github.com/LieberInstitute/qsva_brain/blob/master/brainseq_phase2_qsv/explore_case_control.R#L65-L71
+outFeat <- lapply(c('/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/dxStats_dlpfc_filtered_qSVA_noHGoldQSV_matchDLPFC.rda', '/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/dxStats_hippo_filtered_qSVA_noHGoldQSV_matchHIPPO.rda'), function(f) {
+    message(paste(Sys.time(), 'loading', f))
+    load(f, verbose = TRUE)
+    outTx$ensemblID <- gsub('\\..*', '', outTx$gene_id)
+    return(list('gene' = outGene, 'exon' = outExon, 'jxn' = outJxn, 'tx' = outTx))
+})
+names(outFeat) <- c('DLPFC', 'HIPPO')
+
+
+## Add the SCZD info back to the tt object
+tt$SCZD_FDR <- tt$SCZD_pvalue <- tt$SCZD_t <- NA
+for(feat in features) {
+    for(region in names(outFeat)) {
+        message(paste(Sys.time(), 'processing', region, 'at the', feat, 'level'))
+        i <- which(tt$feature == feat & tt$region == region)
+        current <- outFeat[[region]][[feat]]
+        print(length(i))
+        # table(tt$region[i], tt$feature[i])
+        m <- match(tt$ID[i], rownames(current))
+        stopifnot(!any(is.na(m)))
+        tt$SCZD_t[i] <- current$t[m]
+        tt$SCZD_pvalue[i] <- current$P.Value[m]
+        tt$SCZD_FDR[i] <- current$adj.P.Val[m]
+    }
+}
+## For checking the code
+# sapply(tt[, 49:51], function(x) { sum(is.na(x)) })
+
 
 ## Subset by significant (TWAS FDR < 5%)
 ttSig <- map(split(tt, tt$region), ~ .x[.x$TWAS.FDR < 0.05, ])
@@ -515,7 +545,7 @@ map_dfr(ttSig, dim)
 #   DLPFC HIPPO
 #   <int> <int>
 # 1  5760  4081
-# 2    48    48
+# 2    51    51
 
 ttSig_bonf <- map(split(tt, tt$region), ~ .x[.x$TWAS.Bonf < 0.05, ])
 map_dfr(ttSig_bonf, dim)
@@ -523,7 +553,7 @@ map_dfr(ttSig_bonf, dim)
 #   DLPFC HIPPO
 #   <int> <int>
 # 1   768   578
-# 2    48    48
+# 2    51    51
 
 
 map_int(ttSig, ~ length(unique(.x$geneid)))
@@ -543,15 +573,14 @@ map_int(ttSig, ~ length(unique(.x$geneid[.x$TWAS.P < 5e-08])))
 #   115    84
 
 dim(tt)
-# [1] 127251     48
+# [1] 127251     51
 dim(region_twas_z)
 # [1] 98127    16
 
+
+
 ## save for later
 save(tt, ttSig, ttSig_bonf, get_variable_by_region, ttReg_map, region_twas_z, file = 'rda/tt_objects.Rdata')
-
-
-
 
 
 
@@ -1332,6 +1361,48 @@ cbind(map_dfr(split(tt, tt$region), ~ map_dfr(split(.x, .x$feature), ~ sum(p.adj
 
 
 
+## Compare SCZD t vs TWAS z
+pdf('pdf/sczd_t_vs_twas_z.pdf', useDingbats = FALSE, width = 21, height = 18)
+
+tt$status <- ifelse(tt$BEST.GWAS.status == 'Other', 'Other', 'Risk Locus')
+
+## Used https://stackoverflow.com/questions/11889625/annotating-text-on-individual-facet-in-ggplot2
+dat_text <- map_dfr(features, function(feat) {
+    map_dfr(names(outFeat), function(region) {
+        map_dfr(c('Other', 'Risk Locus'), function(state) {
+            
+            i <- which(tt$feature == feat & tt$region == region & tt$status == state)
+            data.frame(
+                region = region,
+                feature = feat,
+                status = state,
+                cor = signif(cor(tt$TWAS.Z[i], tt$SCZD_t[i]), 3),
+                stringsAsFactors = FALSE
+            )
+        })
+    })
+})
+
+## Used https://stackoverflow.com/questions/39623636/forcing-r-output-to-be-scientific-notation-with-at-most-two-decimals/39625148
+ggplot(tt, aes(x = TWAS.Z, y = SCZD_t, color = BEST.GWAS.P.computed < 5e-08)) +
+    geom_point() +
+    facet_grid(region * 
+        status ~
+        factor(feature, levels = c('gene', 'exon', 'jxn', 'tx'))
+    ) +
+    theme_bw(base_size = 30) +
+    ggtitle('TWAS vs SCZD differential expression') +
+    xlab('TWAS Z score') +
+    ylab('SCZD vs control t-statistic') +
+    labs(caption = 'Risk Loci by BEST GWAS') +
+    guides(color=guide_legend(title="BEST GWAS\np < 5e-08")) +
+    geom_text(
+      data    = dat_text,
+      color = 'black',
+      size = 7,
+      mapping = aes(x = -4, y = 5.5, label = paste0('rho=', formatC(cor, format = "e", digits = 2))),
+    )
+dev.off()
 
 ## Reproducibility information
 print('Reproducibility information:')
@@ -1350,67 +1421,68 @@ session_info()
 #  collate  en_US.UTF-8
 #  ctype    en_US.UTF-8
 #  tz       US/Eastern
-#  date     2019-03-07
+#  date     2019-03-21
 #
 # ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 #  package        * version  date       lib source
 #  assertthat       0.2.0    2017-04-11 [2] CRAN (R 3.5.0)
-#  bindr            0.1.1    2018-03-13 [1] CRAN (R 3.5.0)
-#  bindrcpp         0.2.2    2018-03-29 [1] CRAN (R 3.5.0)
+#  BiocGenerics   * 0.28.0   2018-10-30 [1] Bioconductor
 #  bitops           1.0-6    2013-08-17 [2] CRAN (R 3.5.0)
-#  caTools          1.17.1.1 2018-07-20 [2] CRAN (R 3.5.1)
+#  caTools          1.17.1.2 2019-03-06 [2] CRAN (R 3.5.1)
 #  cli              1.0.1    2018-09-25 [1] CRAN (R 3.5.1)
 #  colorout       * 1.2-0    2018-05-02 [1] Github (jalvesaq/colorout@c42088d)
 #  colorspace       1.4-0    2019-01-13 [2] CRAN (R 3.5.1)
 #  crayon           1.3.4    2017-09-16 [1] CRAN (R 3.5.0)
 #  digest           0.6.18   2018-10-10 [1] CRAN (R 3.5.1)
-#  dplyr            0.7.8    2018-11-10 [1] CRAN (R 3.5.1)
+#  dplyr            0.8.0.1  2019-02-15 [1] CRAN (R 3.5.1)
 #  fansi            0.4.0    2018-10-05 [1] CRAN (R 3.5.1)
-#  formatR          1.5      2017-04-25 [1] CRAN (R 3.5.0)
+#  formatR          1.6      2019-03-05 [1] CRAN (R 3.5.1)
 #  futile.logger  * 1.4.3    2016-07-10 [1] CRAN (R 3.5.0)
 #  futile.options   1.0.1    2018-04-20 [2] CRAN (R 3.5.0)
 #  gdata            2.18.0   2017-06-06 [2] CRAN (R 3.5.0)
 #  ggplot2        * 3.1.0    2018-10-25 [1] CRAN (R 3.5.1)
-#  glue             1.3.0    2018-07-17 [1] CRAN (R 3.5.1)
-#  gplots         * 3.0.1    2016-03-30 [1] CRAN (R 3.5.0)
+#  glue             1.3.1    2019-03-12 [1] CRAN (R 3.5.1)
+#  gplots         * 3.0.1.1  2019-01-27 [1] CRAN (R 3.5.1)
 #  gtable           0.2.0    2016-02-26 [2] CRAN (R 3.5.0)
 #  gtools           3.8.1    2018-06-26 [2] CRAN (R 3.5.1)
 #  hms              0.4.2    2018-03-10 [2] CRAN (R 3.5.0)
 #  htmltools        0.3.6    2017-04-28 [2] CRAN (R 3.5.0)
 #  htmlwidgets      1.3      2018-09-30 [1] CRAN (R 3.5.1)
 #  httpuv           1.4.5.1  2018-12-18 [2] CRAN (R 3.5.1)
+#  jsonlite         1.6      2018-12-07 [2] CRAN (R 3.5.1)
 #  KernSmooth       2.23-15  2015-06-29 [3] CRAN (R 3.5.1)
 #  labeling         0.3      2014-08-23 [2] CRAN (R 3.5.0)
 #  lambda.r         1.2.3    2018-05-17 [1] CRAN (R 3.5.0)
-#  later            0.7.5    2018-09-18 [2] CRAN (R 3.5.1)
+#  later            0.8.0    2019-02-11 [2] CRAN (R 3.5.1)
 #  lattice          0.20-38  2018-11-04 [3] CRAN (R 3.5.1)
 #  lazyeval         0.2.1    2017-10-29 [2] CRAN (R 3.5.0)
 #  magrittr         1.5      2014-11-22 [1] CRAN (R 3.5.0)
-#  munsell          0.5.0    2018-06-12 [2] CRAN (R 3.5.0)
+#  munsell          0.5.0    2018-06-12 [2] CRAN (R 3.5.1)
 #  pillar           1.3.1    2018-12-15 [1] CRAN (R 3.5.1)
 #  pkgconfig        2.0.2    2018-08-16 [1] CRAN (R 3.5.1)
 #  plyr             1.8.4    2016-06-08 [2] CRAN (R 3.5.0)
 #  png              0.1-7    2013-12-03 [2] CRAN (R 3.5.0)
 #  promises         1.0.1    2018-04-13 [2] CRAN (R 3.5.0)
-#  purrr          * 0.2.5    2018-05-29 [2] CRAN (R 3.5.0)
-#  R6               2.3.0    2018-10-04 [2] CRAN (R 3.5.1)
+#  purrr          * 0.3.1    2019-03-03 [2] CRAN (R 3.5.1)
+#  R6               2.4.0    2019-02-14 [2] CRAN (R 3.5.1)
 #  RColorBrewer   * 1.1-2    2014-12-07 [2] CRAN (R 3.5.0)
 #  Rcpp             1.0.0    2018-11-07 [1] CRAN (R 3.5.1)
 #  readr          * 1.3.1    2018-12-21 [1] CRAN (R 3.5.1)
 #  reshape2         1.4.3    2017-12-11 [2] CRAN (R 3.5.0)
 #  rlang            0.3.1    2019-01-08 [1] CRAN (R 3.5.1)
 #  rmote          * 0.3.4    2018-05-02 [1] deltarho (R 3.5.0)
+#  S4Vectors      * 0.20.1   2018-11-09 [1] Bioconductor
 #  scales           1.0.0    2018-08-09 [2] CRAN (R 3.5.1)
-#  servr            0.11     2018-10-23 [1] CRAN (R 3.5.1)
+#  servr            0.13     2019-03-04 [1] CRAN (R 3.5.1)
 #  sessioninfo    * 1.1.1    2018-11-05 [1] CRAN (R 3.5.1)
-#  stringi          1.2.4    2018-07-20 [2] CRAN (R 3.5.1)
-#  stringr          1.3.1    2018-05-10 [1] CRAN (R 3.5.0)
+#  stringi          1.4.3    2019-03-12 [2] CRAN (R 3.5.1)
+#  stringr          1.4.0    2019-02-10 [1] CRAN (R 3.5.1)
 #  tibble         * 2.0.1    2019-01-12 [1] CRAN (R 3.5.1)
 #  tidyselect       0.2.5    2018-10-11 [2] CRAN (R 3.5.1)
 #  utf8             1.1.4    2018-05-24 [1] CRAN (R 3.5.0)
 #  VennDiagram    * 1.6.20   2018-03-28 [1] CRAN (R 3.5.0)
 #  withr            2.1.2    2018-03-15 [2] CRAN (R 3.5.0)
-#  xfun             0.4      2018-10-23 [1] CRAN (R 3.5.1)
+#  xfun             0.5      2019-02-20 [1] CRAN (R 3.5.1)
 #
 # [1] /users/lcollado/R/x86_64-pc-linux-gnu-library/3.5.x
 # [2] /jhpce/shared/jhpce/core/conda/miniconda-3/envs/svnR-3.5.x/R/3.5.x/lib64/R/site-library
