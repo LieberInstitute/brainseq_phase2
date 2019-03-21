@@ -2,37 +2,35 @@ Check development after adjusting for NeuN cell type proportion
 ===============================================================
 
 
-We used the estimated RNA fraction (see [cellComp](../../cellComp) directory) and re-ran our DEG analysis adjusting for the Neuronal estimated RNA fraction.
+We used the estimated RNA fraction (see [cellComp](../../cellComp) directory) for eight different cell types (fetal replicating, fetal quiescent, OPC, neurons, astrocytes, oligodendrocytes, microglia and endothelial cells). We then re-ran our DEG analysis for each expression feature adjusting for the first 7 cell types (to keep a full rank design model). Across features, we observed a high degree of concordance across our initial analysis and this re-analysis (see table below) at a threshold of Bonferroni<1%. This high concordance can be explained by the observation that the cell fractions are not significantly different (Bonferroni>5%) by age between DLPFC and HIPPO for each of the six age groups we considered, with the only exception being astrocytes for individuals 20 to 50 years old (details in `top_cell_by_agegroup` at [cellComp](../../cellComp), images at the end of this page). Thus while cell RNA fractions change over development, they are not a contributing factor in our development analysis comparing DLPFC and HIPPO.
 
 
-.... to be updated ...
-
-
-
-We used 614 samples for the DEG analysis across development, out of which 412 had matching DNAm data and cell type proportion estimates. Using the 412 samples, we re-ran our DEG analysis adjusting for the NeuN estimated proportion. Across all features, we found a negligible amount of features with P-bonferroni <1% that don’t satisfy this threshold in the original model. In contrast, the great majority of features with P-bonferroni <1% in the original model failed to meet this threshold after adjusting for NeuN proportion. This result was significant across all features (largest p-value 3.859747 x 10-60). This result is in line with our previous work (Jaffe et al, Nat Neuro 2015) where we observed strong confounding by cell type across development.
-
-
-....
-
-
-
-The tables below show the number of features that are either null in both models, DE in the original model only, DE in the Neuron RNA fraction adjusted model only, or DE in both models where DE is assed by a P-bonferroni <1%. In the second table we additionally require that the DE call replicate in BrainSpan by having a P-value <5%.
+The tables below show the number of features that are either null in both models, DE in the original model only, DE only in the model where we adjust for the cell type fractions, or DE in both models where DE is assed by a P-bonferroni <1%. In the second table we additionally require that the DE call replicate in BrainSpan by having a P-value <5%.
 
 ```R
 make_table(tab_pbonf)
-#   Null_both Original_only NeuN_only   Both feature        OR pval pval_bonf
-# 1      4566          1241      2341  16504    gene  25.93892    0         0
-# 2     77518         19697     32226 267138    exon  32.62359    0         0
-# 3     89159         15911     15635 176476     jxn  63.24926    0         0
-# 4     88313           662       604   3153      tx 696.39185    0         0
+#   Null_both Original_only CellProp_only  Both feature        OR pval pval_bonf
+# 1      3878          1382          3029 16363    gene  15.15875    0         0
+# 2     88040          1049           877  2766      tx 264.70194    0         0
 make_table(tab_pbonf_span)
-#   Null_both Original_only NeuN_only   Both feature        OR pval pval_bonf
-# 1     12743           647      1070  10192    gene  187.6044    0         0
-# 2    211284         10722     16042 158531    exon  194.7361    0         0
-# 3    142089         12034     11197 131861     jxn  139.0481    0         0
-# 4     90846           224       171   1491      tx 3536.2204    0         0
+#   Null_both Original_only CellProp_only  Both feature        OR pval pval_bonf
+# 1     12501           748          1312 10091    gene  128.5415    0         0
+# 2     90783           408           234  1307      tx 1242.8082    0         0
 ```
+
 
 The following plot shows the F-statistics from the original model against the NeuN adjusted model with DE determined by P-bonferroni<1% and requiring replication in BrainSpan.
 
-![F-statistics original vs NeuN-adjusted](f_original_vs_f_adjNeuN.png)
+![F-statistics original vs CellProp-adjusted](f_original_vs_f_adjCellProp.png)
+
+
+## Cell types RNA fraction over age
+
+![Cell over age page 1](../../cellComp/proportions_over_age_by_cell_type_Page_1.png)
+![Cell over age page 2](../../cellComp/proportions_over_age_by_cell_type_Page_2.png)
+![Cell over age page 3](../../cellComp/proportions_over_age_by_cell_type_Page_3.png)
+![Cell over age page 4](../../cellComp/proportions_over_age_by_cell_type_Page_4.png)
+![Cell over age page 5](../../cellComp/proportions_over_age_by_cell_type_Page_5.png)
+![Cell over age page 6](../../cellComp/proportions_over_age_by_cell_type_Page_6.png)
+![Cell over age page 7](../../cellComp/proportions_over_age_by_cell_type_Page_7.png)
+![Cell over age page 8](../../cellComp/proportions_over_age_by_cell_type_Page_8.png)
