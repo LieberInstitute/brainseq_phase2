@@ -86,13 +86,13 @@ We performed a transcriptome-wide association study (TWAS) after constructing SN
 When comparing DLPFC versus HIPPO, more features were heritable and have TWAS weights in DLPFC (74,327 features spanning 11,421 genes, see Table 1) than HIPPO (52,924 features spanning 9,949 genes). This lead to more TWAS genome wide significant (FDR<5%) features for DLPFC (5,760 features spanning 1,513 genes) than HIPPO (4,081 features spanning 1,254 genes) with 1,656 features (20.2%) spanning 624 genes (30.5%) being significant in both brain regions. The TWAS Z scores were highly correlated (0.86 to 0.93 by brain region, feature and risk loci status) and concordant (only 2 were discordant) among DLPFC and HIPPO for the features with TWAS weights in both brain regions (see Figure 1 below). The TWAS approach is complementary to the eQTL analysis we carried out on risk loci as 92 (74.2%) of the 124 risk loci with eQTLs at FDR<1% we identified successfully had TWAS weights (see Table 2 below). Of these risk loci with TWAS weights, 82 (89.1%) across both brain regions had a feature with genome wide significant TWAS signal at FDR <5% (N=61 for Bonferroni <5%, 66.3%). We further compared our results against the TWAS published by Gusev et al, Nature Genetics, 2018. They identified 83 unique genes with TWAS Bonferroni <5% across the CMC and CMC splicing datasets. In our TWAS analysis, we replicated 70 (84.3%) with TWAS FDR <5% and 55 (66.3%) with TWAS Bonferroni <5% across any of the expression feature levels we assessed (see Table 3 below).
 
 
-_Table 1_
+## _Table 1_
 
 ![Summary TWAS table](summary_results/summary_twas_table.png)
 
 Number in this table are also shown in several of the `pdf/venn_feature*.pdf` files.
 
-_Figure 1_
+## _Figure 1_
 
 ![TWAS Z by brain region](pdf/twas_z_Page_1.png)
 
@@ -117,11 +117,11 @@ corrs
 # 0.8766659 0.9285188
 ```
 
-_Table 2_
+## _Table 2_
 
 ![TWAS vs rAggr loci](summary_results/twas_vs_raggr_by_loci.png)
 
-_Table 3_
+## _Table 3_
 
 ```{r}
 with(gusev_gene, addmargins(table(psycm_FDR_DLPFC_any_feature, psycm_FDR_HIPPO_any_feature)))
