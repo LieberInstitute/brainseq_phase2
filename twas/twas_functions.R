@@ -408,3 +408,90 @@ make_pretty_venn_shared_by_geneid2 <- function(cut, title = '', var = 'TWAS.FDR'
         }
     )
 }
+
+
+
+
+
+make_summary_twas_table <- function(tt) {
+    
+    get_list_n <- function(l) {
+        c(map_int(l, length), 'total' = length(unique(unlist(l))))
+    }
+    
+    clean_gene <- function(x) {
+        x[!is.na(x)]
+    }
+    
+    id_list <- map(split(tt, tt$region), function(reg) {
+        by_feat <- split(reg, factor(reg$feature, levels = features))        
+        ids <- map(by_feat, ~ .x$ID)
+        ids_gene <- map(by_feat, ~ clean_gene(unique(.x$geneid)))
+        
+        ids_sig <- map(by_feat, ~ .x$ID[.x$TWAS.FDR < 0.05] )
+        ids_sig_bonf <- map(by_feat, ~ .x$ID[.x$TWAS.Bonf < 0.05] )
+        
+        ids_gene_sig <- map(by_feat, ~ clean_gene(unique(.x$geneid[.x$TWAS.FDR < 0.05])))
+        ids_gene_sig_bonf <- map(by_feat, ~ clean_gene(unique(.x$geneid[.x$TWAS.Bonf < 0.05])))
+        
+        ids_sig_in <- map(by_feat, ~ .x$ID[.x$TWAS.FDR < 0.05 & .x$status == 'Risk Locus'] )
+        ids_sig_out <- map(by_feat, ~ .x$ID[.x$TWAS.FDR < 0.05 & .x$status != 'Risk Locus'] )
+                
+        ids_sig_in_bonf <- map(by_feat, ~ .x$ID[.x$TWAS.Bonf < 0.05 & .x$status == 'Risk Locus'] )
+        ids_sig_out_bonf <- map(by_feat, ~ .x$ID[.x$TWAS.Bonf < 0.05 & .x$status != 'Risk Locus'] )
+        
+        
+        ids_gene_sig_in <- map(by_feat, ~ clean_gene(unique(.x$geneid[.x$TWAS.FDR < 0.05 & .x$status == 'Risk Locus'])))
+        ids_gene_sig_in_bonf <- map(by_feat, ~ clean_gene(unique(.x$geneid[.x$TWAS.Bonf < 0.05 & .x$status == 'Risk Locus'])))
+        
+        ids_gene_sig_out <- map(by_feat, ~ clean_gene(unique(.x$geneid[.x$TWAS.FDR < 0.05 & .x$status != 'Risk Locus'])))
+        ids_gene_sig_out_bonf <- map(by_feat, ~ clean_gene(unique(.x$geneid[.x$TWAS.Bonf < 0.05 & .x$status != 'Risk Locus'])))
+        
+        return(
+            list(
+                'features' = ids,
+                'genes' = ids_gene,
+                'twas_fdr_features' = ids_sig,
+                'twas_fdr_in_features' = ids_sig_in,
+                'twas_fdr_out_features' = ids_sig_out,
+                'twas_fdr_genes' = ids_gene_sig,
+                'twas_fdr_in_genes' = ids_gene_sig_in,
+                'twas_fdr_out_genes' = ids_gene_sig_out,
+                'twas_bonf_features' = ids_sig_bonf,
+                'twas_bonf_in_features' = ids_sig_in_bonf,
+                'twas_bonf_out_features' = ids_sig_out_bonf,
+                'twas_bonf_genes' = ids_gene_sig_bonf,
+                'twas_bonf_in_genes' = ids_gene_sig_in_bonf,
+                'twas_bonf_out_genes' = ids_gene_sig_out_bonf
+            )
+        )        
+    })
+    
+    result <- map2_dfr(id_list, names(id_list), function(ll, region) {
+        res <- data.frame(
+            type = names(get_list_n(ll[[1]])),
+            set = region,
+            stringsAsFactors = FALSE
+        )
+        cbind(res, map_dfr(ll, get_list_n))
+    })
+    
+    combine_regions <- function(foo, label) {
+        res <- data.frame(
+            type = result$type[1:5],
+            set = label,
+            stringsAsFactors = FALSE
+        )
+        res2 <- map2_dfr(id_list[[1]], id_list[[2]], function(x, y) {
+            get_list_n(map2(x, y, foo))
+        })
+        cbind(res, res2)
+    }
+    
+    
+    rbind(
+        result,
+        combine_regions(intersect, 'Intersection'),
+        combine_regions(function(x, y) { unique(c(x, y))}, 'Union')
+    )
+}

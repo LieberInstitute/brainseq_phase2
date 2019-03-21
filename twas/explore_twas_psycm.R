@@ -506,6 +506,26 @@ map(split(region_twas_z, region_twas_z$feature),
 #    Both      0   34  34
 #    Sum     577  289 866
 
+corrs <- map(split(region_twas_z, factor(region_twas_z$feature, levels = features)), ~ map_dbl(split(.x, ifelse(.x$BEST.GWAS.status_DLPFC == 'Other', 'Other', 'Risk Loci')), ~ cor(.x$DLPFC[.x$in_both], .x$HIPPO[.x$in_both])))
+corrs
+# $gene
+#     Other Risk Loci
+# 0.8580300 0.9153703
+#
+# $exon
+#     Other Risk Loci
+# 0.8666640 0.8951267
+#
+# $jxn
+#     Other Risk Loci
+# 0.8786717 0.9278632
+#
+# $tx
+#     Other Risk Loci
+# 0.8766659 0.9285188
+
+range(unlist(corrs))
+# [1] 0.8580300 0.9285188
 
 ## Load SCZD case-control data
 ## From https://github.com/LieberInstitute/qsva_brain/blob/master/brainseq_phase2_qsv/explore_case_control.R#L65-L71
@@ -1403,6 +1423,47 @@ ggplot(tt, aes(x = TWAS.Z, y = SCZD_t, color = BEST.GWAS.P.computed < 5e-08)) +
       mapping = aes(x = -4, y = 5.5, label = paste0('rho=', formatC(cor, format = "e", digits = 2))),
     )
 dev.off()
+
+## Create the summary twas table
+## Complements venn_by_feature*.pdf files
+options(width = 300)
+(summary_twas_tab <- make_summary_twas_table(tt))
+#     type          set features genes twas_fdr_features twas_fdr_in_features twas_fdr_out_features twas_fdr_genes twas_fdr_in_genes twas_fdr_out_genes twas_bonf_features twas_bonf_in_features twas_bonf_out_features twas_bonf_genes twas_bonf_in_genes twas_bonf_out_genes
+# 1   gene        DLPFC     5482  5482               406                  125                   281            406               125                281                 81                    60                     21              81                 60                  21
+# 2   exon        DLPFC    39131  8123              3057                  957                  2100           1012               276                739                371                   333                     38             128                107                  21
+# 3    jxn        DLPFC    20653  5732              1552                  446                  1106            663               177                487                194                   167                     27             102                 82                  20
+# 4     tx        DLPFC     9061  6125               745                  209                   536            593               164                429                122                    91                     31             101                 71                  30
+# 5  total        DLPFC    74327 11421              5760                 1737                  4023           1513               379               1137                768                   651                    117             239                184                  56
+# 6   gene        HIPPO     3977  3977               270                   67                   203            270                67                203                 56                    39                     17              56                 39                  17
+# 7   exon        HIPPO    25686  5934              1955                  601                  1354            698               189                513                246                   208                     38              90                 73                  17
+# 8    jxn        HIPPO    16107  4974              1249                  354                   895            567               150                418                159                   128                     31              86                 68                  18
+# 9     tx        HIPPO     7154  4996               607                  170                   437            495               137                359                117                    90                     27             101                 74                  27
+# 10 total        HIPPO    52924  9949              4081                 1192                  2889           1254               315                945                578                   465                    113             217                157                  60
+# 11  gene Intersection     2792  2792               138                   44                    94            138                44                 94                 27                    20                      7              27                 20                   7
+# 12  exon Intersection    13780  4482               754                  254                   500            387               134                255                 87                    83                      4              54                 46                   8
+# 13   jxn Intersection     8438  3557               504                  158                   346            307                99                208                 51                    48                      3              47                 39                   8
+# 14    tx Intersection     4114  3461               260                   77                   183            256                77                179                 41                    34                      7              42                 34                   8
+# 15 total Intersection    29124  7069              1656                  533                  1123            624               194                432                206                   185                     21             102                 80                  22
+# 16  gene        Union     6667  6667               538                  148                   390            538               148                390                110                    79                     31             110                 79                  31
+# 17  exon        Union    51037  9575              4258                 1304                  2954           1323               331                997                530                   458                     72             164                134                  30
+# 18   jxn        Union    28322  7149              2297                  642                  1655            923               228                697                302                   247                     55             141                111                  30
+# 19    tx        Union    12101  7660              1092                  302                   790            832               224                609                198                   147                     51             160                111                  49
+# 20 total        Union    98127 13558              8185                 2396                  5789           2043               475               1576               1140                   931                    209             332                246                  87
+
+## Check numbers
+rbind(
+    'DLPFC + HIPPO - intersection' = summary_twas_tab[5, -(1:2)] + summary_twas_tab[10, -(1:2)] - summary_twas_tab[15, -(1:2)],
+    'Union' = summary_twas_tab[20, -(1:2)]
+)
+## Genes don't add up because those can show up more than once
+## for the exon/jxn/tx features
+#                              features genes twas_fdr_features twas_fdr_in_features twas_fdr_out_features twas_fdr_genes twas_fdr_in_genes twas_fdr_out_genes twas_bonf_features twas_bonf_in_features twas_bonf_out_features twas_bonf_genes twas_bonf_in_genes twas_bonf_out_genes
+# DLPFC + HIPPO - intersection    98127 14301              8185                 2396                  5789           2143               500               1650               1140                   931                    209             354                261                  94
+# Union                           98127 13558              8185                 2396                  5789           2043               475               1576               1140                   931                    209             332                246                  87
+
+
+## Save results
+write.table(summary_twas_tab, file = 'summary_results/summary_twas_table.txt', row.names = FALSE, quote = FALSE, sep = '\t')
 
 ## Reproducibility information
 print('Reproducibility information:')

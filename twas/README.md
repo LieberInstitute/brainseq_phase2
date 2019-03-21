@@ -79,4 +79,69 @@ The original `fusion_twas` scripts are located at [gusevlab/fusion_twas](https:/
 * Resolved together with the TWAS-fusion maintainer some issues/bugs(?) reported in [issue number 4](https://github.com/gusevlab/fusion_twas/issues/4).
 * Changed the name of the summary file to `wglist_summary.txt`, so we can then rename it as needed.
 
+# BSP2 CLOZUK+PGC2 TWAS
 
+We performed a transcriptome-wide association study (TWAS) after constructing SNP weights across the four feature summarizations (gene, exon, junction and transcript) using both brain regions (DLPFC and HIPPO) and applying these weights to the summary statistics from the entire collection of schizophrenia GWAS summary statistics from CLOZUK. We identified 8,185 features (538 genes, 4,258 exons, 2,297 junctions and 1,092 transcripts, see Table 1 below) significantly associated with schizophrenia risk with TWAS FDR < 5% that were annotated to 2,044 unique genes, of which 1,140 features (110 genes, 530 exons, 302 junctions and 198 transcripts) in 333 genes were significant following more conservative Bonferroni adjustment (at < 5%) in either brain region. As the TWAS approach combines GWAS and eQTL information, it's possible for GWAS signal that does not reach GWAS genome-wide significance (p < 5e-8) to still achieve TWAS transcriptome-wide significance. We therefore annotated the strongest GWAS variant for each significant TWAS feature back to the clumped GWAS risk loci, and found that 77.7% of the TWAS Bonferroni-significant features (N=931) mapped back to the published GWAS risk loci. While a small fraction of Bonferroni-significant TWAS features were outside of GWAS risk loci (N=209 features, 18.3%), a much larger fraction of FDR-significant TWAS features identified potentially novel genes and corresponding GWAS loci implicated in schizophrenia (N=5,789 features, 70.7% corresponding to 1,576 genes - 77.1%).
+
+When comparing DLPFC versus HIPPO, more features were heritable and have TWAS weights in DLPFC (74,327 features spanning 11,421 genes, see Table 1) than HIPPO (52,924 features spanning 9,949 genes). This lead to more TWAS genome wide significant (FDR<5%) features for DLPFC (5,760 features spanning 1,513 genes) than HIPPO (4,081 features spanning 1,254 genes) with 1,656 features (20.2%) spanning 624 genes (30.5%) being significant in both brain regions. The TWAS Z scores were highly correlated (0.86 to 0.93 by brain region, feature and risk loci status) and concordant (only 2 were discordant) among DLPFC and HIPPO for the features with TWAS weights in both brain regions (see Figure 1 below). The TWAS approach is complementary to the eQTL analysis we carried out on risk loci as 92 (74.2%) of the 124 risk loci with eQTLs at FDR<1% we identified successfully had TWAS weights (see Table 2 below). Of these risk loci with TWAS weights, 82 (89.1%) across both brain regions had a feature with genome wide significant TWAS signal at FDR <5% (N=61 for Bonferroni <5%, 66.3%). We further compared our results against the TWAS published by Gusev et al, Nature Genetics, 2018. They identified 83 unique genes with TWAS Bonferroni <5% across the CMC and CMC splicing datasets. In our TWAS analysis, we replicated 70 (84.3%) with TWAS FDR <5% and 55 (66.3%) with TWAS Bonferroni <5% across any of the expression feature levels we assessed (see Table 3 below).
+
+
+_Table 1_
+
+![Summary TWAS table](summary_results/summary_twas_table.png)
+
+Number in this table are also shown in several of the `pdf/venn_feature*.pdf` files.
+
+_Figure 1_
+
+![TWAS Z by brain region](pdf/twas_z_Page_1.png)
+
+Correlations for the plot above:
+
+```{r}
+corrs
+# $gene
+#     Other Risk Loci
+# 0.8580300 0.9153703
+#
+# $exon
+#     Other Risk Loci
+# 0.8666640 0.8951267
+#
+# $jxn
+#     Other Risk Loci
+# 0.8786717 0.9278632
+#
+# $tx
+#     Other Risk Loci
+# 0.8766659 0.9285188
+```
+
+_Table 2_
+
+![TWAS vs rAggr loci](summary_results/twas_vs_raggr_by_loci.png)
+
+_Table 3_
+
+```{r}
+with(gusev_gene, addmargins(table(psycm_FDR_DLPFC_any_feature, psycm_FDR_HIPPO_any_feature)))
+#                            psycm_FDR_HIPPO_any_feature
+# psycm_FDR_DLPFC_any_feature FALSE TRUE Sum
+#                       FALSE    13    4  17
+#                       TRUE     15   51  66
+#                       Sum      28   55  83
+
+with(gusev_gene, addmargins(table(psycm_Bonf_DLPFC_any_feature, psycm_Bonf_HIPPO_any_feature)))
+#                             psycm_Bonf_HIPPO_any_feature
+# psycm_Bonf_DLPFC_any_feature FALSE TRUE Sum
+#                        FALSE    27    5  32
+#                        TRUE     20   31  51
+#                        Sum      47   36  83
+```
+
+
+## Analysis steps
+
+* [`explore_twas.R`](https://github.com/LieberInstitute/brainseq_phase2/blob/master/twas/explore_twas.R#L1-L122) creates the `rda/twas_exp.Rdata` file by reading in all the output TWAS files and adding feature level information. This script actually reads in all the files from both the CLOZUK+PGC2 TWAS as well as the PGC2 TWAS analyses we ran.
+* [`explore_twas_psycm.R`](https://github.com/LieberInstitute/brainseq_phase2/blob/master/twas/explore_twas_psycm.R) focuses on the CLOZUK+PGC2 TWAS. It reads in the functions we wrote for exploring either set of TWAS saved in [`twas_functions.R`](https://github.com/LieberInstitute/brainseq_phase2/blob/master/twas/twas_functions.R). This script ultimately makes the correlation summary table and has other explorations we carried out. 
+* For PGC2 TWAS, check [`explore_twas_pgc2.R`](https://github.com/LieberInstitute/brainseq_phase2/blob/master/twas/explore_twas_pgc2.R). Something exclusive to this script is that it creates `rda/gusev_gene.Rdata` which shows whether any of the 83 unique genes identified by Gusev et al, Nature Genetics, 2018 in either `CMC` or `CMC_splicing` are present in our TWAS results.
