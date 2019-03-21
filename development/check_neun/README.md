@@ -1,5 +1,5 @@
-Check development after adjusting for NeuN cell type proportion
-===============================================================
+Check development after adjusting for RNA cell fractions
+========================================================
 
 
 We used the estimated RNA fraction (see [cellComp](../../cellComp) directory) for eight different cell types (fetal replicating, fetal quiescent, OPC, neurons, astrocytes, oligodendrocytes, microglia and endothelial cells). We then re-ran our DEG analysis for each expression feature adjusting for the first 7 cell types (to keep a full rank design model). Across features, we observed a high degree of concordance across our initial analysis and this re-analysis (see table below) at a threshold of Bonferroni<1%. This high concordance can be explained by the observation that the cell fractions are not significantly different (Bonferroni>5%) by age between DLPFC and HIPPO for each of the six age groups we considered, with the only exception being astrocytes for individuals 20 to 50 years old (details in `top_cell_by_agegroup` at [cellComp](../../cellComp), images at the end of this page). Thus while cell RNA fractions change over development, they are not a contributing factor in our development analysis comparing DLPFC and HIPPO.
