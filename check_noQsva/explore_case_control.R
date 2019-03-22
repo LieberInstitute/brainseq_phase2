@@ -522,6 +522,52 @@ dev.off()
 
 
 
+## Compare FDR <5% with and without qSVA
+cross_tabs <- list(
+    'HIPPO' = table('HIPPO no qSVA' = outGene0[[1]]$adj.P.Val < 0.05, 'HIPPO with qSVA' = outGene[[3]]$adj.P.Val < 0.05),
+    'DLPFC' = table('DLPFC no qSVA' = outGene0[[2]]$adj.P.Val < 0.05, 'DLPFC with qSVA' = outGene[[4]]$adj.P.Val < 0.05)
+)
+lapply(cross_tabs, addmargins)
+# $HIPPO
+#              HIPPO with qSVA
+# HIPPO no qSVA FALSE  TRUE   Sum
+#         FALSE 24549    40 24589
+#         TRUE     55     8    63
+#         Sum   24604    48 24652
+#
+# $DLPFC
+#              DLPFC with qSVA
+# DLPFC no qSVA FALSE  TRUE   Sum
+#         FALSE 23460   108 23568
+#         TRUE    947   137  1084
+#         Sum   24407   245 24652
+
+sapply(cross_tabs, getOR)
+#    HIPPO    DLPFC
+# 89.26909 31.42497
+
+set.seed(20190322)
+chi <- lapply(cross_tabs, chisq.test, simulate.p.value = TRUE, B = 10000)
+chi
+# $HIPPO
+#
+#     Pearson's Chi-squared test with simulated p-value (based on 10000
+#     replicates)
+#
+# data:  X[[i]]
+# X-squared = 508.14, df = NA, p-value = 9.999e-05
+#
+#
+# $DLPFC
+#
+#     Pearson's Chi-squared test with simulated p-value (based on 10000
+#     replicates)
+#
+# data:  X[[i]]
+# X-squared = 1562.5, df = NA, p-value = 9.999e-05
+sapply(chi, function(x) x$p.value)
+#     HIPPO     DLPFC
+# 9.999e-05 9.999e-05
 
 ## Load expression data
 load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_gene.Rdata", verbose = TRUE)
