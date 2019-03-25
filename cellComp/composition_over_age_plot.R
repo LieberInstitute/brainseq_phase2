@@ -109,7 +109,7 @@ ggsave(cell_type, filename='bothRegions_estimated_cellType_proportions_over_life
 
 cell_type_main <- plot_code(subset(dat, CellType %in% c('FQN', 'Neurons', 'Oligodendrocytes')), legend_pos = c(0.2, 0.8))
 ggsave(cell_type_main, filename='bothRegions_estimated_cellType_proportions_over_lifespan_main.pdf',height=8,width=15)
-
+ggsave(cell_type_main, filename='bothRegions_estimated_cellType_proportions_over_lifespan_main.png',height=8,width=15)
 
 ## Make plots over age
 ## Based on https://github.com/LieberInstitute/brainseq_phase2/blob/89e48d9e612381d857aef358595933c0b9adbf73/development/explore_limma_dev_top.R#L96-L115

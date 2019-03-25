@@ -14,8 +14,7 @@ pcheck_both$de <- get_de(pcheck_both)
 ## Rename for simplicity
 dev <- pcheck_both
 
-# features <- c('gene', 'exon', 'jxn', 'tx')
-features <- c('gene', 'tx')
+features <- c('gene', 'exon', 'jxn', 'tx')
 top <- lapply(features, function(type) {
     f <- paste0('../rda/limma_dev_interaction_adjCellProp_', type, '.Rdata')
     message(paste(Sys.time(), 'loading', f))
@@ -53,6 +52,20 @@ map(tab_pbonf, addmargins)
 #            TRUE   1382 16363 17745
 #            Sum    5260 19392 24652
 #
+# $exon
+#                 CellProp Bonf<1%
+# Original Bonf<1%  FALSE   TRUE    Sum
+#            FALSE  67292  42452 109744
+#            TRUE   24156 262679 286835
+#            Sum    91448 305131 396579
+#
+# $jxn
+#                 CellProp Bonf<1%
+# Original Bonf<1%  FALSE   TRUE    Sum
+#            FALSE  85447  19347 104794
+#            TRUE   26737 165650 192387
+#            Sum   112184 184997 297181
+#
 # $tx
 #                 CellProp Bonf<1%
 # Original Bonf<1% FALSE  TRUE   Sum
@@ -60,11 +73,11 @@ map(tab_pbonf, addmargins)
 #            TRUE   1049  2766  3815
 #            Sum   89089  3643 92732
 map_dbl(tab_pbonf, getOR)
-#     gene        tx
-# 15.15875 264.70194
+#     gene      exon       jxn        tx
+# 15.15875  17.23716  27.36289 264.70194
 map_dbl(tab_pbonf, ~ chisq.test(.x)$p.value)
-# gene   tx
-#    0    0
+# gene exon  jxn   tx
+#    0    0    0    0
 
 
 tab_pbonf_span <- map(
@@ -79,6 +92,20 @@ map(tab_pbonf_span , addmargins)
 #                            TRUE    748 10091 10839
 #                            Sum   13249 11403 24652
 #
+# $exon
+#                                 CellProp Bonf<1% & Rep BrainSpan
+# Original Bonf<1% & Rep BrainSpan  FALSE   TRUE    Sum
+#                            FALSE 206644  20682 227326
+#                            TRUE   13333 155920 169253
+#                            Sum   219977 176602 396579
+#
+# $jxn
+#                                 CellProp Bonf<1% & Rep BrainSpan
+# Original Bonf<1% & Rep BrainSpan  FALSE   TRUE    Sum
+#                            FALSE 139690  13596 153286
+#                            TRUE   21195 122700 143895
+#                            Sum   160885 136296 297181
+#
 # $tx
 #                                 CellProp Bonf<1% & Rep BrainSpan
 # Original Bonf<1% & Rep BrainSpan FALSE  TRUE   Sum
@@ -86,11 +113,11 @@ map(tab_pbonf_span , addmargins)
 #                            TRUE    408  1307  1715
 #                            Sum   91191  1541 92732
 map_dbl(tab_pbonf_span , getOR)
-#     gene        tx
-# 128.5415 1242.8082
+#      gene       exon        jxn         tx
+# 128.54155  116.84341   59.47923 1242.80816
 map_dbl(tab_pbonf_span , ~ chisq.test(.x)$p.value)
-# gene   tx
-#    0    0
+# gene exon  jxn   tx
+#    0    0    0    0
 
 make_table <- function(ov) {
     
@@ -106,28 +133,32 @@ make_table <- function(ov) {
 
 options(width = 120)
 make_table(tab_pbonf)
-#   Null_both Original_only CellProp_only  Both feature        OR pval pval_bonf
-# 1      3878          1382          3029 16363    gene  15.15875    0         0
-# 2     88040          1049           877  2766      tx 264.70194    0         0
+#   Null_both Original_only CellProp_only   Both feature        OR pval pval_bonf
+# 1      3878          1382          3029  16363    gene  15.15875    0         0
+# 2     67292         24156         42452 262679    exon  17.23716    0         0
+# 3     85447         26737         19347 165650     jxn  27.36289    0         0
+# 4     88040          1049           877   2766      tx 264.70194    0         0
 make_table(tab_pbonf_span)
-#   Null_both Original_only CellProp_only  Both feature        OR pval pval_bonf
-# 1     12501           748          1312 10091    gene  128.5415    0         0
-# 2     90783           408           234  1307      tx 1242.8082    0         0
+#   Null_both Original_only CellProp_only   Both feature         OR pval pval_bonf
+# 1     12501           748          1312  10091    gene  128.54155    0         0
+# 2    206644         13333         20682 155920    exon  116.84341    0         0
+# 3    139690         21195         13596 122700     jxn   59.47923    0         0
+# 4     90783           408           234   1307      tx 1242.80816    0         0
 
 map_dbl(dev_type, ~ cor(.x$F, .x$neun_F))
-#      gene        tx
-# 0.8702397 0.9275750
+#      gene      exon       jxn        tx
+# 0.8702397 0.8715382 0.9115000 0.9275750
 
 ## Compute the correlation on the scale that I'm actually plotting below
 map_dbl(dev_type, ~ cor(log10(.x$F), log10(.x$neun_F)))
-#      gene        tx
-# 0.8227183 0.8821472
+#      gene      exon       jxn        tx
+# 0.8227183 0.8367599 0.8740846 0.8821472
 
 corrs <- cbind(map_dfr(dev_type, ~ map_dbl(split(.x, .x$de), ~ cor(log10(.x$F), log10(.x$neun_F)))), DE = c('FALSE', 'TRUE'))
 corrs
-#        gene        tx    DE
-# 1 0.7959842 0.8673563 FALSE
-# 2 0.7670905 0.8729942  TRUE
+#        gene      exon       jxn        tx    DE
+# 1 0.7959842 0.8225326 0.8574005 0.8673563 FALSE
+# 2 0.7670905 0.7819954 0.8324641 0.8729942  TRUE
 
 
 pdf('f_original_vs_f_adjCellProp_by_feature.pdf', width = 12, useDingbats = FALSE)
@@ -176,7 +207,7 @@ session_info()
 #  collate  en_US.UTF-8
 #  ctype    en_US.UTF-8
 #  tz       US/Eastern
-#  date     2019-03-20
+#  date     2019-03-25
 #
 # ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 #  package          * version   date       lib source
