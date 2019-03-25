@@ -9,7 +9,7 @@ load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_gene.Rdata", verb
 load('rda/gene_pinfo.Rdata', verbose = TRUE)
 
 ## Read in housekeeping gene symbols
-## List comes from RSeQC http://rseqc.sourceforge.net/
+## List comes from RSeQC http://rseqc.sourceforge.net/ [PMID: 22743226]
 ## which we used in
 ## https://www.pnas.org/content/pnas/suppl/2017/06/19/1617384114.DCSupplemental/pnas.1617384114.sapp.pdf
 ## _A framework for RNA quality correction in differential expression analysis_ 2017 PNAS paper
