@@ -23,11 +23,6 @@ make_table(tab_pbonf_span)
 ```
 
 
-The following plot shows the F-statistics from the original model against the RNA cell fractions adjusted model with DE determined by P-bonferroni<1% and requiring replication in BrainSpan.
-
-![F-statistics original vs CellProp-adjusted](f_original_vs_f_adjCellProp.png)
-
-
 ## Cell types RNA fraction over age
 
 ![Cell over age page 1](../../cellComp/proportions_over_age_by_cell_type_Page_1.png)
@@ -38,3 +33,10 @@ The following plot shows the F-statistics from the original model against the RN
 ![Cell over age page 6](../../cellComp/proportions_over_age_by_cell_type_Page_6.png)
 ![Cell over age page 7](../../cellComp/proportions_over_age_by_cell_type_Page_7.png)
 ![Cell over age page 8](../../cellComp/proportions_over_age_by_cell_type_Page_8.png)
+
+
+## F-stats
+
+The following plot shows the F-statistics from the original model against the RNA cell fractions adjusted model with DE determined by P-bonferroni<1% and requiring replication in BrainSpan.
+
+![F-statistics original vs CellProp-adjusted](f_original_vs_f_adjCellProp.png)
