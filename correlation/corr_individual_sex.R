@@ -42,6 +42,19 @@ lapply(modQsva, function(x) { colnames(mod_reorder(x))})
 # [25] "PC12"              "PC13"              "PC14"
 # [28] "PC15"              "PC16"
 
+## keep only the fully annotated junctions
+for(region in names(expr)) {
+    index <- which(rowRanges(simple_rse[[region]]$jxn)$inGencode)
+    simple_rse[[region]]$jxn <- simple_rse[[region]]$jxn[index, ]
+    expr[[region]]$jxnRp10m <- expr[[region]]$jxnRp10m[index, ]
+}
+# > table(rowRanges(simple_rse[[region]]$jxn)$inGencode)
+#
+#  FALSE   TRUE
+#  93582 203599
+rm(region, index)
+
+
 ## Drop the chrX and chrY features
 drop_xy <- function(exp) {
     
@@ -57,17 +70,15 @@ drop_xy <- function(exp) {
 }
 
 expr <- drop_xy(expr)
-## DLPFC; by feature: gene, exon, jxn, tx
-# 2019-03-20 11:31:55 dropping 875 out of 24652 that is, 3.5494 percent
-# 2019-03-20 11:31:55 dropping 11603 out of 396583 that is, 2.9257 percent
-# 2019-03-20 11:31:55 dropping 9582 out of 297181 that is, 3.2243 percent
-# 2019-03-20 11:31:58 dropping 2613 out of 92732 that is, 2.8178 percent
+# 2019-03-25 11:55:06 dropping 875 out of 24652 that is, 3.5494 percent
+# 2019-03-25 11:55:06 dropping 11603 out of 396583 that is, 2.9257 percent
+# 2019-03-25 11:55:07 dropping 6881 out of 203599 that is, 3.3797 percent
+# 2019-03-25 11:55:07 dropping 2613 out of 92732 that is, 2.8178 percent
 ## HIPPO (same as DLPFC)
-# 2019-03-20 11:31:58 dropping 875 out of 24652 that is, 3.5494 percent
-# 2019-03-20 11:31:58 dropping 11603 out of 396583 that is, 2.9257 percent
-# 2019-03-20 11:31:58 dropping 9582 out of 297181 that is, 3.2243 percent
-# 2019-03-20 11:31:59 dropping 2613 out of 92732 that is, 2.8178 percent
-
+# 2019-03-25 11:55:07 dropping 875 out of 24652 that is, 3.5494 percent
+# 2019-03-25 11:55:07 dropping 11603 out of 396583 that is, 2.9257 percent
+# 2019-03-25 11:55:08 dropping 6881 out of 203599 that is, 3.3797 percent
+# 2019-03-25 11:55:08 dropping 2613 out of 92732 that is, 2.8178 percent
 ## Not needed
 # cleaned <- drop_xy(cleaned)
 
@@ -148,7 +159,7 @@ session_info()
 #  collate  en_US.UTF-8
 #  ctype    en_US.UTF-8
 #  tz       US/Eastern
-#  date     2019-03-20
+#  date     2019-03-25
 #
 # ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 #  package              * version   date       lib source
