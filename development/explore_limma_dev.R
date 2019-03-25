@@ -955,7 +955,16 @@ dev.off()
 
 
 ## novenn
-pdf('pdf/go_de_genes_novenn.pdf', width = 14, height = 9, useDingbats = FALSE)
+
+shorten_go <- function(go, query, short = query) {
+    i <- grep(query, go@compareClusterResult$Description)
+    go@compareClusterResult$Description[i] <- paste0(go@compareClusterResult$ID[i], ': ', short)
+    return(go)
+}
+
+go_de_genes_novenn$BP <- shorten_go(go_de_genes_novenn$BP, 'G-protein coupled receptor signaling pathway')
+
+pdf('pdf/go_de_genes_novenn.pdf', width = 11, height = 9, useDingbats = FALSE)
 plot_go(go_de_genes_novenn)
 dev.off()
 

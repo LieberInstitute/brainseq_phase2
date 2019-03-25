@@ -535,24 +535,39 @@ pdf('pdf/go_de_genes_adult.pdf', width = 14, height = 9, useDingbats = FALSE)
 plot_go(go_de_genes_adult)
 dev.off()
 
-pdf('pdf/go_de_genes_fetal.pdf', width = 30, height = 9, useDingbats = FALSE)
+
+shorten_go <- function(go, query, short = query) {
+    i <- grep(query, go@compareClusterResult$Description)
+    go@compareClusterResult$Description[i] <- paste0(go@compareClusterResult$ID[i], ': ', short)
+    return(go)
+}
+
+go_de_genes_fetal$MF <- shorten_go(go_de_genes_fetal$MF, 'oxidoreductase activity')
+
+pdf('pdf/go_de_genes_fetal.pdf', width = 12, height = 9, useDingbats = FALSE)
 plot_go(go_de_genes_fetal)
 dev.off()
+
+go_de_genes_brain_adult$MF <- shorten_go(go_de_genes_brain_adult$MF, 'transcriptional activator activity')
 
 pdf('pdf/go_de_genes_brain_adult.pdf', width = 14, height = 11, useDingbats = FALSE)
 plot_go(go_de_genes_brain_adult)
 dev.off()
 
-pdf('pdf/go_de_genes_brain_fetal.pdf', width = 30, height = 11, useDingbats = FALSE)
+go_de_genes_brain_fetal$MF <- shorten_go(go_de_genes_brain_fetal$MF, 'oxidoreductase activity')
+go_de_genes_brain_fetal$MF <- shorten_go(go_de_genes_brain_fetal$MF, 'transcriptional activator activity')
+go_de_genes_brain_fetal$MF <- shorten_go(go_de_genes_brain_fetal$MF, 'transcription factor activity')
+
+pdf('pdf/go_de_genes_brain_fetal.pdf', width = 14, height = 11, useDingbats = FALSE)
 plot_go(go_de_genes_brain_fetal)
 dev.off()
 
 ## all
-pdf('pdf/go_all_de_genes_adult.pdf', width = 14, height = 50, useDingbats = FALSE)
+pdf('pdf/go_all_de_genes_adult.pdf', width = 12, height = 50, useDingbats = FALSE)
 plot_go(go_de_genes_adult, cat = NULL)
 dev.off()
 
-pdf('pdf/go_all_de_genes_fetal.pdf', width = 30, height = 50, useDingbats = FALSE)
+pdf('pdf/go_all_de_genes_fetal.pdf', width = 12, height = 50, useDingbats = FALSE)
 plot_go(go_de_genes_fetal, cat = NULL)
 dev.off()
 
@@ -560,7 +575,7 @@ pdf('pdf/go_all_de_genes_brain_adult.pdf', width = 14, height = 100, useDingbats
 plot_go(go_de_genes_brain_adult, cat = NULL)
 dev.off()
 
-pdf('pdf/go_all_de_genes_brain_fetal.pdf', width = 30, height = 50, useDingbats = FALSE)
+pdf('pdf/go_all_de_genes_brain_fetal.pdf', width = 14, height = 50, useDingbats = FALSE)
 plot_go(go_de_genes_brain_fetal, cat = NULL)
 dev.off()
 
