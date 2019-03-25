@@ -191,15 +191,54 @@ ggplot(rep_span, aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01,
 
 dev.off()
 
+## Used https://stackoverflow.com/questions/11889625/annotating-text-on-individual-facet-in-ggplot2
+subset(rep_span, pvar == 'P.Bonf' & type != 'tx')
+#      pvar cutoff type      age replicated number_de  total replicated_sign
+# 7  P.Bonf  5e-02 gene    adult       1659      8561  24652            6441
+# 8  P.Bonf  1e-02 gene    adult       1612      7895  24652            6016
+# 9  P.Bonf  1e-03 gene    adult       1549      7045  24652            5467
+# 10 P.Bonf  1e-04 gene    adult       1486      6314  24652            4978
+# 11 P.Bonf  1e-05 gene    adult       1420      5700  24652            4560
+# 12 P.Bonf  1e-06 gene    adult       1350      5152  24652            4160
+# 19 P.Bonf  5e-02 exon    adult      16182     90862 396579           66567
+# 20 P.Bonf  1e-02 exon    adult      15442     82336 396579           60968
+# 21 P.Bonf  1e-03 exon    adult      14453     71841 396579           53908
+# 22 P.Bonf  1e-04 exon    adult      13532     63018 396579           47898
+# 23 P.Bonf  1e-05 exon    adult      12695     55579 396579           42784
+# 24 P.Bonf  1e-06 exon    adult      12005     49241 396579           38310
+# 31 P.Bonf  5e-02  jxn    adult       5912     40222 297181           28982
+# 32 P.Bonf  1e-02  jxn    adult       5561     35864 297181           26205
+# 33 P.Bonf  1e-03  jxn    adult       5098     30828 297181           22904
+# 34 P.Bonf  1e-04  jxn    adult       4683     26599 297181           20055
+# 35 P.Bonf  1e-05  jxn    adult       4364     23118 297181           17715
+# 36 P.Bonf  1e-06  jxn    adult       4027     20134 297181           15648
+# 55 P.Bonf  5e-02 gene prenatal         43       127  24652              76
+# 56 P.Bonf  1e-02 gene prenatal         32        70  24652              49
+# 57 P.Bonf  1e-03 gene prenatal         18        42  24652              29
+# 58 P.Bonf  1e-04 gene prenatal          5        14  24652               9
+# 59 P.Bonf  1e-05 gene prenatal          0         5  24652               1
+# 60 P.Bonf  1e-06 gene prenatal          0         2  24652               0
+# 67 P.Bonf  5e-02 exon prenatal        126       281 396579             192
+# 68 P.Bonf  1e-02 exon prenatal         71       163 396579             112
+# 69 P.Bonf  1e-03 exon prenatal         31        52 396579              38
+# 70 P.Bonf  1e-04 exon prenatal         10        16 396579              10
+# 71 P.Bonf  1e-05 exon prenatal          0         2 396579               0
+# 72 P.Bonf  1e-06 exon prenatal          0         2 396579               0
+# 79 P.Bonf  5e-02  jxn prenatal         32       217 297181             184
+# 80 P.Bonf  1e-02  jxn prenatal         18       147 297181             126
+# 81 P.Bonf  1e-03  jxn prenatal          9        96 297181              88
+# 82 P.Bonf  1e-04  jxn prenatal          3        66 297181              62
+# 83 P.Bonf  1e-05  jxn prenatal          1        41 297181              40
+# 84 P.Bonf  1e-06  jxn prenatal          0        21 297181              20
 
 pdf('pdf/replication_exploration_subset.pdf', width = 8, height =  10, useDingbats = FALSE)
-ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated / number_de)) + facet_grid(type ~ age) + ylab('Replication rate') + xlab('p-value threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylim(c(0, 1)) + geom_line(aes(y = replicated / number_de, x = rep(1:6, 6)))
+ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated / number_de)) + facet_grid(type ~ age) + ylab('Replication rate') + xlab('Bonferroni p-value threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylim(c(0, 1)) + geom_line(aes(y = replicated / number_de, x = rep(1:6, 6))) + geom_text(mapping = aes(label = number_de, vjust = -1.5))
 
-ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated_sign / number_de)) + facet_grid(type ~ age) + ylab('Replication rate (sign only)') + xlab('p-value threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylim(c(0, 1)) + geom_line(aes(y = replicated_sign / number_de, x = rep(1:6, 6)))
+ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = replicated_sign / number_de)) + facet_grid(type ~ age) + ylab('Replication rate (sign only)') + xlab('Bonferroni p-value threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylim(c(0, 1)) + geom_line(aes(y = replicated_sign / number_de, x = rep(1:6, 6))) #+ geom_text(mapping = aes(label = number_de, vjust = -1.5))
 
-ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = number_de)) + facet_grid(type ~ age) + ylab('Number of DE features') + xlab('p-value threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) +  geom_line(aes(y = number_de, x = rep(1:6, 6)))
+ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = number_de)) + facet_grid(type ~ age) + ylab('Number of DE features') + xlab('Bonferroni p-value threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) +  geom_line(aes(y = number_de, x = rep(1:6, 6))) + geom_text(mapping = aes(label = number_de, vjust = -1.5)) + scale_y_log10() + ylim(c(0, 110000))
 
-ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = number_de / total * 100)) + facet_grid(type ~ age) + ylab('Percent of DE features') + xlab('p-value threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + geom_line(aes(y = number_de / total * 100, x = rep(1:6, 6))) + ylim(c(0, 100))
+ggplot(subset(rep_span, pvar == 'P.Bonf' & type != 'tx'), aes(x = factor(paste0('p<', cutoff), paste0('p<', c(0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001))), y = number_de / total * 100)) + facet_grid(type ~ age) + ylab('Percent of DE features') + xlab('Bonferroni p-value threshold') + geom_point() + theme_bw(base_size = 18)+ theme(axis.text.x = element_text(angle = 90, hjust = 1)) + geom_line(aes(y = number_de / total * 100, x = rep(1:6, 6))) + ylim(c(0, 100)) #+ geom_text(mapping = aes(label = number_de, vjust = -1.5))
 
 dev.off()
 
