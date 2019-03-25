@@ -81,11 +81,11 @@ theme_set(theme_bw(base_size=30) +
                  
 dat <- pd
 dat$Region <- toupper(dat$Region)
-dat$FPN <- dat$Fetal_replicating
+dat$FRN <- dat$Fetal_replicating
 dat$FQN <- dat$Fetal_quiescent
-dat = as.data.frame(dat[,c('BrNum','Region','ageGroup', 'FPN', 'FQN', 'OPC', 'Neurons', 'Astrocytes', 'Oligodendrocytes', 'Microglia', 'Endothelial')])
-dat = tidyr::gather(dat, key="CellType", value="Proportion", FPN, FQN, OPC, Neurons, Astrocytes, Oligodendrocytes, Microglia, Endothelial)
-dat$CellType = factor(dat$CellType,levels=c('FPN', 'FQN', 'Neurons', 'Microglia', 'OPC', 'Astrocytes', 'Oligodendrocytes', 'Endothelial') )
+dat = as.data.frame(dat[,c('BrNum','Region','ageGroup', 'FRN', 'FQN', 'OPC', 'Neurons', 'Astrocytes', 'Oligodendrocytes', 'Microglia', 'Endothelial')])
+dat = tidyr::gather(dat, key="CellType", value="Proportion", FRN, FQN, OPC, Neurons, Astrocytes, Oligodendrocytes, Microglia, Endothelial)
+dat$CellType = factor(dat$CellType,levels=c('FRN', 'FQN', 'Neurons', 'Microglia', 'OPC', 'Astrocytes', 'Oligodendrocytes', 'Endothelial') )
 
 df3 = data.frame(ageGroup = as.numeric(c(NA, NA)),
                  Region = c("DLPFC", "HIPPO"),
@@ -107,7 +107,7 @@ ggsave(cell_type, filename='bothRegions_estimated_cellType_proportions_over_life
 ggsave(cell_type, filename='bothRegions_estimated_cellType_proportions_over_lifespan.png',height=8,width=30)
 
 
-cell_type_main <- plot_code(subset(dat, CellType %in% c('FQN', 'Neurons', 'Microglia')), legend_pos = c(0.2, 0.8))
+cell_type_main <- plot_code(subset(dat, CellType %in% c('FQN', 'Neurons', 'Oligodendrocytes')), legend_pos = c(0.2, 0.8))
 ggsave(cell_type_main, filename='bothRegions_estimated_cellType_proportions_over_lifespan_main.pdf',height=8,width=15)
 
 
@@ -141,7 +141,7 @@ for(i in seq_along(propEsts)) {
         pointColor = p_cols,
         ageBreaks = age_brks,
         ## If we wanted the abbreviated names:
-        # mainText = c('FQN', 'FQN', colnames(propEsts)[-c(1:2)])[i],
+        # mainText = c('FRN', 'FQN', colnames(propEsts)[-c(1:2)])[i],
         mainText = gsub('_', ' ', colnames(propEsts))[i],
         lineColor = l_cols,
         ylab = 'Estimated Proportion',
@@ -247,6 +247,29 @@ subset(top_cell_by_agegroup, P.Bonf.sig)
 write.table(top_cell_by_agegroup, file = 'top_cell_by_agegroup.txt', sep = '\t', quote = FALSE, row.names = FALSE)
 save(top_cell_by_agegroup, file = 'top_cell_by_agegroup.Rdata')
 
+
+
+from_0_to_20 <- function() {
+    index <- pd$Age >= 0 & pd$Age < 20
+    pd <- pd[index, ]
+    props <- props[, index]
+    brnum <- pd$BrNum
+    mod <- with(pd, model.matrix( ~ Region + Age))
+    corfit <- duplicateCorrelation(props,
+            mod[, c('(Intercept)')], block=brnum)
+            
+    fit <- lmFit(props, design = mod, block=brnum,
+            correlation = corfit$consensus.correlation)
+    fit <- eBayes(fit)
+    top <- topTable(fit, coef = grep('Region', colnames(mod)), n = nrow(props),
+        sort.by = 'none')
+    top$P.Bonf <- p.adjust(top$P.Value, 'bonf')
+    return(top)
+}
+options(width = 120)
+from_0_to_20()['Oligodendrocytes', ]
+#                       logFC   AveExpr        t      P.Value   adj.P.Val         B      P.Bonf
+# Oligodendrocytes 0.04233406 0.1850042 3.547673 0.0005488421 0.001463579 -3.498899 0.004390737
 
 ## Reproducibility information
 print('Reproducibility information:')
