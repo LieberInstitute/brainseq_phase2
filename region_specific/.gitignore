@@ -2,3 +2,4 @@ rda
 tmp*
 pdf/volcano*
 subsample
+.*adjCell*.sh

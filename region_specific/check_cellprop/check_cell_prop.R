@@ -6,17 +6,25 @@ library('ggplot2')
 message(paste(Sys.time(), 'loading ../rda/pcheck_both.Rdata'))
 load('../rda/pcheck_both.Rdata', verbose = TRUE)
 
+## Subset to only adults
+dim(pcheck_both)
+# [1] 1622288      20
+pcheck_both <- subset(pcheck_both, age == 'adult')
+dim(pcheck_both)
+# [1] 811144     20
+
 get_de <- function(x) {
-    sign(x$F) == sign(x$span_F) & x$span_P.Value < 0.05 & x$P.Bonf < 0.01
+    sign(x$t) == sign(x$span_t) & x$span_P.Value < 0.05 & x$P.Bonf < 0.01
 }
 pcheck_both$de <- get_de(pcheck_both)
 
 ## Rename for simplicity
-dev <- pcheck_both
+ptab <- pcheck_both
 
-features <- c('gene', 'exon', 'jxn', 'tx')
+# features <- c('gene', 'exon', 'jxn', 'tx')
+features <- c('gene', 'tx')
 top <- lapply(features, function(type) {
-    f <- paste0('../rda/limma_dev_interaction_adjCellProp_', type, '.Rdata')
+    f <- paste0('../rda/limma_region_specific_adult_', type, '_adjCellProp.Rdata')
     message(paste(Sys.time(), 'loading', f))
     load(f, verbose = TRUE)
     top$type <- type
@@ -31,90 +39,66 @@ neun <- do.call(rbind, map(top, function(x) {
     x
 }))
 
-stopifnot(identical(nrow(dev), nrow(neun)))
 
-m <- match(rownames(dev), rownames(neun))
+stopifnot(identical(nrow(ptab), nrow(neun)))
+
+## Drop the age part from the names
+rownames(ptab) <- gsub('adult_', '', rownames(ptab))
+
+m <- match(rownames(ptab), rownames(neun))
 stopifnot(!any(is.na(m)))
 neun <- neun[m, ]
 
-dev <- cbind(dev, neun)
-dev_type <- split(dev, factor(dev$type, levels = features))
+ptab <- cbind(ptab, neun)
+ptab_type <- split(ptab, factor(ptab$type, levels = features))
 
 tab_pbonf <- map(
-    dev_type,
+    ptab_type,
     ~ with(.x, table('Original Bonf<1%' = P.Bonf < 0.01, 'CellProp Bonf<1%' = neun_P.Bonf < 0.01))
 )
 map(tab_pbonf, addmargins)
 # $gene
 #                 CellProp Bonf<1%
 # Original Bonf<1% FALSE  TRUE   Sum
-#            FALSE  3878  3029  6907
-#            TRUE   1382 16363 17745
-#            Sum    5260 19392 24652
-#
-# $exon
-#                 CellProp Bonf<1%
-# Original Bonf<1%  FALSE   TRUE    Sum
-#            FALSE  67292  42452 109744
-#            TRUE   24156 262679 286835
-#            Sum    91448 305131 396579
-#
-# $jxn
-#                 CellProp Bonf<1%
-# Original Bonf<1%  FALSE   TRUE    Sum
-#            FALSE  85447  19347 104794
-#            TRUE   26737 165650 192387
-#            Sum   112184 184997 297181
+#            FALSE 15560  1197 16757
+#            TRUE   2000  5895  7895
+#            Sum   17560  7092 24652
 #
 # $tx
 #                 CellProp Bonf<1%
 # Original Bonf<1% FALSE  TRUE   Sum
-#            FALSE 88040   877 88917
-#            TRUE   1049  2766  3815
-#            Sum   89089  3643 92732
+#            FALSE 76355  2337 78692
+#            TRUE   4182  9858 14040
+#            Sum   80537 12195 92732
 map_dbl(tab_pbonf, getOR)
-#     gene      exon       jxn        tx
-# 15.15875  17.23716  27.36289 264.70194
+#     gene       tx
+# 38.31504 77.01646
 map_dbl(tab_pbonf, ~ chisq.test(.x)$p.value)
 # gene exon  jxn   tx
 #    0    0    0    0
 
 
 tab_pbonf_span <- map(
-    dev_type,
-    ~ with(.x, table('Original Bonf<1% & Rep BrainSpan' = P.Bonf < 0.01 & span_P.Value < 0.05, 'CellProp Bonf<1% & Rep BrainSpan' = neun_P.Bonf < 0.01  & span_P.Value < 0.05))
+    ptab_type,
+    ~ with(.x, table('Original Bonf<1% & Rep BrainSpan' = P.Bonf < 0.01 & span_P.Value < 0.05 & span_P.Value < 0.05  & sign(t) == sign(span_t), 'CellProp Bonf<1% & Rep BrainSpan' = neun_P.Bonf < 0.01  & span_P.Value < 0.05  & sign(neun_t) == sign(span_t)))
 )
 map(tab_pbonf_span , addmargins)
 # $gene
 #                                 CellProp Bonf<1% & Rep BrainSpan
 # Original Bonf<1% & Rep BrainSpan FALSE  TRUE   Sum
-#                            FALSE 12501  1312 13813
-#                            TRUE    748 10091 10839
-#                            Sum   13249 11403 24652
-#
-# $exon
-#                                 CellProp Bonf<1% & Rep BrainSpan
-# Original Bonf<1% & Rep BrainSpan  FALSE   TRUE    Sum
-#                            FALSE 206644  20682 227326
-#                            TRUE   13333 155920 169253
-#                            Sum   219977 176602 396579
-#
-# $jxn
-#                                 CellProp Bonf<1% & Rep BrainSpan
-# Original Bonf<1% & Rep BrainSpan  FALSE   TRUE    Sum
-#                            FALSE 139690  13596 153286
-#                            TRUE   21195 122700 143895
-#                            Sum   160885 136296 297181
+#                            FALSE 22844   196 23040
+#                            TRUE    107  1505  1612
+#                            Sum   22951  1701 24652
 #
 # $tx
 #                                 CellProp Bonf<1% & Rep BrainSpan
 # Original Bonf<1% & Rep BrainSpan FALSE  TRUE   Sum
-#                            FALSE 90783   234 91017
-#                            TRUE    408  1307  1715
-#                            Sum   91191  1541 92732
+#                            FALSE 90850   143 90993
+#                            TRUE    372  1367  1739
+#                            Sum   91222  1510 92732
 map_dbl(tab_pbonf_span , getOR)
-#      gene       exon        jxn         tx
-# 128.54155  116.84341   59.47923 1242.80816
+#     gene       tx
+# 1639.339 2334.611
 map_dbl(tab_pbonf_span , ~ chisq.test(.x)$p.value)
 # gene exon  jxn   tx
 #    0    0    0    0
@@ -133,60 +117,51 @@ make_table <- function(ov) {
 
 options(width = 120)
 make_table(tab_pbonf)
-#   Null_both Original_only CellProp_only   Both feature        OR pval pval_bonf
-# 1      3878          1382          3029  16363    gene  15.15875    0         0
-# 2     67292         24156         42452 262679    exon  17.23716    0         0
-# 3     85447         26737         19347 165650     jxn  27.36289    0         0
-# 4     88040          1049           877   2766      tx 264.70194    0         0
+#   Null_both Original_only CellProp_only Both feature       OR pval pval_bonf
+# 1     15560          2000          1197 5895    gene 38.31504    0         0
+# 2     76355          4182          2337 9858      tx 77.01646    0         0
 make_table(tab_pbonf_span)
-#   Null_both Original_only CellProp_only   Both feature         OR pval pval_bonf
-# 1     12501           748          1312  10091    gene  128.54155    0         0
-# 2    206644         13333         20682 155920    exon  116.84341    0         0
-# 3    139690         21195         13596 122700     jxn   59.47923    0         0
-# 4     90783           408           234   1307      tx 1242.80816    0         0
+#   Null_both Original_only CellProp_only Both feature       OR pval pval_bonf
+# 1     22844           107           196 1505    gene 1639.339    0         0
+# 2     90850           372           143 1367      tx 2334.611    0         0
 
-map_dbl(dev_type, ~ cor(.x$F, .x$neun_F))
-#      gene      exon       jxn        tx
-# 0.8702397 0.8715382 0.9115000 0.9275750
+map_dbl(ptab_type, ~ cor(.x$t, .x$neun_t))
+#      gene        tx
+# 0.9355817 0.9490653
 
-## Compute the correlation on the scale that I'm actually plotting below
-map_dbl(dev_type, ~ cor(log10(.x$F), log10(.x$neun_F)))
-#      gene      exon       jxn        tx
-# 0.8227183 0.8367599 0.8740846 0.8821472
-
-corrs <- cbind(map_dfr(dev_type, ~ map_dbl(split(.x, .x$de), ~ cor(log10(.x$F), log10(.x$neun_F)))), DE = c('FALSE', 'TRUE'))
+corrs <- cbind(map_dfr(ptab_type, ~ map_dbl(split(.x, .x$de), ~ cor(.x$t, .x$neun_t))), DE = c('FALSE', 'TRUE'))
 corrs
-#        gene      exon       jxn        tx    DE
-# 1 0.7959842 0.8225326 0.8574005 0.8673563 FALSE
-# 2 0.7670905 0.7819954 0.8324641 0.8729942  TRUE
+#        gene        tx    DE
+# 1 0.9136217 0.9420496 FALSE
+# 2 0.9873258 0.9930099  TRUE
 
 
-pdf('f_original_vs_f_adjCellProp_by_feature.pdf', width = 12, useDingbats = FALSE)
-map2(dev_type, names(dev_type), function(df, type) {
+pdf('t_original_vs_t_adjCellProp_by_feature.pdf', width = 12, useDingbats = FALSE)
+map2(ptab_type, names(ptab_type), function(df, type) {
     print(
-        ggplot(df, aes(x = F, y = neun_F)) +
+        ggplot(df, aes(x = t, y = neun_t)) +
             geom_hex(aes(fill=..density..), bins = 100) +
-            scale_x_log10() +
-            scale_y_log10() +
+            # scale_x_log10() +
+            # scale_y_log10() +
             facet_grid( ~ de) +
             theme_bw(base_size = 30) +
-            xlab('F-statistic: original') + 
-            ylab('F-statistic: adj. cell fraction') +
+            xlab('t-statistic: original') + 
+            ylab('t-statistic: adj. cell fraction') +
             labs(caption = 'Separated by DE status', title =  paste(type, 'corr =', paste(signif(corrs[, type], 3), collapse = ', ')))
     )
     return(invisible(NULL))
 })
 dev.off()
 
-pdf('f_original_vs_f_adjCellProp.pdf', width = 12, useDingbats = FALSE, height = 18)
-ggplot(dev, aes(x = F, y = neun_F)) +
+pdf('t_original_vs_t_adjCellProp.pdf', width = 12, useDingbats = FALSE, height = 18)
+ggplot(ptab, aes(x = t, y = neun_t)) +
     geom_hex(aes(fill=..density..), bins = 100) +
-    scale_x_log10() +
-    scale_y_log10() +
+    # scale_x_log10() +
+    # scale_y_log10() +
     facet_grid(type ~ de) +
     theme_bw(base_size = 30) +
-    xlab('F-statistic: original') + 
-    ylab('F-statistic: adj. cell fraction') +
+    xlab('t-statistic: original') + 
+    ylab('t-statistic: adj. cell fraction') +
     labs(caption = 'Separated by DE status')
 dev.off()
 
@@ -207,7 +182,7 @@ session_info()
 #  collate  en_US.UTF-8
 #  ctype    en_US.UTF-8
 #  tz       US/Eastern
-#  date     2019-03-25
+#  date     2019-03-26
 #
 # ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 #  package          * version   date       lib source

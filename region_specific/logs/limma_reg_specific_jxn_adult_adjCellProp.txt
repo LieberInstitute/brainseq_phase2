@@ -1,0 +1,104 @@
+Loading git
+Adding LIBD modules
+**** Job starts ****
+Mon Mar 25 20:22:49 EDT 2019
+**** JHPCE info ****
+User: lcollado
+Job id: 6835071
+Job name: limma_reg_specific_jxn_adult_adjCellProp
+Hostname: compute-094
+Task id: 
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colMeans,
+    colnames, colSums, dirname, do.call, duplicated, eval, evalq,
+    Filter, Find, get, grep, grepl, intersect, is.unsorted, lapply,
+    lengths, Map, mapply, match, mget, order, paste, pmax, pmax.int,
+    pmin, pmin.int, Position, rank, rbind, Reduce, rowMeans, rownames,
+    rowSums, sapply, setdiff, sort, table, tapply, union, unique,
+    unsplit, which, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:base’:
+
+    expand.grid
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: DelayedArray
+Loading required package: matrixStats
+
+Attaching package: ‘matrixStats’
+
+The following objects are masked from ‘package:Biobase’:
+
+    anyMissing, rowMedians
+
+Loading required package: BiocParallel
+
+Attaching package: ‘DelayedArray’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+
+The following objects are masked from ‘package:base’:
+
+    aperm, apply
+
+
+Attaching package: ‘limma’
+
+The following object is masked from ‘package:BiocGenerics’:
+
+    plotMA
+
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  1.205   1.548   1.579   1.575   1.617   1.871 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+      1       1       1       1       1       1 
+[1] "Dimensions of the data used"
+[1] 297181    460
+$mod
+ [1] "(Intercept)"            "RegionHIPPO"            "Age"                   
+ [4] "SexM"                   "snpPC1"                 "snpPC2"                
+ [7] "snpPC3"                 "snpPC4"                 "snpPC5"                
+[10] "mean_mitoRate"          "mean_totalAssignedGene" "mean_RIN"              
+[13] "OPC"                    "Neurons"                "Astrocytes"            
+[16] "Oligodendrocytes"       "Microglia"              "Endothelial"           
+
+$mod0
+ [1] "(Intercept)"            "Age"                    "SexM"                  
+ [4] "snpPC1"                 "snpPC2"                 "snpPC3"                
+ [7] "snpPC4"                 "snpPC5"                 "mean_mitoRate"         
+[10] "mean_totalAssignedGene" "mean_RIN"               "OPC"                   
+[13] "Neurons"                "Astrocytes"             "Oligodendrocytes"      
+[16] "Microglia"              "Endothelial"           
+
