@@ -2,7 +2,7 @@ library('SummarizedExperiment')
 library('getopt')
 library('limma')
 library('edgeR')
-library('devtools')
+library('sessioninfo')
 
 ## Specify parameters
 spec <- matrix(c(
@@ -15,6 +15,7 @@ opt <- getopt(spec)
 ## For testing
 if(FALSE){
     opt <- list('type' = 'gene', 'age' = 'fetal')
+    opt <- list('type' = 'gene', 'age' = 'adult')
 }
 
 ## if help was asked for print a friendly message
@@ -29,14 +30,35 @@ source('load_funs.R')
 dir.create('rda', showWarnings = FALSE)
 dir.create('pdf', showWarnings = FALSE)
 
+## Load cell proportion info
+load('../cellComp/RNA_cell_proportions_brainSeq_phase2.rda')
+
+## Re-weight so the sum is 1? Yes
+summary(rowSums(propEsts))
+#  Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+# 1.205   1.548   1.579   1.575   1.617   1.871
+propEsts <- sweep(propEsts, 1, rowSums(propEsts), '/')
+summary(rowSums(propEsts))
+# Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+#    1       1       1       1       1       1
+
 ## Load data
 rse <- load_foo(opt$type, opt$age)
 
+## Add RNA fraction information
+m_cell <- match(colnames(rse), rownames(propEsts))
+colData(rse) <- cbind(colData(rse), propEsts[m_cell, ])
+
 ## To simplify later code
 pd <- as.data.frame(colData(rse))
-pd <- pd[, match(c('Age', 'Sex', 'snpPC1', 'snpPC2', 'snpPC3', 'snpPC4', 'snpPC5', 'Region', 'Race', 'mean_mitoRate', 'mean_totalAssignedGene'), colnames(pd))]
+pd <- pd[, match(c('Age', 'Sex', 'snpPC1', 'snpPC2', 'snpPC3', 'snpPC4', 'snpPC5', 'Region', 'Race', 'mean_mitoRate', 'mean_totalAssignedGene', colnames(propEsts)), colnames(pd))]
 
-## Interaction model
+## Define models
+## Had to drop Fetal_replicating + Fetal_quiescent since otherwise the model was not full rank in adults (gene level)
+fm_mod <- ~Region + Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + OPC + Neurons + Astrocytes + Oligodendrocytes + Microglia + Endothelial
+fm_mod0 <- ~Age + Sex + snpPC1 + snpPC2 + snpPC3 + snpPC4 + snpPC5 + mean_mitoRate + mean_totalAssignedGene + mean_RIN + OPC + Neurons + Astrocytes + Oligodendrocytes + Microglia + Endothelial
+
+## Main model
 mods <-  get_mods( colData(rse) )
 sapply(mods, colnames)
 
@@ -48,7 +70,7 @@ stopifnot(is.fullrank(design))
 if(opt$type != 'tx') {
     dge <- DGEList(counts = assays(rse)$counts)
     dge <- calcNormFactors(dge)
-    pdf(paste0('pdf/limma_region_specific_', opt$age, '_', opt$type, '.pdf'))
+    pdf(paste0('pdf/limma_region_specific_', opt$age, '_', opt$type, '_adjCellProp.pdf'))
     v <- voom(dge, design, plot = TRUE)
     dev.off()
 
@@ -83,7 +105,7 @@ top <- topTable(fit, coef = grep('Region', colnames(design)), n = nrow(rse),
     sort.by = 'none')
 
 save(corfit, fit, top, exprsNorm,
-    file = paste0('rda/limma_region_specific_', opt$age, '_', opt$type, '.Rdata'))
+    file = paste0('rda/limma_region_specific_', opt$age, '_', opt$type, '_adjCellProp.Rdata'))
 
 ## Reproducibility information
 print('Reproducibility information:')

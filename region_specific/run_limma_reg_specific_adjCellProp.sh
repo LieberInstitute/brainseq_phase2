@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## Usage:
-# sh run_limma_reg_specific.sh
+# sh run_limma_reg_specific_adjCellProp.sh
 
 mkdir -p logs
 mkdir -p rda
@@ -9,10 +9,10 @@ mkdir -p pdf
 
 for featuretype in gene exon jxn tx
 do
-    for agegroup in adult fetal
+    for agegroup in adult #fetal
     do
 
-SHORT="limma_reg_specific_${featuretype}_${agegroup}"
+SHORT="limma_reg_specific_${featuretype}_${agegroup}_adjCellProp"
 
 # Construct shell file
 echo "Creating script for feature type ${featuretype} and age group ${agegroup}"
@@ -20,7 +20,7 @@ echo "Creating script for feature type ${featuretype} and age group ${agegroup}"
 cat > .${SHORT}.sh <<EOF
 #!/bin/bash
 #$ -cwd
-#$ -l mem_free=25G,h_vmem=25G,h_fsize=100G
+#$ -l bluejay,mem_free=25G,h_vmem=25G,h_fsize=100G
 #$ -N ${SHORT}
 #$ -o ./logs/${SHORT}.txt
 #$ -e ./logs/${SHORT}.txt
@@ -36,8 +36,8 @@ echo "Job name: \${JOB_NAME}"
 echo "Hostname: \${HOSTNAME}"
 echo "Task id: \${TASK_ID}"
 
-module load conda_R/3.4.x
-Rscript limma_reg_specific.R -t ${featuretype} -a ${agegroup}
+#module load conda_R/3.4.x
+Rscript limma_reg_specific_adjCellProp.R -t ${featuretype} -a ${agegroup}
 
 echo "**** Job ends ****"
 date
