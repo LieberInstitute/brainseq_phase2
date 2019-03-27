@@ -1,6 +1,7 @@
 library('sessioninfo')
 library('purrr')
 library('jaffelab')
+library('ggplot2')
 
 outFeat <- lapply(
     c('/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/dxStats_dlpfc_filtered_qSVA_noHGoldQSV_matchDLPFC.rda',
@@ -73,6 +74,7 @@ comp_log <- function(x, y, xlab, ylab, var = 'logFC', de = FALSE, n = 150, onlyx
     # abline(lm(y[, var] ~ x[, var]), col = 'blue')
     abline(h = 0, col = 'grey20')
     abline(v = 0, col = 'grey20')
+    abline(a = 0, b = 1, col = 'red')
 }
 
 
@@ -81,6 +83,10 @@ pdf('pdf/scatter_models.pdf', useDingbats = FALSE)
 comp_log(outFeat$DLPFC$gene, outFeat_cell$DLPFC$gene, 'DLPFC', 'DLPFC - RNA fraction adj.', var = 't')
 comp_log(outFeat$HIPPO$gene, outFeat_cell$HIPPO$gene, 'HIPPO', 'HIPPO - RNA fraction adj.', var = 't')
 comp_log(outFeat_cell$DLPFC$gene, outFeat_cell$HIPPO$gene, 'DLPFC - RNA fraction adj.', 'HIPPO - RNA fraction adj.', var = 't')
+
+comp_log(outFeat$DLPFC$gene, outFeat_cell$DLPFC$gene, 'DLPFC', 'DLPFC - RNA fraction adj.')
+comp_log(outFeat$HIPPO$gene, outFeat_cell$HIPPO$gene, 'HIPPO', 'HIPPO - RNA fraction adj.')
+comp_log(outFeat_cell$DLPFC$gene, outFeat_cell$HIPPO$gene, 'DLPFC - RNA fraction adj.', 'HIPPO - RNA fraction adj.')
 dev.off()
 
 
@@ -161,6 +167,94 @@ map_dbl(de_chi, ~ .x$p.value)
 # DLPFC.gene DLPFC.exon  DLPFC.jxn   DLPFC.tx HIPPO.gene HIPPO.exon  HIPPO.jxn   HIPPO.tx
 # 0.00009999 0.00009999 0.00009999        NaN 0.00019998 0.00009999 0.00009999        NaN
 
+
+
+de_bias <- map2_dfr(outFeat, outFeat_cell, ~ map2_dfr(.x, .y,
+        ~ data.frame(
+            ratio_logfc = .y$logFC / .x$logFC,
+            bias_logfc = abs(.y$logFC - .x$logFC) / abs(.x$logFC) * 100,
+            ratio_t = .y$t / .x$t,
+            bias_t = abs(.y$t - .x$t) / abs(.x$t) * 100,
+            de_original = .x$adj.P.Val < 0.05,
+            de_cell = .y$adj.P.Val < 0.05,
+            stringsAsFactors = FALSE
+        )
+    )
+)
+de_bias$region <- rep(names(outFeat), each = nrow(de_bias) / 2)
+de_bias$feature <- rep(rep(names(outFeat$DLPFC), map_int(outFeat$DLPFC, nrow)), 2)
+
+
+# table(de_bias$de_original, de_bias$de_cell, de_bias$region, de_bias$feature)
+
+sts_logfc <- boxplot.stats(de_bias$bias_logfc)$stats
+sts_t <- boxplot.stats(de_bias$bias_t)$stats
+features <- c('gene', 'exon', 'jxn', 'tx')
+
+pdf('pdf/bias.pdf', useDingbats = TRUE, width = 16)
+ggplot(de_bias, aes(x = region, y = bias_logfc, fill = region)) +
+    geom_boxplot(outlier.shape = NA) +
+    facet_grid(~ factor(feature, levels = features)) +
+    scale_fill_manual(values = c('DLPFC' = 'darkgoldenrod2', 'HIPPO' = 'steelblue1')) +
+    xlab('Region') +
+    ylab('Percent absolute bias on log2 FC') +
+    coord_cartesian(ylim = c(0, max(sts_logfc) * 1.2)) +
+    theme_bw(base_size = 30)
+ggplot(de_bias, aes(x = region, y = bias_t, fill = region)) +
+    geom_boxplot(outlier.shape = NA) +
+    facet_grid(~ factor(feature, levels = features)) +
+    scale_fill_manual(values = c('DLPFC' = 'darkgoldenrod2', 'HIPPO' = 'steelblue1')) +
+    xlab('Region') +
+    ylab('Percent absolute bias on t-stats') +
+    coord_cartesian(ylim = c(0, max(sts_t) * 1.2)) +
+    theme_bw(base_size = 30)
+dev.off()
+
+pdf('pdf/bias_de_original.pdf', useDingbats = TRUE, width = 16)
+ggplot(subset(de_bias, de_original), aes(x = region, y = bias_logfc, fill = region)) +
+    geom_boxplot() +
+    facet_grid(~ factor(feature, levels = features)) +
+    scale_fill_manual(values = c('DLPFC' = 'darkgoldenrod2', 'HIPPO' = 'steelblue1')) +
+    xlab('Region') +
+    ylab('Percent absolute bias on log2 FC') +
+    theme_bw(base_size = 30)
+ggplot(subset(de_bias, de_original), aes(x = region, y = bias_t, fill = region)) +
+    geom_boxplot() +
+    facet_grid(~ factor(feature, levels = features)) +
+    scale_fill_manual(values = c('DLPFC' = 'darkgoldenrod2', 'HIPPO' = 'steelblue1')) +
+    xlab('Region') +
+    ylab('Percent absolute bias on t-stats') +
+    theme_bw(base_size = 30)
+dev.off()
+
+
+## Explore ratio of adj/original t-stats and log2 FC
+sts_ratio_logfc <- boxplot.stats(abs(de_bias$ratio_logfc))$stats
+sts_ratio_t <- boxplot.stats(abs(de_bias$ratio_t))$stats
+
+pdf('pdf/ratio.pdf', useDingbats = TRUE, width = 16)
+ggplot(de_bias, aes(x = region, y = abs(ratio_logfc), fill = region)) +
+    geom_boxplot(outlier.shape = NA) +
+    facet_grid(~ factor(feature, levels = features)) +
+    scale_fill_manual(values = c('DLPFC' = 'darkgoldenrod2', 'HIPPO' = 'steelblue1')) +
+    xlab('Region') +
+    ylab('Abs. ratio (adj / original) on log2 FC') +
+    coord_cartesian(ylim = c(0, max(sts_ratio_logfc) * 1.2)) +
+    theme_bw(base_size = 30) +
+    geom_hline(aes(yintercept = 1), linetype = 'dashed', color = 'red')
+ggplot(de_bias, aes(x = region, y = abs(ratio_t), fill = region)) +
+    geom_boxplot(outlier.shape = NA) +
+    facet_grid(~ factor(feature, levels = features)) +
+    scale_fill_manual(values = c('DLPFC' = 'darkgoldenrod2', 'HIPPO' = 'steelblue1')) +
+    xlab('Region') +
+    ylab('Abs. ratio (adj / original) on t-stats') +
+    coord_cartesian(ylim = c(0, max(sts_ratio_t) * 1.2)) +
+    theme_bw(base_size = 30) +
+    geom_hline(aes(yintercept = 1), linetype = 'dashed', color = 'red')
+dev.off()
+
+
+
 ## Reproducibility information
 print('Reproducibility information:')
 Sys.time()
@@ -183,7 +277,7 @@ session_info()
 # ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 #  package          * version   date       lib source
 #  assertthat         0.2.1     2019-03-21 [2] CRAN (R 3.5.1)
-#  BiocGenerics     * 0.28.0    2018-10-30 [1] Bioconductor
+#  BiocGenerics       0.28.0    2018-10-30 [1] Bioconductor
 #  bitops             1.0-6     2013-08-17 [2] CRAN (R 3.5.0)
 #  cli                1.0.1     2018-09-25 [1] CRAN (R 3.5.1)
 #  colorout         * 1.2-0     2018-05-02 [1] Github (jalvesaq/colorout@c42088d)
@@ -194,7 +288,7 @@ session_info()
 #  GenomeInfoDb       1.18.2    2019-02-12 [1] Bioconductor
 #  GenomeInfoDbData   1.2.0     2018-11-02 [2] Bioconductor
 #  GenomicRanges      1.34.0    2018-10-30 [1] Bioconductor
-#  ggplot2            3.1.0     2018-10-25 [1] CRAN (R 3.5.1)
+#  ggplot2          * 3.1.0     2018-10-25 [1] CRAN (R 3.5.1)
 #  glue               1.3.1     2019-03-12 [1] CRAN (R 3.5.1)
 #  gtable             0.3.0     2019-03-25 [2] CRAN (R 3.5.1)
 #  htmltools          0.3.6     2017-04-28 [2] CRAN (R 3.5.0)
@@ -203,6 +297,7 @@ session_info()
 #  IRanges            2.16.0    2018-10-30 [1] Bioconductor
 #  jaffelab         * 0.99.21   2018-05-03 [1] Github (LieberInstitute/jaffelab@7ed0ab7)
 #  jsonlite           1.6       2018-12-07 [2] CRAN (R 3.5.1)
+#  labeling           0.3       2014-08-23 [2] CRAN (R 3.5.0)
 #  later              0.8.0     2019-02-11 [2] CRAN (R 3.5.1)
 #  lattice            0.20-38   2018-11-04 [3] CRAN (R 3.5.1)
 #  lazyeval           0.2.2     2019-03-15 [2] CRAN (R 3.5.1)
@@ -220,13 +315,16 @@ session_info()
 #  RColorBrewer       1.1-2     2014-12-07 [2] CRAN (R 3.5.0)
 #  Rcpp               1.0.0     2018-11-07 [1] CRAN (R 3.5.1)
 #  RCurl              1.95-4.12 2019-03-04 [2] CRAN (R 3.5.1)
+#  reshape2           1.4.3     2017-12-11 [2] CRAN (R 3.5.0)
 #  rlang              0.3.1     2019-01-08 [1] CRAN (R 3.5.1)
 #  rmote            * 0.3.4     2018-05-02 [1] deltarho (R 3.5.0)
-#  S4Vectors        * 0.20.1    2018-11-09 [1] Bioconductor
+#  S4Vectors          0.20.1    2018-11-09 [1] Bioconductor
 #  scales             1.0.0     2018-08-09 [2] CRAN (R 3.5.1)
 #  segmented          0.5-3.0   2017-11-30 [2] CRAN (R 3.5.0)
 #  servr              0.13      2019-03-04 [1] CRAN (R 3.5.1)
 #  sessioninfo      * 1.1.1     2018-11-05 [1] CRAN (R 3.5.1)
+#  stringi            1.4.3     2019-03-12 [2] CRAN (R 3.5.1)
+#  stringr            1.4.0     2019-02-10 [1] CRAN (R 3.5.1)
 #  tibble             2.0.1     2019-01-12 [1] CRAN (R 3.5.1)
 #  tidyselect         0.2.5     2018-10-11 [2] CRAN (R 3.5.1)
 #  withr              2.1.2     2018-03-15 [2] CRAN (R 3.5.0)
