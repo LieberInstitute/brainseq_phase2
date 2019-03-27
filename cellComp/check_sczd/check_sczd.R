@@ -10,7 +10,7 @@ library('tidyr')
 files <- c('DLPFC' = '/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/brainseq_phase2_qsvs_age17_noHGold_DLPFC.Rdata', 'HIPPO' = '/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/brainseq_phase2_qsvs_age17_noHGold_HIPPO.Rdata')
 file.exists(files)
 
-load('methprop_pd.Rdata', verbose = TRUE)
+load('../methprop_pd.Rdata', verbose = TRUE)
 
 
 sczd_lm <- map2_dfr(files, names(files), function(f, region) {
@@ -160,7 +160,7 @@ sczd_cell <- shorten_cell(sczd_cell)
 dx_lm$dx <- 'Schizo'
 dx_lm <- shorten_cell(dx_lm)
 
-pdf('sczd_cell.pdf', useDingbats = FALSE, width = 14, height = 25)
+pdf('pdf/sczd_cell.pdf', useDingbats = FALSE, width = 14, height = 25)
 ggplot(sczd_cell, aes(x = dx, y = cell, fill = dx)) +
     geom_boxplot() +
     # geom_boxplot(alpha = 0.7, outlier.shape = NA) +
@@ -208,27 +208,48 @@ dim(subset(sczd_qsv, p.bonf < 0.05 & term != '(Intercept)'))
 # [1] 98  9
 dim(subset(sczd_qsv, p.fdr < 0.05 & term != '(Intercept)'))
 # [1] 138   9
-with(subset(sczd_qsv, p.bonf < 0.05 & term != '(Intercept)'), table(celltype, region))
-#                   region
-# celltype           DLPFC HIPPO
-#   Astrocytes           9    11
-#   Endothelial          9    10
-#   FQN                  0     4
-#   Microglia            8     6
-#   Neurons              9    11
-#   Oligodendrocytes     9     9
-#   OPC                  2     1
-with(subset(sczd_qsv, p.fdr < 0.05 & term != '(Intercept)'), table(celltype, region))
-#                   region
-# celltype           DLPFC HIPPO
-#   Astrocytes          13    13
-#   Endothelial         11    15
-#   FQN                  2     6
-#   FRN                  1     1
-#   Microglia           11     9
-#   Neurons             12    13
-#   Oligodendrocytes    14    10
-#   OPC                  6     1
+with(subset(sczd_qsv, p.bonf < 0.05 & term != '(Intercept)'), table(factor(celltype, levels = unique(sczd_qsv$celltype)), region))
+#                 region
+#                  DLPFC HIPPO
+# FRN                  0     0
+# FQN                  0     4
+# OPC                  2     1
+# Neurons              9    11
+# Astrocytes           9    11
+# Oligodendrocytes     9     9
+# Microglia            8     6
+# Endothelial          9    10
+with(subset(sczd_qsv, p.fdr < 0.05 & term != '(Intercept)'), table(factor(celltype, levels = unique(sczd_qsv$celltype)), region))
+#                 region
+#                  DLPFC HIPPO
+# FRN                  1     1
+# FQN                  2     6
+# OPC                  6     1
+# Neurons             12    13
+# Astrocytes          13    13
+# Oligodendrocytes    14    10
+# Microglia           11     9
+# Endothelial         11    15
+
+with(subset(sczd_qsv, p.bonf < 0.05 & term != '(Intercept)'), table(factor(term, levels = unique(sczd_qsv$term)[-1]), region))
+#         region
+#          DLPFC HIPPO
+# qSVsPC1      4     5
+# qSVsPC2      4     5
+# qSVsPC3      3     3
+# qSVsPC4      4     4
+# qSVsPC5      3     4
+# qSVsPC6      1     2
+# qSVsPC7      3     3
+# qSVsPC8      2     4
+# qSVsPC9      5     2
+# qSVsPC10     2     3
+# qSVsPC11     1     1
+# qSVsPC12     3     2
+# qSVsPC13     3     5
+# qSVsPC14     4     3
+# qSVsPC15     4     4
+# qSVsPC16     0     2
 
 sczd_qsv_tab <- map2_dfr(files, names(files), function(f, region) {
     load(f, verbose = TRUE)
@@ -265,7 +286,7 @@ m <- match(
 sczd_qsv_tab <- cbind(sczd_qsv_tab, sczd_qsv[m, c('p.bonf', 'p.fdr')])
 
 ## Visualize all the qSVs versus the cell type proportions
-pdf('sczd_cell_and_qsv.pdf', useDingbats = FALSE, width = 45, height = 55)
+pdf('pdf/sczd_cell_and_qsv.pdf', useDingbats = FALSE, width = 45, height = 55)
 ggplot(sczd_qsv_tab, aes(x = qsv_value, y = cell, color = p.bonf < 0.05)) + 
     geom_point() +
     facet_grid(region * celltype ~ qsv, scales = 'free') +
@@ -276,6 +297,48 @@ ggplot(sczd_qsv_tab, aes(x = qsv_value, y = cell, color = p.bonf < 0.05)) +
     scale_color_manual(values = c('FALSE' = 'black', 'TRUE' = 'red'))
 dev.off()
 
+
+## Get R-squared
+sczd_r_sq <- map2_dfr(files, names(files), function(f, region) {
+    load(f, verbose = TRUE)
+    
+    stopifnot(all(sapply(pd$SAMPLE_ID[keepIndex], '[', 1) == rownames(qSVs)))
+    
+    res <- map_dfr(
+        colnames(pd)[57:64],
+        ~ data.frame(r_squared = summary(lm(pd[keepIndex, .x] ~  qSVs))$adj.r.squared, celltype = .x)
+    )
+    res$region <- region
+    
+    return(res)
+})
+sczd_r_sq
+#       r_squared          celltype region
+# 1  -0.003581566 Fetal_replicating  DLPFC
+# 2   0.041031538   Fetal_quiescent  DLPFC
+# 3   0.165518855               OPC  DLPFC
+# 4   0.917873885           Neurons  DLPFC
+# 5   0.895389430        Astrocytes  DLPFC
+# 6   0.725281891  Oligodendrocytes  DLPFC
+# 7   0.417239966         Microglia  DLPFC
+# 8   0.647175741       Endothelial  DLPFC
+# 9   0.022929396 Fetal_replicating  HIPPO
+# 10  0.289756469   Fetal_quiescent  HIPPO
+# 11  0.033058682               OPC  HIPPO
+# 12  0.948052921           Neurons  HIPPO
+# 13  0.804310534        Astrocytes  HIPPO
+# 14  0.734860107  Oligodendrocytes  HIPPO
+# 15  0.559609755         Microglia  HIPPO
+# 16  0.836349603       Endothelial  HIPPO
+
+map(split(sczd_r_sq, sczd_r_sq$region), ~ summary(.x$r_squared))
+# $DLPFC
+#      Min.   1st Qu.    Median      Mean   3rd Qu.      Max.
+# -0.003582  0.134397  0.532208  0.475741  0.767809  0.917874
+#
+# $HIPPO
+#    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+# 0.02293 0.22558 0.64723 0.52862 0.81232 0.94805
 
 ## Reproducibility information
 print('Reproducibility information:')
