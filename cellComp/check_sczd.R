@@ -4,6 +4,7 @@ library('SummarizedExperiment')
 library('broom')
 library('jaffelab')
 library('ggplot2')
+library('tidyr')
 
 
 files <- c('DLPFC' = '/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/brainseq_phase2_qsvs_age17_noHGold_DLPFC.Rdata', 'HIPPO' = '/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/brainseq_phase2_qsvs_age17_noHGold_HIPPO.Rdata')
@@ -148,8 +149,8 @@ sczd_cell <- map2_dfr(files, names(files), function(f, region) {
     return(res)
 })
 
-shorten_cell <- function(df) {
-    df$dx[df$dx == 'Schizo'] <- 'SCZD'
+shorten_cell <- function(df, dx = TRUE) {
+    if(dx) df$dx[df$dx == 'Schizo'] <- 'SCZD'
     df$celltype[df$celltype == 'Fetal_replicating'] <- 'FRN'
     df$celltype[df$celltype == 'Fetal_quiescent'] <- 'FQN'
     return(df)
@@ -179,6 +180,102 @@ ggplot(sczd_cell, aes(x = dx, y = cell, fill = dx)) +
     labs(caption = 'Bonferroni-adjusted p-value shown in each panel') +
     expand_limits(y = c(-0.0001, 0.0001))
 dev.off()
+
+
+
+sczd_qsv <- map2_dfr(files, names(files), function(f, region) {
+    load(f, verbose = TRUE)
+    
+    stopifnot(all(sapply(pd$SAMPLE_ID[keepIndex], '[', 1) == rownames(qSVs)))
+    
+    res <- map_dfr(
+        colnames(pd)[57:64],
+        ~ cbind(tidy(lm(pd[keepIndex, .x] ~  qSVs)), celltype = .x)
+    )
+    res$region <- region
+    
+    return(res)
+})
+sczd_qsv$p.bonf <- p.adjust(sczd_qsv$p.value, 'bonf')
+sczd_qsv$p.fdr <- p.adjust(sczd_qsv$p.value, 'fdr')
+sczd_qsv <- shorten_cell(sczd_qsv, dx = FALSE)
+dim(sczd_qsv)
+# [1] 264   9
+dim(subset(sczd_qsv, term != '(Intercept)'))
+# [1] 248   9
+head(sczd_qsv)
+dim(subset(sczd_qsv, p.bonf < 0.05 & term != '(Intercept)'))
+# [1] 98  9
+dim(subset(sczd_qsv, p.fdr < 0.05 & term != '(Intercept)'))
+# [1] 138   9
+with(subset(sczd_qsv, p.bonf < 0.05 & term != '(Intercept)'), table(celltype, region))
+#                   region
+# celltype           DLPFC HIPPO
+#   Astrocytes           9    11
+#   Endothelial          9    10
+#   FQN                  0     4
+#   Microglia            8     6
+#   Neurons              9    11
+#   Oligodendrocytes     9     9
+#   OPC                  2     1
+with(subset(sczd_qsv, p.fdr < 0.05 & term != '(Intercept)'), table(celltype, region))
+#                   region
+# celltype           DLPFC HIPPO
+#   Astrocytes          13    13
+#   Endothelial         11    15
+#   FQN                  2     6
+#   FRN                  1     1
+#   Microglia           11     9
+#   Neurons             12    13
+#   Oligodendrocytes    14    10
+#   OPC                  6     1
+
+sczd_qsv_tab <- map2_dfr(files, names(files), function(f, region) {
+    load(f, verbose = TRUE)
+    
+    res <- map_dfr(
+        colnames(pd)[57:64],
+        function(cell) {
+            cbind(data.frame(
+                cell = pd[keepIndex, cell],
+                dx = pd$Dx[keepIndex],
+                celltype = cell,
+                stringsAsFactors = FALSE
+            ), qSVs)
+        }
+    )
+    
+    ## Make into long format
+    res <- gather(res, qsv, qsv_value, grep('PC', colnames(res)))
+    
+    res$region <- region
+    
+    return(res)
+})
+
+## Simplify for plotting
+sczd_qsv_tab <- shorten_cell(sczd_qsv_tab)
+sczd_qsv_tab$qsv <- factor(sczd_qsv_tab$qsv, levels = unique(sczd_qsv_tab$qsv))
+
+## Add info from the other table that I can then use for colors
+m <- match(
+    with(sczd_qsv_tab, paste('qSVs', qsv, '-', region, '-', celltype, sep = '')),
+    with(sczd_qsv, paste(term, '-', region, '-', celltype, sep = ''))
+)
+sczd_qsv_tab <- cbind(sczd_qsv_tab, sczd_qsv[m, c('p.bonf', 'p.fdr')])
+
+## Visualize all the qSVs versus the cell type proportions
+pdf('sczd_cell_and_qsv.pdf', useDingbats = FALSE, width = 45, height = 55)
+ggplot(sczd_qsv_tab, aes(x = qsv_value, y = cell, color = p.bonf < 0.05)) + 
+    geom_point() +
+    facet_grid(region * celltype ~ qsv, scales = 'free') +
+    ylab('Cell RNA fraction') +
+    xlab('Quality Surrogate Variable') +
+    theme_bw(base_size = 30) +
+    expand_limits(y = c(-0.01, 0.01)) +
+    scale_color_manual(values = c('FALSE' = 'black', 'TRUE' = 'red'))
+dev.off()
+
 
 ## Reproducibility information
 print('Reproducibility information:')
@@ -215,7 +312,6 @@ session_info()
 #  DelayedArray         * 0.8.0     2018-10-30 [2] Bioconductor
 #  digest                 0.6.18    2018-10-10 [1] CRAN (R 3.5.1)
 #  dplyr                  0.8.0.1   2019-02-15 [1] CRAN (R 3.5.1)
-#  fansi                  0.4.0     2018-10-05 [1] CRAN (R 3.5.1)
 #  generics               0.0.2     2018-11-29 [1] CRAN (R 3.5.1)
 #  GenomeInfoDb         * 1.18.2    2019-02-12 [1] Bioconductor
 #  GenomeInfoDbData       1.2.0     2018-11-02 [2] Bioconductor
@@ -237,7 +333,6 @@ session_info()
 #  magrittr               1.5       2014-11-22 [1] CRAN (R 3.5.0)
 #  Matrix                 1.2-17    2019-03-22 [3] CRAN (R 3.5.1)
 #  matrixStats          * 0.54.0    2018-07-23 [1] CRAN (R 3.5.1)
-#  mime                   0.6       2018-10-05 [1] CRAN (R 3.5.1)
 #  munsell                0.5.0     2018-06-12 [2] CRAN (R 3.5.1)
 #  nlme                   3.1-137   2018-04-07 [3] CRAN (R 3.5.1)
 #  pillar                 1.3.1     2018-12-15 [1] CRAN (R 3.5.1)
@@ -263,9 +358,8 @@ session_info()
 #  stringr                1.4.0     2019-02-10 [1] CRAN (R 3.5.1)
 #  SummarizedExperiment * 1.12.0    2018-10-30 [1] Bioconductor
 #  tibble                 2.0.1     2019-01-12 [1] CRAN (R 3.5.1)
-#  tidyr                  0.8.3     2019-03-01 [2] CRAN (R 3.5.1)
+#  tidyr                * 0.8.3     2019-03-01 [2] CRAN (R 3.5.1)
 #  tidyselect             0.2.5     2018-10-11 [2] CRAN (R 3.5.1)
-#  utf8                   1.1.4     2018-05-24 [1] CRAN (R 3.5.0)
 #  withr                  2.1.2     2018-03-15 [2] CRAN (R 3.5.0)
 #  xfun                   0.5       2019-02-20 [1] CRAN (R 3.5.1)
 #  XVector                0.22.0    2018-10-30 [1] Bioconductor
