@@ -116,6 +116,14 @@ comp_qtl_short(interaction, perc = TRUE, cutde = 0.05)
 #      TRUE    8.358276  87.201936  95.560212
 #      Sum    12.798064  87.201936 100.000000
 
+comp_qtl_short(interaction, cutde = 0.001)
+# $gene
+#           CAUC p<0.001
+# Equal sign FALSE  TRUE   Sum
+#      FALSE  1780     0  1780
+#      TRUE  15111 23201 38312
+#      Sum   16891 23201 40092
+
 comp_qtl_short(interaction, perc = TRUE, cutde = 0.001)
 # $gene
 #           CAUC p<0.001
@@ -212,6 +220,14 @@ or_chisq(comp_qtl_short(hippo, cutde = 0.05)[[1]])
 # $p.value
 # [1] 0
 
+comp_qtl_short(hippo, cutde = 0.001)
+# $gene
+#           CAUC p<0.001
+# Equal sign   FALSE    TRUE     Sum
+#      FALSE   59506      58   59564
+#      TRUE   380298  635871 1016169
+#      Sum    439804  635929 1075733
+
 comp_qtl_short(hippo, perc = TRUE, cutde = 0.001)
 # $gene
 #           CAUC p<0.001
@@ -285,6 +301,14 @@ or_chisq(comp_qtl_short(dlpfc, cutde = 0.05)[[1]])
 #
 # $p.value
 # [1] 0
+
+comp_qtl_short(dlpfc, cutde = 0.001)
+# $gene
+#           CAUC p<0.001
+# Equal sign   FALSE    TRUE     Sum
+#      FALSE   93065      88   93153
+#      TRUE   577607  907203 1484810
+#      Sum    670672  907291 1577963
 
 comp_qtl_short(dlpfc, perc = TRUE, cutde = 0.001)
 # $gene
