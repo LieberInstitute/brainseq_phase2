@@ -26,6 +26,15 @@ table('FDR' = tt$TWAS.FDR < 0.05, 'Bonf' = tt$TWAS.Bonf < 0.05)
 #   FALSE 117410      0
 #   TRUE    8495   1346
 
+## Add Gandal et al results
+load('../twas/rda/twas_z_gandal.Rdata', verbose = TRUE)
+
+## Add Gandal info (only for the gene-level feature rows)
+m <- match(region_twas_z$ID, twas_z_gandal$ID)
+region_twas_z <- cbind(region_twas_z, twas_z_gandal[m, grep('gandal', tolower(colnames(twas_z_gandal)))])
+rownames(region_twas_z) <- NULL
+
+
 ## Export
 write.xlsx2(as.data.frame(tt[tt$TWAS.FDR < 0.05, ]), file = 'BrainSeqPhaseII_TWAS_TableSxx.xlsx', sheetName='TWAS PGC2+CLOZUK FDR<5% results')
 write.xlsx2(region_twas_z, file = 'BrainSeqPhaseII_TWAS_TableSxx.xlsx', append = TRUE, sheetName='PGC2+CLOZUK TWAS Z DLPFCvsHIPPO')
@@ -62,7 +71,7 @@ session_info()
 #  collate  en_US.UTF-8
 #  ctype    en_US.UTF-8
 #  tz       US/Eastern
-#  date     2019-03-29
+#  date     2019-04-01
 #
 # ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 #  package     * version date       lib source
@@ -74,7 +83,6 @@ session_info()
 #  data.table  * 1.12.0  2019-01-13 [1] CRAN (R 3.5.1)
 #  digest        0.6.18  2018-10-10 [1] CRAN (R 3.5.1)
 #  dplyr         0.8.0.1 2019-02-15 [1] CRAN (R 3.5.1)
-#  fansi         0.4.0   2018-10-05 [1] CRAN (R 3.5.1)
 #  ggplot2       3.1.0   2018-10-25 [1] CRAN (R 3.5.1)
 #  glue          1.3.1   2019-03-12 [1] CRAN (R 3.5.1)
 #  gtable        0.3.0   2019-03-25 [2] CRAN (R 3.5.1)
@@ -103,7 +111,6 @@ session_info()
 #  sessioninfo * 1.1.1   2018-11-05 [1] CRAN (R 3.5.1)
 #  tibble      * 2.0.1   2019-01-12 [1] CRAN (R 3.5.1)
 #  tidyselect    0.2.5   2018-10-11 [2] CRAN (R 3.5.1)
-#  utf8          1.1.4   2018-05-24 [1] CRAN (R 3.5.0)
 #  withr         2.1.2   2018-03-15 [2] CRAN (R 3.5.0)
 #  xfun          0.5     2019-02-20 [1] CRAN (R 3.5.1)
 #  xlsx        * 0.6.1   2018-06-11 [2] CRAN (R 3.5.1)
