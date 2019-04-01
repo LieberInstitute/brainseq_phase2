@@ -72,6 +72,7 @@ Pre-print URL: https://www.biorxiv.org/content/early/2018/09/26/426213.
 | TWAS HIPPO weights | `/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/HIPPO/HIPPO_weights.tar.gz` | [AWS](https://s3.us-east-2.amazonaws.com/libd-brainseq2/HIPPO_weights.tar.gz) |
 | TWAS results R objects | `/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/rda/TWAS_results.tar.gz` | [AWS](https://s3.us-east-2.amazonaws.com/libd-brainseq2/TWAS_results.tar.gz) |
 
+Check the corresponding scripts or use GitHub's search feature to find where each of the R objects were created. If you have questions about the files, please open an [issue](https://github.com/LieberInstitute/brainseq_phase2/issues).
 
 ## LIBD internal:
 
