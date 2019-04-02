@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="/stylesheets/style.css"></link>
+    <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+    <style> 
+	body { font-family: 'Open Sans';font-size: 14px; } 
+
+	.left-h2 { text-align: left; }
+
+    	.grid-container {
+ 		display: grid;
+  		grid-template-columns: auto;
+  		padding: 10px;
+	}
+	.grid-item {
+  		/* border: 1px solid rgba(0, 0, 0, 0.8);*/ 
+  		padding: 20px;
+  		font-size: 14px;
+		/* text-align: center;*/
+	}	
+    </style>
+
+    <!-- Local app scripts -->
+    <link rel="stylesheet" href="/stylesheets/style.css"></link>
+
+  </head>
+  <body>
+    
+    <header style="max-width: 1600px;">
+       <img class="logo" src="/images/img-logo-libd_black.png"/>
+       <div style="float: left">
+         <h3 id="title-text" style="margin-top: 10px; margin-bottom:5px;font-size:30pt;">BrainSeq Phase 2</h3>
+         <h3 id="subtitle-text" style="margin-top: 10px; margin-bottom:5px;color:#D01039;font-size:16pt;padding-left:100px;">Schizophrenia DLPFC and HIPPO</h3>
+       </div>
+       <nav>
+         <a href="/contact.html" class="nav-link"><img src="/images/contactus_eQTL.png" /></a>
+         <a href="http://eqtl.brainseq.org/phase2/eqtl/" class="nav-link"><img src="/images/about_eQTL.png" /></a>
+         <a href="/" class="nav-link"><img src="/images/home_eQTL.png" /></a>
+       </nav>
+
+    </header>
+	    
+    <main>
+      <div id="results-box" style="margin-bottom: 10-px;max-width: 1580px;">
+         <!-- <h4 id="title-subtext" style="padding-left: 150px;font-size:18pt; color:#D01039">Schizophrenia DLPFC</h4> -->
+
+
+	<div class="grid-container" style="margin-left: 250px">
+		<div class="grid-item">
+			<h2 id="data-browser-links" class="left-h2">Data Browser Links</h2>
+			<ul style="text-align:left; display:inline-block;">
+  				<li><a href="http://eqtl.brainseq.org/phase2/eqtl/">eQTL Browser</a></li>
+			</ul>
+		</div>
+
+                <div class="grid-item">
+                        <h2 id="processed-data" class="left-h2">Processed Data</h2>
+                        <div style="display:inline-block; vertical-align: top; margin-right: 40px;">
+                        <p>These are <a href="https://www.bioconductor.org/packages/release/bioc/vignettes/SummarizedExperiment/inst/doc/SummarizedExperiment.html">RangedSummarizedExperiment</a> R Objects processed against hg38 with Gencode v25.
+                        <ul style="text-align:left; display:inline-block;">
+                                <li><a href="https://s3.us-east-2.amazonaws.com/libd-brainseq2/rse_gene_unfiltered.Rdata">Gene</a></li>
+                                <li><a href="https://s3.us-east-2.amazonaws.com/libd-brainseq2/rse_exon_unfiltered.Rdata">Exon</a></li>
+                                <li><a href="https://s3.us-east-2.amazonaws.com/libd-brainseq2/rse_jxn_unfiltered.Rdata">Junction</a></li>
+                                <li><a href="https://s3.us-east-2.amazonaws.com/libd-brainseq2/rse_tx_unfiltered.Rdata">Transcript</a></li>
+                        </ul>
+			            </p>
+                        </div>
+                        <!-- <div style="display:inline-block; vertical-align: top;">
+                        <p>These are regular RData objects:
+                        <ul style="text-align:left; display:inline-block;">
+                                <li><a href="https://s3.us-east-2.amazonaws.com/libd-brainseq2/methprop_pd.Rdata">Demographic table including cell RNA fraction estimates. Can be used to replace the colData() slot of the RangedSummarizedExperiment objects.</a></li>
+                        </ul>
+                        </p>
+                        </div> -->
+                </div>
+
+		        <div class="grid-item">
+                        <h2 id="processed-results" class="left-h2">Processed Results</h2>
+                        <ul style="text-align:left; display:inline-block;">
+                            <li><a href="https://s3.us-east-2.amazonaws.com/libd-brainseq2/SupplementaryTable15_eQTL.tar.gz">Table S15.</a> Genome wide significant eQTL snp-feature pairs</li>
+                                <li><a href="https://s3.us-east-2.amazonaws.com/libd-brainseq2/RegionSpecificDEGobjects.tar.gz">DLPFC vs HIPPO differential expressed genes (DEG) RData objects</a> (adult and prenatal, includes BrainSpan replication and cell RNA fraction sensitivity results)</li>
+                                <li><a href="https://s3.us-east-2.amazonaws.com/libd-brainseq2/DevelopmentDEGobjects.tar.gz">Development DEG RData objects</a> (includes BrainSpan replication and cell RNA fraction sensitivity results)</li>
+                                <li><a href="https://s3.us-east-2.amazonaws.com/libd-brainseq2/SCZDvsControlDEGobjects.tar.gz">SCZD vs non-psychiatric control DEG RData objects</a> (includes qSVs as well as results for the interaction and no-qSVA gene-level sensitivity analyses). See <a href="https://s3.us-east-2.amazonaws.com/jaffe-nat-neuro-2018/expressed_de_features.rda">BrainSeq Phase I</a> SCZD DE features if you want to compare with BSP1 and the CMC dataset processed in hg19.</li>
+                                <li>TWAS <a href="https://s3.us-east-2.amazonaws.com/libd-brainseq2/DLPFC_weights.tar.gz">DLPFC weights</a></li>
+                                <li>TWAS <a href="https://s3.us-east-2.amazonaws.com/libd-brainseq2/HIPPO_weights.tar.gz">HIPPO weights</a></li>
+                                <li>TWAS <a href="https://s3.us-east-2.amazonaws.com/libd-brainseq2/TWAS_results.tar.gz">results</a> RData objects</li>
+                        </ul>
+                </div>
+               	<div class="grid-item">
+                        <h2 id="raw-data" class="left-h2">Raw Data</h2>
+                        <ul style="text-align:left; display:inline-block;">
+                                <li>RNA-seq reads: FASTQ via <a href="">(Coming soon)</a></li>
+                                <li>Phenotype data: <a href="https://s3.us-east-2.amazonaws.com/libd-brainseq2/methprop_pd.Rdata">RData</a>. This demographic table, which includes cell RNA fraction estimates, can be used to replace the colData() slot of the RangedSummarizedExperiment objects.</li>
+                                <li>Genotype data: <a href="">dbGaP (Coming soon)</a> - we will share analysis-ready genotype data with researchers that obtain dbGaP access of that accession.</li>
+                        </ul>
+                </div>
+	</div>
+    <p>Check the corresponding scripts or use GitHub's search feature to find where each of the R objects were created. If you have questions about the files, please open an <a href="https://github.com/LieberInstitute/brainseq_phase2/issues">issue</a>.</p>
+      
+   <h4 id="site-description">This site describes data and resources for the BrainSeq Phase 2 DLPFC and HIPPO resource paper which you can cite below:</h4>
+<h4 id="preprint">Collado-Torres L, Burke EE, Peterson A, Shin JH, Straub RE, Rajpurohit A, Semick SA, Ulrich WS, BrainSeq Consortium, Valencia C, Tao R, Deep-Soboslay A, Hyde TM, Kleinman JE, Weinberger DR, Jaffe AE. Regional heterogeneity in gene expression, regulation and coherence in hippocampus and dorsolateral prefrontal cortex across development and in schizophrenia. bioRxiv, DOI 10.1101/426213. 2018. <a href="https://www.biorxiv.org/content/early/2018/09/26/426213">Pre-print URL</a>.</h4>
+			<p>Analysis code is available on <a href="https://github.com/LieberInstitute/brainseq_phase2">GitHub</a>.</p>
+    </div> 
+  </main>
+  </body>
+</html>

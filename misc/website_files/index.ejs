@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include partials/head %>
+  </head>
+  <body>
+    
+    <header>
+      <% include partials/header %>
+    </header>
+    
+    <main>
+      <div id="results-box">
+	<div id="select-panel" class="text-center">
+	  <select id="brain-region" name="eqtl-pool">
+	    <option value="hippo" label="hippo">Hippocampus</option>
+	  </select>
+	</div>
+	<div id="button-panel" class="text-center">
+	  <label class="radio-inline">
+	    <input type="radio" name="search-type" value="snprsnum">SNP (rs)
+	  </label>
+	  <label class="radio-inline">
+	    <input type="radio" name="search-type" value="ensemblid">Ensembl Gene ID
+	  </label>
+	  <label class="radio-inline">
+	    <input type="radio" name="search-type" value="symbol">Gene Symbol
+	  </label>
+	</div>
+	<div id="text-panel">
+	  <input type="text" id="query-term"/>
+	  <input type="submit" value="Submit" id="search-btn">
+	</div>
+	<div id="rawdata-link-panel">
+	  Download:
+	  <a id="cvs-link" href="">CSV</a>
+	</div>
+      </div>
+      <div id="info-container">
+
+	      <h3> LIBD BrainSeq Phase II RNA-seq Project </h3> 
+		  
+	      <p>Recent large-scale genomics efforts have better characterized the molecular correlates of schizophrenia in postmortem human neocortex, but not hippocampus which is a brain region prominently implicated in its pathogenesis. Here in the second phase of the BrainSeq Consortium (Phase II), we have generated RiboZero RNA-seq data for 900 samples across both the dorsolateral prefrontal cortex (DLPFC) and the hippocampus (HIPPO) for 551 individuals (286 affected by schizophrenia disorder: SCZD). We identify substantial regional differences in gene expression, in both pre- and post-natal life, and find widespread differences in how genes are regulated across development independent of cell composition. By extending quality surrogate variable analysis (qSVA) to multiple brain regions, we identified 48 and 245 differentially expressed genes (DEG) by SCZD diagnosis (FDR&lt;5%) in HIPPO and DLPFC, respectively, with surprisingly minimal overlap in DEG between the two brain regions. While there were widespread eQTLs in both brain regions, we identified 205,618 brain region-dependent eQTLs (FDR&lt;1%). We further found that 124/163 (76.6%) schizophrenia GWAS risk loci contained eQTLs in at least one of the regions, and more formally performed a transcriptome-wide association study (TWAS) in each brain region to identify hundreds of new schizophrenia risk genes. We lastly identified potential molecular correlates of in vivo evidence of altered prefrontal-hippocampal functional coherence in schizophrenia. These results underscore the complexity and regional heterogeneity of the transcriptional correlates of schizophrenia, and suggest future schizophrenia therapeutics may need to target molecular pathologies localized to specific brain regions.</p>
+	      
+	      <p>Collado-Torres L, Burke EE, Peterson A, Shin JH, Straub RE, Rajpurohit A, Semick SA, Ulrich WS, BrainSeq Consortium, Valencia C, Tao R, Deep-Soboslay A, Hyde TM, Kleinman JE, Weinberger DR, Jaffe AE. Regional heterogeneity in gene expression, regulation and coherence in hippocampus and dorsolateral prefrontal cortex across development and in schizophrenia. bioRxiv, DOI 10.1101/426213. 2018. <a href="https://www.biorxiv.org/content/early/2018/09/26/426213">Pre-print URL</a>.</p>
+          
+          <p>See the <a href="http://eqtl.brainseq.org/phase2/">data availability</a> page to access the raw and processed files.</p>
+
+	      <hr/>
+	      <div style="text-align: center"><i>NB: All Coordinates are in hg38</i></div>
+	      
+      </div>
+      
+    </main>
+  </body>
+</html>
