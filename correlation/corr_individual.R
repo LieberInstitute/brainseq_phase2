@@ -511,7 +511,7 @@ save(indv_go_expr_sczd, indv_go_cleaned_sczd, file = 'rda/indv_go_sczd.Rdata')
 
 ## Load SCZD case-control results
 load('rda/out_info.Rdata', verbose = TRUE)
-compare_corr_de <- function(, cutvar = cutde) {
+compare_corr_de <- function(out, cutvar = cutde) {
     out_comp <- out[ !is.na(out$adj.P.Val) & !is.na(out$expr.pval), ]
     res <- lapply(colnames(gene_pinfo)[1:6], function(var) {
         table(DE = out$adj.P.Val < cutde, Corr = out[, var] < cutvar)
@@ -549,6 +549,18 @@ indv_corrsczd_expr <- lapply(c(outGene, list('combined' = rbind(outGene[['HIPPO_
 #   287
 indv_corrsczd_cleaned <- lapply(c(outGene, list('combined' = rbind(outGene[['HIPPO_matchQSV']], outGene[['DLPFC_matchQSV']]))), computecor_sczd, exp = cleaned)
 
+
+computecor_without_sczd <- function(out, exp, cutde = 0.05) {
+    
+    genes <- unique(out$ensemblID[out$adj.P.Val < cutde])
+    m <- match(genes, as.character(rowRanges(simple_rse[['DLPFC']][['gene']])$ensemblID))
+    print(table(is.na(m)))
+    m <- m[!is.na(m)]
+    stopifnot(!any(is.na(m)))
+    paircor(exp[['DLPFC']][['geneRpkm']][-m, ], exp[['HIPPO']][['geneRpkm']][-m, ])
+}
+
+indv_without_corrsczd_cleaned <- lapply(c(outGene, list('combined' = rbind(outGene[['HIPPO_matchQSV']], outGene[['DLPFC_matchQSV']]))), computecor_without_sczd, exp = cleaned)
 
 corrsczd_info <- function(corrsczd, type) {
     dx <- colData(simple_rse[['DLPFC']][['gene']])$Dx
@@ -605,6 +617,20 @@ indv_corrsczd_info_cleaned
 # 5 -0.0007077617 0.001671337 -0.4234705 6.722982e-01 0.8213347    0.8220425     293       combined 6.930947e-01    FALSE
 
 save(indv_corrsczd_expr, indv_corrsczd_cleaned, indv_corrsczd_info_expr, indv_corrsczd_info_cleaned, file = 'rda/indv_corrsczd.Rdata')
+
+
+pdf('pdf/indv_box_without_corrsczd.pdf', useDingbats = FALSE)
+indv_without_corrsczd_info_cleaned <- corrsczd_info(indv_without_corrsczd_cleaned, 'cleaned')
+dev.off()
+indv_without_corrsczd_info_cleaned
+#       Estimate   Std. Error   t value   Pr(>|t|) mean_sczd mean_control n_genes            set       padj padj_sig
+# 1 -0.001887021 0.0007931765 -2.379069 0.01807045 0.7787176    0.7806046      48 HIPPO_matchQSV 0.01807045     TRUE
+# 2 -0.001909352 0.0007924882 -2.409313 0.01667016 0.7783565    0.7802659     245 DLPFC_matchQSV 0.01807045     TRUE
+# 3 -0.001943374 0.0007937660 -2.448295 0.01500716 0.7781886    0.7801319     171           BSP1 0.01807045     TRUE
+# 4 -0.001940100 0.0007934520 -2.445138 0.01513615 0.7779434    0.7798835     339            CMC 0.01807045     TRUE
+# 5 -0.001899514 0.0007930741 -2.395128 0.01731453 0.7781895    0.7800891     293       combined 0.01807045     TRUE
+
+save(indv_without_corrsczd_info_cleaned, indv_without_corrsczd_cleaned, file = 'rda/indv_without_corrsczd.Rdata')
 
 ## Re-loading if necessary
 if(FALSE) {
