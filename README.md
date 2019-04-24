@@ -77,6 +77,14 @@ Pre-print URL: https://www.biorxiv.org/content/early/2018/09/26/426213.
 
 If the information below is insufficient, check the corresponding scripts or use GitHub's search feature to find where each of the R objects were created. If you have questions about the files, please open an [issue](https://github.com/LieberInstitute/brainseq_phase2/issues).
 
+
+### Common R objects used
+
+* `RangedSummarizedExperiment`: [RDocumentation](https://www.rdocumentation.org/packages/SummarizedExperiment/versions/1.2.3/topics/RangedSummarizedExperiment-class), [Bioconductor](http://bioconductor.org/packages/SummarizedExperiment)
+* `limma::eBayes()`: [RDocumentation](https://www.rdocumentation.org/packages/limma/versions/3.28.14/topics/ebayes), [Bioconductor](http://bioconductor.org/packages/limma)
+* `limma::topTable()` [RDocumentation](https://www.rdocumentation.org/packages/limma/versions/3.28.14/topics/toptable), [Bioconductor](http://bioconductor.org/packages/limma)
+* `stats::prcomp()`: [RDoducmentation](https://www.rdocumentation.org/packages/stats/versions/3.5.3/topics/prcomp)
+
 ### `SupplementaryTable15_eQTL.tar.gz`
 
 [f1](#f1)
@@ -149,18 +157,20 @@ TODO
 
 #### `brainseq_phase2_qsvs_age17_noHGold_DLPFC.Rdata`
 
+qSVA information for DLPFC (without the 'RiboZero Gold' HIPPO samples, just for file name consistency since no HIPPO samples were considered for this set of qSVs.)
+
 * JHPCE path: `/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/brainseq_phase2_qsvs_age17_noHGold_DLPFC.Rdata`
-* [Script](TODO)
+* [Script](https://github.com/LieberInstitute/qsva_brain/blob/dc574ae3266a91126bbd35d2bb1a926ee9822848/brainseq_phase2_qsv/make_qSVs.R#L190-L235)
 * Contents:
 
 
 |object    |class   |description |
 |:---------|:-------|:-----------|
-|qsvBonf   |prcomp  |TODO        |
-|qSVs      |matrix  |TODO        |
-|mod       |matrix  |TODO        |
-|modQsva   |matrix  |TODO        |
-|keepIndex |integer |TODO        |
+|qsvBonf   |prcomp  | qSVs in the original object format       |
+|qSVs      |matrix  | Matrix of qSVs used for building the model matrices       |
+|mod       |matrix  | Model matrix without qSVs        |
+|modQsva   |matrix  | Model matrix with qSVs        |
+|keepIndex |integer | Vector specifying which samples from the full RSE objects to keep        |
 
 * Details:
 
@@ -180,18 +190,20 @@ keepIndex mod modQsva qsvBonf qSVs
 
 #### `brainseq_phase2_qsvs_age17_noHGold_HIPPO.Rdata`
 
+qSV information for HIPPO after dropping the 'RiboZero Gold' HIPPO samples.
+
 * JHPCE path: `/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/brainseq_phase2_qsvs_age17_noHGold_HIPPO.Rdata`
-* [Script](TODO)
+* [Script](https://github.com/LieberInstitute/qsva_brain/blob/dc574ae3266a91126bbd35d2bb1a926ee9822848/brainseq_phase2_qsv/make_qSVs.R#L133-L178)
 * Contents:
 
 
 |object    |class   |description |
 |:---------|:-------|:-----------|
-|qsvBonf   |prcomp  |TODO        |
-|qSVs      |matrix  |TODO        |
-|mod       |matrix  |TODO        |
-|modQsva   |matrix  |TODO        |
-|keepIndex |integer |TODO        |
+|qsvBonf   |prcomp  | qSVs in the original object format       |
+|qSVs      |matrix  | Matrix of qSVs used for building the model matrices       |
+|mod       |matrix  | Model matrix without qSVs        |
+|modQsva   |matrix  | Model matrix with qSVs        |
+|keepIndex |integer | Vector specifying which samples from the full RSE objects to keep        |
 
 * Details:
 
@@ -211,18 +223,20 @@ keepIndex mod modQsva qsvBonf qSVs
 
 #### `brainseq_phase2_qsvs_age17_noHGold.Rdata`
 
+Joint DLPFC and HIPPO qSVs without the HIPPO 'RiboZero Gold' samples.
+
 * JHPCE path: `/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/brainseq_phase2_qsvs_age17_noHGold.Rdata`
-* [Script](TODO)
+* [Script](https://github.com/LieberInstitute/qsva_brain/blob/dc574ae3266a91126bbd35d2bb1a926ee9822848/brainseq_phase2_qsv/make_qSVs.R#L118)
 * Contents:
 
 
 |object    |class   |description |
 |:---------|:-------|:-----------|
-|qsvBonf   |prcomp  |TODO        |
-|qSVs      |matrix  |TODO        |
-|mod       |matrix  |TODO        |
-|modQsva   |matrix  |TODO        |
-|keepIndex |integer |TODO        |
+|qsvBonf   |prcomp  | qSVs in the original object format       |
+|qSVs      |matrix  | Matrix of qSVs used for building the model matrices       |
+|mod       |matrix  | Model matrix without qSVs        |
+|modQsva   |matrix  | Model matrix with qSVs        |
+|keepIndex |integer | Vector specifying which samples from the full RSE objects to keep        |
 
 * Details:
 
@@ -242,17 +256,19 @@ keepIndex mod modQsva qsvBonf qSVs
 
 #### `limma_casecontrol_interaction_exon.Rdata`
 
+SCZD case vs neurotypical controls interaction with brain region (DLPFC, HIPPO) analysis results at the exon feature level.
+
 * JHPCE path: `/dcl01/lieber/ajaffe/lab/brainseq_phase2/casecontrolint/rda/limma_casecontrol_interaction_exon.Rdata`
-* [Script](TODO)
+* [Script](https://github.com/LieberInstitute/brainseq_phase2/blob/master/casecontrolint/limma_casecontrolint.R)
 * Contents:
 
 
 |object    |class      |description |
 |:---------|:----------|:-----------|
-|corfit    |list       |TODO        |
-|fit       |MArrayLM   |TODO        |
-|top       |data.frame |TODO        |
-|exprsNorm |matrix     |TODO        |
+|corfit    |list       | Output from `limma::duplicateCorrelation()` for taking into account repeated measures since some brains were sequenced in both DLPFC and HIPPO      |
+|fit       |MArrayLM   | Output from `limma::eBayes()` with the DE model results       |
+|top       |data.frame | Output from `limma::topTable()` with the DE results for the interaction term       |
+|exprsNorm |matrix     | Normalized expression matrix used for the DE analysis        |
 
 * Details:
 
@@ -275,17 +291,19 @@ corfit exprsNorm fit top
 
 #### `limma_casecontrol_interaction_gene.Rdata`
 
+SCZD case vs neurotypical controls interaction with brain region (DLPFC, HIPPO) analysis results at the gene feature level.
+
 * JHPCE path: `/dcl01/lieber/ajaffe/lab/brainseq_phase2/casecontrolint/rda/limma_casecontrol_interaction_gene.Rdata`
-* [Script](TODO)
+* [Script](https://github.com/LieberInstitute/brainseq_phase2/blob/master/casecontrolint/limma_casecontrolint.R)
 * Contents:
 
 
 |object    |class      |description |
 |:---------|:----------|:-----------|
-|corfit    |list       |TODO        |
-|fit       |MArrayLM   |TODO        |
-|top       |data.frame |TODO        |
-|exprsNorm |matrix     |TODO        |
+|corfit    |list       | Output from `limma::duplicateCorrelation()` for taking into account repeated measures since some brains were sequenced in both DLPFC and HIPPO      |
+|fit       |MArrayLM   | Output from `limma::eBayes()` with the DE model results       |
+|top       |data.frame | Output from `limma::topTable()` with the DE results for the interaction term       |
+|exprsNorm |matrix     | Normalized expression matrix used for the DE analysis        |
 
 * Details:
 
@@ -308,17 +326,19 @@ corfit exprsNorm fit top
 
 #### `limma_casecontrol_interaction_jxn.Rdata`
 
+SCZD case vs neurotypical controls interaction with brain region (DLPFC, HIPPO) analysis results at the junction feature level.
+
 * JHPCE path: `/dcl01/lieber/ajaffe/lab/brainseq_phase2/casecontrolint/rda/limma_casecontrol_interaction_jxn.Rdata`
-* [Script](TODO)
+* [Script](https://github.com/LieberInstitute/brainseq_phase2/blob/master/casecontrolint/limma_casecontrolint.R)
 * Contents:
 
 
 |object    |class      |description |
 |:---------|:----------|:-----------|
-|corfit    |list       |TODO        |
-|fit       |MArrayLM   |TODO        |
-|top       |data.frame |TODO        |
-|exprsNorm |matrix     |TODO        |
+|corfit    |list       | Output from `limma::duplicateCorrelation()` for taking into account repeated measures since some brains were sequenced in both DLPFC and HIPPO      |
+|fit       |MArrayLM   | Output from `limma::eBayes()` with the DE model results       |
+|top       |data.frame | Output from `limma::topTable()` with the DE results for the interaction term       |
+|exprsNorm |matrix     | Normalized expression matrix used for the DE analysis        |
 
 * Details:
 
@@ -341,17 +361,19 @@ corfit exprsNorm fit top
 
 #### `limma_casecontrol_interaction_tx.Rdata`
 
+SCZD case vs neurotypical controls interaction with brain region (DLPFC, HIPPO) analysis results at the transcript feature level.
+
 * JHPCE path: `/dcl01/lieber/ajaffe/lab/brainseq_phase2/casecontrolint/rda/limma_casecontrol_interaction_tx.Rdata`
-* [Script](TODO)
+* [Script](https://github.com/LieberInstitute/brainseq_phase2/blob/master/casecontrolint/limma_casecontrolint.R)
 * Contents:
 
 
 |object    |class      |description |
 |:---------|:----------|:-----------|
-|corfit    |list       |TODO        |
-|fit       |MArrayLM   |TODO        |
-|top       |data.frame |TODO        |
-|exprsNorm |matrix     |TODO        |
+|corfit    |list       | Output from `limma::duplicateCorrelation()` for taking into account repeated measures since some brains were sequenced in both DLPFC and HIPPO      |
+|fit       |MArrayLM   | Output from `limma::eBayes()` with the DE model results       |
+|top       |data.frame | Output from `limma::topTable()` with the DE results for the interaction term       |
+|exprsNorm |matrix     | Normalized expression matrix used for the DE analysis        |
 
 * Details:
 
@@ -374,16 +396,18 @@ corfit exprsNorm fit top
 
 #### `dxStats_dlpfc_filtered_qSVA_geneLevel_noHGoldQSV_matchDLPFC.rda`
 
+DLPFC SCZD case vs neurotypical control DE analysis at the gene level. Also contains results for models that either don't adjust for qSVs or don't adjust for any covariates at all (naive model).
+
 * JHPCE path: `/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/dxStats_dlpfc_filtered_qSVA_geneLevel_noHGoldQSV_matchDLPFC.rda`
-* [Script](TODO)
+* [Script](https://github.com/LieberInstitute/qsva_brain/blob/master/brainseq_phase2_qsv/casectrl_DLPFC.R)
 * Contents:
 
 
 |object       |class      |description |
 |:------------|:----------|:-----------|
-|outGene      |data.frame |TODO        |
-|outGene0     |data.frame |TODO        |
-|outGeneNoAdj |data.frame |TODO        |
+|outGene      |data.frame | Output from `limma::topTable()` with the gene annotation information for the SCZD case vs neurotypical control model adjusting for qSVs       |
+|outGene0     |data.frame | Output from `limma::topTable()` with the gene annotation information for the SCZD case vs neurotypical control model __without__ adjusting for qSVs        |
+|outGeneNoAdj |data.frame | Output from `limma::topTable()` with the gene annotation information for the SCZD case vs neurotypical control model __without__ adjusting for qSVs and any other variables       |
 
 * Details:
 
@@ -447,17 +471,19 @@ outGene outGene0 outGeneNoAdj
 
 #### `dxStats_dlpfc_filtered_qSVA_noHGoldQSV_matchDLPFC.rda`
 
+DLPFC SCZD case vs neurotypical control DE analysis for each of the feature levels (gene, exon, junction, transcript) adjusting for qSVs.
+
 * JHPCE path: `/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/dxStats_dlpfc_filtered_qSVA_noHGoldQSV_matchDLPFC.rda`
-* [Script](TODO)
+* [Script](https://github.com/LieberInstitute/qsva_brain/blob/master/brainseq_phase2_qsv/casectrl_DLPFC_allFeatures.R)
 * Contents:
 
 
 |object  |class      |description |
 |:-------|:----------|:-----------|
-|outGene |data.frame |TODO        |
-|outExon |data.frame |TODO        |
-|outJxn  |data.frame |TODO        |
-|outTx   |DataFrame  |TODO        |
+|outGene |data.frame | Output from `limma::topTable()` with the gene annotation information for the SCZD case vs neurotypical control model adjusting for qSVs        |
+|outExon |data.frame | Output from `limma::topTable()` with the exon annotation information for the SCZD case vs neurotypical control model adjusting for qSVs        |
+|outJxn  |data.frame | Output from `limma::topTable()` with the junction annotation information for the SCZD case vs neurotypical control model adjusting for qSVs        |
+|outTx   |DataFrame  | Output from `limma::topTable()` with the transcript annotation information for the SCZD case vs neurotypical control model adjusting for qSVs        |
 
 * Details:
 
@@ -529,16 +555,18 @@ outExon outGene outJxn outTx
 
 #### `dxStats_hippo_filtered_qSVA_geneLevel_noHGoldQSV_matchHIPPO.rda`
 
+HIPPO SCZD case vs neurotypical control DE analysis at the gene level. Also contains results for models that either don't adjust for qSVs or don't adjust for any covariates at all (naive model).
+
 * JHPCE path: `/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/dxStats_hippo_filtered_qSVA_geneLevel_noHGoldQSV_matchHIPPO.rda`
-* [Script](TODO)
+* [Script](https://github.com/LieberInstitute/qsva_brain/blob/master/brainseq_phase2_qsv/casectrl_HIPPO.R)
 * Contents:
 
 
 |object       |class      |description |
 |:------------|:----------|:-----------|
-|outGene      |data.frame |TODO        |
-|outGene0     |data.frame |TODO        |
-|outGeneNoAdj |data.frame |TODO        |
+|outGene      |data.frame | Output from `limma::topTable()` with the gene annotation information for the SCZD case vs neurotypical control model adjusting for qSVs       |
+|outGene0     |data.frame | Output from `limma::topTable()` with the gene annotation information for the SCZD case vs neurotypical control model __without__ adjusting for qSVs        |
+|outGeneNoAdj |data.frame | Output from `limma::topTable()` with the gene annotation information for the SCZD case vs neurotypical control model __without__ adjusting for qSVs and any other variables       |
 
 * Details:
 
@@ -602,17 +630,19 @@ outGene outGene0 outGeneNoAdj
 
 #### `dxStats_hippo_filtered_qSVA_noHGoldQSV_matchHIPPO.rda`
 
+HIPPO SCZD case vs neurotypical control DE analysis for each of the feature levels (gene, exon, junction, transcript) adjusting for qSVs.
+
 * JHPCE path: `/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/dxStats_hippo_filtered_qSVA_noHGoldQSV_matchHIPPO.rda`
-* [Script](TODO)
+* [Script](https://github.com/LieberInstitute/qsva_brain/blob/master/brainseq_phase2_qsv/casectrl_HIPPO_allFeatures.R)
 * Contents:
 
 
 |object  |class      |description |
 |:-------|:----------|:-----------|
-|outGene |data.frame |TODO        |
-|outExon |data.frame |TODO        |
-|outJxn  |data.frame |TODO        |
-|outTx   |DataFrame  |TODO        |
+|outGene |data.frame | Output from `limma::topTable()` with the gene annotation information for the SCZD case vs neurotypical control model adjusting for qSVs        |
+|outExon |data.frame | Output from `limma::topTable()` with the exon annotation information for the SCZD case vs neurotypical control model adjusting for qSVs        |
+|outJxn  |data.frame | Output from `limma::topTable()` with the junction annotation information for the SCZD case vs neurotypical control model adjusting for qSVs        |
+|outTx   |DataFrame  | Output from `limma::topTable()` with the transcript annotation information for the SCZD case vs neurotypical control model adjusting for qSVs        |
 
 * Details:
 
