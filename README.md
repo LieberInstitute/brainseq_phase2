@@ -71,7 +71,8 @@ Pre-print URL: https://www.biorxiv.org/content/early/2018/09/26/426213.
 | <a name='f10'>f10</a> | [details](https://github.com/LieberInstitute/brainseq_phase2#dlpfc_weightstargz) | TWAS DLPFC weights | `/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/DLPFC/DLPFC_weights.tar.gz` | [AWS](https://s3.us-east-2.amazonaws.com/libd-brainseq2/DLPFC_weights.tar.gz) |
 | <a name='f11'>f11</a> | [details](https://github.com/LieberInstitute/brainseq_phase2#hippo_weightstargz) | TWAS HIPPO weights | `/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/HIPPO/HIPPO_weights.tar.gz` | [AWS](https://s3.us-east-2.amazonaws.com/libd-brainseq2/HIPPO_weights.tar.gz) |
 | <a name='f12'>f12</a> | [details](https://github.com/LieberInstitute/brainseq_phase2#twas_resultstargz) | TWAS results R objects | `/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/rda/TWAS_results.tar.gz` | [AWS](https://s3.us-east-2.amazonaws.com/libd-brainseq2/TWAS_results.tar.gz) |
-
+| <a name='f13'>f13</a> | [details](https://github.com/LieberInstitute/brainseq_phase2#dlpfc_fastq) | FASTQ files for DLPFC | `/dcl01/lieber/ajaffe/lab/brainseq_phase2/preprocessed_data/DLPFC_RiboZero/brainseq/dlpfc/merged_fastq/` | [Globus Endpoint](https://app.globus.org/file-manager?origin_id=0dd03924-6853-11e9-bf44-0e4a062367b8&origin_path=%2F); collection: `jhpce#bsp2-dlpfc` |
+| <a name='f14'>f14</a> | [details](https://github.com/LieberInstitute/brainseq_phase2#dlpfc_hippo) | FASTQ files for HIPPO | `/dcl01/lieber/ajaffe/lab/brainseq_phase2/preprocessed_data/DLPFC_RiboZero/brainseq/dlpfc/merged_fastq/` | [Globus Endpoint](https://app.globus.org/file-manager?origin_id=96be20a2-6853-11e9-bf44-0e4a062367b8&origin_path=%2F); collection: `jhpce#bsp2-hippo` |
 
 ## File details
 
@@ -750,6 +751,30 @@ TODO
 * Contents:
 
 TODO
+
+### DLPFC FASTQ
+
+[f12](#f13)
+
+* Script that created it: [.merge-brainseq.dlpfc.sh](https://github.com/LieberInstitute/brainseq_phase2/blob/master/preprocessed_data/DLPFC_RiboZero/.merge-brainseq.dlpfc.sh)
+* Contents:
+
+```
+$ du -sh /dcl01/lieber/ajaffe/lab/brainseq_phase2/preprocessed_data/DLPFC_RiboZero/brainseq/dlpfc/merged_fastq/
+6.0T	/dcl01/lieber/ajaffe/lab/brainseq_phase2/preprocessed_data/DLPFC_RiboZero/brainseq/dlpfc/merged_fastq/
+```
+
+### HIPPO FASTQ
+
+[f14](#f14)
+
+* Script that created it: [.merge-brainseq.hippo.sh](https://github.com/LieberInstitute/brainseq_phase2/blob/master/preprocessed_data/Hippo_RiboZero/.merge-brainseq.hippo.sh)
+* Contents:
+
+```
+$ du -sh /dcl01/lieber/ajaffe/lab/brainseq_phase2/preprocessed_data/Hippo_RiboZero/brainseq/hippo/merged_fastq/
+5.5T	/dcl01/lieber/ajaffe/lab/brainseq_phase2/preprocessed_data/Hippo_RiboZero/brainseq/hippo/merged_fastq/
+```
 
 
 ## LIBD internal:
