@@ -756,7 +756,7 @@ TODO
 
 ### DLPFC FASTQ
 
-[f12](#f13)
+[f13](#f13)
 
 * Script that created it: [.merge-brainseq.dlpfc.sh](https://github.com/LieberInstitute/brainseq_phase2/blob/master/preprocessed_data/DLPFC_RiboZero/.merge-brainseq.dlpfc.sh)
 * Contents:
