@@ -766,6 +766,8 @@ $ du -sh /dcl01/lieber/ajaffe/lab/brainseq_phase2/preprocessed_data/DLPFC_RiboZe
 6.0T	/dcl01/lieber/ajaffe/lab/brainseq_phase2/preprocessed_data/DLPFC_RiboZero/brainseq/dlpfc/merged_fastq/
 ```
 
+These files are named after the `SAMPLE_ID` `CharacterList` values stored in the phenotype tables (see any RSE object or the [phenotype table](https://s3.us-east-2.amazonaws.com/libd-brainseq2/methprop_pd.Rdata)). The Globus endpoint also includes the FASTQ files for samples that were excluded by this [R script](https://github.com/LieberInstitute/brainseq_phase2/blob/master/misc/subset_samples_dlpfc.R).
+
 ### HIPPO FASTQ
 
 [f14](#f14)
@@ -778,6 +780,7 @@ $ du -sh /dcl01/lieber/ajaffe/lab/brainseq_phase2/preprocessed_data/Hippo_RiboZe
 5.5T	/dcl01/lieber/ajaffe/lab/brainseq_phase2/preprocessed_data/Hippo_RiboZero/brainseq/hippo/merged_fastq/
 ```
 
+These files are named after the `SAMPLE_ID` `CharacterList` values stored in the phenotype tables (see any RSE object or the [phenotype table](https://s3.us-east-2.amazonaws.com/libd-brainseq2/methprop_pd.Rdata)). The Globus endpoint also includes the FASTQ files for samples that were excluded by this [R script](https://github.com/LieberInstitute/brainseq_phase2/blob/master/misc/subset_samples_hippo.R).
 
 ## LIBD internal:
 
