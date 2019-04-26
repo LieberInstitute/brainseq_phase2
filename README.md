@@ -57,6 +57,8 @@ Pre-print URL: https://www.biorxiv.org/content/early/2018/09/26/426213.
 
 ## Public Files
 
+Supplementary Figures and Tables via Mendelay Data at DOI [10.17632/3j93ybf4md.1](http://dx.doi.org/10.17632/3j93ybf4md.1).
+
 | File ID | Details | Description | JHPCE path | URL |
 | --- | --- | --- | --- | --- |
 | <a name='f1'>f1</a> | [details](https://github.com/LieberInstitute/brainseq_phase2#supplementarytable15_eqtltargz) | Table S15. Genome wide significant eQTL snp-feature pairs | `/dcl01/lieber/ajaffe/lab/brainseq_phase2/supp_tabs/SupplementaryTableXX_eQTL.tar.gz` | [AWS](https://s3.us-east-2.amazonaws.com/libd-brainseq2/SupplementaryTable15_eQTL.tar.gz) |
