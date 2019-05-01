@@ -203,7 +203,7 @@ hsq_info$ID[hsq_info$ID == ''] <- NA
 hsq_info$geneID[hsq_info$geneID == ''] <- NA
 
 ## Adapted from https://github.com/LieberInstitute/fusion_twas/blob/jhpce/utils/FUSION.profile_wgt.R
-for ( i in 1:N ) {
+for ( i in seq_len(nrow(hsq_info)) ) {
     load(hsq_info$HSQ[i])
     hsq_info$hsq[i] <- hsq[1]
     hsq_info$hsq.se[i] <- hsq[2]
