@@ -91,6 +91,81 @@ plot(x = hsq[['DLPFC']]$hsq, y = hsq[['HIPPO']]$hsq, xlab = 'DLPFC', ylab = 'HIP
 
 save(hsq, file = 'rda/hsq_genes.Rdata')
 
+
+## Resume
+load('rda/hsq_genes.Rdata', verbose = TRUE)
+
+add.alpha <- function(col, alpha=1){
+  if(missing(col))
+    stop("Please provide a vector of colours.")
+  apply(sapply(col, col2rgb)/255, 2,
+                     function(x)
+                       rgb(x[1], x[2], x[3], alpha=alpha))
+}
+
+pdf('pdf/heritability_DLPFC_HIPPO_gene.pdf', useDingbats = FALSE)
+plot(
+    x = (hsq[['DLPFC']]$hsq + hsq[['HIPPO']]$hsq) / 2,
+    y = hsq[['DLPFC']]$hsq - hsq[['HIPPO']]$hsq,
+    xlab = '(DLPFC + HIPPO) / 2',
+    ylab = 'DLPFC - HIPPO',
+    pch = 16,
+    col = ifelse(
+        !(hsq[['DLPFC']]$failFilter | hsq[['HIPPO']]$failFilter),
+        add.alpha('magenta', 1/5),
+        ifelse(
+            hsq[['DLPFC']]$hsq < 0 | hsq[['HIPPO']]$hsq < 0,
+            add.alpha('royalblue4', 1/5),
+            add.alpha('black', 1/5)    
+        )
+    ),
+    main = 'Heritability (cis +- 500kb)',
+    cex.lab = 1.4,
+    cex.axis = 1.4,
+    cex.main = 1.5
+)
+abline(h = 0, col = 'red', lwd = 1.2)
+legend('bottomright',
+    legend = c(
+        '<0 in 1 region',
+        'Fails filter in 1 region',
+        'Passes filters in both regions'
+    ),
+    col = c('royalblue4', 'black', 'magenta'), lwd = 2
+)
+
+plot(
+    x = hsq[['HIPPO']]$hsq,
+    y = hsq[['DLPFC']]$hsq,
+    xlab = 'HIPPO',
+    ylab = 'DLPFC',
+    pch = 16,
+    col = ifelse(
+        !(hsq[['DLPFC']]$failFilter | hsq[['HIPPO']]$failFilter),
+        add.alpha('magenta', 1/5),
+        ifelse(
+            hsq[['DLPFC']]$hsq < 0 | hsq[['HIPPO']]$hsq < 0,
+            add.alpha('royalblue4', 1/5),
+            add.alpha('black', 1/5)    
+        )
+    ),
+    main = 'Heritability (cis +- 500kb)',
+    cex.lab = 1.4,
+    cex.axis = 1.4,
+    cex.main = 1.5
+)
+abline(a = 0, b = 1, col = 'red', lwd = 1.2)
+legend('bottomright',
+    legend = c(
+        '<0 in 1 region',
+        'Fails filter in 1 region',
+        'Passes filters in both regions'
+    ),
+    col = c('royalblue4', 'black', 'magenta'), lwd = 2
+)
+dev.off()
+
+
 ## Reproducibility information
 print('Reproducibility information:')
 Sys.time()
