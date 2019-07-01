@@ -4,6 +4,7 @@ library('jaffelab')
 library('sessioninfo')
 library('ggplot2')
 library('getopt')
+library('data.table')
 
 ## Specify parameters
 spec <- matrix(c(
@@ -43,6 +44,11 @@ fit <- lapply(raw, '[[', 'fit')
 exprsNorm <- lapply(raw, '[[', 'exprsNorm')
 
 rse <- load_foo(opt$type)
+
+
+if(opt$type == 'exon') {
+    load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/browser/rda/exon_name_map.Rdata', verbose = TRUE)
+}
 
 ## Reg specific model
 design <- get_mods( colData(rse), int = TRUE)$mod
@@ -90,7 +96,13 @@ get_main <- function(i) {
         res <- with(rowRanges(rse)[j, ], paste(gene_id, gene_name))
     }
     res <- paste(res, 'p-bonf', signif(pinfo$P.Bonf[i], 3))
-    if(opt$type != 'gene') res <- paste(rownames(rse)[j], res)
+    if(opt$type != 'gene') {
+        res <- paste(rownames(rse)[j], res)
+    } 
+    if (opt$type == 'exon') {
+        ## Add Gencode exon id
+        res <- paste(exon_name_map$gencode[exon_name_map$libd_bsp2 == rownames(rse)[j]], res)
+    }
     return(res)
 }
 
