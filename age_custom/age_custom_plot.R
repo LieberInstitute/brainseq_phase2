@@ -9,7 +9,7 @@ library('data.table')
 ## Specify parameters
 spec <- matrix(c(
     'type', 't', 1, 'character', 'Either gene, exon, tx or jxn',
-    'symbol', 's', 1, 'character', 'Symbol for the gene'
+    'symbol', 's', 1, 'character', 'Symbol for the gene',
 	'help' , 'h', 0, 'logical', 'Display help'
 ), byrow=TRUE, ncol=5)
 opt <- getopt(spec)
