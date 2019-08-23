@@ -1,5 +1,6 @@
 BrainSeq Phase II analysis
 ==========================
+[![DOI](https://zenodo.org/badge/78666523.svg)](https://zenodo.org/badge/latestdoi/78666523)
 
 This repository contains analysis code for the BrainSeq Phase II project from the BrainSeq Consortium carried out by researchers at the [Lieber Institute for Brain Development](https://www.libd.org/).
 
