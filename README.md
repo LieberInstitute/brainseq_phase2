@@ -75,6 +75,7 @@ Supplementary Figures and Tables via Mendelay Data at DOI [10.17632/3j93ybf4md.1
 | <a name='f12'>f12</a> | [details](https://github.com/LieberInstitute/brainseq_phase2#twas_resultstargz) | TWAS results R objects | `/dcl01/lieber/ajaffe/lab/brainseq_phase2/twas/rda/TWAS_results.tar.gz` | [AWS](https://s3.us-east-2.amazonaws.com/libd-brainseq2/TWAS_results.tar.gz) |
 | <a name='f13'>f13</a> | [details](https://github.com/LieberInstitute/brainseq_phase2#dlpfc-fastq) | FASTQ files for DLPFC | `/dcl01/lieber/ajaffe/lab/brainseq_phase2/preprocessed_data/DLPFC_RiboZero/brainseq/dlpfc/merged_fastq/` | [Globus Endpoint](https://app.globus.org/file-manager?origin_id=0dd03924-6853-11e9-bf44-0e4a062367b8&origin_path=%2F); collection: `jhpce#bsp2-dlpfc` |
 | <a name='f14'>f14</a> | [details](https://github.com/LieberInstitute/brainseq_phase2#hippo-fastq) | FASTQ files for HIPPO | `/dcl01/lieber/ajaffe/lab/brainseq_phase2/preprocessed_data/DLPFC_RiboZero/brainseq/dlpfc/merged_fastq/` | [Globus Endpoint](https://app.globus.org/file-manager?origin_id=96be20a2-6853-11e9-bf44-0e4a062367b8&origin_path=%2F); collection: `jhpce#bsp2-hippo` |
+| <a name='f15'>f15</a> | [details](https://github.com/LieberInstitute/brainseq_phase2#bam-files) | BAM files for HIPPO and DLPFC | `/dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/HISAT2_out/` | [Globus Endpoint](https://app.globus.org/file-manager?origin_id=96be20a2-6853-11e9-bf44-0e4a062367b8&origin_path=%2F); collection: `jhpce#bsp2-bam` |
 
 ## File details
 
@@ -781,6 +782,19 @@ $ du -sh /dcl01/lieber/ajaffe/lab/brainseq_phase2/preprocessed_data/Hippo_RiboZe
 ```
 
 These files are named after the `SAMPLE_ID` `CharacterList` values stored in the phenotype tables (see any RSE object or the [phenotype table](https://s3.us-east-2.amazonaws.com/libd-brainseq2/methprop_pd.Rdata)). The Globus endpoint also includes the FASTQ files for samples that were excluded by this [R script](https://github.com/LieberInstitute/brainseq_phase2/blob/master/misc/subset_samples_hippo.R).
+
+
+### BAM files
+
+[f15](#f15)
+
+* Scripts that created them: [.step3-hisat2-HIPPO_RiboZero_BrainSeq_Phase2.LIBD.sh](https://github.com/LieberInstitute/brainseq_phase2/blob/master/preprocessed_data/Hippo_RiboZero/.step3-hisat2-HIPPO_RiboZero_BrainSeq_Phase2.LIBD.sh) and [.step3-hisat2-DLPFC_RiboZero_BrainSeq_Phase2.LIBD.sh](https://github.com/LieberInstitute/brainseq_phase2/blob/master/preprocessed_data/DLPFC_RiboZero/.step3-hisat2-DLPFC_RiboZero_BrainSeq_Phase2.LIBD.sh)
+* Contents:
+
+```
+$ du -sh /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/HISAT2_out/
+6.5T	/dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/HISAT2_out/
+```
 
 ## LIBD internal:
 
