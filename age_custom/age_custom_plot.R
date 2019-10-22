@@ -10,14 +10,15 @@ library('data.table')
 spec <- matrix(c(
     'type', 't', 1, 'character', 'Either gene, exon, tx or jxn',
     'symbol', 's', 1, 'character', 'Symbol for the gene',
+    'outdir', 'o', 1, 'character', 'Output directory: pdf',
 	'help' , 'h', 0, 'logical', 'Display help'
 ), byrow=TRUE, ncol=5)
 opt <- getopt(spec)
 
 ## For testing
 if(FALSE){
-    opt <- list(type = 'gene', symbol = 'BDNF')
-    opt <- list(type = 'exon', symbol = 'BDNF')
+    opt <- list(type = 'gene', symbol = 'BDNF', outdir = 'pdf')
+    opt <- list(type = 'exon', symbol = 'BDNF', outdir = 'pdf')
 }
 
 ## if help was asked for print a friendly message
@@ -34,7 +35,7 @@ stopifnot(opt$type %in% c('gene', 'exon', 'tx', 'jxn'))
 
 
 source('/dcl01/lieber/ajaffe/lab/brainseq_phase2/development/load_funs.R')
-dir.create('pdf', showWarnings = FALSE)
+dir.create(opt$outdir, showWarnings = FALSE)
 
 ## Load required data
 load('/dcl01/lieber/ajaffe/lab/brainseq_phase2/development/rda/pcheck_both.Rdata', verbose = TRUE)
@@ -133,7 +134,7 @@ p_cols <- ifelse(colData(rse)$Region == 'HIPPO', 'skyblue3', 'dark orange')
 l_cols <- c('lightgoldenrod', 'light blue')
 age_brks <- c(-1, 0, 1, 10, 20, 50, 100)
 
-pdf(paste0('pdf/bsp2_age_', opt$symbol, '_', opt$type, '_norm.pdf'), width = 14, useDingbats = FALSE)
+pdf(file.path(opt$outdir, paste0('bsp2_age_', opt$symbol, '_', opt$type, '_norm.pdf')), width = 14, useDingbats = FALSE)
 for(i in seq_len(length(tocheck))) {
     set.seed(20180419)
     agePlotter(
@@ -150,7 +151,7 @@ for(i in seq_len(length(tocheck))) {
 }
 dev.off()
 
-pdf(paste0('pdf/bsp2_age_', opt$symbol, '_', opt$type, '_cleaned.pdf'), width = 14, useDingbats = FALSE)
+pdf(file.path(opt$outdir, paste0('bsp2_age_', opt$symbol, '_', opt$type, '_cleaned.pdf')), width = 14, useDingbats = FALSE)
 for(i in seq_len(length(tocheck))) {
     set.seed(20180419)
     agePlotter(
