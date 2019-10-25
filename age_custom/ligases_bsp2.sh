@@ -33,3 +33,7 @@ date
 
 ## This script was made using sgejobs version 0.99.0
 ## available from http://research.libd.org/sgejobs/
+
+## Manual ones Jim requested:
+# Rscript age_custom_plot.R -t gene -s CRBN -o ligases_pdf
+# Rscript age_custom_plot.R -t gene -s VHL -o ligases_pdf
