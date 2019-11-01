@@ -324,6 +324,27 @@ ggplot(region_twas_z,
     scale_color_manual(values = c('grey80', 'dark orange', 'skyblue3', 'purple'))
 dev.off()
 
+pdf('pdf/twas_z_gene.pdf', useDingbats = FALSE, width = 10, height = 10)
+ggplot(subset(region_twas_z, feature == 'gene'),
+    aes(x = DLPFC, y = HIPPO, color = FDR.5perc, shape = in_both)) +
+    geom_point() +
+    # facet_grid(BEST.GWAS.status ~ feature) +
+    coord_fixed() +
+    theme_bw(base_size = 30) +
+    ggtitle('TWAS Z by brain region') +
+    scale_color_manual(values = c('grey80', 'dark orange', 'skyblue3', 'purple'))
+    
+ggplot(subset(region_twas_z, feature == 'gene'),
+    aes(x = DLPFC, y = HIPPO, color = Bonf.5perc, shape = in_both)) +
+    geom_point() +
+    # facet_grid(BEST.GWAS.status ~ feature) +
+    coord_fixed() +
+    theme_bw(base_size = 30) +
+    ggtitle('TWAS Z by brain region') +
+    scale_color_manual(values = c('grey80', 'dark orange', 'skyblue3', 'purple'))
+dev.off()
+
+
 ## Find the discordant ones
 options(width = 200)
 subset(region_twas_z, FDR.5perc == 'Both' & sign(DLPFC) != sign(HIPPO))
