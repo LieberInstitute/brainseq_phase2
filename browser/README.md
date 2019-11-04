@@ -106,6 +106,8 @@ Columns:
 12. `name`: snp rs number (use this)
 13. `rsnumguess`: _guessed_ snp name
 
+This file is available for download [here](https://libd-brainseq2.s3.us-east-2.amazonaws.com/BrainSeqPhaseII_snp_annotation.txt.gz).
+
 ### Genotype information
 
 Columns are the subjects labeled by the `BrNum` from the sample metadata. Rows are the SNPs with labels corresponding to the `snp` column from the SNP information table. Entries are 0, 1, 2 or NA.
@@ -146,13 +148,13 @@ Each of these tables has the following columns:
 
 1. `snp`: snp ID, matches the `snp` column from the SNP information file (`BrainSeqPhaseII_snp_annotation.txt`).
 2. `feature_id`: feature ID, matches the `feature_id` column of the expression feature files.
-3. `statistic`: eQTL statistic
+3. `statistic`: eQTL t-statistic
 4. `pvalue`: nominal p-value
 5. `FDR`: FDR adjusted p-value
-6. `beta`
+6. `beta`: eQTL beta coefficient. If you want the `SE`, you can compute it using `beta` / `statistic`.
 7. `Type`: feature type in lower-case. This matches the expression feature files, for example `gene` for `BrainSeqPhaseII_feature_annotation_gene.txt`.
 
-The 5 tables correspond to the following types of eQTLs:
+The 5 eQTL tables correspond to the following types of eQTLs:
 
 * DLPFC using all the genome (`dlpfc_full`), so the samples with `TRUE` under the `analysis_eqtl_dlpfc` column from the sample info table. Shows only results with a nominal p-value <0.001.
 * HIPPO using all the genome (`hippo_full`), so the samples with `TRUE` under the `analysis_eqtl_hippo` column from the sample info table. Shows only results with a nominal p-value <0.001.
@@ -161,6 +163,9 @@ The 5 tables correspond to the following types of eQTLs:
 * Sub-analysis using only the PGC2 SNPs and neighboring SNPs identified with rAggr (9,736 SNPs) for HIPPO (`hippo_raggr`). Given the smaller number of SNPs considered, the FDR is different compared to `hippo_full`. Shows all associations (so no nominal p-value filter).
 
 We considered as significant associations those that had a FDR < 0.01.
+
+A subset of the `*full.txt` results are available at [`SupplementaryTable15_eQTL.tar.gz`](https://github.com/LieberInstitute/brainseq_phase2/#supplementarytable15_eqtltargz) which has the results with FDR < 1%. If you are interested in the complete unfiltered list of eQTL associations please let us know.
+
 
 #### GTEx eQTL replication tables
 

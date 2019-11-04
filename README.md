@@ -19,9 +19,9 @@ This license lets others remix, tweak, and build upon our work non-commercially 
 
 If you use anything in this repository please cite the following publication:
 
-Collado-Torres L, Burke EE, Peterson A, Shin JH, Straub RE, Rajpurohit A, Semick SA, Ulrich WS, BrainSeq Consortium, Valencia C, Tao R, Deep-Soboslay A, Hyde TM, Kleinman JE, Weinberger DR, Jaffe AE. Regional heterogeneity in gene expression, regulation and coherence in hippocampus  and dorsolateral prefrontal cortex across development and in schizophrenia. bioRxiv, DOI 10.1101/426213. 2018.
+Collado-Torres L, Burke EE, Peterson A, Shin JH, Straub RE, Rajpurohit A, Semick SA, Ulrich WS, BrainSeq Consortium, Price AJ, Valencia C, Tao R, Deep-Soboslay A, Hyde TM, Kleinman JE, Weinberger DR, Jaffe AE. Regional Heterogeneity in Gene Expression, Regulation, and Coherence in the Frontal Cortex and Hippocampus across Development and Schizophrenia. Neuron. 2019. DOI [10.1016/j.neuron.2019.05.013](https://doi.org/10.1016/j.neuron.2019.05.013).
 
-Pre-print URL: https://www.biorxiv.org/content/early/2018/09/26/426213.
+Pre-print: bioRxiv, 2018, DOI [10.1101/426213](https://www.biorxiv.org/content/early/2018/09/26/426213).
 
 ## Files
 
@@ -94,10 +94,22 @@ If the information below is insufficient, check the corresponding scripts or use
 
 [f1](#f1)
 
-* Script that created it: [export.sh](https://github.com/LieberInstitute/qsva_brain/blob/master/brainseq_phase2_qsv/rdas/export.sh)
+* Script that created it: [subset_sig_eqtls.R](https://github.com/LieberInstitute/brainseq_phase2/blob/master/supp_tabs/subset_sig_eqtls.R)
 * Contents:
 
-TODO
+Tables with the significant eQTL associations (FDR < 1%) for DLPFC, HIPPO and the brain region interaction (DLPFC vs HIPPO) at the gene, exon, exon-exon junction and transcript expression levels.
+
+Different expression levels and models include other columns depending on what other data was used for replication: GTEx, CAUC only sub-analysis, BrainSeq Phase 1 replication. Though the main ones are described [here](https://github.com/LieberInstitute/brainseq_phase2/tree/master/browser#eqtl-result-tables), and briefly these are:
+
+
+* `snp`: SNP ID.
+* `feature_id`: expression feature ID. You might also want the `EnsemblGeneID` column (Ensembl gene ID) or the `Symbol` one (gene symbol, when available).
+* `statistic`: eQTL t-statistic computed by MatrixEQTL.
+* `pvalue`: p-value.
+* `FDR`: FDR adjusted p-value.
+* `beta`: eQTL beta coefficient.
+
+For the reference and alternative alleles (note that some variants are insertions), check the `newRef` and `newCount` columns respectively in the SNP annotation file [`BrainSeqPhaseII_snp_annotation.txt`](https://github.com/LieberInstitute/brainseq_phase2/tree/master/browser#snp-information) (the column names are lower case in that file) that you can match using the `snp` column.
 
 ### `rse_gene_unfiltered.Rdata`
 
