@@ -101,8 +101,8 @@ Columns:
 7. `counted`: allele quantified
 8. `alt`: alternative allele
 9. `type`
-10. `newref`: new reference allele (use this)
-11. `newcount`: new counted allele (use this)
+10. `newref`: new reference allele (use this); this is the non-effect (major) allele
+11. `newcount`: new counted allele (use this); this is the effect (minor) allele
 12. `name`: snp rs number (use this)
 13. `rsnumguess`: _guessed_ snp name
 
