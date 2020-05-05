@@ -1,20 +1,21 @@
-library('SummarizedExperiment')
-library('xlsx')
-library('devtools')
+library("SummarizedExperiment")
+library("xlsx")
+library("devtools")
 
 ## For Table S3
 load(
-    '/dcl01/lieber/ajaffe/lab/brainseq_phase2/correlation/rda/indv_kegg_sczd.Rdata',
+    "/dcl01/lieber/ajaffe/lab/brainseq_phase2/correlation/rda/indv_kegg_sczd.Rdata",
     verbose = TRUE
 )
 info <- subset(indv_kegg_cleaned_sczd, padj < 0.05)
-colnames(info)[colnames(info) == 'padj'] <- 'FDR'
+colnames(info)[colnames(info) == "padj"] <- "FDR"
 write.xlsx(info,
-    file = 'SupplementaryTable3.xlsx',
-    sheetName = 'KEGG',
-    append = FALSE)
+    file = "SupplementaryTable3.xlsx",
+    sheetName = "KEGG",
+    append = FALSE
+)
 load(
-    '/dcl01/lieber/ajaffe/lab/brainseq_phase2/correlation/rda/indv_go_sczd.Rdata',
+    "/dcl01/lieber/ajaffe/lab/brainseq_phase2/correlation/rda/indv_go_sczd.Rdata",
     verbose = TRUE
 )
 info <-
@@ -23,14 +24,14 @@ info <-
     })
 info <-
     lapply(info, function(x) {
-        colnames(x)[colnames(x) == 'padj'] <- 'FDR'
+        colnames(x)[colnames(x) == "padj"] <- "FDR"
         return(x)
     })
 for (i in 1:3) {
     write.xlsx(
         info[[i]],
-        file = 'SupplementaryTable3.xlsx',
-        sheetName = paste0('GO-', names(info)[i]),
+        file = "SupplementaryTable3.xlsx",
+        sheetName = paste0("GO-", names(info)[i]),
         append = TRUE
     )
 }
@@ -43,24 +44,25 @@ load(
 info <- as.data.frame(rowRanges(cov_rse))[, -c(6:7)]
 rownames(info) <- NULL
 write.xlsx(info,
-    file = 'SupplementaryTable4.xlsx',
-    sheetName = 'Top1kDegradationExpressedRegions',
-    append = FALSE)
+    file = "SupplementaryTable4.xlsx",
+    sheetName = "Top1kDegradationExpressedRegions",
+    append = FALSE
+)
 
 ## For table S2
 ## Development model first
-source('/dcl01/lieber/ajaffe/lab/brainseq_phase2/development/load_funs.R')
-lvls <- c('gene', 'exon', 'jxn', 'tx')
+source("/dcl01/lieber/ajaffe/lab/brainseq_phase2/development/load_funs.R")
+lvls <- c("gene", "exon", "jxn", "tx")
 rses <- lapply(lvls, load_foo)
 names(rses) <- lvls
 
 load(
-    '/dcl01/lieber/ajaffe/lab/brainseq_phase2/development/rda/pcheck_both.Rdata',
+    "/dcl01/lieber/ajaffe/lab/brainseq_phase2/development/rda/pcheck_both.Rdata",
     verbose = TRUE
 )
 stopifnot(sum(sapply(rses, nrow)) == nrow(pcheck_both))
 info <-
-    split(pcheck_both[, -which(colnames(pcheck_both) %in% c('global_fdr', 'global_bonf'))], pcheck_both$type)[names(rses)]
+    split(pcheck_both[, -which(colnames(pcheck_both) %in% c("global_fdr", "global_bonf"))], pcheck_both$type)[names(rses)]
 stopifnot(all(sapply(rses, nrow) - sapply(info, nrow) == 0))
 for (i in 1:4) {
     info[[i]] <- cbind(info[[i]], as.data.frame(rowRanges(rses[[i]])))
@@ -68,24 +70,25 @@ for (i in 1:4) {
     info[[i]]$replicates_in_BrainSpan <-
         info[[i]]$P.Bonf < 0.01 & info[[i]]$span_P.Value < 0.05
 }
-sapply(info, function(x)
-    sum(x$replicates_in_BrainSpan))
+sapply(info, function(x) {
+      sum(x$replicates_in_BrainSpan)
+  })
 #  gene   exon    jxn     tx
 # 10839 169253 143895   1715
 
 ## Save for grouping across the 3 models
-deres <- vector('list', 3)
-names(deres) <- c('development', 'region', 'sczd')
+deres <- vector("list", 3)
+names(deres) <- c("development", "region", "sczd")
 deres$development <- info
 
 ## Move on to the region-specific (adult, prenatal) results
 load(
-    '/dcl01/lieber/ajaffe/lab/brainseq_phase2/region_specific/rda/pcheck_both.Rdata',
+    "/dcl01/lieber/ajaffe/lab/brainseq_phase2/region_specific/rda/pcheck_both.Rdata",
     verbose = TRUE
 )
 stopifnot(sum(sapply(rses, nrow)) * 2 == nrow(pcheck_both))
 info <-
-    split(pcheck_both[, -which(colnames(pcheck_both) %in% c('global_fdr', 'global_bonf'))], pcheck_both$type)[names(rses)]
+    split(pcheck_both[, -which(colnames(pcheck_both) %in% c("global_fdr", "global_bonf"))], pcheck_both$type)[names(rses)]
 stopifnot(all(sapply(rses, nrow) * 2 - sapply(info, nrow) == 0))
 for (i in 1:4) {
     info[[i]] <-
@@ -93,18 +96,20 @@ for (i in 1:4) {
     ## Replication: log2FC has to have the same sing, Bonf < 1% and BrainSpan p-val < 5%
     info[[i]]$replicates_in_BrainSpan <-
         sign(info[[i]]$logFC) == sign(info[[i]]$span_logFC) &
-        info[[i]]$P.Bonf < 0.01 & info[[i]]$span_P.Value < 0.05
-    info[[i]]$age[info[[i]]$age == 'fetal'] <- 'prenatal'
-    info[[i]]$span_age[info[[i]]$span_age == 'fetal'] <- 'prenatal'
+            info[[i]]$P.Bonf < 0.01 & info[[i]]$span_P.Value < 0.05
+    info[[i]]$age[info[[i]]$age == "fetal"] <- "prenatal"
+    info[[i]]$span_age[info[[i]]$span_age == "fetal"] <- "prenatal"
     rownames(info[[i]]) <-
-        gsub('fetal', 'prenatal', rownames(info[[i]]))
+        gsub("fetal", "prenatal", rownames(info[[i]]))
 }
-sapply(info, function(x)
-    sum(x$replicates_in_BrainSpan[x$age == 'adult']))
+sapply(info, function(x) {
+      sum(x$replicates_in_BrainSpan[x$age == "adult"])
+  })
 # gene  exon   jxn    tx
 #  1612 15442  5561  1739
-sapply(info, function(x)
-    sum(x$replicates_in_BrainSpan[x$age == 'prenatal']))
+sapply(info, function(x) {
+      sum(x$replicates_in_BrainSpan[x$age == "prenatal"])
+  })
 # gene exon  jxn   tx
 #   32   71   18    3
 deres$region <- info
@@ -112,30 +117,30 @@ deres$region <- info
 ## Now the SCZD case-control results
 outFeat <-
     lapply(c(
-        '/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/dxStats_dlpfc_filtered_qSVA_noHGoldQSV_matchDLPFC.rda',
-        '/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/dxStats_hippo_filtered_qSVA_noHGoldQSV_matchHIPPO.rda'
+        "/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/dxStats_dlpfc_filtered_qSVA_noHGoldQSV_matchDLPFC.rda",
+        "/dcl01/ajaffe/data/lab/qsva_brain/brainseq_phase2_qsv/rdas/dxStats_hippo_filtered_qSVA_noHGoldQSV_matchHIPPO.rda"
     ), function(f) {
-        message(paste(Sys.time(), 'loading', f))
+        message(paste(Sys.time(), "loading", f))
         load(f, verbose = TRUE)
-        outTx$ensemblID <- gsub('\\..*', '', outTx$gene_id)
+        outTx$ensemblID <- gsub("\\..*", "", outTx$gene_id)
         return(list(
-            'gene' = outGene,
-            'exon' = outExon,
-            'jxn' = outJxn,
-            'tx' = outTx
+            "gene" = outGene,
+            "exon" = outExon,
+            "jxn" = outJxn,
+            "tx" = outTx
         ))
     })
-names(outFeat) <- c('DLPFC', 'HIPPO')
+names(outFeat) <- c("DLPFC", "HIPPO")
 
 ## Add region to each table
 outFeat$DLPFC <-
     lapply(outFeat$DLPFC, function(x) {
-        x$region <- 'DLPFC'
+        x$region <- "DLPFC"
         return(x)
     })
 outFeat$HIPPO <-
     lapply(outFeat$HIPPO, function(x) {
-        x$region <- 'HIPPO'
+        x$region <- "HIPPO"
         return(x)
     })
 
@@ -147,18 +152,18 @@ for (i in 1:4) {
 deres$sczd <- info
 
 ## Save full info
-save(deres, file = 'deres.Rdata')
+save(deres, file = "deres.Rdata")
 
 ## Subset to DE features
 rep_in_span <- function(x) {
-    x[x$replicates_in_BrainSpan,]
+    x[x$replicates_in_BrainSpan, ]
 }
 deres_sig <- deres
 deres_sig[[1]] <- lapply(deres_sig[[1]], rep_in_span)
 deres_sig[[2]] <- lapply(deres_sig[[2]], rep_in_span)
 deres_sig[[3]] <-
     lapply(deres_sig[[3]], function(x) {
-        x[x$adj.P.Val < 0.1,]
+        x[x$adj.P.Val < 0.1, ]
     })
 
 sapply(deres_sig, lapply, nrow)
@@ -167,20 +172,20 @@ sapply(deres_sig, lapply, nrow)
 # exon 169253      15513  2384
 # jxn  143895      5579   155
 # tx   1715        1742   21
-save(deres_sig, file = 'deres_sig.Rdata')
+save(deres_sig, file = "deres_sig.Rdata")
 
 ## Change commas to semi-colons before writing as a csv file
 fix_csv <- function(df) {
     for (i in seq_len(ncol(df))) {
-        if (any(grepl(',', df[, i]))) {
-            message(paste(Sys.time(), 'fixing column', colnames(df)[i]))
-            df[, i] <- gsub(',', ';', df[, i])
+        if (any(grepl(",", df[, i]))) {
+            message(paste(Sys.time(), "fixing column", colnames(df)[i]))
+            df[, i] <- gsub(",", ";", df[, i])
         }
     }
     return(df)
 }
 for (i in 1:3) {
-    message(paste(Sys.time(), 'processing', names(deres_sig)[i]))
+    message(paste(Sys.time(), "processing", names(deres_sig)[i]))
     deres_sig[[i]] <- lapply(deres_sig[[i]], fix_csv)
 }
 
@@ -192,28 +197,29 @@ for (i in 1:3) {
     for (j in 1:4) {
         message(paste(
             Sys.time(),
-            'processing',
+            "processing",
             names(deres_sig)[i],
-            'at the',
+            "at the",
             names(deres_sig[[i]])[j],
-            'level'
+            "level"
         ))
         write.csv(deres_sig[[i]][[j]],
             file = paste0(
-                'SupplementaryTable2_',
+                "SupplementaryTable2_",
                 names(deres_sig)[i],
-                '_',
+                "_",
                 names(deres_sig[[i]])[j],
-                '.csv'
-            ))
+                ".csv"
+            )
+        )
     }
 }
 
-system('tar -cvzf SupplementaryTable2.tar.gz SupplementaryTable2*csv')
+system("tar -cvzf SupplementaryTable2.tar.gz SupplementaryTable2*csv")
 
 
 ## Reproducibility information
-print('Reproducibility information:')
+print("Reproducibility information:")
 Sys.time()
 proc.time()
 options(width = 120)
@@ -221,13 +227,13 @@ session_info()
 
 ## For RB:
 
-load('deres.Rdata', verbose = TRUE)
+load("deres.Rdata", verbose = TRUE)
 deres_sig <- deres
-#deres_sig[[3]] <- lapply(deres_sig[[3]], function(x) { x[x$adj.P.Val < 0.2, ] })
+# deres_sig[[3]] <- lapply(deres_sig[[3]], function(x) { x[x$adj.P.Val < 0.2, ] })
 
 ## Fix csv columns
 for (i in c(1, 3)) {
-    message(paste(Sys.time(), 'processing', names(deres_sig)[i]))
+    message(paste(Sys.time(), "processing", names(deres_sig)[i]))
     deres_sig[[i]] <- lapply(deres_sig[[i]], fix_csv)
 }
 
@@ -236,20 +242,20 @@ for (i in c(1, 3)) {
     for (j in 1) {
         message(paste(
             Sys.time(),
-            'processing',
+            "processing",
             names(deres_sig)[i],
-            'at the',
+            "at the",
             names(deres_sig[[i]])[j],
-            'level'
+            "level"
         ))
         write.csv(
             deres_sig[[i]][[j]],
             file = paste0(
-                'versionForRB_SupplementaryTable2_',
+                "versionForRB_SupplementaryTable2_",
                 names(deres_sig)[i],
-                '_',
+                "_",
                 names(deres_sig[[i]])[j],
-                '.csv'
+                ".csv"
             )
         )
     }
