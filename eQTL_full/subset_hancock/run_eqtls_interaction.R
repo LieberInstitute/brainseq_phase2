@@ -1,26 +1,21 @@
+####
+
 ### libraries
-library(SummarizedExperiment)
-library(jaffelab)
-library(MatrixEQTL)
-library(sva)
+library("SummarizedExperiment")
+library("jaffelab")
+library("MatrixEQTL")
+library("sva")
+library("here")
+library("sessioninfo")
 
 ######################
 ### load data ####
 ######################
 
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_gene.Rdata")
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_exon.Rdata")
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_jxn.Rdata")
-load("/dcl01/lieber/ajaffe/lab/brainseq_phase2/expr_cutoff/rse_tx.Rdata")
-
-# # fix junction row names
-# rownames(rse_jxn) = paste0(seqnames(rse_jxn),":",start(rse_jxn),"-",end(rse_jxn),"(",strand(rse_jxn),")")
-
-# # sum totalMapped IntegerLists (so getRPKM works later)
-# colData(rse_tx)$totalMapped =
-	# colData(rse_jxn)$totalMapped =
-	# colData(rse_exon)$totalMapped = 
-	# colData(rse_gene)$totalMapped  = sapply(colData(rse_gene)$totalMapped, sum)
+load(here::here("expr_cutoff", "rse_gene.Rdata"), verbose = TRUE)
+load(here::here("expr_cutoff", "rse_exon.Rdata"), verbose = TRUE)
+load(here::here("expr_cutoff", "rse_jxn.Rdata"), verbose = TRUE)
+load(here::here("expr_cutoff", "rse_tx.Rdata"), verbose = TRUE)
 
 ## keep adult samples - keep both regions
 keepInd = which(colData(rse_gene)$Age > 13)
@@ -36,16 +31,20 @@ exonRpkm = assays(rse_exon)$rpkm
 jxnRp10m = assays(rse_jxn)$rp10m
 txTpm = assays(rse_tx)$tpm
 
-print("....data loaded....")
-
-
 
 ######################
 ### snp data ####
 ######################
 
 ## load SNP data
-load("genotype_data/BrainSeq_Phase2_RiboZero_Genotypes_n551.rda")
+load(
+    here::here(
+        "eQTL_full",
+        "subset_hancock",
+        "BrainSeq_Phase2_RiboZero_Genotypes_n551_subset_hancock.Rdata"
+    ),
+    verbose = TRUE
+)
 
 ### make mds and snp dimensions equal to N
 ###(repeat rows or columns for BrNum replicates)
@@ -55,9 +54,13 @@ rownames(mds) = colnames(snp) = pd$RNum
 
 
 ## drop SNPs not mapping to hg38
-keepIndex = which(!is.na(snpMap$chr_hg38))
-snpMap = snpMap[keepIndex,]
-snp = snp[keepIndex,]
+table(is.na(snpMap$chr_hg38))
+# FALSE
+#    51
+   
+# keepIndex = which(!is.na(snpMap$chr_hg38))
+# snpMap = snpMap[keepIndex,]
+# snp = snp[keepIndex,]
 
 
 ######################
@@ -85,29 +88,19 @@ colnames(snpspos) = c("name","chr","pos")
 ####### do PCA ########
 #######################
 
-pcaGene = prcomp(t(log2(geneRpkm+1)))
-kGene = num.sv(log2(geneRpkm+1), mod)
-kGene = min(kGene, 25)
-genePCs = pcaGene$x[,1:kGene]
+load(
+    here::here(
+        "eQTL_full",
+        "eqtl_tables",
+        "rdas",
+        "pcs_4features_combined_regions_filtered_over13.rda"
+    ),
+    verbose = TRUE
+)
 
-pcaExon = prcomp(t(log2(exonRpkm+1)))
-kExon = num.sv(log2(exonRpkm+1), mod, vfilter=50000)
-kExon = min(kExon, 25)
-exonPCs = pcaExon$x[,1:kExon]
-
-pcaJxn = prcomp(t(log2(jxnRp10m+1)))
-kJxn = num.sv(log2(jxnRp10m+1), mod, vfilter=50000)
-kJxn = min(kJxn, 25)
-jxnPCs = pcaJxn$x[,1:kJxn]
-
-pcaTx = prcomp(t(log2(txTpm+1)))
-kTx = num.sv(log2(txTpm+1), mod, vfilter=50000)
-kTx = min(kTx, 25)
-txPCs = pcaTx$x[,1:kTx]
-
-save(genePCs, exonPCs, jxnPCs, txPCs, 
-	file="rdas/pcs_4features_combined_regions_filtered_over13.rda")
-# load("rdas/pcs_4features_combined_regions_filtered_over13.rda")
+colnames(mod)[-1]
+# [1] "DxSchizo"    "SexM"        "snpPC1"      "snpPC2"      "snpPC3"
+# [6] "snpPC4"      "snpPC5"      "RegionHIPPO"
 
 ## make covs and move BrainRegion to end
 modReg = grep("Region",colnames(mod))
@@ -120,13 +113,6 @@ covsTx = SlicedData$new(t(cbind(mod[,-c(1,modReg)], txPCs, mod[,modReg])))
 rownames(covsGene)[nrow(covsGene)] = rownames(covsExon)[nrow(covsExon)] = 
 	rownames(covsJxn)[nrow(covsJxn)] = rownames(covsTx)[nrow(covsTx)] = colnames(mod)[modReg]
 
-# covsGene = SlicedData$new(t(cbind(mod[,-1],genePCs)))
-# covsExon = SlicedData$new(t(cbind(mod[,-1],exonPCs)))
-# covsJxn = SlicedData$new(t(cbind(mod[,-1],jxnPCs)))
-# covsTx = SlicedData$new(t(cbind(mod[,-1],txPCs)))
-
-rm(genePCs, exonPCs, jxnPCs, txPCs)
-print("....pcas created....")
 
 ##########################
 ### feature annotation ###
@@ -168,61 +154,48 @@ jxnSlice$ResliceCombined(sliceSize = 5000)
 txSlice$ResliceCombined(sliceSize = 5000)
 
 
-keep = c("theSnps","snpspos","geneSlice","covsGene","posGene","exonSlice","covsExon","posExon",
-		"jxnSlice","covsJxn","posJxn","txSlice","covsTx","posTx")
-rm(list=ls()[! ls() %in% keep])
-print("....beginning eQTL analysis....")
-
-
 ##########################
 ### Run EQTLs ############
 ##########################
 
 meGene = Matrix_eQTL_main(snps=theSnps, gene = geneSlice, 
 	cvrt = covsGene, output_file_name.cis =  ".ctxt" ,
-	pvOutputThreshold.cis = 0.001,  pvOutputThreshold=0,
+	pvOutputThreshold.cis = 1,  pvOutputThreshold=0,
 	snpspos = snpspos, genepos = posGene, 
 	useModel = modelLINEAR_CROSS,	cisDist=2.5e5,
 	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
-save(meGene, file="eqtl_tables/matrixEqtl_output_interaction_gene.rda")
 	
 meExon = Matrix_eQTL_main(snps=theSnps, gene = exonSlice, 
 	cvrt = covsExon, output_file_name.cis =  ".ctxt" ,
-	pvOutputThreshold.cis = 0.001,  pvOutputThreshold=0,
+	pvOutputThreshold.cis = 1,  pvOutputThreshold=0,
 	snpspos = snpspos, genepos = posExon, 
 	useModel = modelLINEAR_CROSS,	cisDist=2.5e5,
-	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
-save(meExon, file="eqtl_tables/matrixEqtl_output_interaction_exon.rda")
+	pvalue.hist = 100,min.pv.by.genesnp = TRUE)
 	
 meJxn = Matrix_eQTL_main(snps=theSnps, gene = jxnSlice, 
 	cvrt = covsJxn, output_file_name.cis =  ".ctxt" ,
-	pvOutputThreshold.cis = 0.001,  pvOutputThreshold=0,
+	pvOutputThreshold.cis = 1,  pvOutputThreshold=0,
 	snpspos = snpspos, genepos = posJxn, 
 	useModel = modelLINEAR_CROSS,	cisDist=2.5e5,
-	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
-save(meJxn,	file="eqtl_tables/matrixEqtl_output_interaction_jxn.rda")
+	pvalue.hist = 100,min.pv.by.genesnp = TRUE)
 	
 meTx = Matrix_eQTL_main(snps=theSnps, gene = txSlice, 
 	cvrt = covsTx, output_file_name.cis =  ".ctxt" ,
-	pvOutputThreshold.cis = 0.001,  pvOutputThreshold=0,
+	pvOutputThreshold.cis = 1,  pvOutputThreshold=0,
 	snpspos = snpspos, genepos = posTx, 
 	useModel = modelLINEAR_CROSS,	cisDist=2.5e5,
-	pvalue.hist = 100,min.pv.by.genesnp = TRUE)	
-save(meTx, file="eqtl_tables/matrixEqtl_output_interaction_tx.rda")
-	
+	pvalue.hist = 100,min.pv.by.genesnp = TRUE)
 	
 save(meGene, meExon, meJxn, meTx,
-	file="eqtl_tables/matrixEqtl_output_interaction_4features.rda")
+	file=here::here(
+        "eQTL_full",
+        "subset_hancock",
+        "matrixEqtl_output_interaction_4features_subset_hancock.Rdata")
+)
 
 	
 ######################
 ###### annotate ######
-
-# load("eqtl_tables/matrixEqtl_output_interaction_4features.rda")
-# load("data/zandiHypde_bipolar_rseTx_n511.rda")
-# load("data/zandiHypde_bipolar_rseJxn_n511.rda")
-# load("data/zandiHypde_bipolar_rseExon_n511.rda")
-# load("data/zandiHypde_bipolar_rseGene_n511.rda")
 
 # extract
 geneEqtl = meGene$cis$eqtls
@@ -281,25 +254,125 @@ allEqtl$gencodeTx = CharacterList(c(as.list(rowRanges(rse_gene)$gencodeTx[match(
 	as.list(rowRanges(rse_exon)$gencodeTx[match(exonEqtl$gene, rownames(rse_exon))]),
 	as.list(rowRanges(rse_jxn)$gencodeTx[match(jxnEqtl$gene, rownames(rse_jxn))]),
 	as.list(txEqtl$gene)))
-save(allEqtl, file="eqtl_tables/mergedEqtl_output_interaction_4features.rda",compress=TRUE)
 
+allEqtl$Region <- "Interaction"
+save(allEqtl, file=here::here(
+        "eQTL_full",
+        "subset_hancock",
+        "mergedEqtl_output_interaction_4features_subset_hancock.Rdata")
+    ,compress=TRUE)
+    
+dim(allEqtl)
+# [1] 4839   12
 
-# # #############
-# # # metrics ###
-# # sigEqtl = allEqtl[allEqtl$FDR < 0.01,] # fdr significant
-# # length(unique(sigEqtl$EnsemblGeneID))
+## Reproducibility information
+print('Reproducibility information:')
+Sys.time()
+proc.time()
+options(width = 120)
+session_info()
 
-# # sigEqtlList = split(sigEqtl, factor(sigEqtl$Type,
-	# # levels=c("Gene","Exon","Jxn", "Tx")))
-
-# # sapply(sigEqtlList, function(x) max(x$pvalue))
-
-# # sapply(sigEqtlList, function(x) length(unique(x$EnsemblGeneID)))
-# # sapply(sigEqtlList, function(x) length(unique(x$Symbol)))
-# # sapply(sigEqtlList, function(x) length(unique(x$snps)))
-
-# # sapply(sigEqtlList, function(x) quantile(abs(x$beta)))
-
-# # sapply(sigEqtlList, function(x) table(x$Class[!duplicated(x$gene)]))
-# # sapply(sigEqtlList, function(x) prop.table(table(x$Class)))
-
+# ─ Session info ───────────────────────────────────────────────────────────────────────────────────────────────────────
+#  setting  value
+#  version  R version 4.0.4 RC (2021-02-08 r79975)
+#  os       CentOS Linux 7 (Core)
+#  system   x86_64, linux-gnu
+#  ui       X11
+#  language (EN)
+#  collate  en_US.UTF-8
+#  ctype    en_US.UTF-8
+#  tz       US/Eastern
+#  date     2021-03-11
+#
+# ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
+#  package              * version  date       lib source
+#  annotate               1.68.0   2020-10-27 [1] Bioconductor
+#  AnnotationDbi          1.52.0   2020-10-27 [1] Bioconductor
+#  assertthat             0.2.1    2019-03-21 [2] CRAN (R 4.0.3)
+#  Biobase              * 2.50.0   2020-10-27 [1] Bioconductor
+#  BiocGenerics         * 0.36.0   2020-10-27 [1] Bioconductor
+#  BiocParallel         * 1.24.1   2020-11-06 [1] Bioconductor
+#  bit                    4.0.4    2020-08-04 [2] CRAN (R 4.0.3)
+#  bit64                  4.0.5    2020-08-30 [2] CRAN (R 4.0.3)
+#  bitops                 1.0-6    2013-08-17 [2] CRAN (R 4.0.3)
+#  blob                   1.2.1    2020-01-20 [2] CRAN (R 4.0.3)
+#  cachem                 1.0.4    2021-02-13 [2] CRAN (R 4.0.4)
+#  cli                    2.2.0    2020-11-20 [1] CRAN (R 4.0.3)
+#  colorout               1.2-2    2020-05-09 [1] Github (jalvesaq/colorout@726d681)
+#  colorspace             2.0-0    2020-11-11 [2] CRAN (R 4.0.3)
+#  crayon                 1.4.1    2021-02-08 [1] CRAN (R 4.0.4)
+#  DBI                    1.1.1    2021-01-15 [2] CRAN (R 4.0.3)
+#  DelayedArray           0.16.0   2020-10-27 [1] Bioconductor
+#  digest                 0.6.27   2020-10-24 [1] CRAN (R 4.0.3)
+#  dplyr                  1.0.2    2020-08-18 [1] CRAN (R 4.0.3)
+#  edgeR                  3.32.0   2020-10-27 [1] Bioconductor
+#  ellipsis               0.3.1    2020-05-15 [1] CRAN (R 4.0.3)
+#  fansi                  0.4.1    2020-01-08 [1] CRAN (R 4.0.0)
+#  fastmap                1.0.1    2019-10-08 [1] CRAN (R 4.0.0)
+#  genefilter           * 1.72.0   2020-10-27 [1] Bioconductor
+#  generics               0.1.0    2020-10-31 [1] CRAN (R 4.0.3)
+#  GenomeInfoDb         * 1.26.2   2020-12-08 [1] Bioconductor
+#  GenomeInfoDbData       1.2.4    2020-11-30 [2] Bioconductor
+#  GenomicRanges        * 1.42.0   2020-10-27 [1] Bioconductor
+#  ggplot2                3.3.3    2020-12-30 [1] CRAN (R 4.0.3)
+#  glue                   1.4.2    2020-08-27 [1] CRAN (R 4.0.3)
+#  googledrive            1.0.1    2020-05-05 [1] CRAN (R 4.0.3)
+#  gtable                 0.3.0    2019-03-25 [2] CRAN (R 4.0.3)
+#  here                   1.0.1    2020-12-13 [1] CRAN (R 4.0.3)
+#  htmltools              0.5.0    2020-06-16 [1] CRAN (R 4.0.3)
+#  htmlwidgets            1.5.3    2020-12-10 [1] CRAN (R 4.0.3)
+#  httpuv                 1.5.4    2020-06-06 [1] CRAN (R 4.0.3)
+#  httr                   1.4.2    2020-07-20 [1] CRAN (R 4.0.3)
+#  IRanges              * 2.24.1   2020-12-12 [1] Bioconductor
+#  jaffelab             * 0.99.30  2021-01-12 [1] Github (LieberInstitute/jaffelab@42637ff)
+#  jsonlite               1.7.2    2020-12-09 [2] CRAN (R 4.0.3)
+#  later                  1.1.0.1  2020-06-05 [1] CRAN (R 4.0.3)
+#  lattice                0.20-41  2020-04-02 [3] CRAN (R 4.0.4)
+#  lifecycle              0.2.0    2020-03-06 [1] CRAN (R 4.0.0)
+#  limma                  3.46.0   2020-10-27 [1] Bioconductor
+#  locfit                 1.5-9.4  2020-03-25 [2] CRAN (R 4.0.3)
+#  magrittr               2.0.1    2020-11-17 [1] CRAN (R 4.0.3)
+#  Matrix                 1.3-2    2021-01-06 [3] CRAN (R 4.0.4)
+#  MatrixEQTL           * 2.3      2019-12-22 [1] CRAN (R 4.0.0)
+#  MatrixGenerics       * 1.2.1    2021-01-30 [2] Bioconductor
+#  matrixStats          * 0.58.0   2021-01-29 [1] CRAN (R 4.0.3)
+#  memoise                2.0.0    2021-01-26 [2] CRAN (R 4.0.3)
+#  mgcv                 * 1.8-34   2021-02-16 [3] CRAN (R 4.0.4)
+#  munsell                0.5.0    2018-06-12 [2] CRAN (R 4.0.3)
+#  nlme                 * 3.1-152  2021-02-04 [3] CRAN (R 4.0.4)
+#  pillar                 1.4.7    2020-11-20 [1] CRAN (R 4.0.3)
+#  pkgconfig              2.0.3    2019-09-22 [1] CRAN (R 4.0.0)
+#  png                    0.1-7    2013-12-03 [2] CRAN (R 4.0.3)
+#  promises               1.1.1    2020-06-09 [1] CRAN (R 4.0.3)
+#  purrr                  0.3.4    2020-04-17 [1] CRAN (R 4.0.0)
+#  R6                     2.5.0    2020-10-28 [2] CRAN (R 4.0.3)
+#  rafalib              * 1.0.0    2015-08-09 [1] CRAN (R 4.0.0)
+#  RColorBrewer           1.1-2    2014-12-07 [2] CRAN (R 4.0.3)
+#  Rcpp                   1.0.5    2020-07-06 [1] CRAN (R 4.0.3)
+#  RCurl                  1.98-1.2 2020-04-18 [2] CRAN (R 4.0.3)
+#  rlang                  0.4.10   2020-12-30 [1] CRAN (R 4.0.3)
+#  rmote                  0.3.4    2020-05-09 [1] Github (cloudyr/rmote@fbce611)
+#  rprojroot              2.0.2    2020-11-15 [2] CRAN (R 4.0.3)
+#  RSQLite                2.2.3    2021-01-24 [2] CRAN (R 4.0.3)
+#  S4Vectors            * 0.28.1   2020-12-09 [1] Bioconductor
+#  scales                 1.1.1    2020-05-11 [2] CRAN (R 4.0.3)
+#  segmented              1.3-1    2020-12-10 [1] CRAN (R 4.0.3)
+#  servr                  0.21     2020-12-14 [1] CRAN (R 4.0.3)
+#  sessioninfo          * 1.1.1    2018-11-05 [1] CRAN (R 4.0.3)
+#  SummarizedExperiment * 1.20.0   2020-10-27 [1] Bioconductor
+#  survival               3.2-7    2020-09-28 [1] CRAN (R 4.0.3)
+#  sva                  * 3.38.0   2020-10-27 [2] Bioconductor
+#  tibble                 3.0.4    2020-10-12 [1] CRAN (R 4.0.3)
+#  tidyselect             1.1.0    2020-05-11 [2] CRAN (R 4.0.3)
+#  vctrs                  0.3.6    2020-12-17 [1] CRAN (R 4.0.3)
+#  withr                  2.3.0    2020-09-22 [1] CRAN (R 4.0.3)
+#  xfun                   0.20     2021-01-06 [1] CRAN (R 4.0.3)
+#  XML                    3.99-0.5 2020-07-23 [2] CRAN (R 4.0.3)
+#  xtable                 1.8-4    2019-04-21 [2] CRAN (R 4.0.3)
+#  XVector                0.30.0   2020-10-27 [1] Bioconductor
+#  zlibbioc               1.36.0   2020-10-27 [1] Bioconductor
+#
+# [1] /users/lcollado/R/4.0.x
+# [2] /jhpce/shared/jhpce/core/conda/miniconda3-4.6.14/envs/svnR-4.0.x/R/4.0.x/lib64/R/site-library
+# [3] /jhpce/shared/jhpce/core/conda/miniconda3-4.6.14/envs/svnR-4.0.x/R/4.0.x/lib64/R/library
+#
