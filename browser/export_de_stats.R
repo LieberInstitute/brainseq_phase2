@@ -260,6 +260,19 @@ system("wc -l BrainSeqPhaseII_stats_*")
 #  185465 BrainSeqPhaseII_stats_sczd_casecontrol_tx.csv
 # 4062285 total
 
+## Save for later
+save(deres, file = "rda/BrainSeqPhaseII_stats.Rdata")
+
+## Check a case for Bill
+check <- subset(deres$development$jxn, gencodeGeneID == "ENSG00000026025.14")
+check$adj.P.Val
+# [1] 0 0 0 0 0 0 0 0
+table(deres$development$jxn$adj.P.Val == 0)
+#  FALSE   TRUE
+# 264633  32548
+min(deres$development$jxn$adj.P.Val[deres$development$jxn$adj.P.Val != 0])
+# [1] 4.446591e-323
+
 styler::style_file("export_de_stats.R", transformers = biocthis::bioc_style())
 
 ## Reproducibility information
