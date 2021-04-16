@@ -77,7 +77,7 @@ Supplementary Figures and Tables via Mendelay Data at DOI [10.17632/3j93ybf4md.1
 | <a name='f13'>f13</a> | [details](https://github.com/LieberInstitute/brainseq_phase2#dlpfc-fastq) | FASTQ files for DLPFC | `/dcl01/lieber/ajaffe/lab/brainseq_phase2/preprocessed_data/DLPFC_RiboZero/brainseq/dlpfc/merged_fastq/` | [Globus Endpoint](http://LieberInstitute.github.io/globus/jhpce_bsp2-dlpfc/index.html); collection: `jhpce#bsp2-dlpfc` |
 | <a name='f14'>f14</a> | [details](https://github.com/LieberInstitute/brainseq_phase2#hippo-fastq) | FASTQ files for HIPPO | `/dcl01/lieber/ajaffe/lab/brainseq_phase2/preprocessed_data/DLPFC_RiboZero/brainseq/dlpfc/merged_fastq/` | [Globus Endpoint](http://LieberInstitute.github.io/globus/jhpce_bsp2-hippo/index.html); collection: `jhpce#bsp2-hippo` |
 | <a name='f15'>f15</a> | [details](https://github.com/LieberInstitute/brainseq_phase2#bam-files) | BAM files for HIPPO and DLPFC | `/dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/DLPFC_RiboZero/HISAT2_out/` and `/dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Hippo_RiboZero/HISAT2_out/`| Globus Endpoints for [DLPFC](http://LieberInstitute.github.io/globus/jhpce_bsp2-dlpfc-bam/index.html) and [HIPPO](http://LieberInstitute.github.io/globus/jhpce_bsp2-hippo-bam/index.html); collections: `jhpce#bsp2-dlpfc-bam` and `jhpce#bsp2-hippo-bam` |
-| <a name='f16'>f16</a> | [details](https://github.com/LieberInstitute/brainseq_phase2#bsp1_generdata) | BSP1 re-processed using hg38 at the gene level | `/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1_gene.Rdata` | [AWS](https://jaffe-nat-neuro-2018.s3.us-east-2.amazonaws.com/bsp1_gene.Rdata) |
+| <a name='f16'>f16</a> | [details](https://github.com/LieberInstitute/brainseq_phase2#bsp1_generdata) | BSP1 re-processed using hg38 at the gene, exon, junction, and transcript expression levels | `/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1_gene.Rdata` | [gene (AWS)](https://jaffe-nat-neuro-2018.s3.us-east-2.amazonaws.com/bsp1_gene.Rdata), [exon (AWS)](https://jaffe-nat-neuro-2018.s3.us-east-2.amazonaws.com/bsp1_exon.Rdata), [jxn (AWS)](https://jaffe-nat-neuro-2018.s3.us-east-2.amazonaws.com/bsp1_jxn.Rdata), [tx (AWS)](https://jaffe-nat-neuro-2018.s3.us-east-2.amazonaws.com/bsp1_tx.Rdata) |
 
 ## File details
 
@@ -811,18 +811,21 @@ $ du -sh /dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/HISAT2_out/
 ```
 
 
-### `bsp1_gene.Rdata`
+### BSP1 hg38
 
 [f16](#f16)
 
-This is the BrainSEQ Phase 1 data re-processed using hg38 (unlike the originally published data using hg19) that was subsetted to the genes expressed in BrainSEQ Phase 2 using the script [bsp1/data/subset_bsp1.R](https://github.com/LieberInstitute/brainseq_phase2/blob/master/bsp1/data/subset_bsp1.R).
+This is the BrainSEQ Phase 1 data (DOI: [10.1038/s41593-018-0197-y](https://doi.org/10.1038/s41593-018-0197-y)) re-processed using hg38 (unlike the originally published data using hg19) that was subsetted to the genes, exons, exon-exon junctions, and transcripts expressed in BrainSEQ Phase 2 using the script [bsp1/data/subset_bsp1.R](https://github.com/LieberInstitute/brainseq_phase2/blob/master/bsp1/data/subset_bsp1.R).
 
-* JHPCE path: `/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1_gene.Rdata`
+* JHPCE path: `/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/`
 * Contents:
 
 ```
-$ du -sh bsp1_gene.Rdata
-157M	bsp1_gene.Rdata
+$ du -sh /dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1*
+2.0G	/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1_exon.Rdata
+157M	/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1_gene.Rdata
+635M	/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1_jxn.Rdata
+373M	/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1_tx.Rdata
 ```
 
 ## LIBD internal:
