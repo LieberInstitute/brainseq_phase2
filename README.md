@@ -79,9 +79,6 @@ Supplementary Figures and Tables via Mendelay Data at DOI [10.17632/3j93ybf4md.1
 | <a name='f15'>f15</a> | [details](https://github.com/LieberInstitute/brainseq_phase2#bam-files) | BAM files for HIPPO and DLPFC | `/dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/DLPFC_RiboZero/HISAT2_out/` and `/dcl01/ajaffe/data/lab/brainseq_phase1/preprocessed_data/Hippo_RiboZero/HISAT2_out/`| Globus Endpoints for [DLPFC](http://LieberInstitute.github.io/globus/jhpce_bsp2-dlpfc-bam/index.html) and [HIPPO](http://LieberInstitute.github.io/globus/jhpce_bsp2-hippo-bam/index.html); collections: `jhpce#bsp2-dlpfc-bam` and `jhpce#bsp2-hippo-bam` |
 | <a name='f16'>f16</a> | [details](https://github.com/LieberInstitute/brainseq_phase2#bsp1_generdata) | BSP1 re-processed using hg38 at the gene level | `/dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1_gene.Rdata` | [AWS](https://jaffe-nat-neuro-2018.s3.us-east-2.amazonaws.com/bsp1_gene.Rdata) |
 
-
-| <a name='f1'>f1</a> | [details](https://github.com/LieberInstitute/brainseq_phase2#supplementarytable15_eqtltargz) | Table S15. Genome wide significant eQTL snp-feature pairs | `/dcl01/lieber/ajaffe/lab/brainseq_phase2/supp_tabs/SupplementaryTableXX_eQTL.tar.gz` | [AWS](https://s3.us-east-2.amazonaws.com/libd-brainseq2/SupplementaryTable15_eQTL.tar.gz) |
-
 ## File details
 
 If the information below is insufficient, check the corresponding scripts or use GitHub's search feature to find where each of the R objects were created. If you have questions about the files, please open an [issue](https://github.com/LieberInstitute/brainseq_phase2/issues).
