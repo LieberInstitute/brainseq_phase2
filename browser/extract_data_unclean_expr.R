@@ -54,7 +54,7 @@ mapply(function(exprs, type) {
     message(paste(Sys.time(), 'processing', type))
     mapply(function(expr, exprtype) {
         message(paste(Sys.time(), 'processing', exprtype))
-        fwrite(expr, sep = '\t', row.names = TRUE, file = paste0('BrainSeqPhaseII_unclean_expression_eqtl_', type, '_', exprtype, '.txt'))
+        fwrite(as.data.frame(expr), sep = '\t', row.names = TRUE, file = paste0('BrainSeqPhaseII_unclean_expression_eqtl_', type, '_', exprtype, '.txt'))
     }, exprs, names(exprs))
     return(NULL)
 }, cleaned, names(cleaned))
@@ -101,7 +101,7 @@ mapply(function(exprs, type) {
     message(paste(Sys.time(), 'processing', type))
     mapply(function(expr, exprtype) {
         message(paste(Sys.time(), 'processing', exprtype))
-        fwrite(expr, sep = '\t', row.names = TRUE, file = paste0('BrainSeqPhaseII_unclean_expression_', type, '_', exprtype, '.txt'))
+        fwrite(as.data.frame(expr), sep = '\t', row.names = TRUE, file = paste0('BrainSeqPhaseII_unclean_expression_', type, '_', exprtype, '.txt'))
     }, exprs, names(exprs))
     return(NULL)
 }, cleaned, names(cleaned))
