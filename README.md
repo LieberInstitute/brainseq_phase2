@@ -831,3 +831,5 @@ $ du -sh /dcl01/lieber/ajaffe/lab/brainseq_phase2/bsp1/data/bsp1*
 ## LIBD internal:
 
 JHPCE location: `/dcl01/lieber/ajaffe/lab/brainseq_phase2`
+<br>
+__NOTE__: since 2023 the updated internal location is `/dcs04/lieber/lcolladotor/BrainSEQ_LIBD001/brainseq_phase2`
